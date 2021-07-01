@@ -2,7 +2,6 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Produto;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

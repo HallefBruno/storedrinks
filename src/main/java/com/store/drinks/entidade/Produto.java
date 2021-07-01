@@ -33,6 +33,12 @@ public class Produto implements Serializable {
     @Column(length = 100, nullable = true, name = "codigo_barra", unique = true)
     private String codigoBarra;
     
+    @NotBlank(message = "Código do produto não pode ter espaços em branco!")
+    @NotEmpty(message = "Código do produto não pode ser vazio!")
+    @NotNull(message = "Código do produto não pode ser null!")
+    @Column(length = 100, nullable = true, name = "codigo_produto", unique = true)
+    private String codProduto;
+    
     @NotBlank(message = "Descrição do produto não pode ter espaços em branco!")
     @NotEmpty(message = "Descrição do produto não pode ser vazio!")
     @NotNull(message = "Descrição do produto não pode ser null!")
@@ -44,7 +50,7 @@ public class Produto implements Serializable {
     @Column(nullable = false)
     private Integer quantidade;
     
-    @NotNull(message = "Quantidade do produto não pode ser null!")
+    @NotNull(message = "Preço de venda não pode ser null!")
     @Min(value = 1, message = "Preço de venda mínima {0}")
     @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "preco_venda")
@@ -56,6 +62,7 @@ public class Produto implements Serializable {
     private void prePersistPreUpdate() {
         this.codigoBarra = StringUtils.strip(this.codigoBarra);
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
+        this.codProduto = StringUtils.strip(this.codProduto);
     }
     
 }
