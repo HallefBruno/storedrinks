@@ -66,3 +66,6 @@ public class Produto implements Serializable {
     }
     
 }
+//final Locale brLocale = new Locale("pt", "BR");
+//final NumberFormat brFormat = NumberFormat.getCurrencyInstance(brLocale);
+//System.out.println(brFormat.format(amount));
