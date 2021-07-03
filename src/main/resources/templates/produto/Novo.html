@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-3 col-sm-8">
-                                <label for="codBarra" class="form-label">Cód Barra</label>
+                                <label for="codigoBarra" class="form-label">Cód Barra</label>
                                 <input th:value="*{codigoBarra}" type="text" class="form-control" id="codigoBarra" name="codigoBarra">
                             </div>
                             <div class="mb-3 col-sm-4">
@@ -34,28 +34,36 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição do produto</label>
+                            <label for="descricaoProduto" class="form-label">Descrição do produto</label>
                             <input type="text" th:value="*{descricaoProduto}" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
                         </div>
                         <div class="mb-3">
                             <label for="quantidade" class="form-label">Quantidade</label>
                             <input type="number" th:value="*{quantidade}" min="1" class="form-control" id="quantidade" name="quantidade"/>
                         </div>
-
-                        <label for="precoVenda" class="form-label">Preço de venda</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                            <input type="text" th:value="*{precoVenda}" min="1" class="form-control" id="precoVenda" name="precoVenda"/>
-                        </div>
-                        <div class="">
-                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar
-                                </button>
-                                <a type="button" th:href="@{/produtos/pesquisar}" class="btn btn-outline-secondary">
-                                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Pesquisar
-                                </a>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="valorCusto" class="form-label">Valor de custo</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                    <input type="text" th:value="*{valorCusto}" min="1" class="form-control" id="valorCusto" name="valorCusto"/>
+                                </div>
                             </div>
+                            <div class="col-sm-6">
+                                <label for="valorVenda" class="form-label">Valor de venda</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                    <input type="text" th:value="*{valorVenda}" min="1" class="form-control" id="valorVenda" name="valorVenda"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar
+                            </button>
+                            <a type="button" th:href="@{/produtos/pesquisar}" class="btn btn-outline-secondary">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i> Pesquisar
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -66,7 +74,8 @@
         <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-                $('#precoVenda').mask("#.##0,00", {reverse: true});
+                $('#valorCusto').mask("#.##0,00", {reverse: true});
+                $('#valorVenda').mask("#.##0,00", {reverse: true});
             });
         </script>
     </body>

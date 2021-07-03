@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -50,12 +51,21 @@ public class Produto implements Serializable {
     @Column(nullable = false)
     private Integer quantidade;
     
-    @NotNull(message = "Preço de venda não pode ser null!")
-    @Min(value = 1, message = "Preço de venda mínima {0}")
+    @NotNull(message = "Valor de custo não pode ser null!")
+    @Min(value = 1, message = "Valor de custo mínima {0}")
     @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
-    @Column(nullable = false, name = "preco_venda")
-    private BigDecimal precoVenda;
+    @Column(nullable = false, name = "valor_venda")
+    private BigDecimal valorCusto;
     
+    @NotNull(message = "Valor de venda não pode ser null!")
+    @Min(value = 1, message = "Valor de venda mínima {0}")
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
+    @Column(nullable = false, name = "valor_custo")
+    private BigDecimal valorVenda;
+    
+    @Version
+    @Column(name = "versao_objeto", nullable = false, unique = true)
+    private Integer versaoObjeto;
     
     @PrePersist
     @PreUpdate
