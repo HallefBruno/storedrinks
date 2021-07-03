@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-    public Optional<Produto> findByCodigoBarraOrCodProduto(String codBarra, String codProduto);
+    public Optional<Produto> findFirstByCodigoBarraOrCodProdutoOrDescricaoProduto(String codBarra, String codProduto, String descricao);
 }

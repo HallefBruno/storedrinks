@@ -17,7 +17,7 @@ public class ProdutoService {
 
     @Transactional
     public void salvar(Produto produto) {
-        Optional<Produto> findProduto = produtoRepository.findByCodigoBarraOrCodProduto(produto.getCodigoBarra(), produto.getCodProduto());
+        Optional<Produto> findProduto = produtoRepository.findFirstByCodigoBarraOrCodProdutoOrDescricaoProduto(produto.getCodigoBarra(), produto.getCodProduto(), produto.getDescricaoProduto());
         if(findProduto.isPresent()) {
             throw new NegocioException("Esse produto ja foi cadastrado!");
         }
