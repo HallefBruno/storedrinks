@@ -30,11 +30,8 @@ public class ProdutoService {
         Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
         if (optionalProdutoAtual.isPresent()) {
             Produto atual = optionalProdutoAtual.get();
-            if (atual.getDescricaoProduto().equalsIgnoreCase(update.getDescricaoProduto()) && atual.getCodigoBarra().equals(update.getCodigoBarra()) && atual.getCodProduto().equals(update.getCodProduto())) {
-                BeanUtils.copyProperties(update, optionalProdutoAtual.get(), "id");
-                update = produtoRepository.save(optionalProdutoAtual.get());
-                produtoRepository.save(update);
-            }
+            BeanUtils.copyProperties(update, atual, "id");
+            produtoRepository.save(atual);
         }
     }
 
