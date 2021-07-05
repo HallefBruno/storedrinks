@@ -27,11 +27,17 @@ public class ProdutoController {
 
     private ProdutoService produtoService;
     private ProdutoRepository produtoRepository;
-    
+
     @Autowired
     public ProdutoController(ProdutoService produtoService, ProdutoRepository produtoRepository) {
         this.produtoService = produtoService;
         this.produtoRepository = produtoRepository;
+    }
+    
+    @RequestMapping
+    public ModelAndView index(Produto produto) {
+        ModelAndView mv = new ModelAndView("produto/Novo");
+        return mv;
     }
 
     @RequestMapping("novo")
@@ -55,6 +61,22 @@ public class ProdutoController {
         attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
         return new ModelAndView("redirect:/produtos/novo", HttpStatus.CREATED);
     }
+    
+    @PostMapping("update/{codigo}")
+    public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo,  @Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
+        try {
+            if (result.hasErrors()) {
+                return init(produto);
+            }
+            this.produtoService.update(produto,codigo);
+        } catch (NegocioException ex) {
+            ObjectError error = new ObjectError("erro", ex.getMessage());
+            result.addError(error);
+            return init(produto);
+        }
+        attributes.addFlashAttribute("mensagem", "Produto alterado com sucesso!");
+        return new ModelAndView("redirect:/produtos/novo", HttpStatus.OK);
+    }
 
     @GetMapping("pesquisar")
     public ModelAndView pesqisar(Produto produto, BindingResult result) {
@@ -63,7 +85,7 @@ public class ProdutoController {
         return mv;
     }
 
-    @DeleteMapping("/{codigo}")
+    @DeleteMapping("{codigo}")
     public @ResponseBody
     ResponseEntity<?> excluir(@PathVariable("codigo") Produto produto) {
         try {
@@ -72,6 +94,13 @@ public class ProdutoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("{codigo}")
+    public ModelAndView editar(@PathVariable("codigo") Produto produto) {
+        ModelAndView mv = init(produto);
+        mv.addObject(produto);
+        return mv;
     }
 
 }

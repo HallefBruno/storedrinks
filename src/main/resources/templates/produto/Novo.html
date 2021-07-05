@@ -8,18 +8,12 @@
         <title>Cadastro de produto</title>
     </head>
 
-    <body>
-
+    <body class="bg-light rounded-3">
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-
         <div class="container-fluid">
-
             <th:block th:include="fragments/MensagemSucesso"></th:block>
-
-            <form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
-
+            <form th:action="${produto.id} == null ? @{/produtos/salvar} : @{/produtos/update/{codigo}(codigo=${produto.id})}" method="post" th:object="${produto}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-
                 <div class="card">
                     <h5 class="card-header">Cadastro de produto</h5>
                     <div class="card-body">
@@ -63,7 +57,7 @@
                         <div class="row">
                             <div class="col-sm-2 mb-1">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="${ativo}">
+                                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
                                     <label class="form-check-label" for="ativo">Ativo?</label>
                                 </div>
                             </div>
