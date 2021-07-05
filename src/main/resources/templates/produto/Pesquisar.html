@@ -8,9 +8,6 @@
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
 
         <style>
-            body{
-                background: #f7f7ff;
-            }
             .card {
                 position: relative;
                 display: flex;
@@ -22,12 +19,11 @@
                 border: 0 solid transparent;
                 border-radius: .25rem;
                 margin-bottom: 1.5rem;
-                box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
             }
         </style>
 
     </head>
-    <body>
+    <body class="bg-light">
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
         <main>
             <div class="container">
@@ -36,9 +32,44 @@
                     <div th:if="${#lists.isEmpty(produtos)}">
                         <div class="bg-light rounded-3"><h1>Nenhum produto cadastrado</h1></div>
                     </div>
+                        <div class="accordion accordion-flush shadow mb-2 bg-body rounded" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Pesquisa
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="mb-3 col-sm-4">
+                                                        <label for="codigoBarra" class="form-label">Cód Barra</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                                                            <input th:value="*{codigoBarra}" type="text" class="form-control" id="codigoBarra" name="codigoBarra">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-4">
+                                                        <label for="codProduto" class="form-label">Cód Produto</label>
+                                                        <input th:value="*{codProduto}" type="text" class="form-control" id="codProduto" name="codProduto">
+                                                    </div>
+                                                    <div class="mb-3 col-sm-4">
+                                                        <label for="descricaoProduto" class="form-label">Descrição do produto</label>
+                                                        <input type="text" th:value="*{descricaoProduto}" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     <div th:each="produto : ${produtos}">
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 shadow bg-body rounded">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-column align-items-center text-center">
@@ -53,7 +84,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-8">
+                            <div class="col-lg-8 shadow bg-body rounded">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
