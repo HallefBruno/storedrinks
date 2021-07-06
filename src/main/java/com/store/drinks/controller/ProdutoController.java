@@ -1,11 +1,16 @@
 package com.store.drinks.controller;
 
+import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ProdutoRepository;
+import com.store.drinks.repository.querys.produto.ProdutoFilter;
 import com.store.drinks.service.ProdutoService;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -79,9 +84,10 @@ public class ProdutoController {
     }
 
     @GetMapping("pesquisar")
-    public ModelAndView pesqisar(Produto produto, BindingResult result) {
+    public ModelAndView pesqisar(ProdutoFilter produtoFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
         ModelAndView mv = new ModelAndView("produto/Pesquisar");
-        mv.addObject("produtos", this.produtoRepository.findAll());
+        PageWrapper<Produto> paginaWrapper = new PageWrapper<>(this.produtoRepository.filtrar(produtoFilter, pageable),httpServletRequest);
+        mv.addObject("pagina", paginaWrapper);
         return mv;
     }
 
