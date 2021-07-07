@@ -10,7 +10,7 @@
 
     <body class="bg-light rounded-3">
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-        <div class="container-fluid">
+        <div class="container">
             <th:block th:include="fragments/MensagemSucesso"></th:block>
             <form th:action="${produto.id} == null ? @{/produtos/salvar} : @{/produtos/update/{codigo}(codigo=${produto.id})}" method="post" th:object="${produto}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
