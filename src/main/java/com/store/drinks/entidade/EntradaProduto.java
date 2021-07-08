@@ -70,6 +70,12 @@ public class EntradaProduto implements Serializable {
     @Column(length = 255, name = "forma_pagamento", nullable = false)
     private String formaPagamento;
     
+    @NotBlank(message = "Situacao da compra não pode ter espaços em branco!")
+    @NotEmpty(message = "Situacao da compra não pode ser vazio!")
+    @NotNull(message = "Situacao da compra não pode ser null!")
+    @Column(name = "situacao", nullable = false, length = 50)
+    private SituacaoCompra situacaoCompra;
+    
     @Version
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;

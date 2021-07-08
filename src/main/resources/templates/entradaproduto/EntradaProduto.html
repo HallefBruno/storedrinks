@@ -20,28 +20,49 @@
                     <div class="card">
                         <h5 class="card-header">Entrada de produto</h5>
                         <div class="card-body">
-                            <select id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Selecione o produto..." data-allow-clear="1">
-                                <option>Christmas Island</option>
-                                <option>South Sudan</option>
-                                <option disabled>Jamaica (disabled)</option>
-                                <option>Kenya</option>
-                                <option>French Guiana</option>
-                                <option>Mayotta</option>
-                                <option>Liechtenstein</option>
-                                <option>Denmark</option>
-                                <option>Eritrea</option>
-                                <option>Gibraltar</option>
-                                <option>Saint Helena, Ascension and Tristan da Cunha</option>
-                                <option>Haiti</option>
-                                <option>Namibia</option>
-                                <option>South Georgia and the South Sandwich Islands</option>
-                                <option>Vietnam</option>
-                                <option>Yemen</option>
-                                <option>Philippines</option>
-                                <option>Benin</option>
-                                <option>Czech Republic</option>
-                                <option>Russia</option>
-                            </select>
+                            <label for="produtos" class="form-label">Produtos</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-archive" aria-hidden="true"></i></span>
+                                <select th:field="*{produto}" id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Selecione o produto..." data-allow-clear="1">
+                                    <option value=""></option>
+                                    <option th:each="produto : ${produtos}" th:value="${produto.id}"
+                                        th:text="${produto.codigoBarra}+' '+${produto.descricaoProduto}+' '+${produto.codProduto}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="dataEmissao" class="form-label">Data emissão</label>
+                                    <input th:value="*{dataEmissao}" type="datetime-local" class="form-control" id="dataEmissao" name="dataEmissao">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="fornecedor" class="form-label">Fornecedor</label>
+                                    <input th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="situacao" class="form-label">Situação</label>
+                                    <select data-placeholder="Selecione a sutuação..." id="situacao" class="form-control">
+                                        <option></option>
+                                        <option th:each="situacao : ${T(com.store.drinks.entidade.SituacaoCompra).values()}" th:value="${situacao}" th:text="${situacao.value}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="quantidade" class="form-label">Quantidade</label>
+                                    <input th:value="*{quantidade}" min="0" type="datetime-local" class="form-control" id="quantidade" name="quantidade">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="valorCusto" class="form-label">Valor de custo</label>
+                                    <input th:value="*{valorCusto}" min="0" type="text" class="form-control" id="valorCusto" name="valorCusto">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-12">
+                                    <label for="valorTotal" class="form-label">Valor total</label>
+                                    <input th:value="*{valorTotal}" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
