@@ -51,7 +51,7 @@
                             <div class="row mt-2">
                                 <div class="col-sm-12 col-md-4 col-12">
                                     <label for="quantidade" class="form-label">Quantidade</label>
-                                    <input th:value="*{quantidade}" min="0" type="datetime-local" class="form-control" id="quantidade" name="quantidade">
+                                    <input th:value="*{quantidade}" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-12">
                                     <label for="valorCusto" class="form-label">Valor de custo</label>
@@ -62,7 +62,11 @@
                                     <input th:value="*{valorTotal}" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
                                 </div>
                             </div>
-                            
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="btn-group">
+                                    <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/entradas/{codigo}(codigo=${entradaProduto.id})}">Salvar</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
