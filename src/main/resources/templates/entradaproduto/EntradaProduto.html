@@ -11,6 +11,7 @@
     </head>
 
     <body class="bg-light rounded-3">
+        <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
         <div class="container">
             <th:block th:include="fragments/MensagemSucesso"></th:block>
@@ -59,12 +60,17 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-12">
                                     <label for="valorTotal" class="form-label">Valor total</label>
-                                    <input th:value="*{valorTotal}" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
+                                    <input readonly="true" th:value="*{valorTotal}" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
                                 <div class="btn-group">
-                                    <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/entradas/{codigo}(codigo=${entradaProduto.id})}">Salvar</a>
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                        Salvar
+                                    </button>
+                                    <a type="button" th:href="@{/entradas/novo}" class="btn btn-sm btn-outline-secondary">
+                                        Pesquisar
+                                    </a>
                                 </div>
                             </div>
                         </div>
