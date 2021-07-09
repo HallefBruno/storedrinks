@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -57,6 +58,9 @@ public class EntradaProduto implements Serializable {
     @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "valor_custo")
     private BigDecimal valorCusto;
+    
+    @Transient
+    private String codigoBarra;
     
     @NotNull(message = "Valor total não pode ser null!")
     @Min(value = 0, message = "Valor total")

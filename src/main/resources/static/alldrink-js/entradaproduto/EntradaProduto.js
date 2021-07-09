@@ -8,7 +8,7 @@ $(function () {
     $("#produtos").on("select2:select", function (e) {
         $.get($("#contextApp").val()+"entradas/buscar/"+e.params.data.id, function (data) {
             $("#valorCusto").val(data.valorCusto);
-            $("#valorCusto").trigger("input");
+            $("#valorCusto").focus();
         });
     });
     $("#valorCusto").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});

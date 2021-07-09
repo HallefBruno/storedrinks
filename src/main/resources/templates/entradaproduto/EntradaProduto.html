@@ -21,9 +21,9 @@
                     <div class="card">
                         <h5 class="card-header">Entrada de produto</h5>
                         <div class="card-body">
-                            <label for="produtos" class="form-label">Produtos</label>
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-12">
+                                <div class="mb-3 col-sm-8 col-md-8 col-12">
+                                    <label for="produtos" class="form-label">Produtos</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa fa-archive" aria-hidden="true"></i></span>
                                         <select th:field="*{produto}" id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Selecione o produto..." data-allow-clear="1">
@@ -34,17 +34,24 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="mb-3 col-sm-4 col-md-4 col-12">
+                                    <label for="codigoBarra" class="form-label">Cód Barra</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                                        <input th:value="*{codigoBarra}" type="text" class="form-control" id="codigoBarra" name="codigoBarra">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-sm-12 col-md-4 col-12">
+                            <div class="row">
+                                <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="dataEmissao" class="form-label">Data emissão</label>
                                     <input th:value="*{dataEmissao}" type="datetime-local" class="form-control" id="dataEmissao" name="dataEmissao">
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-12">
+                                <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="fornecedor" class="form-label">Fornecedor</label>
                                     <input th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-12">
+                                <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="situacao" class="form-label">Situação</label>
                                     <select data-placeholder="Selecione a sutuação..." id="situacao" class="form-control">
                                         <option></option>
@@ -53,12 +60,12 @@
                                 </div>
                             </div>
                             
-                            <div class="row mt-2">
-                                <div class="col-sm-12 col-md-4 col-12">
+                            <div class="row">
+                                <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="quantidade" class="form-label">Quantidade</label>
                                     <input th:value="*{quantidade}" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-12">
+                                <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="valorCusto" class="form-label">Valor de custo atual</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
