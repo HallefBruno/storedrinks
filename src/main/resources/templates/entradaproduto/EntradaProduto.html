@@ -14,69 +14,91 @@
         <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
         <div class="container">
+
+            <div id="nenumProduto" style="display: block;">
+                <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <p class="">Nenhum produto encontrado!</p>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+
             <th:block th:include="fragments/MensagemSucesso"></th:block>
             <form th:action="${entradaProduto.id} == null ? @{/entradas/salvar} : @{/entradas/update/{codigo}(codigo=${entradaProduto.id})}" method="post" th:object="${entradaProduto}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-                <div class="shadow p-3 mb-5 bg-body rounded">
-                    <div class="card">
-                        <h5 class="card-header">Entrada de produto</h5>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="mb-3 col-sm-8 col-md-8 col-12">
-                                    <label for="produtos" class="form-label">Produtos</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fa fa-archive" aria-hidden="true"></i></span>
-                                        <select th:field="*{produto}" id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Selecione o produto..." data-allow-clear="1">
-                                            <option value=""></option>
-                                            <option th:each="produto : ${produtos}" th:value="${produto.id}"
-                                                th:text="${produto.codigoBarra}+' '+${produto.descricaoProduto}+' '+${produto.codProduto}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-sm-4 col-md-4 col-12">
-                                    <label for="codigoBarra" class="form-label">Cód Barra</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                        <input th:value="*{codigoBarra}" type="text" class="form-control" id="codigoBarra" name="codigoBarra">
-                                    </div>
+                <div class="card shadow-sm" style="margin-top: 5px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-8">
+                                <label for="produtos" class="form-label">Porcure aqui seu produto</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-archive" aria-hidden="true"></i></span>
+                                    <select id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                             </div>
+                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                <label for="codigoBarra" class="form-label">Cód Barra</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" id="codigoBarra" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-sm-7 col-md-7 col-7 col-lg-9">
+                                <label for="descricaoProdutoAtual" class="form-label">Descrição do produto</label>
+                                <input readonly="true" type="text" class="form-control" id="descricaoProdutoAtual" >
+                            </div>
+                            <div class="mb-3 col-sm-5 col-md-5 col-3 col-lg-3">
+                                <label for="codigoProdutoAtual" class="form-label">Cód produto</label>
+                                <input readonly="true" type="text" class="form-control" id="codigoProdutoAtual" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shadow-sm mt-2 mb-5 rounded">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="dataEmissao" class="form-label">Data emissão</label>
-                                    <input th:value="*{dataEmissao}" type="datetime-local" class="form-control" id="dataEmissao" name="dataEmissao">
+                                    <input required th:value="*{dataEmissao}" type="datetime-local" class="form-control" id="dataEmissao" name="dataEmissao">
                                 </div>
                                 <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="fornecedor" class="form-label">Fornecedor</label>
-                                    <input th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
+                                    <input required th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
                                 </div>
                                 <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="situacao" class="form-label">Situação</label>
-                                    <select data-placeholder="Selecione a sutuação..." id="situacao" class="form-control">
+                                    <select required data-placeholder="Selecione a sutuação..." id="situacao" class="form-control">
                                         <option></option>
                                         <option th:each="situacao : ${T(com.store.drinks.entidade.SituacaoCompra).values()}" th:value="${situacao}" th:text="${situacao.value}"></option>
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="quantidade" class="form-label">Quantidade</label>
-                                    <input th:value="*{quantidade}" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
+                                    <input required th:value="*{quantidade}" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
                                 </div>
                                 <div class="mb-3 col-sm-12 col-md-4 col-12">
                                     <label for="valorCusto" class="form-label">Valor de custo atual</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                        <input th:value="*{valorCusto}" min="0" type="text" class="form-control" id="valorCusto" name="valorCusto">
+                                        <input required th:value="*{valorCusto}" min="0" type="text" class="form-control" id="valorCusto" name="valorCusto">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-12">
                                     <label for="valorTotal" class="form-label">Valor total</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                        <input th:value="*{valorTotal}" readonly="true" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
+                                        <input required th:value="*{valorTotal}" readonly="true" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
                                     </div>
                                 </div>
                             </div>
@@ -101,5 +123,10 @@
         <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery.maskMoney.js}" type="text/javascript"></script>
         <script th:src="@{/alldrink-js/entradaproduto/EntradaProduto.js}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function () {
+                $(".toast").toast('show');
+            });
+        </script>
     </body>
 </html>
