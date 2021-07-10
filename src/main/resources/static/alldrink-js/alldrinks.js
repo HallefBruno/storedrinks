@@ -1,8 +1,8 @@
-/* global Swal */
+/* global Swal, numeral */
 
-var Deletar = Deletar || {};
+var StoreDrink = StoreDrink || {};
 
-Deletar.DialogoExcluir = (function () {
+StoreDrink.DialogoExcluir = (function () {
 
     function DialogoExcluir() {
         this.exclusaoBtn = $('.js-exclusao-btn');
@@ -62,7 +62,39 @@ Deletar.DialogoExcluir = (function () {
 
 }());
 
+
+StoreDrink.Security = (function () {
+
+    function Security() {
+        this.token = $('input[name=_csrf]').val();
+        this.header = $('input[name=_csrf_header]').val();
+    }
+
+    Security.prototype.enable = function () {
+        $(document).ajaxSend(function (event, jqxhr, settings) {
+            jqxhr.setRequestHeader(this.header, this.token);
+        }.bind(this));
+    };
+
+    return Security;
+
+}());
+
+
+StoreDrink.formatarMoeda = function (valor) {
+    return numeral(valor).format('0,0.00');
+};
+
+StoreDrink.recuperarValor = function (valorFormatado) {
+    return numeral().unformat(valorFormatado);
+};
+
 $(function () {
-    var dialogo = new Deletar.DialogoExcluir();
+
+    var dialogo = new StoreDrink.DialogoExcluir();
     dialogo.iniciar();
+
+    var security = new StoreDrink.Security();
+    security.enable();
+
 });

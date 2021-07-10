@@ -1,4 +1,4 @@
 $(document).ready(function () {
-    $("#valorCusto").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
-    $("#valorVenda").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
+    $("#valorCusto").mask("#,##0.00", {reverse: true});
+    $("#valorVenda").mask("#,##0.00", {reverse: true});
 });

@@ -1,6 +1,11 @@
 /* global bootstrap */
 
 $(function () {
+    
+    $("#valorCusto").mask("#,##0.00", {reverse: true});
+//    $("#valorTotal").mask("#,##0.00", {reverse: true});
+    $("#valorCusto").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
+    
     $("#produtos").select2({
         theme: "bootstrap-5"
     });
@@ -11,8 +16,6 @@ $(function () {
             $("#valorCusto").focus();
         });
     });
-    $("#valorCusto").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
-    $("#valorTotal").maskMoney({prefix:'R$ ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
 
     $("#situacao").select2({
         theme: "bootstrap-5"

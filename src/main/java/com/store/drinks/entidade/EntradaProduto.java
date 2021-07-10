@@ -55,9 +55,8 @@ public class EntradaProduto implements Serializable {
     
     @NotNull(message = "Valor de custo não pode ser null!")
     @Min(value = 0, message = "Valor de custo mínima")
-    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "valor_custo")
-    private BigDecimal valorCusto;
+    private Double valorCusto;
     
     @Transient
     private String codigoBarra;

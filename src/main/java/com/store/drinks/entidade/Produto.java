@@ -55,13 +55,11 @@ public class Produto implements Serializable {
     
     @NotNull(message = "Valor de custo não pode ser null!")
     @Min(value = 0, message = "Valor de custo mínima")
-    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "valor_venda")
     private BigDecimal valorCusto;
     
     @NotNull(message = "Valor de venda não pode ser null!")
     @Min(value = 0, message = "Valor de venda mínima")
-    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "valor_custo")
     private BigDecimal valorVenda;
     
