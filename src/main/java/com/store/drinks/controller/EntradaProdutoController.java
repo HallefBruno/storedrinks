@@ -81,4 +81,11 @@ public class EntradaProdutoController {
         return new ResponseEntity<>(entradaProdutoService.pesquisarProdutosAutoComplete(descricao, page),HttpStatus.OK);
     }
     
+    @GetMapping("pesquisar")
+    public ModelAndView pesqisar() {
+        ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
+        mv.addObject("pagina", entradaProdutoService.todas());
+        return mv;
+    }
+    
 }

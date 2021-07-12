@@ -53,13 +53,13 @@ public class EntradaProdutoService {
             entradaProduto.setValorTotal(somaTotal);
         } else if (((entradaProduto.getNovoValorCusto() != null && entradaProduto.getNovoValorCusto().doubleValue() > 0) && (entradaProduto.getNovoValorVenda() == null || entradaProduto.getNovoValorVenda().doubleValue() == 0) && (entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0))) {
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
-            entradaProduto.setNovaQuantidade(produto.getQuantidade());
+            entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * entradaProduto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
         } else if (((entradaProduto.getNovoValorVenda() != null && entradaProduto.getNovoValorVenda().doubleValue() > 0) && (entradaProduto.getNovoValorCusto() == null || entradaProduto.getNovoValorCusto().doubleValue() == 0) && (entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0))) {
             produto.setValorCusto(entradaProduto.getNovoValorVenda());
-            entradaProduto.setNovaQuantidade(produto.getQuantidade());
+            entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * produto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
@@ -92,6 +92,10 @@ public class EntradaProdutoService {
 
     public List<Produto> todos() {
         return produtoRepository.findAll();
+    }
+    
+    public List<EntradaProduto> todas() {
+        return entradaProdutoRepository.findAll();
     }
 
     public Produto buscarProdutoPorId(Long id) {
