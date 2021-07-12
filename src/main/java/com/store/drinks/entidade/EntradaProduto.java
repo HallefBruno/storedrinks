@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.NumberFormat;
 
 @Data
 @Entity
@@ -53,30 +54,44 @@ public class EntradaProduto implements Serializable {
     @Column(nullable = false)
     private Integer quantidade;
     
+    @Min(value = 0, message = "Nova quantidade mínima")
+    @Column(nullable = false)
+    private Integer novaQuantidade;
+    
     @NotNull(message = "Valor de custo não pode ser null!")
     @Min(value = 0, message = "Valor de custo mínima")
     @Column(nullable = false, name = "valor_custo")
-    private Double valorCusto;
+    private BigDecimal valorCusto;
+    
+    @NotNull(message = "Valor de venda não pode ser null!")
+    @Min(value = 0, message = "Valor de venda mínima")
+    @Column(nullable = false, name = "valor_venda")
+    private BigDecimal valorVenda;
     
     @Transient
     private String codigoBarra;
     
-    @NotNull(message = "Valor total não pode ser null!")
     @Min(value = 0, message = "Valor total")
-    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "###,##0.00")
     @Column(nullable = false, name = "valor_total")
     private BigDecimal valorTotal;
+    
+    @Min(value = 0, message = "Novo valor de custo")
+    @Column(nullable = false, name = "novo_valor_custo")
+    private BigDecimal novoValorCusto;
+    
+    @Min(value = 0, message = "Novo valor de venda")
+    @Column(nullable = false, name = "novo_valor_venda")
+    private BigDecimal novoValorVenda;
     
     @NotBlank(message = "Forma de pagamento não pode ter espaços em branco!")
     @NotEmpty(message = "Forma de pagamento não pode ser vazio!")
     @NotNull(message = "Forma de pagamento não pode ser null!")
     @Column(length = 255, name = "forma_pagamento", nullable = false)
     private String formaPagamento;
-    
-    @NotBlank(message = "Situacao da compra não pode ter espaços em branco!")
-    @NotEmpty(message = "Situacao da compra não pode ser vazio!")
+
     @NotNull(message = "Situacao da compra não pode ser null!")
-    @Column(name = "situacao", nullable = false, length = 50)
+    @Column(name = "situacao_compra", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
     private SituacaoCompra situacaoCompra;
     
     @Version

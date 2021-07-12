@@ -1,8 +1,6 @@
 package com.store.drinks.controller;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.boot.web.servlet.error.*;
 import org.springframework.stereotype.Controller;

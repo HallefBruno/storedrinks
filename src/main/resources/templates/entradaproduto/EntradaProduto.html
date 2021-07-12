@@ -8,24 +8,14 @@
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/select2.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/select2-bootstrap-5-theme.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
     </head>
-
+    
     <body class="bg-light rounded-3">
         <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
         <div class="container">
-
-            <div id="nenumProduto" style="display: block;">
-                <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <p class="">Nenhum produto encontrado!</p>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            </div>
-
+            <div id="nenhumProduto" style="display: none;"></div>
             <th:block th:include="fragments/MensagemSucesso"></th:block>
             <form th:action="${entradaProduto.id} == null ? @{/entradas/salvar} : @{/entradas/update/{codigo}(codigo=${entradaProduto.id})}" method="post" th:object="${entradaProduto}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
@@ -33,10 +23,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-8">
-                                <label for="produtos" class="form-label">Porcure aqui seu produto</label>
+                                <label for="produtos" class="form-label">Procure aqui seu produto</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-archive" aria-hidden="true"></i></span>
-                                    <select id="produtos" name="produtos" class="form-select mb-3" required data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
+                                    <select id="produtos" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -45,18 +35,18 @@
                                 <label for="codigoBarra" class="form-label">Cód Barra</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" id="codigoBarra" >
+                                    <input type="text" th:field="*{codigoBarra}" class="form-control" id="codigoBarra" name="codigoBarra">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="mb-3 col-sm-7 col-md-7 col-7 col-lg-9">
                                 <label for="descricaoProdutoAtual" class="form-label">Descrição do produto</label>
-                                <input readonly="true" type="text" class="form-control" id="descricaoProdutoAtual" >
+                                <input readonly="true" type="text" class="form-control" id="descricaoProdutoAtual">
                             </div>
-                            <div class="mb-3 col-sm-5 col-md-5 col-3 col-lg-3">
+                            <div class="mb-3 col-sm-5 col-md-5 col-5 col-lg-3">
                                 <label for="codigoProdutoAtual" class="form-label">Cód produto</label>
-                                <input readonly="true" type="text" class="form-control" id="codigoProdutoAtual" >
+                                <input readonly="true" type="text" class="form-control" id="codigoProdutoAtual">
                             </div>
                         </div>
                     </div>
@@ -65,43 +55,90 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="mb-3 col-sm-12 col-md-4 col-12">
+                                <div class="mb-3 col-sm-12 col-md-3 col-12">
                                     <label for="dataEmissao" class="form-label">Data emissão</label>
-                                    <input required th:value="*{dataEmissao}" type="datetime-local" class="form-control" id="dataEmissao" name="dataEmissao">
+                                    <input required th:field="*{dataEmissao}" type="text" class="form-control" id="dataEmissao" name="dataEmissao">
                                 </div>
-                                <div class="mb-3 col-sm-12 col-md-4 col-12">
+                                <div class="mb-3 col-sm-12 col-md-3 col-12">
                                     <label for="fornecedor" class="form-label">Fornecedor</label>
                                     <input required th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
                                 </div>
-                                <div class="mb-3 col-sm-12 col-md-4 col-12">
-                                    <label for="situacao" class="form-label">Situação</label>
-                                    <select required data-placeholder="Selecione a sutuação..." id="situacao" class="form-control">
-                                        <option></option>
-                                        <option th:each="situacao : ${T(com.store.drinks.entidade.SituacaoCompra).values()}" th:value="${situacao}" th:text="${situacao.value}"></option>
+
+                                <div class="mb-3 col-sm-12 col-md-3 col-12">
+                                    <label for="formaPagamento" class="form-label">Forma de pagamento</label>
+                                    <input required th:value="*{formaPagamento}" type="text" class="form-control" id="formaPagamento" name="formaPagamento">
+                                </div>
+
+                                <div class="mb-3 col-sm-12 col-md-3 col-12">
+                                    <label for="situacaoCompra" class="form-label">Situação</label>
+                                    <select required data-placeholder="Selecione a sutuação..." th:field="*{situacaoCompra}" id="situacaoCompra" name="situacaoCompra" class="form-control">
+                                        <option value=""></option>
+                                        <option th:each="situacaoCompra : ${T(com.store.drinks.entidade.SituacaoCompra).values()}" th:value="${situacaoCompra}" th:text="${situacaoCompra.value}"></option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="mb-3 col-sm-12 col-md-4 col-12">
-                                    <label for="quantidade" class="form-label">Quantidade</label>
-                                    <input required th:value="*{quantidade}" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
-                                </div>
-                                <div class="mb-3 col-sm-12 col-md-4 col-12">
-                                    <label for="valorCusto" class="form-label">Valor de custo atual</label>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                        <input required th:value="*{valorCusto}" min="0" type="text" class="form-control" id="valorCusto" name="valorCusto">
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <div class="mb-3">
+                                        <label for="quantidade" class="form-label">Quantidade</label>
+                                        <input required th:value="*{quantidade}" readonly="true" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-12">
-                                    <label for="valorTotal" class="form-label">Valor total</label>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                        <input required th:value="*{valorTotal}" readonly="true" min="0" type="text" class="form-control" id="valorTotal" name="valorTotal">
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <div class="mb-3">
+                                        <label for="valorCusto" class="form-label">Valor de custo</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                            <input required th:value="*{valorCusto}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorCusto" name="valorCusto">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <div class="mb-3">
+                                        <label for="valorVenda" class="form-label">Valor de venda</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                            <input required th:value="*{valorVenda}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorVenda" name="valorVenda">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-12 col-lg-4">
+                                    <label for="novaQuantidade" class="form-label">N quantidade</label>
+                                    <div class="input-group mb-3">
+                                        <input th:value="*{novaQuantidade}" min="0" type="number" class="form-control" id="novaQuantidade" name="novaQuantidade">
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label for="novoValorCusto" class="form-label">N valor custo</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                        <input th:value="*{novoValorCusto}" min="0" type="text" class="form-control monetaria" id="novoValorCusto" name="novoValorCusto">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-12 col-lg-4">
+                                    <label for="novoValorVenda" class="form-label">N valor venda</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                        <input th:value="*{novoValorVenda}" min="0" type="text" class="form-control monetaria" id="novoValorVenda" name="novoValorVenda">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row justify-content-end">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-12">
+                                    <label for="valorTotal" class="form-label">Valor total</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                        <input required th:value="*{valorTotal}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorTotal" name="valorTotal">
+                                        <button type="button" id="btnCalcular" class="btn btn-info btn-sm">Calcular</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="d-flex justify-content-between align-items-center mt-2">
                                 <div class="btn-group">
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">
@@ -112,21 +149,21 @@
                                     </a>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </form>
         </div>
+        <div id="divLoading"></div>
+
         <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/select2.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery.maskMoney.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
+        <script th:src="@{/alldrink-js/alldrinks.js}" type="text/javascript"></script>
         <script th:src="@{/alldrink-js/entradaproduto/EntradaProduto.js}" type="text/javascript"></script>
-        <script type="text/javascript">
-            $(function () {
-                $(".toast").toast('show');
-            });
-        </script>
     </body>
 </html>

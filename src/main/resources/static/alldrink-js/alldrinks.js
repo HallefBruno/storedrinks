@@ -63,22 +63,22 @@ StoreDrink.DialogoExcluir = (function () {
 }());
 
 
-StoreDrink.Security = (function () {
-
-    function Security() {
-        this.token = $('input[name=_csrf]').val();
-        this.header = $('input[name=_csrf_header]').val();
-    }
-
-    Security.prototype.enable = function () {
-        $(document).ajaxSend(function (event, jqxhr, settings) {
-            jqxhr.setRequestHeader(this.header, this.token);
-        }.bind(this));
-    };
-
-    return Security;
-
-}());
+//StoreDrink.Security = (function () {
+//
+//    function Security() {
+//        this.token = $('input[name=_csrf]').val();
+//        this.header = $('input[name=_csrf_header]').val();
+//    }
+//
+//    Security.prototype.enable = function () {
+//        $(document).ajaxSend(function (event, jqxhr, settings) {
+//            jqxhr.setRequestHeader(this.header, this.token);
+//        }.bind(this));
+//    };
+//
+//    return Security;
+//
+//}());
 
 
 StoreDrink.formatarMoeda = function (valor) {
@@ -89,12 +89,44 @@ StoreDrink.recuperarValor = function (valorFormatado) {
     return numeral().unformat(valorFormatado);
 };
 
+StoreDrink.MascaraMoneteria = (function () {
+    function MascaraMoneteria() {}
+    MascaraMoneteria.prototype.enable = function () {
+        $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: ',', decimal: '.', affixesStay: false});;
+    };
+    return MascaraMoneteria;
+}());
+
+
+StoreDrink.LoadGif = (function () {
+
+    function LoadGif() {}
+    window.console.log("LoadGif");
+    LoadGif.prototype.enable = function () {
+        $(document).ajaxSend(function (event, jqxhr, settings) {
+            window.console.log(event);
+            $("#divLoading").addClass("loading");
+        }.bind(this));
+        $(document).ajaxComplete(function (event, jqxhr, settings) {
+            $("#divLoading").removeClass("loading");
+        }.bind(this));
+    };
+    return LoadGif;
+}());
+
+
 $(function () {
 
     var dialogo = new StoreDrink.DialogoExcluir();
     dialogo.iniciar();
 
-    var security = new StoreDrink.Security();
-    security.enable();
-
+    
+    var loadGif = new StoreDrink.LoadGif();
+    loadGif.enable();
+    
+    var inputM = new StoreDrink.MascaraMoneteria();
+    inputM.enable();
+    
+//    var security = new StoreDrink.Security();
+//    security.enable();
 });

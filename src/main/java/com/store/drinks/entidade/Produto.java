@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 @Data

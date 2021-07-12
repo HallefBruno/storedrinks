@@ -1,0 +1,17 @@
+.loading {
+    display : none;
+}
+.loading {
+    display : block;
+    position : fixed;
+    z-index: 100;
+    background-image : url('/alldrinks/imagens/carregando.gif');
+    background-color:#999999; /*#ffffff;*/
+    opacity : 0.8;
+    background-repeat : no-repeat;
+    background-position : center;
+    left : 0;
+    bottom : 0;
+    right : 0;
+    top : 0;
+}
