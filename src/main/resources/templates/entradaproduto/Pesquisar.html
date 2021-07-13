@@ -1,67 +1,93 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Pesquisa de produtos</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/responsive.dataTables.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/buttons.dataTables.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
     </head>
     <body class="bg-light">
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
         <main>
             <div class="container-fluid">
-                <div th:if="${#lists.isEmpty(pagina)}">
-                    <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex">
-                            <div class="toast-body">
-                                <p class="">Nenhuma entrada encontrado!</p>
+                <div class="card shadow-sm" style="margin-top: 5px;">
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(pagina)}">
+                            <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="d-flex">
+                                    <div class="toast-body">
+                                        <p class="">Nenhuma entrada encontrado!</p>
+                                    </div>
+                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
                             </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
+                        <table id="entradas" class="table table-hover">
+                            <thead>
+                                <tr style="font-size: 12px;">
+                                    <th>#</th>
+                                    <th>Cód barra</th>
+                                    <th>Produto</th>
+                                    <th>Fornecedor</th>
+                                    <th>Data emissão</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor custo</th>
+                                    <th>Valor venda</th>
+                                    <th>N quantidade</th>
+                                    <th>N valor custo</th>
+                                    <th>N valor venda</th>
+                                    <th>Forma pagto</th>
+                                    <th>Situação compra</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 12px;" th:each="entrada : ${pagina}">
+                                    <th th:text="${entrada.id}"></th>
+                                    <th th:text="${entrada.produto.codigoBarra}"></th>
+                                    <th th:text="${entrada.produto.descricaoProduto}"></th>
+                                    <th th:text="${entrada.fornecedor}"></th>
+                                    <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy hh:mm:ss')}"></th>
+                                    <th th:text="${entrada.quantidade}" style="text-align: center;"></th>
+                                    <th th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
+                                    <th th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
+                                    <th th:text="${entrada.novaQuantidade}"></th>
+                                    <th th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
+                                    <th th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
+                                    <th th:text="${entrada.formaPagamento}"></th>
+                                    <th th:text="${entrada.situacaoCompra}"></th>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Cód barra</th>
-                            <th scope="col">Produto</th>
-                            <th scope="col">Fornecedor</th>
-                            <th scope="col">Data emissão</th>
-                            <th scope="col">Quantidade</th>
-                            <th scope="col">Valor custo</th>
-                            <th scope="col">Valor venda</th>
-                            <th scope="col">Nova quantidade</th>
-                            <th scope="col">Novo valor custo</th>
-                            <th scope="col">Nova valor venda</th>
-                            <th scope="col">Forma pagamento</th>
-                            <th scope="col">Situação da compra</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="entrada : ${pagina}">
-                            <th scope="row">[[${entrada.id}]]</th>
-                            <th scope="row">[[${entrada.produto.codigoBarra}]]</th>
-                            <th scope="row">[[${entrada.produto.descricaoProduto}]]</th>
-                            <th scope="row">[[${entrada.fornecedor}]]</th>
-                            <th scope="row">[[${entrada.dataEmissao}]]</th>
-                            <th scope="row">[[${entrada.quantidade}]]</th>
-                            <th scope="row">[[${entrada.valorCusto}]]</th>
-                            <th scope="row">[[${entrada.valorVenda}]]</th>
-                            <th scope="row">[[${entrada.novaQuantidade}]]</th>
-                            <th scope="row">[[${entrada.novoValorCusto}]]</th>
-                            <th scope="row">[[${entrada.novoValorVenda}]]</th>
-                            <th scope="row">[[${entrada.formaPagamento}]]</th>
-                            <th scope="row">[[${entrada.situacaoCompra}]]</th>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </main>
         <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/jquery.dataTables.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/dataTables.bootstrap5.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/dataTables.responsive.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/dataTables.buttons.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/jquery.maskMoney.js}" type="text/javascript"></script>
         <script th:src="@{/alldrink-js/alldrinks.js}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#entradas").DataTable({
+                    searching: false,
+                    destroy: true,
+                    pageLength: 10,
+                    info: true,
+                    responsive: true,
+                    lengthChange: false,
+                    language: {
+                        url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
