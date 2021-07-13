@@ -33,15 +33,15 @@
                                     <th>Cód barra</th>
                                     <th>Produto</th>
                                     <th>Fornecedor</th>
-                                    <th>Data emissão</th>
-                                    <th>Quantidade</th>
-                                    <th>Valor custo</th>
-                                    <th>Valor venda</th>
-                                    <th>N quantidade</th>
-                                    <th>N valor custo</th>
-                                    <th>N valor venda</th>
-                                    <th>Forma pagto</th>
-                                    <th>Situação compra</th>
+                                    <th style="text-align: center;">Data emissão</th>
+                                    <th style="text-align: center;">Quantidade</th>
+                                    <th style="text-align: center;">Valor custo</th>
+                                    <th style="text-align: center;">Valor venda</th>
+                                    <th style="text-align: center;">Nova quantidade</th>
+                                    <th style="text-align: center;">Novo valor custo</th>
+                                    <th style="text-align: center;">Novo valor venda</th>
+                                    <th style="text-align: center;">Forma pagto</th>
+                                    <th style="text-align: center;">Situação compra</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,14 +51,14 @@
                                     <th th:text="${entrada.produto.descricaoProduto}"></th>
                                     <th th:text="${entrada.fornecedor}"></th>
                                     <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy hh:mm:ss')}"></th>
-                                    <th th:text="${entrada.quantidade}" style="text-align: center;"></th>
-                                    <th th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
-                                    <th th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
-                                    <th th:text="${entrada.novaQuantidade}"></th>
-                                    <th th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
-                                    <th th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
-                                    <th th:text="${entrada.formaPagamento}"></th>
-                                    <th th:text="${entrada.situacaoCompra}"></th>
+                                    <th style="text-align: center;" th:text="${entrada.quantidade}"></th>
+                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
+                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
+                                    <th style="text-align: center;" th:text="${entrada.novaQuantidade}"></th>
+                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
+                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
+                                    <th style="text-align: center;" th:text="${entrada.formaPagamento}"></th>
+                                    <th style="text-align: center; font-size: 12px;"><span th:class="${entrada.situacaoCompra =='CONFIRMADA'? 'badge bg-success':'badge bg-secondary'}">[[${entrada.situacaoCompra}]]</span></th>
                                 </tr>
                             </tbody>
                         </table>
