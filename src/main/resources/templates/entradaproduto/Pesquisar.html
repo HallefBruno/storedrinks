@@ -50,7 +50,7 @@
                                     <th th:text="${entrada.produto.codigoBarra}"></th>
                                     <th th:text="${entrada.produto.descricaoProduto}"></th>
                                     <th th:text="${entrada.fornecedor}"></th>
-                                    <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy hh:mm:ss')}"></th>
+                                    <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></th>
                                     <th style="text-align: center;" th:text="${entrada.quantidade}"></th>
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
@@ -58,7 +58,12 @@
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
                                     <th style="text-align: center;" th:text="${entrada.formaPagamento}"></th>
-                                    <th style="text-align: center; font-size: 12px;"><span th:class="${entrada.situacaoCompra =='CONFIRMADA'? 'badge bg-success':'badge bg-secondary'}">[[${entrada.situacaoCompra}]]</span></th>
+                                    <th style="text-align: center;">
+                                        <div th:switch="${entrada.situacaoCompra}">
+                                            <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).CONFIRMADA}" class="badge bg-success">[[${entrada.situacaoCompra}]]</span>
+                                            <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).ABERTA}"><button class="btn btn-outline-primary btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i></button></span>
+                                        </div>
+                                    </th>
                                 </tr>
                             </tbody>
                         </table>

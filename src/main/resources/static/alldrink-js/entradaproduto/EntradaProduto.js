@@ -1,7 +1,9 @@
 /* global bootstrap, Swal */
 
 $(function () {
-    $("#dataEmissao").mask("00/00/0000 00:00:00");
+
+    
+//    $("#dataEmissao").mask("00/00/0000 00:00:00");
     
     var toast = "<div style='height: 44px; width: 100%;' class='toast align-items-center text-white bg-warning border-0 mt-1 mb-1' data-delay='5000' data-animation='true' data-autohide='true' role='alert' aria-live='assertive' aria-atomic='true'>" +
             "<div class='d-flex'>" +
@@ -37,7 +39,7 @@ $(function () {
     });
 
     $("#codigoBarra").focus();
-
+    
     $("#codigoBarra").on("focusout", function (event) {
         if ($("#codigoBarra").val() !== undefined && $("#codigoBarra").val() !== null && $("#codigoBarra").val() !== "") {
             $.get($("#contextApp").val() + "entradas/buscar/produtoPorCodBarra/" + $("#codigoBarra").val(), function (data) {
@@ -60,6 +62,7 @@ $(function () {
                     $("#quantidade").focus();
                 }
             });
+            
         } else if ($("#codigoBarra").val() === "") {
             $("form").trigger("reset");
             $("#produtos").val(null).trigger("change");

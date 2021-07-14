@@ -23,6 +23,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
@@ -45,7 +46,8 @@ public class EntradaProduto implements Serializable {
     @Column(length = 255,name = "fornecedor", nullable = false)
     private String fornecedor;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     @Column(name = "data_emissao", nullable = false)
     private Date dataEmissao;
     
