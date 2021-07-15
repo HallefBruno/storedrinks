@@ -25,9 +25,14 @@ $(function () {
             $("#descricaoProdutoAtual").val(data.descricaoProduto);
             $("#codigoBarra").val(data.codigoBarra);
             $("#codigoProdutoAtual").val(data.codProduto);
+            if (data.valorCusto === 0 && $("#valorVenda").val() !== undefined && data.valorVenda === 0) {
+                $("#valorCusto").maskMoney("destroy");
+                $("#valorVenda").maskMoney("destroy");
+                $("#novoValorCusto").prop("required",true);
+                $("#novoValorVenda").prop("required",true);
+                $("#novaQuantidade").prop("required",true);
+            }
             $("#quantidade").val(data.quantidade);
-            $("#valorCusto").val(data.valorCusto);
-            $("#valorVenda").val(data.valorVenda);
             $("#valorCusto").focus();
             $("#valorVenda").focus();
             $("#quantidade").focus();
@@ -54,6 +59,13 @@ $(function () {
                     $("#descricaoProdutoAtual").val(data.descricaoProduto);
                     $("#codigoBarra").val(data.codigoBarra);
                     $("#codigoProdutoAtual").val(data.codProduto);
+                    if (data.valorCusto === 0 && $("#valorVenda").val() !== undefined && data.valorVenda === 0) {
+                        $("#valorCusto").maskMoney("destroy");
+                        $("#valorVenda").maskMoney("destroy");
+                        $("#novoValorCusto").prop("required",true);
+                        $("#novoValorVenda").prop("required",true);
+                        $("#novaQuantidade").prop("required",true);
+                    }
                     $("#quantidade").val(data.quantidade);
                     $("#valorCusto").val(data.valorCusto);
                     $("#valorVenda").val(data.valorVenda);

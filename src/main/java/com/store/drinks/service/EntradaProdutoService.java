@@ -42,49 +42,51 @@ public class EntradaProdutoService {
             entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
-            produto.setQuantidade(entradaProduto.getNovaQuantidade());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * produto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            produto.setQuantidade(entradaProduto.getNovaQuantidade());
         } else if (((entradaProduto.getNovaQuantidade() != null && entradaProduto.getNovaQuantidade() > 0) && (entradaProduto.getNovoValorCusto() == null || entradaProduto.getNovoValorCusto().doubleValue() == 0) && (entradaProduto.getNovoValorVenda() == null || entradaProduto.getNovoValorVenda().doubleValue() == 0))) {
             produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
             BigDecimal somaTotal = BigDecimal.valueOf(entradaProduto.getNovaQuantidade() * produto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            entradaProduto.setNovaQuantidade(produto.getQuantidade());
         } else if (((entradaProduto.getNovoValorCusto() != null && entradaProduto.getNovoValorCusto().doubleValue() > 0) && (entradaProduto.getNovoValorVenda() == null || entradaProduto.getNovoValorVenda().doubleValue() == 0) && (entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0))) {
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
-            produto.setQuantidade(produto.getQuantidade() + produto.getQuantidade());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * entradaProduto.getNovoValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            produto.setQuantidade(entradaProduto.getNovaQuantidade());
         } else if (((entradaProduto.getNovoValorVenda() != null && entradaProduto.getNovoValorVenda().doubleValue() > 0) && (entradaProduto.getNovoValorCusto() == null || entradaProduto.getNovoValorCusto().doubleValue() == 0) && (entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0))) {
             produto.setValorCusto(entradaProduto.getNovoValorVenda());
             entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * produto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            produto.setQuantidade(entradaProduto.getNovaQuantidade());
         } else if (((entradaProduto.getNovaQuantidade() != null && entradaProduto.getNovaQuantidade() > 0) && (entradaProduto.getNovoValorCusto() != null && entradaProduto.getNovoValorCusto().doubleValue() > 0) && (entradaProduto.getNovoValorVenda() == null || entradaProduto.getNovoValorVenda().doubleValue() == 0))) {
             produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
-            entradaProduto.setNovaQuantidade(produto.getQuantidade());
             BigDecimal somaTotal = BigDecimal.valueOf(entradaProduto.getNovaQuantidade() * entradaProduto.getNovoValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            entradaProduto.setNovaQuantidade(produto.getQuantidade());
         } else if (((entradaProduto.getNovaQuantidade() != null && entradaProduto.getNovaQuantidade() > 0) && (entradaProduto.getNovoValorVenda() != null && entradaProduto.getNovoValorVenda().doubleValue() > 0) && (entradaProduto.getNovoValorCusto() == null || entradaProduto.getNovoValorCusto().doubleValue() == 0))) {
             produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
-            entradaProduto.setNovaQuantidade(produto.getQuantidade());
             BigDecimal somaTotal = BigDecimal.valueOf(entradaProduto.getNovaQuantidade() * produto.getValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            entradaProduto.setNovaQuantidade(produto.getQuantidade());
         } else if (((entradaProduto.getNovoValorCusto() != null && entradaProduto.getNovoValorCusto().doubleValue() > 0) &&  (entradaProduto.getNovoValorVenda() != null && entradaProduto.getNovoValorVenda().doubleValue() > 0) && (entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0))) {
-            produto.setQuantidade(produto.getQuantidade() + produto.getQuantidade());
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
             entradaProduto.setNovaQuantidade(produto.getQuantidade());
             BigDecimal somaTotal = BigDecimal.valueOf(produto.getQuantidade() * entradaProduto.getNovoValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
+            produto.setQuantidade(produto.getQuantidade() + produto.getQuantidade());
         } else {
             produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
