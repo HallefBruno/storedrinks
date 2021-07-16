@@ -67,7 +67,7 @@
                                     <th style="text-align: center;">
                                         <div th:switch="${entrada.situacaoCompra}">
                                             <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
-                                            <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).ABERTA}"><button class="btn btn-outline-primary btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i></button></span>
+                                            <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
                                         </div>
                                     </th>
                                 </tr>
