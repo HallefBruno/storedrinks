@@ -35,7 +35,7 @@ public class EntradaProdutoController {
     }
     
     @GetMapping("nova")
-    public ModelAndView novo(EntradaProduto entradaProduto) {
+    public ModelAndView nova(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
         return mv;
     }
@@ -44,16 +44,16 @@ public class EntradaProdutoController {
     public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return novo(entradaProduto);
+                return nova(entradaProduto);
             }
             this.entradaProdutoService.salvar(entradaProduto);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
-            return novo(entradaProduto);
+            return nova(entradaProduto);
         }
         attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
-        return new ModelAndView("redirect:/entradas/novo", HttpStatus.CREATED);
+        return new ModelAndView("redirect:/entradas/nova", HttpStatus.CREATED);
     }
     
     @GetMapping("buscar/{id}")

@@ -9,6 +9,7 @@ import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class EntradaProdutoService {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade());
                 entradaProduto.setProduto(produto);
                 entradaProduto.setSituacaoCompra(SituacaoCompra.CONFIRMADA);
+                entradaProduto.setValorTotal(totalEntrada(entradaProduto.getQuantidadeIncrementar(), entradaProduto.getNovoValorCusto()));
                 entradaProdutoRepository.save(entradaProduto);
                 return;
             }
@@ -203,5 +205,11 @@ public class EntradaProdutoService {
             resultSelectAutomoveis.setItems(produtosDTO);
         }
         return resultSelectAutomoveis;
+    }
+    
+    public BigDecimal totalEntrada(Integer quantidade, BigDecimal valorCusto) {
+        BigDecimal itemCost = valorCusto.multiply(new BigDecimal(quantidade));
+        BigDecimal totalCost = new BigDecimal(BigInteger.ZERO);
+        return totalCost.add(itemCost);
     }
 }

@@ -17,16 +17,6 @@
                 <th:block th:include="fragments/MensagemSucesso"></th:block>
                 <div class="card shadow-sm" style="margin-top: 5px;">
                     <div class="card-body">
-                        <div th:if="${#lists.isEmpty(pagina)}">
-                            <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div class="d-flex">
-                                    <div class="toast-body">
-                                        <p class="">Nenhuma entrada encontrado!</p>
-                                    </div>
-                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        </div>
                         <table id="entradas" class="table table-hover caption-top">
                             <caption>Registro de entradas no estoque</caption>
                             <thead>

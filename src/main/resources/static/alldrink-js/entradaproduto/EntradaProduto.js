@@ -14,29 +14,44 @@ $(function () {
             "</div>" +
             "</div>";
 
-    popularSelectProdutos();
+    popularSelectProdutos(toast);
 
     $("#produtos").on("select2:open", function (e) {
         $(".select2-search__field")[0].focus();
     });
+    
+    $("#produtos").on("select2:unselecting", function (e) {
+        $("form").trigger("reset");
+        $("#produtos").val(null).trigger("change");
+        $("#situacaoCompra").val(null).trigger("change");
+    });
 
     $("#produtos").on("select2:select", function (e) {
         $.get($("#contextApp").val() + "entradas/buscar/" + e.params.data.id, function (data) {
-            window.console.log(data);
-            $("#descricaoProdutoAtual").val(data.descricaoProduto);
-            $("#codigoBarra").val(data.codigoBarra);
-            $("#codigoProdutoAtual").val(data.codProduto);
-            if (data.valorCusto === 0 && $("#valorVenda").val() !== undefined && data.valorVenda === 0) {
-                $("#valorCusto").maskMoney("destroy");
-                $("#valorVenda").maskMoney("destroy");
-                $("#novoValorCusto").prop("required",true);
-                $("#novoValorVenda").prop("required",true);
-                $("#novaQuantidade").prop("required",true);
+            if (data !== undefined && data !== null) {
+                $("#descricaoProdutoAtual").val(data.descricaoProduto);
+                $("#codigoBarra").val(data.codigoBarra);
+                $("#codigoProdutoAtual").val(data.codProduto);
+                if (data.valorCusto === 0) {
+                    $("#valorCusto").maskMoney("destroy");
+                    $("#novoValorCusto").prop("required", true);
+                }
+                if (data.valorVenda === 0) {
+                    $("#valorVenda").maskMoney("destroy");
+                    $("#novoValorVenda").prop("required", true);
+                }
+                if (data.quantidade === 0) {
+                    $("#novaQuantidade").prop("required", true);
+                }
+                $("#quantidade").val(data.quantidade);
+                $("#valorCusto").val(data.valorCusto);
+                $("#valorVenda").val(data.valorVenda);
+                $("#valorCusto").focus();
+                $("#valorVenda").focus();
+                $("#quantidade").focus();
+            } else {
+                clearFormShowMessage(toast);
             }
-            $("#quantidade").val(data.quantidade);
-            $("#valorCusto").focus();
-            $("#valorVenda").focus();
-            $("#quantidade").focus();
         });
     });
 
@@ -50,22 +65,26 @@ $(function () {
         if ($("#codigoBarra").val() !== undefined && $("#codigoBarra").val() !== null && $("#codigoBarra").val() !== "") {
             $.get($("#contextApp").val() + "entradas/buscar/produtoPorCodBarra/" + $("#codigoBarra").val(), function (data) {
                 if (data === undefined || data === null && $("#codigoBarra").val() !== "") {
-                    $("#nenhumProduto").css("display", "block");
-                    $("#nenhumProduto").html(toast);
-                    $(".toast").toast('show');
+                    clearFormShowMessage(toast);
                 }
                 if (data !== undefined && data !== null) {
                     $("#produtos").val(null).trigger("change");
                     $("#descricaoProdutoAtual").val(data.descricaoProduto);
                     $("#codigoBarra").val(data.codigoBarra);
                     $("#codigoProdutoAtual").val(data.codProduto);
-                    if (data.valorCusto === 0 && $("#valorVenda").val() !== undefined && data.valorVenda === 0) {
+                    
+                    if(data.valorCusto === 0) {
                         $("#valorCusto").maskMoney("destroy");
-                        $("#valorVenda").maskMoney("destroy");
                         $("#novoValorCusto").prop("required",true);
+                    }
+                    if(data.valorVenda === 0) {
+                        $("#valorVenda").maskMoney("destroy");
                         $("#novoValorVenda").prop("required",true);
+                    }
+                    if (data.quantidade === 0) {
                         $("#novaQuantidade").prop("required",true);
                     }
+                    
                     $("#quantidade").val(data.quantidade);
                     $("#valorCusto").val(data.valorCusto);
                     $("#valorVenda").val(data.valorVenda);
@@ -114,7 +133,7 @@ $(function () {
 
 });
 
-function popularSelectProdutos() {
+function popularSelectProdutos(toast) {
     $("#produtos").select2({
         theme: "bootstrap-5",
         allowClear: true,
@@ -134,6 +153,11 @@ function popularSelectProdutos() {
             },
             processResults: function (data, params) {
                 params.page = params.page || 0;
+                if(data.items === null) {
+                    $("form").trigger("reset");
+                    $("#produtos").val(null).trigger("change");
+                    $("#situacaoCompra").val(null).trigger("change");
+                }
                 return {
                     results: data.items,
                     pagination: {
@@ -144,6 +168,15 @@ function popularSelectProdutos() {
             cache: true
         }
     });
+}
+
+function clearFormShowMessage(toast) {
+    $("#nenhumProduto").css("display", "block");
+    $("#nenhumProduto").html(toast);
+    $(".toast").toast('show');
+    $("form").trigger("reset");
+    $("#produtos").val(null).trigger("change");
+    $("#situacaoCompra").val(null).trigger("change");
 }
 
 
