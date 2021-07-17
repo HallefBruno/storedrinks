@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
         Root<Produto> produto = query.from(Produto.class);
+        Path<Boolean> isAtivo = produto.get("ativo");
         Predicate predicateOr = cb.conjunction();
         
         if (!StringUtils.isBlank(descricao)) {
@@ -44,7 +46,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
         }
         
         query.select(produto);
-        query.where(predicateOr);
+        query.where(predicateOr, cb.isTrue(isAtivo));
         TypedQuery<Produto> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);

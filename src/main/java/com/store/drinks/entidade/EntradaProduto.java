@@ -60,6 +60,9 @@ public class EntradaProduto implements Serializable {
     @Column(nullable = false)
     private Integer novaQuantidade;
     
+    @Column(nullable = true, name = "quantidade_incrementar_estoque")
+    private Integer quantidadeIncrementar;
+    
     @NotNull(message = "Valor de custo não pode ser null!")
     @Min(value = 0, message = "Valor de custo mínima")
     @Column(nullable = false, name = "valor_custo")

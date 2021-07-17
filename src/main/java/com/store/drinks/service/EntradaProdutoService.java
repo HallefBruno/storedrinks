@@ -11,6 +11,7 @@ import com.store.drinks.repository.ProdutoRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,25 @@ public class EntradaProdutoService {
         entradaProduto.setProduto(produto);
         entradaProdutoRepository.save(entradaProduto);
     }
+    
+    @Transactional
+    public void alterarSituacaoEntrada(Long id) {
+        if(Objects.nonNull(id)) {
+            Optional<EntradaProduto> optionalEntrada = entradaProdutoRepository.findById(id);
+            if(optionalEntrada.isPresent()) {
+                EntradaProduto entradaProduto = optionalEntrada.get();
+                Produto produto = entradaProduto.getProduto();
+                produto.setQuantidade(entradaProduto.getQuantidadeIncrementar()+produto.getQuantidade());
+                entradaProduto.setNovaQuantidade(produto.getQuantidade());
+                entradaProduto.setProduto(produto);
+                entradaProduto.setSituacaoCompra(SituacaoCompra.CONFIRMADA);
+                entradaProdutoRepository.save(entradaProduto);
+                return;
+            }
+            throw new NegocioException("Nenhuma entrada encontrada!");
+        }
+        throw new NegocioException("Identificador inválido!");
+    }
 
     private void setarNovosValores(EntradaProduto entradaProduto, Produto produto) {
         if (((entradaProduto.getNovaQuantidade() == null || entradaProduto.getNovaQuantidade() == 0) && (entradaProduto.getNovoValorCusto() == null || entradaProduto.getNovoValorCusto().doubleValue() == 0) && (entradaProduto.getNovoValorVenda() == null || entradaProduto.getNovoValorVenda().doubleValue() == 0))) {
@@ -44,6 +64,7 @@ public class EntradaProdutoService {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             } else {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(produto.getQuantidade());
             }
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
@@ -55,6 +76,7 @@ public class EntradaProdutoService {
                 produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             } else {
                 produto.setQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(entradaProduto.getNovaQuantidade());
             }
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
@@ -66,6 +88,7 @@ public class EntradaProdutoService {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             } else {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(produto.getQuantidade());
             }
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
@@ -77,6 +100,7 @@ public class EntradaProdutoService {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade() + produto.getQuantidade());
             } else {
                 entradaProduto.setNovaQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(produto.getQuantidade());
             }
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
@@ -88,6 +112,7 @@ public class EntradaProdutoService {
                 produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             } else {
                 produto.setQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(entradaProduto.getNovaQuantidade());
             }
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             entradaProduto.setNovoValorVenda(produto.getValorVenda());
@@ -99,6 +124,7 @@ public class EntradaProdutoService {
                 produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             } else {
                 produto.setQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(entradaProduto.getNovaQuantidade());
             }
             entradaProduto.setNovoValorCusto(produto.getValorCusto());
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
@@ -110,6 +136,7 @@ public class EntradaProdutoService {
                 produto.setQuantidade(produto.getQuantidade() + produto.getQuantidade());
             } else {
                 produto.setQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(produto.getQuantidade());
             }
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
@@ -121,6 +148,7 @@ public class EntradaProdutoService {
                 produto.setQuantidade(produto.getQuantidade() + entradaProduto.getNovaQuantidade());
             } else {
                 produto.setQuantidade(produto.getQuantidade());
+                entradaProduto.setQuantidadeIncrementar(entradaProduto.getNovaQuantidade());
             }
             produto.setValorCusto(entradaProduto.getNovoValorCusto());
             produto.setValorVenda(entradaProduto.getNovoValorVenda());
@@ -148,7 +176,7 @@ public class EntradaProdutoService {
 
     public Produto buscarProdutoPorCodBarra(String codBarra) {
         if (!StringUtils.isEmpty(codBarra)) {
-            Optional<Produto> produtoOptional = produtoRepository.findByCodigoBarra(codBarra);
+            Optional<Produto> produtoOptional = produtoRepository.findByCodigoBarraAndAtivoTrue(codBarra);
             if (produtoOptional.isPresent()) {
                 return produtoOptional.get();
             }

@@ -29,7 +29,6 @@ StoreDrink.DialogoExcluir = (function () {
             confirmButtonColor: '#DD6B55',
             confirmButtonText: 'Sim, exclua agora!'
         }).then((result) => {
-            window.console.log(url);
             if (result.isConfirmed) {
                 onExcluirConfirmado(url);
             }
@@ -37,7 +36,6 @@ StoreDrink.DialogoExcluir = (function () {
     }
 
     function onExcluirConfirmado(url) {
-        window.console.info("excluir");
         $.ajax({
             url: url,
             method: 'DELETE',
@@ -101,10 +99,8 @@ StoreDrink.MascaraMoneteria = (function () {
 StoreDrink.LoadGif = (function () {
 
     function LoadGif() {}
-    window.console.log("LoadGif");
     LoadGif.prototype.enable = function () {
         $(document).ajaxSend(function (event, jqxhr, settings) {
-            window.console.log(event);
             $("#divLoading").addClass("loading");
         }.bind(this));
         $(document).ajaxComplete(function (event, jqxhr, settings) {

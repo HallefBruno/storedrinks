@@ -34,7 +34,7 @@ public class EntradaProdutoController {
         return mv;
     }
     
-    @GetMapping("novo")
+    @GetMapping("nova")
     public ModelAndView novo(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
         return mv;
@@ -63,6 +63,13 @@ public class EntradaProdutoController {
         } catch (NegocioException ex) {
             return ResponseEntity.badRequest().build();
         }
+    }
+    
+    @GetMapping("alterarSituacao/{id}")
+    public ModelAndView alterarSituacaoEntrada(@PathVariable(required = true, name = "id") Long id, RedirectAttributes attributes) {
+        entradaProdutoService.alterarSituacaoEntrada(id);
+        attributes.addFlashAttribute("mensagem", "Situação da entrada alterada com sucesso!");
+        return new ModelAndView("redirect:/entradas/pesquisar", HttpStatus.OK);
     }
     
     @GetMapping("buscar/produtoPorCodBarra/{codBarra}")

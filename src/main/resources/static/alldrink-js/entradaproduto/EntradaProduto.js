@@ -22,6 +22,7 @@ $(function () {
 
     $("#produtos").on("select2:select", function (e) {
         $.get($("#contextApp").val() + "entradas/buscar/" + e.params.data.id, function (data) {
+            window.console.log(data);
             $("#descricaoProdutoAtual").val(data.descricaoProduto);
             $("#codigoBarra").val(data.codigoBarra);
             $("#codigoProdutoAtual").val(data.codProduto);
@@ -48,7 +49,6 @@ $(function () {
     $("#codigoBarra").on("focusout", function (event) {
         if ($("#codigoBarra").val() !== undefined && $("#codigoBarra").val() !== null && $("#codigoBarra").val() !== "") {
             $.get($("#contextApp").val() + "entradas/buscar/produtoPorCodBarra/" + $("#codigoBarra").val(), function (data) {
-                window.console.log(data);
                 if (data === undefined || data === null && $("#codigoBarra").val() !== "") {
                     $("#nenhumProduto").css("display", "block");
                     $("#nenhumProduto").html(toast);

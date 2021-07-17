@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryCustom {
-    Optional<Produto> findByCodigoBarra(String codigoBarra);
+    Optional<Produto> findByCodigoBarraAndAtivoTrue(String codigoBarra);
 }
