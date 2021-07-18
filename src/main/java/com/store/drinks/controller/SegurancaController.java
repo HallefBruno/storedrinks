@@ -11,7 +11,7 @@ public class SegurancaController {
     @GetMapping("/login")
     public String login(@AuthenticationPrincipal User user) {
         if (user != null) {
-            return "redirect:/produtos";
+            return "redirect:/alldrinks/produtos";
         }
         return "Login";
     }

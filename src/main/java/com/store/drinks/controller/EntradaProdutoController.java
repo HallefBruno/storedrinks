@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -40,6 +41,9 @@ public class EntradaProdutoController {
         return mv;
     }
     
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("#username == authentication.principal.username")
+    //@Secured("ADMIN")
     @PostMapping("salvar")
     public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
