@@ -9,48 +9,53 @@
         <link th:href="@{/vendor/css/responsive.dataTables.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/buttons.dataTables.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/navbar.css}" rel="stylesheet" type="text/css"/>
     </head>
-    <body class="bg-light">
+
+    <body>
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-        <main>
-            <div class="container-fluid">
-                <th:block th:include="fragments/MensagemSucesso"></th:block>
-                <div class="card shadow-sm" style="margin-top: 5px;">
-                    <div class="card-body">
-                        <table id="entradas" class="table table-hover caption-top">
-                            <caption>Registro de entradas no estoque</caption>
-                            <thead>
-                                <tr style="font-size: 12px;">
-                                    <th>#</th>
-                                    <th>Cód barra</th>
-                                    <th>Produto</th>
-                                    <th>Fornecedor</th>
-                                    <th style="text-align: center;">Data emissão</th>
-                                    <th style="text-align: center;">Quantidade</th>
-                                    <th style="text-align: center;">Valor custo</th>
-                                    <th style="text-align: center;">Valor venda</th>
-                                    <th style="text-align: center;">Nova quantidade</th>
-                                    <th style="text-align: center;">Qtd entrada</th>
-                                    <th style="text-align: center;">Novo valor custo</th>
-                                    <th style="text-align: center;">Novo valor venda</th>
-                                    <th style="text-align: center;">Valor entrada</th>
-                                    <th style="text-align: center;">Forma pagto</th>
-                                    <th style="text-align: center;">Situação compra</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="font-size: 12px;" th:each="entrada : ${pagina}">
-                                    <th th:text="${entrada.id}"></th>
-                                    <th th:text="${entrada.produto.codigoBarra}"></th>
-                                    <th th:text="${entrada.produto.descricaoProduto}"></th>
-                                    <th th:text="${entrada.fornecedor}"></th>
-                                    <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></th>
-                                    <th style="text-align: center;" th:text="${entrada.quantidade}"></th>
-                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
-                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
-                                    <th style="text-align: center;" th:text="${entrada.novaQuantidade}"></th>
+        <div class="container-fluid">
+            <div th:replace="layout/fragments/Menu :: menu"></div>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div class="container-fluid">
+                        <th:block th:include="fragments/MensagemSucesso"></th:block>
+                        <div class="card shadow-sm" style="margin-top: 5px;">
+                            <div class="card-body">
+                                <table id="entradas" class="table table-hover caption-top">
+                                    <caption>Registro de entradas no estoque</caption>
+                                    <thead>
+                                        <tr style="font-size: 12px;">
+                                            <th>#</th>
+                                            <th>Cód barra</th>
+                                            <th>Produto</th>
+                                            <th>Fornecedor</th>
+                                            <th style="text-align: center;">Data emissão</th>
+                                            <th style="text-align: center;">Quantidade</th>
+                                            <th style="text-align: center;">Valor custo</th>
+                                            <th style="text-align: center;">Valor venda</th>
+                                            <th style="text-align: center;">Nova quantidade</th>
+                                            <th style="text-align: center;">Qtd entrada</th>
+                                            <th style="text-align: center;">Novo valor custo</th>
+                                            <th style="text-align: center;">Novo valor venda</th>
+                                            <th style="text-align: center;">Valor entrada</th>
+                                            <th style="text-align: center;">Forma pagto</th>
+                                            <th style="text-align: center;">Situação compra</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="font-size: 12px;" th:each="entrada : ${pagina}">
+                                            <th th:text="${entrada.id}"></th>
+                                            <th th:text="${entrada.produto.codigoBarra}"></th>
+                                            <th th:text="${entrada.produto.descricaoProduto}"></th>
+                                            <th th:text="${entrada.fornecedor}"></th>
+                                            <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></th>
+                                            <th style="text-align: center;" th:text="${entrada.quantidade}"></th>
+                                            <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
+                                            <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
+                                            <th style="text-align: center;" th:text="${entrada.novaQuantidade}"></th>
                                     <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
-                                    <th style="text-align: center;" th:text="${qtdEntrada}"></th>
+                                        <th style="text-align: center;" th:text="${qtdEntrada}"></th>
                                     </th:block>
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
@@ -62,16 +67,19 @@
                                             <span th:case="${T(com.store.drinks.entidade.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
                                         </div>
                                     </th>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <a href="/alldrinks/entradas/nova" type="button" class="btn btn-outline-secondary btn-sm mb-2">Nova</a>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <a href="/alldrinks/entradas/nova" type="button" class="btn btn-outline-secondary btn-sm mb-2">Nova</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
+
         <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
         <script th:src="@{/vendor/js/jquery.dataTables.min.js}" type="text/javascript"></script>

@@ -1,6 +1,18 @@
-<!DOCTYPE html>
-<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<header class="mb-2" th:fragment="navbar">
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow" th:fragment="navbar">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" th:href="@{/}">Store drinks</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Procurar" aria-label="Search">
+    <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+            <a class="nav-link px-3" href="#">Sair</a>
+        </div>
+    </div>
+</header>
+
+<!--<header class="mb-2" th:fragment="navbar">
     <div class="collapse bg-dark" id="navbarHeader">
         <div class="container-fluid">
             <div class="row">
@@ -24,4 +36,4 @@
             </button>
         </div>
     </div>
-</header>
+</header>-->

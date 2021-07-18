@@ -1,0 +1,44 @@
+<div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" th:fragment="menu">
+        <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/}">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/entradas/pesquisar}">
+                        <i class="fa fa-file-o" aria-hidden="true"></i>
+                        Entradas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/produtos/pesquisar}">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        Produtos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-id-badge" aria-hidden="true"></i>
+                        Usuarios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                        Relatorios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-plug" aria-hidden="true"></i>
+                        Integrations
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
