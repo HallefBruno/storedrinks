@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -52,7 +53,8 @@ public class ProdutoController {
         return mv;
     }
     
-    @Secured("teste")
+    //@Secured("teste")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("salvar")
     public ModelAndView salvar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
     <head>
         <title>Login</title>
         <meta charset="utf-8">
@@ -10,17 +10,21 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-4 offset-md-4">
-                    <div class="login-form bg-light mt-4 p-4">
+                <div class="col-md-4 offset-md-4 mt-5">
+                    <div class="login-form bg-light p-4 shadow">
+                        <div  th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Usuário ou senha inválidos!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         <form class="row g-3" th:action="@{/login}" method="POST">
-                            <h4>Bem vindo a Storedrinks</h4>
+                            <h4>Bem vindo a Store Drinks<span><i class="fa fa-glass fa-lg" aria-hidden="true"></i></span></h4>
                             <div class="col-12">
-                                <label>Emial</label>
-                                <input type="email" name="username" class="form-control" placeholder="Emial">
+                                <label for="username">Email</label>
+                                <input required type="email" name="username" class="form-control" id="username" placeholder="Email">
                             </div>
                             <div class="col-12">
-                                <label>Senha</label>
-                                <input type="password" name="password" class="form-control" placeholder="Senha">
+                                <label for="password">Senha</label>
+                                <input required type="password" name="password" id="password" class="form-control" placeholder="Senha">
                             </div>
                             <div class="col-12">
                                 <div class="form-check">
