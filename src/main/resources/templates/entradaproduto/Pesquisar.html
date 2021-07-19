@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <title>Pesquisa de produtos</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
         <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/responsive.dataTables.min.css}" rel="stylesheet" type="text/css"/>

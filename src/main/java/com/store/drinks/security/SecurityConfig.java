@@ -42,22 +42,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
         .authorizeRequests()
-        .antMatchers("/produtos/**").hasRole("CADASTRAR_PRODUTO")
-        .antMatchers("/entradas/**").hasRole("CADASTRAR_ENTRADA")
+        .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
+        .antMatchers("/entradas/**").hasRole("MANTER_ENTRADA")
         .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
         .permitAll()
         .and()
-        .logout()
+        .logout().deleteCookies("JSESSIONID")
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .and()
         .sessionManagement()
         .invalidSessionUrl("/login")
         .and()
-        .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
-        
+        .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+        .and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
+        .and().rememberMe().rememberMeParameter("remember-me");
     }
     
     @Bean

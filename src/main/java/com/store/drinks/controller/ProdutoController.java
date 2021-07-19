@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -54,7 +53,7 @@ public class ProdutoController {
     }
     
     //@Secured("teste")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('MANTER_PRODUTO')")
     @PostMapping("salvar")
     public ModelAndView salvar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
@@ -71,6 +70,7 @@ public class ProdutoController {
         return new ModelAndView("redirect:/produtos/novo", HttpStatus.CREATED);
     }
     
+    @PreAuthorize("hasRole('MANTER_PRODUTO')")
     @PostMapping("update/{codigo}")
     public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo,  @Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
         try {
@@ -94,10 +94,10 @@ public class ProdutoController {
         mv.addObject("pagina", paginaWrapper);
         return mv;
     }
-
+    
+    @PreAuthorize("hasRole('MANTER_PRODUTO')")
     @DeleteMapping("{codigo}")
-    public @ResponseBody
-    ResponseEntity<?> excluir(@PathVariable("codigo") Produto produto) {
+    public ResponseEntity<?> excluir(@PathVariable("codigo") Produto produto) {
         try {
             produtoService.excluir(produto);
         } catch (NegocioException e) {

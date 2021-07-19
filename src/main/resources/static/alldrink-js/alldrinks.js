@@ -62,7 +62,7 @@ StoreDrink.DialogoExcluir = (function () {
 
 
 StoreDrink.Security = (function () {
-    
+
     function Security() {
         this.token = $("meta[name='_csrf']").attr("content");
         this.header = $("meta[name='_csrf_header']").attr("content");
@@ -123,6 +123,6 @@ $(function () {
     var inputM = new StoreDrink.MascaraMoneteria();
     inputM.enable();
     
-//    var security = new StoreDrink.Security();
-//    security.enable();
+    var security = new StoreDrink.Security();
+    security.enable();
 });
