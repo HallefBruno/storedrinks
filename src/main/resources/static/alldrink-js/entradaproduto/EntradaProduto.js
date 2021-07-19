@@ -106,11 +106,11 @@ $(function () {
         var novaQuantidade = $("#novaQuantidade");
         var valorTotal = $("#valorTotal");
         
-        if(novaQuantidade !== undefined && novaQuantidade !== null && novaQuantidade.val() !== "") {
-            if(novoValorCusto !== undefined && novoValorCusto !== null && novoValorCusto.val() !== "") {
-                valorTotal.val(novaQuantidade.val() * novoValorCusto.val().replace(/\/r/g,''));
-                valorTotal.focus();
-            }
+        if(novaQuantidade !== undefined && novaQuantidade !== null && novaQuantidade.val() !== "" && novoValorCusto !== undefined && novoValorCusto !== null && novoValorCusto.val() !== "") {
+            var soma = novaQuantidade.val() * novoValorCusto.val();
+            soma = soma.toLocaleString({minimumFractionDigits: 2, maximumFractionDigits: 2}).replace(",",".");
+            valorTotal.val("R$ "+soma); //.toFixed(2)
+            valorTotal.focus();
         } else {
             const Toast = Swal.mixin({
                 toast: true,

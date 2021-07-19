@@ -41,7 +41,7 @@ public class EntradaProdutoController {
         return mv;
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('MANTER_ENTRADA')")
     //@PreAuthorize("#username == authentication.principal.username")
     //@Secured("ADMIN")
     @PostMapping("salvar")
@@ -60,6 +60,7 @@ public class EntradaProdutoController {
         return new ModelAndView("redirect:/entradas/nova", HttpStatus.CREATED);
     }
     
+    @PreAuthorize("hasRole('MANTER_ENTRADA')")
     @GetMapping("buscar/{id}")
     public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable(required = true, name = "id") Long id) {
         try {
@@ -69,6 +70,7 @@ public class EntradaProdutoController {
         }
     }
     
+    @PreAuthorize("hasRole('MANTER_ENTRADA')")
     @GetMapping("alterarSituacao/{id}")
     public ModelAndView alterarSituacaoEntrada(@PathVariable(required = true, name = "id") Long id, RedirectAttributes attributes) {
         entradaProdutoService.alterarSituacaoEntrada(id);
@@ -76,6 +78,7 @@ public class EntradaProdutoController {
         return new ModelAndView("redirect:/entradas/pesquisar", HttpStatus.OK);
     }
     
+    @PreAuthorize("hasRole('MANTER_ENTRADA')")
     @GetMapping("buscar/produtoPorCodBarra/{codBarra}")
     public ResponseEntity<Produto> buscarProdutoPorCodBarra(@PathVariable(required = true, name = "codBarra") String codBarra) {
         try {
@@ -85,6 +88,7 @@ public class EntradaProdutoController {
         }
     }
     
+    @PreAuthorize("hasRole('MANTER_ENTRADA')")
     @GetMapping("produtos")
     public ResponseEntity<?> pesquisarProdutosAutoComplete(
             @RequestParam(name = "q", required = false) String descricao,
