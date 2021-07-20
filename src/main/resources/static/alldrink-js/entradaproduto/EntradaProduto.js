@@ -2,9 +2,12 @@
 
 $(function () {
 
-    
-//    $("#dataEmissao").mask("00/00/0000 00:00:00");
-    
+   $("#valorCusto").mask("#,##0.00", {reverse: true});
+   $("#valorVenda").mask("#,##0.00", {reverse: true});
+   $("#novoValorCusto").mask("#,##0.00", {reverse: true});
+   $("#novoValorVenda").mask("#,##0.00", {reverse: true});
+   $("#valorTotal").mask("#,##0.00", {reverse: true});
+       
     var toast = "<div style='height: 44px; width: 100%;' class='toast align-items-center text-white bg-warning border-0 mt-1 mb-1' data-delay='5000' data-animation='true' data-autohide='true' role='alert' aria-live='assertive' aria-atomic='true'>" +
             "<div class='d-flex'>" +
             "<div class='toast-body'>" +
