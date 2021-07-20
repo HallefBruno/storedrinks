@@ -95,6 +95,27 @@ StoreDrink.MascaraMoneteria = (function () {
     return MascaraMoneteria;
 }());
 
+StoreDrink.MascaraCpfCnpj = (function () {
+    
+    function MascaraCpfCnpj() {
+        this.mascaraCpfCnpj = $(".mascaraCpfCnpj");
+    }
+    
+    MascaraCpfCnpj.prototype.enable = function () {
+        
+        var CpfCnpjMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
+        },
+        cpfCnpjpOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(CpfCnpjMaskBehavior.apply({}, arguments), options);
+            }
+        };
+        this.mascaraCpfCnpj.mask(CpfCnpjMaskBehavior,cpfCnpjpOptions);
+    };
+    
+    return MascaraCpfCnpj;
+}());
 
 StoreDrink.LoadGif = (function () {
 
@@ -116,7 +137,6 @@ $(function () {
     var dialogo = new StoreDrink.DialogoExcluir();
     dialogo.iniciar();
 
-    
     var loadGif = new StoreDrink.LoadGif();
     loadGif.enable();
     
@@ -125,4 +145,8 @@ $(function () {
     
     var security = new StoreDrink.Security();
     security.enable();
+    
+    var mascaraCpfCnpj = new StoreDrink.MascaraCpfCnpj();
+    mascaraCpfCnpj.enable();
+    
 });

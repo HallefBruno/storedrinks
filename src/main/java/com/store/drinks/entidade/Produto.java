@@ -25,7 +25,7 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Produto implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
     

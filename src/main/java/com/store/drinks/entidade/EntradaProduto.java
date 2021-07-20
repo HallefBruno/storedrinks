@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +24,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,7 +35,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class EntradaProduto implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
     
@@ -40,6 +43,18 @@ public class EntradaProduto implements Serializable {
     @ManyToOne
     private Produto produto;
     
+    @NotBlank(message = "Nº da nota não pode ter espaços em branco!")
+    @NotEmpty(message = "Nº da nota não pode ser vazio!")
+    @NotNull(message = "Nº da nota não pode ser null!")
+    @Column(length = 255,name = "numero_nota", nullable = false, unique = true)
+    private String numeroNota;
+    
+    @NotBlank(message = "Cnpj ou cpf não pode ter espaços em branco!")
+    @NotEmpty(message = "Cnpj ou cpf não pode ser vazio!")
+    @NotNull(message = "Cnpj ou cpf não pode ser null!")
+    @Column(length = 20,name = "cnpjcpf", nullable = false)
+    private String cnpjCpf;
+
     @NotBlank(message = "Fornecedor do produto não pode ter espaços em branco!")
     @NotEmpty(message = "Fornecedor do produto não pode ser vazio!")
     @NotNull(message = "Fornecedor do produto não pode ser null!")
@@ -102,5 +117,14 @@ public class EntradaProduto implements Serializable {
     @Version
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
+    
+    @PrePersist
+    @PreUpdate
+    private void removeCaracterEspeciais() {
+        this.numeroNota = StringUtils.strip(this.numeroNota);
+        this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
+        this.formaPagamento = StringUtils.strip(this.formaPagamento);
+        this.fornecedor = StringUtils.strip(this.fornecedor);
+    }
     
 }

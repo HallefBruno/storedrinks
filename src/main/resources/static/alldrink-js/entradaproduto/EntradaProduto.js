@@ -13,7 +13,16 @@ $(function () {
             "<button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button>" +
             "</div>" +
             "</div>";
-
+    
+    $("form").submit(function(event) {
+        window.console.log(event);
+        if($("#valorTotal").val()) {
+            $("#valorTotal").val($("#valorTotal").val().replace("R$ ",""));
+        }
+    });
+    
+    $("#novaQuantidade").mask("0000");
+    
     popularSelectProdutos(toast);
 
     $("#produtos").on("select2:open", function (e) {
@@ -106,7 +115,7 @@ $(function () {
         var novaQuantidade = $("#novaQuantidade");
         var valorTotal = $("#valorTotal");
         
-        if(novaQuantidade !== undefined && novaQuantidade !== null && novaQuantidade.val() !== "" && novoValorCusto !== undefined && novoValorCusto !== null && novoValorCusto.val() !== "") {
+        if((novaQuantidade !== undefined && novaQuantidade !== null && novaQuantidade.val() !== "" && Number(novaQuantidade.val()) > 0) && (novoValorCusto !== undefined && novoValorCusto !== null && novoValorCusto.val() !== "" && Number(novoValorCusto.val()) > 0)) {
             var soma = novaQuantidade.val() * novoValorCusto.val();
             soma = soma.toLocaleString({minimumFractionDigits: 2, maximumFractionDigits: 2}).replace(",",".");
             valorTotal.val("R$ "+soma); //.toFixed(2)

@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
+        <title>Entrada de produto</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="_csrf" th:content="${_csrf.token}"/>
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-        <title>Entrada de produto</title>
         <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/select2.min.css}" rel="stylesheet" type="text/css"/>
@@ -61,22 +61,36 @@
                             <div class="shadow-sm mt-2 mb-5 rounded">
                                 <div class="card">
                                     <div class="card-body">
+                                        
                                         <div class="row">
-                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
-                                                <label for="dataEmissao" class="form-label">Data emissão</label>
-                                                <input required th:field="*{dataEmissao}" type="date" class="form-control" id="dataEmissao" name="dataEmissao">
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                                <label for="numeroNota" class="form-label">Nº da nota</label>
+                                                <input required th:value="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
                                             </div>
-                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
+
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                                <label for="cnpjCpf" class="form-label">CNPJ/CPF</label>
+                                                <input required th:value="*{cnpjCpf}" type="text" class="form-control mascaraCpfCnpj" id="cnpjCpf" name="cnpjCpf">
+                                            </div>
+                                            
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                 <label for="fornecedor" class="form-label">Fornecedor</label>
                                                 <input required th:value="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
                                             </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                                <label for="dataEmissao" class="form-label">Data emissão</label>
+                                                <input required th:field="*{dataEmissao}" type="date" class="form-control" id="dataEmissao" name="dataEmissao">
+                                            </div>
 
-                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                 <label for="formaPagamento" class="form-label">Forma de pagamento</label>
                                                 <input required th:value="*{formaPagamento}" type="text" class="form-control" id="formaPagamento" name="formaPagamento">
                                             </div>
 
-                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
+                                            <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                 <label for="situacaoCompra" class="form-label">Situação</label>
                                                 <select required data-placeholder="Selecione a sutuação..." th:field="*{situacaoCompra}" id="situacaoCompra" name="situacaoCompra" class="form-control">
                                                     <option value=""></option>
