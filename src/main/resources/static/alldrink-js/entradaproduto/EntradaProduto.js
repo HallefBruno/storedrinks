@@ -18,7 +18,6 @@ $(function () {
             "</div>";
     
     $("form").submit(function(event) {
-        window.console.log(event);
         if($("#valorTotal").val()) {
             $("#valorTotal").val($("#valorTotal").val().replace("R$ ",""));
         }

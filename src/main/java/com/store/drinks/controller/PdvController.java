@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("pdv")
@@ -15,11 +16,11 @@ public class PdvController {
     private AberturaCaixaService aberturaCaixaService;
     
     @GetMapping
-    public String pagina() {
+    public ModelAndView pagina() {
         if(aberturaCaixaService.caixaAberto()) {
-            return "venda/AberturaCaixa";
+            return new ModelAndView("venda/MovimentacaoCaixa");
         }
-        return "Dashboard";
+        return new ModelAndView("Dashboard");
     }
     
 }
