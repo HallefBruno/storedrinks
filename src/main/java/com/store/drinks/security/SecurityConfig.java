@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
         .antMatchers("/entradas/**").hasRole("MANTER_ENTRADA")
+        .antMatchers("/pdv/**").access("hasRole('MANTER_PDV')")
         .anyRequest().authenticated()
         .and()
         .formLogin()
