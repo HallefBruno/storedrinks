@@ -2,6 +2,7 @@
 package com.store.drinks.controller;
 
 import com.store.drinks.entidade.MovimentacaoCaixa;
+import com.store.drinks.entidade.OpenCaixa;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ public class PdvController {
     }
     
     @GetMapping("abrirCaixa")
-    public ModelAndView abrirCaixa(MovimentacaoCaixa movimentacaoCaixa) {
+    public ModelAndView abrirCaixa(OpenCaixa openCaixa) {
         return new ModelAndView("venda/MovimentacaoCaixa");
     }
     

@@ -1,7 +1,7 @@
 package com.store.drinks.entidade;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +22,6 @@ public class Grupo implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "id_grupo"), inverseJoinColumns = @JoinColumn(name = "id_permissao"))
-    private List<Permissao> permissoes;
+    private Set<Permissao> permissoes;
 
 }

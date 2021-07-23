@@ -3,7 +3,7 @@ package com.store.drinks.entidade;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +45,7 @@ public class Usuario implements Serializable {
     @Size(min = 1, message = "Selecione pelo menos um grupo")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
-    private List<Grupo> grupos;
+    private Set<Grupo> grupos;
 
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
