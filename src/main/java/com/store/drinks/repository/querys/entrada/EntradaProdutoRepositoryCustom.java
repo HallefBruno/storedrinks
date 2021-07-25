@@ -1,5 +1,5 @@
 
-package com.store.drinks.repository.querys.entradas;
+package com.store.drinks.repository.querys.entrada;
 
 import com.store.drinks.entidade.Produto;
 import org.springframework.data.domain.Page;

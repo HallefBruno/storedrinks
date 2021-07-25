@@ -19,9 +19,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
-@Table(name = "open_caixa")
+@Table(name = "abrir_caixa")
 @DynamicUpdate
-public class OpenCaixa implements Serializable {
+public class AbrirCaixa implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class OpenCaixa implements Serializable {
     @Column(name = "valor_inicial_troco", nullable = false)
     private BigDecimal valorInicialTroco;
     
-    @Column(name = "data_hora_fechamento", nullable = false)
+    @Column(name = "data_hora_fechamento")
     private LocalDateTime dataHoraFechamento;
     
     @Column(name = "data_hora_abertura", nullable = false)

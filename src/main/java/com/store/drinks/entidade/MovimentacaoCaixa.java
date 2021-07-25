@@ -49,8 +49,8 @@ public class MovimentacaoCaixa implements Serializable {
     private FormaPagamento formaPagamento;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "open_caixa",nullable = false)
-    private OpenCaixa openCaixa;
+    @JoinColumn(name = "abrir_caixa",nullable = false)
+    private AbrirCaixa abrirCaixa;
     
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)

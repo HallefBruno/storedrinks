@@ -26,6 +26,4 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
             .getResultList();
     }
     
-    
-    
 }
