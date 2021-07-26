@@ -3,9 +3,11 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.AbrirCaixa;
 import com.store.drinks.entidade.Usuario;
+import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.AbrirCaixaRepository;
 import com.store.drinks.repository.IAuthenticationFacade;
 import com.store.drinks.repository.UsuarioRepository;
+import com.store.drinks.security.UsuarioSistema;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class AbrirCaixaService {
 
     @Transactional
     public void salvar(AbrirCaixa abrirCaixa) {
+        if(abrirCaixaPorUsuarioLogado()) {
+            throw new NegocioException("O caixa já foi aberto para esse usuário!");
+        }
         AbrirCaixa acx = new AbrirCaixa();
         acx.setAberto(Boolean.TRUE);
         acx.setDataHoraAbertura(LocalDateTime.now());
@@ -40,7 +45,7 @@ public class AbrirCaixaService {
     }
     
     private Usuario usuario() {
-        Usuario usuario = (Usuario) authenticationFacade.getAuthentication().getPrincipal();
+        Usuario usuario = ((UsuarioSistema) authenticationFacade.getAuthentication().getPrincipal()).getUsuario();
         usuarioRepository.findById(usuario.getId());
         return usuario;
     }

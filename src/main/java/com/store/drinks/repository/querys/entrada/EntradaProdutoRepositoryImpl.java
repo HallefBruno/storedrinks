@@ -40,8 +40,8 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
         
         if (!StringUtils.isBlank(descricao)) {
             Predicate predicateCodBarra = cb.like(cb.upper(produto.get("codigoBarra")), "%" + descricao + "%");
-            Predicate predicateCodProduto = cb.like(cb.upper(produto.get("codProduto")), "%" + descricao.toUpperCase() + "%");
-            Predicate descricaoProduto = cb.like(cb.upper(produto.get("descricaoProduto")), "%" + descricao + "%");
+            Predicate predicateCodProduto = cb.like(cb.upper(produto.get("descricaoProduto")), "%" + descricao.toUpperCase() + "%");
+            Predicate descricaoProduto = cb.like(cb.upper(produto.get("codProduto")),"%" + descricao + "%");
             predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
         }
         

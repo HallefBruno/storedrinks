@@ -8,6 +8,7 @@
     </head>
     <body>
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+        <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
         <div class="container-fluid">
             <div class="row">
                 <div th:replace="layout/fragments/Menu :: menu"></div>
@@ -16,41 +17,82 @@
                         <div class="container">
                             <form th:object="${venda}" method="post" th:action="@{/pdv/salvar}">
                                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-                                <div class="shadow p-3 mb-5 bg-body rounded">
+                                <div class="shadow-sm mb-3 bg-body rounded">
                                     <div class="card">
-                                        <h5 class="card-header">Vendas de produtos</h5>
+                                        <h5 class="card-header">Venda de produtos</h5>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="mb-3 col-sm-8">
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
+                                                    <label for="produtos" class="form-label">Procure aqui seu produto</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text"><i class="fa fa-cubes" aria-hidden="true"></i></span>
+                                                        <select id="produtos" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-5">
+                                                    <label for="descricaoProduto" class="form-label">Descrição do produto</label>
+                                                    <input readonly="true" type="text" autocomplete="false" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
+                                                </div>
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
                                                     <label for="codigoBarra" class="form-label">Cód Barra</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                                        <input type="text" class="form-control" id="codigoBarra" name="codigoBarra">
+                                                        <input readonly="true" autocomplete="false" autofocus="true" type="text" class="form-control" id="codigoBarra" name="codigoBarra"/>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 col-sm-4">
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
                                                     <label for="codProduto" class="form-label">Cód Produto</label>
-                                                    <input type="text" class="form-control" id="codProduto" name="codProduto">
+                                                    <input readonly="true" type="text" autocomplete="false" class="form-control" id="codProduto" name="codProduto"/>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="descricaoProduto" class="form-label">Descrição do produto</label>
-                                                <input type="text" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
+                                                    <label for="valorVenda" class="form-label">Valor de venda</label>
+                                                    <input readonly="true" type="text" autocomplete="false" class="form-control" id="valorVenda" name="valorVenda"/>
+                                                </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="quantidade" class="form-label">Quantidade</label>
-                                                <input type="number" min="0" class="form-control" id="quantidade" name="quantidade"/>
+                                                <input type="number" autocomplete="false" min="1" class="form-control" id="quantidade" name="quantidade"/>
                                             </div>
 
                                             <div class="btn-group mt-2" role="group" aria-label="Basic mixed styles example">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                    Salvar
+                                                <button type="submit" class="btn btn-sm btn-warning">
+                                                    Finalizar venda
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </form>
+                            <div class="shadow-sm mb-2 bg-body rounded">
+                                <div class="card" style="margin-top: 5px;">
+                                    <div class="card-body">
+                                        <table id="produtosVenda" class="table table-hover caption-top">
+                                            <caption>Detalhes da venda</caption>
+                                            <thead>
+                                                <tr style="font-size: 12px;">
+                                                    <th>Cód barra</th>
+                                                    <th>Produto</th>
+                                                    <th style="text-align: center;">Valor unitário</th>
+                                                    <th style="text-align: center;">Quantidade</th>
+                                                    <th style="text-align: center;">Valor total</th>
+                                                    <th style="text-align: center;">Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+<!--                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <a href="/alldrinks/entradas/nova" type="button" class="btn btn-outline-secondary btn-sm mb-2">Nova</a>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </main>
