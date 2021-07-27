@@ -15,12 +15,12 @@ $(function () {
     
     
     $("#produtos").on("select2:select", function (e) {
-        window.console.log(e.params.data);
         const produto = e.params.data;
         $("#descricaoProduto").val(produto.descricaoProduto);
         $("#codigoBarra").val(produto.codBarra);
         $("#codProduto").val(produto.codProduto);
         $("#valorVenda").val(produto.valorVenda);
+        $("#quantidade").focus();
         
     });
     
@@ -45,6 +45,9 @@ $(function () {
             event.preventDefault();
         }
     });
+    
+    actionTableItens();
+    addItemVenda();
     
 });
 function doneTyping() {
@@ -100,4 +103,50 @@ function styleSelectAutomoveis(produto) {
         return $("<span class='badge bg-primary' style='font-size:13px;'>" + produto.text + "</span>");
     }
     return $("<span>" + produto.text + "</span>");
+}
+
+function addItemVenda() {
+    var produto = {};
+    
+    $("#btnItemVenda").click(function (event) {
+        produto = {
+            descricaoProduto:$("#descricaoProduto").val(),
+            codigoBarra:$("#codigoBarra").val(),
+            codProduto:$("#codProduto").val(),
+            valorVenda:$("#valorVenda").val().toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
+            quantidade:$("#quantidade").val(),
+            valorTotal:Number($("#quantidade").val() * $("#valorVenda").val()).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+        };
+        
+        $("#itensVenda").DataTable().row.add([
+            produto.descricaoProduto,
+            produto.valorVenda,
+            produto.quantidade,
+            produto.valorTotal,
+            "<button id='btnRemoverItemVenda' data-key='" + produto.codigoBarra + "' type='button' title='Remover' class='text-center btn btn-outline-danger btn-sm'><i class='fa fa-trash-o'></i></button>"
+        ]).draw(false);
+        
+    });
+}
+
+function actionTableItens() {
+    
+    $("#itensVenda").DataTable({
+        paginate: false,
+        lengthChange: false,
+        info: false,
+        autoWidth: false,
+        filter: false,
+        responsive: true,
+//        language: {
+//            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+//        },
+        columnDefs: [
+            {
+                targets: [2,4],
+                className: 'text-center'
+            }
+        ]
+    });
+
 }

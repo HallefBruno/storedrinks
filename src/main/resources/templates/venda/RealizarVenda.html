@@ -4,7 +4,13 @@
         <title>Vendas</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+        <th:block th:replace="fragments/CssFragment :: css"></th:block>
+<!--        <style>
+            .table thead,
+            .table th {
+                text-align: center;
+            }
+        </style>-->
     </head>
     <body>
         <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
@@ -60,8 +66,8 @@
                                             </div>
 
                                             <div class="btn-group mt-2" role="group" aria-label="Basic mixed styles example">
-                                                <button type="submit" class="btn btn-sm btn-warning">
-                                                    Finalizar venda
+                                                <button type="button" id="btnItemVenda" class="btn btn-sm btn-warning text-white">
+                                                    Adicionar
                                                 </button>
                                             </div>
                                         </div>
@@ -71,20 +77,19 @@
                             <div class="shadow-sm mb-2 bg-body rounded">
                                 <div class="card" style="margin-top: 5px;">
                                     <div class="card-body">
-                                        <table id="produtosVenda" class="table table-hover caption-top">
+                                        <table id="itensVenda" class="table table-hover caption-top">
                                             <caption>Detalhes da venda</caption>
                                             <thead>
                                                 <tr style="font-size: 12px;">
-                                                    <th>Cód barra</th>
                                                     <th>Produto</th>
-                                                    <th style="text-align: center;">Valor unitário</th>
-                                                    <th style="text-align: center;">Quantidade</th>
-                                                    <th style="text-align: center;">Valor total</th>
-                                                    <th style="text-align: center;">Ações</th>
+                                                    <th>Valor unitário</th>
+                                                    <th>Quantidade</th>
+                                                    <th>Valor total</th>
+                                                    <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                
                                             </tbody>
                                         </table>
 <!--                                        <div class="d-flex justify-content-between align-items-center mt-3">
