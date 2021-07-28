@@ -1,3 +1,6 @@
+/* global Swal */
+
+var listProdutos = [];
 $(function () {
     $("#valorCusto").mask("#,##0.00", {reverse: true});
     
@@ -25,8 +28,7 @@ $(function () {
     });
     
     $("#produtos").on("select2:unselecting", function (e) {
-        $("form").trigger("reset");
-        $("#produtos").val(null).trigger("change");
+        clearFormFocusSelect();
     });
 
     var typingTimer;
@@ -107,26 +109,59 @@ function styleSelectAutomoveis(produto) {
 
 function addItemVenda() {
     var produto = {};
-    
     $("#btnItemVenda").click(function (event) {
+        var valorUni = Number($("#valorVenda").val());
+        
         produto = {
             descricaoProduto:$("#descricaoProduto").val(),
             codigoBarra:$("#codigoBarra").val(),
             codProduto:$("#codProduto").val(),
-            valorVenda:$("#valorVenda").val().toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
+            valorVenda:valorUni.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
             quantidade:$("#quantidade").val(),
             valorTotal:Number($("#quantidade").val() * $("#valorVenda").val()).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
         };
+
+        var htmlbtnGroup =`
+            <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
+                <button id='btnDiminuirQuantidade' data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
+                <button id='btnAumentarQuantidade' data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                <button id='btnRemoverItemVenda' data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            </div>`;
         
-        $("#itensVenda").DataTable().row.add([
-            produto.descricaoProduto,
-            produto.valorVenda,
-            produto.quantidade,
-            produto.valorTotal,
-            "<button id='btnRemoverItemVenda' data-key='" + produto.codigoBarra + "' type='button' title='Remover' class='text-center btn btn-outline-danger btn-sm'><i class='fa fa-trash-o'></i></button>"
-        ]).draw(false);
-        
+        acoes(produto, htmlbtnGroup);
     });
+}
+
+function acoes(produto, htmlbtnGroup) {
+    
+    window.console.log("ações!");
+    
+    if(containsObject(produto,listProdutos)) {
+        mensagem();
+        return;
+    }
+    
+    listProdutos.push(produto);
+    window.console.log(listProdutos);
+    
+    $("#itensVenda").on("click", "#btnDiminuirQuantidade", function (e) {
+        e.stopImmediatePropagation();
+        var codBarra = $(this).data("key");
+        alert(codBarra);
+    });
+
+    popularTable(produto, htmlbtnGroup);
+    clearFormFocusSelect();
+}
+
+function popularTable(produto,htmlbtnGroup) {
+    $("#itensVenda").DataTable().row.add([
+        produto.descricaoProduto,
+        produto.valorVenda,
+        produto.quantidade,
+        produto.valorTotal,
+        htmlbtnGroup
+    ]).draw(false);
 }
 
 function actionTableItens() {
@@ -149,4 +184,33 @@ function actionTableItens() {
         ]
     });
 
+}
+
+function clearFormFocusSelect() {
+    $("form").trigger("reset");
+    $("#produtos").val(null).trigger("change");
+    $("#produtos").focus();
+}
+
+function containsObject(obj, list) {
+    return list.some(elem => elem.codigoBarra === obj.codigoBarra);
+}
+
+function mensagem() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 8000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
+
+    Toast.fire({
+        icon: 'warning',
+        text: `Esse produto já está na lista, é possível alterar a quantidade`
+    });
 }
