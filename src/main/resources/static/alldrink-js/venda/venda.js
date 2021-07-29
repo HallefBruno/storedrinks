@@ -50,6 +50,7 @@ $(function () {
     
     actionTableItens();
     addItemVenda();
+    acoes();
     
 });
 function doneTyping() {
@@ -110,58 +111,67 @@ function styleSelectAutomoveis(produto) {
 function addItemVenda() {
     var produto = {};
     $("#btnItemVenda").click(function (event) {
-        var valorUni = Number($("#valorVenda").val());
         
-        produto = {
-            descricaoProduto:$("#descricaoProduto").val(),
-            codigoBarra:$("#codigoBarra").val(),
-            codProduto:$("#codProduto").val(),
-            valorVenda:valorUni.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
-            quantidade:$("#quantidade").val(),
-            valorTotal:Number($("#quantidade").val() * $("#valorVenda").val()).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
-        };
+        if($("#descricaoProduto").val()) {
+                
+            var valorUni = Number($("#valorVenda").val());
 
-        var htmlbtnGroup =`
-            <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
-                <button id='btnDiminuirQuantidade' data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
-                <button id='btnAumentarQuantidade' data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-                <button id='btnRemoverItemVenda' data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-            </div>`;
-        
-        acoes(produto, htmlbtnGroup);
+            produto = {
+                descricaoProduto:$("#descricaoProduto").val(),
+                codigoBarra:$("#codigoBarra").val(),
+                codProduto:$("#codProduto").val(),
+                valorVenda:valorUni.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
+                quantidade:$("#quantidade").val(),
+                valorTotal:Number($("#quantidade").val() * $("#valorVenda").val()).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+            };
+            
+            if(containsObject(produto,listProdutos)) {
+                mensagem("Esse produto já está na lista, é possível alterar a quantidade");
+                return;
+            }
+
+            listProdutos.push(produto);
+            popularTable(listProdutos);
+            clearFormFocusSelect();
+            return;
+        }
+        mensagem("É necessário selecionar um produto!");
     });
 }
 
-function acoes(produto, htmlbtnGroup) {
-    
-    window.console.log("ações!");
-    
-    if(containsObject(produto,listProdutos)) {
-        mensagem();
-        return;
-    }
-    
-    listProdutos.push(produto);
-    window.console.log(listProdutos);
-    
+function acoes() {
+
     $("#itensVenda").on("click", "#btnDiminuirQuantidade", function (e) {
         e.stopImmediatePropagation();
         var codBarra = $(this).data("key");
-        alert(codBarra);
+        var dataTableRow = $("#itensVenda").DataTable().row($(this).parents('tr')).data();
+        index = listProdutos.findIndex((prod => prod.codigoBarra === codBarra.toString()));
+        if(index > -1) {
+            listProdutos[index].quantidade -=1;
+            window.console.log(index,listProdutos[index]);
+        }
+        popularTable(listProdutos);
     });
-
-    popularTable(produto, htmlbtnGroup);
     clearFormFocusSelect();
 }
 
-function popularTable(produto,htmlbtnGroup) {
-    $("#itensVenda").DataTable().row.add([
-        produto.descricaoProduto,
-        produto.valorVenda,
-        produto.quantidade,
-        produto.valorTotal,
-        htmlbtnGroup
-    ]).draw(false);
+function popularTable(listProdutos) {
+    $("#itensVenda").DataTable().clear().draw();
+    $.each(listProdutos, function (index, produto) {
+        var htmlbtnGroup =`
+                <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
+                    <button id='btnDiminuirQuantidade' data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
+                    <button id='btnAumentarQuantidade' data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                    <button id='btnRemoverItemVenda' data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </div>`;
+        $("#itensVenda").DataTable().row.add([
+            produto.descricaoProduto,
+            produto.valorVenda,
+            produto.quantidade,
+            produto.valorTotal,
+            htmlbtnGroup
+        ]).draw(false);
+    });
 }
 
 function actionTableItens() {
@@ -196,7 +206,7 @@ function containsObject(obj, list) {
     return list.some(elem => elem.codigoBarra === obj.codigoBarra);
 }
 
-function mensagem() {
+function mensagem(mensagem) {
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -211,6 +221,18 @@ function mensagem() {
 
     Toast.fire({
         icon: 'warning',
-        text: `Esse produto já está na lista, é possível alterar a quantidade`
+        text: `${mensagem}`
     });
 }
+
+
+//var table = $('#itensVenda').DataTable();
+//var colIndex = table.cell(this).index().column;
+//var rowIndex = table.cell(this).index().row;
+//table.cell(rowIndex, colIndex).data("new");
+//$.each(listProdutos, function (index, prod) {
+//    if(prod.codigoBarra === codBarra.toString()) {
+//        produto = prod;
+//        return false;
+//    }
+//});
