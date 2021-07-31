@@ -27,23 +27,23 @@ public class ProdutoService {
 
     @Transactional
     public void salvar(Produto produto) {
-        produtoRepository.save(produto);
+        try {
+            produtoRepository.save(produto);
+        } catch(OptimisticLockException ex) {
+            throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
+        }
     }
 
     @Transactional
     public void update(Produto update, Long codigo) {
-        try {
-            if (Objects.isNull(codigo)) {
-                throw new NegocioException("Código não pode ser null!");
-            }
-            Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
-            if (optionalProdutoAtual.isPresent()) {
-                Produto atual = optionalProdutoAtual.get();
-                BeanUtils.copyProperties(update, atual, "id");
-                produtoRepository.save(atual);
-            }
-        } catch(OptimisticLockException ex) {
-            throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
+        if (Objects.isNull(codigo)) {
+            throw new NegocioException("Código não pode ser null!");
+        }
+        Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
+        if (optionalProdutoAtual.isPresent()) {
+            Produto atual = optionalProdutoAtual.get();
+            BeanUtils.copyProperties(update, atual, "id");
+            produtoRepository.save(atual);
         }
     }
 
