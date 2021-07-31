@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,18 @@ public class ProdutoService {
 
     @Transactional
     public void update(Produto update, Long codigo) {
-        if (Objects.isNull(codigo)) {
-            throw new NegocioException("Código não pode ser null!");
-        }
-        Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
-        if (optionalProdutoAtual.isPresent()) {
-            Produto atual = optionalProdutoAtual.get();
-            BeanUtils.copyProperties(update, atual, "id");
-            produtoRepository.save(atual);
+        try {
+            if (Objects.isNull(codigo)) {
+                throw new NegocioException("Código não pode ser null!");
+            }
+            Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
+            if (optionalProdutoAtual.isPresent()) {
+                Produto atual = optionalProdutoAtual.get();
+                BeanUtils.copyProperties(update, atual, "id");
+                produtoRepository.save(atual);
+            }
+        } catch(OptimisticLockException ex) {
+            throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
         }
     }
 
