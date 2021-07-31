@@ -151,7 +151,7 @@ function addItemVenda() {
 
 function acoes() {
 
-    $("#itensVenda").on("click", "#btnDiminuirQuantidade", function (e) {
+    $("#itensVenda").on("click", ".btnDiminuirQuantidade", function (e) {
         e.stopImmediatePropagation();
         var codBarra = $(this).data("key");
         var dataTableRow = $("#itensVenda").DataTable().row($(this).parents('tr')).data();
@@ -159,16 +159,20 @@ function acoes() {
         if(index >= 0) {
             if(listProdutos[index].quantidade > 1) {
                 listProdutos[index].quantidade -=1;
+                var qtd = listProdutos[index].quantidade;
+                var vv = removeMask(listProdutos[index].valorVenda);
+                listProdutos[index].valorTotal = Number(qtd*vv).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
                 mensagem("success","A quantidade foi diminuida!");
             } else {
                 listProdutos.splice(index,1);
                 mensagem("success","Item removido da lista!");
+                clearFormFocusSelect();
             }
         }
         popularTable(listProdutos);
     });
 
-    $("#itensVenda").on("click", "#btnAumentarQuantidade", function (e) {
+    $("#itensVenda").on("click", ".btnAumentarQuantidade", function (e) {
         e.stopImmediatePropagation();
         var codBarra = $(this).data("key");
         var dataTableRow = $("#itensVenda").DataTable().row($(this).parents('tr')).data();
@@ -176,6 +180,9 @@ function acoes() {
         if(index >= 0) {
             if(listProdutos[index].quantidade < quantidadeEstoqueAtual) {
                 listProdutos[index].quantidade++;
+                var qtd = listProdutos[index].quantidade;
+                var vv = removeMask(listProdutos[index].valorVenda);
+                listProdutos[index].valorTotal = Number(qtd*vv).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
                 mensagem("success","A quantidade foi aumentada!");
             } else {
                 mensagem("warning", "Quantidade em estoque inválida!");
@@ -184,7 +191,7 @@ function acoes() {
         popularTable(listProdutos);
     });
     
-    $("#itensVenda").on("click", "#btnRemoverItemVenda", function (e) {
+    $("#itensVenda").on("click", ".btnRemoverItemVenda", function (e) {
         e.stopImmediatePropagation();
         var codBarra = $(this).data("key");
         var dataTableRow = $("#itensVenda").DataTable().row($(this).parents('tr')).data();
@@ -203,9 +210,9 @@ function popularTable(listProdutos) {
     $.each(listProdutos, function (index, produto) {
         var htmlbtnGroup =`
                 <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
-                    <button id='btnDiminuirQuantidade' data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
-                    <button id='btnAumentarQuantidade' data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-                    <button id='btnRemoverItemVenda' data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <button data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btnDiminuirQuantidade btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
+                    <button data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btnAumentarQuantidade btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                    <button data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btnRemoverItemVenda btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 </div>`;
         $("#itensVenda").DataTable().row.add([
             produto.descricaoProduto,
@@ -268,6 +275,11 @@ function mensagem(icon,mensagem) {
     });
 }
 
+function removeMask(value) {
+    value = value.replace(/[^0-9.-]+/g,"");
+    var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);
+    return Number(val);
+}
 
 //var table = $('#itensVenda').DataTable();
 //var colIndex = table.cell(this).index().column;

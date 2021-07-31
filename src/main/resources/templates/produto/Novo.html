@@ -48,14 +48,14 @@
                                                     <label for="valorCusto" class="form-label">Valor de custo</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                        <input type="text" th:value="*{valorCusto}" min="0" class="form-control" id="valorCusto" name="valorCusto"/>
+                                                        <input type="text" maxlength="6" th:value="*{valorCusto}" min="0" class="form-control" id="valorCusto" name="valorCusto"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="valorVenda" class="form-label">Valor de venda</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                        <input type="text" th:value="*{valorVenda}" min="0" class="form-control" id="valorVenda" name="valorVenda"/>
+                                                        <input type="text" maxlength="6" th:value="*{valorVenda}" min="0" class="form-control" id="valorVenda" name="valorVenda"/>
                                                     </div>
                                                 </div>
                                             </div>

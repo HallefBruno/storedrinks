@@ -15,12 +15,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
 @Table(name = "itens_venda")
 @DynamicUpdate
+@EqualsAndHashCode
 public class ItensVenda implements Serializable {
     
     @Id

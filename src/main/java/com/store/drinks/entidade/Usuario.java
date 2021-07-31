@@ -19,9 +19,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Entity
 @Data
+@Entity
+@EqualsAndHashCode
 public class Usuario implements Serializable {
 
     @Id

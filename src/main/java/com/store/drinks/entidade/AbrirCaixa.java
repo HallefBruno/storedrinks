@@ -15,12 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
 @Table(name = "abrir_caixa")
 @DynamicUpdate
+@EqualsAndHashCode
 public class AbrirCaixa implements Serializable {
     
     @Id

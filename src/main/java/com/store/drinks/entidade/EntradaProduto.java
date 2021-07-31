@@ -24,6 +24,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +33,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @DynamicUpdate
 @Table(name = "entrada_produto")
+@EqualsAndHashCode
 public class EntradaProduto implements Serializable {
     
     @Id

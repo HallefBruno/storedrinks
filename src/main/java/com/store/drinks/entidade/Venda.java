@@ -16,11 +16,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
 @DynamicUpdate
+@EqualsAndHashCode
 public class Venda implements Serializable {
     
     @Id

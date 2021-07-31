@@ -11,17 +11,20 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
+//import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Entity
 @Data
+@Entity
 @DynamicUpdate
+@EqualsAndHashCode
 public class Produto implements Serializable {
     
     @Id
@@ -76,7 +79,7 @@ public class Produto implements Serializable {
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
         this.codProduto = StringUtils.strip(this.codProduto);
     }
-    
+
 }
 //final Locale brLocale = new Locale("pt", "BR");
 //final NumberFormat brFormat = NumberFormat.getCurrencyInstance(brLocale);

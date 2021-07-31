@@ -71,7 +71,6 @@
                                                 <div class="d-flex flex-column align-items-center text-center">
                                                     <img th:src="@{/imagens/sem-perfil.png}" alt="produto" class="rounded-circle p-1" width="110">
                                                     <div class="mt-4">
-                                                        <h5>Descrição</h5>
                                                         <p class="text-secondary">[[${produto.descricaoProduto}]]</p>
                                                         <span th:if="${produto.ativo}"><span class="badge bg-success text-white">Ativo</span></span>
                                                         <span th:unless="${produto.ativo}"><span class="badge bg-danger text-white">Inativo</span></span>
@@ -120,7 +119,7 @@
                                                     <div class="col-sm-9 text-secondary">
                                                         <div class="input-group">
                                                             <input type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorVenda)}">
-                                                            <span class="input-group-text">Lucro previsto:</span>
+                                                            <span class="input-group-text">L-P:</span>
                                                             <th:block th:with="lucro=${produto.valorVenda - produto.valorCusto}">
                                                                 <input type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucro)}" placeholder="lucro previsto" aria-label="lucro previsto">
                                                             </th:block>
