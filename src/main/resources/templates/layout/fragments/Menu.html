@@ -1,3 +1,4 @@
+<input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" th:fragment="menu">
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
@@ -29,6 +30,18 @@
                 <a class="nav-link" href="#">
                     <i class="fa fa-id-badge" aria-hidden="true"></i>
                     Usuarios
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/loggedUsers}">
+                    <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                    Online
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/clienteSistema/novo}">
+                    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                    Cliente sistema
                 </a>
             </li>
             <li class="nav-item">

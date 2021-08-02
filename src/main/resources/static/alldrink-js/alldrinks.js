@@ -78,21 +78,22 @@ StoreDrink.Security = (function () {
 
 }());
 
-
-StoreDrink.formatarMoeda = function (valor) {
-    return numeral(valor).format('0,0.00');
-};
-
-StoreDrink.recuperarValor = function (valorFormatado) {
-    return numeral().unformat(valorFormatado);
-};
-
 StoreDrink.MascaraMoneteria = (function () {
     function MascaraMoneteria() {}
     MascaraMoneteria.prototype.enable = function () {
         $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: ',', decimal: '.', affixesStay: false});;
     };
     return MascaraMoneteria;
+}());
+
+StoreDrink.Cep = (function () {
+    function Cep() {
+        this.cep = $(".cep");
+    }
+    Cep.prototype.enable = function () {
+         this.cep.mask("00000-000");
+    };
+    return Cep;
 }());
 
 StoreDrink.MascaraCpfCnpj = (function () {
@@ -148,5 +149,8 @@ $(function () {
     
     var mascaraCpfCnpj = new StoreDrink.MascaraCpfCnpj();
     mascaraCpfCnpj.enable();
+    
+    var mascaraCep = new StoreDrink.Cep();
+    mascaraCep.enable();
     
 });

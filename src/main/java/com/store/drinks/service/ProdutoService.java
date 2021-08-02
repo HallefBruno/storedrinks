@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,7 @@ public class ProdutoService {
 
     @Transactional
     public void salvar(Produto produto) {
-        try {
-            produtoRepository.save(produto);
-        } catch(OptimisticLockException ex) {
-            throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
-        }
+        produtoRepository.save(produto);
     }
 
     @Transactional
@@ -42,6 +37,9 @@ public class ProdutoService {
         Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
         if (optionalProdutoAtual.isPresent()) {
             Produto atual = optionalProdutoAtual.get();
+            if(!Objects.equals(atual.getVersaoObjeto(), update.getVersaoObjeto())) {
+                throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
+            }
             BeanUtils.copyProperties(update, atual, "id");
             produtoRepository.save(atual);
         }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <style>
+        .icon-container {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        .status-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: green;
+            border: 2px solid white;
+            bottom: 0;
+            right: 0;
+            position: absolute;
+        }
+    </style>
+    <body>
+        <h3 class="mb-4" style="text-align: center">Usuários logado!</h3>
+        <div class="mt-5" th:each="user : ${users}">
+            <div class='icon-container'>
+                <img src="https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png" />
+                <div class='status-circle'>
+                </div>
+                <p th:text="${user.usuario.email}"></p>
+            </div>
+        </div>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+</body>
+</html>

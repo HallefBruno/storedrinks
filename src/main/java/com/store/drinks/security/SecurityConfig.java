@@ -11,10 +11,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
@@ -35,20 +38,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
             .antMatchers("/vendor/**")
-            .antMatchers("/imagens/**");
+            .antMatchers("/imagens/**")
+            .antMatchers("/public/**")
+            .antMatchers("/clientesistema/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
         http
+        .authorizeRequests()
+        .antMatchers("/validar/**").permitAll()
+        .and()
         .authorizeRequests()
         .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
         .antMatchers("/entradas/**").hasRole("MANTER_ENTRADA")
         .antMatchers("/pdv/**").access("hasRole('MANTER_PDV')")
+        .antMatchers("/clienteSistema/**").access("hasRole('SUPER_USER')")
+        .antMatchers("/loggedUsers/**").access("hasRole('SUPER_USER')")
         .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
+        .failureUrl("/error")
         .permitAll()
         .and()
         .logout().deleteCookies("JSESSIONID")
@@ -70,6 +82,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
 }
