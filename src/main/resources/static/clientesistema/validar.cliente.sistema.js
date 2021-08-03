@@ -10,7 +10,7 @@ $(function () {
                     url: $("#contextApp").val() + "validar/cliente",
                     type: "get",
                     data: {
-                        cpfCnpj: $("#cpfCnpj").val()
+                        cpfCnpj: $("#cpfCnpj").val().replace(/[^\d]+/g,'')
                     },
                     headers: {
                         "X-CSRF-TOKEN": $("meta[name='_csrf']").attr("content"),
@@ -20,6 +20,14 @@ $(function () {
                         alert(response);
                     },
                     error: function (xhr) {
+                        if(xhr.responseJSON) {
+                            $("#cpfCnpj").focus();
+                            Swal.fire(
+                                'Atenção!',
+                                `${xhr.responseJSON.message}`,
+                                'warning'
+                            );
+                        }
                         window.console.log(xhr);
                     },
                     beforeSend: function () {
@@ -30,6 +38,7 @@ $(function () {
                     }
                 });
             } else {
+                $("#cpfCnpj").focus();
                 Swal.fire(
                     'Atenção!',
                     'CPF/CNPJ Inválido!',
@@ -37,6 +46,7 @@ $(function () {
                 );
             }
         } else {
+            $("#cpfCnpj").focus();
             Swal.fire(
                 'Atenção!',
                 'CPF/CNPJ é obrigatória!',

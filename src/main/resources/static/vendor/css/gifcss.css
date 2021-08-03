@@ -6,7 +6,7 @@
     position : fixed;
     z-index: 100;
     background-image : url('/alldrinks/imagens/gif-cliente-sistema.gif');
-    background-color:#999999; /*#ffffff;*/
+    background-color:#fafafa; /*#ffffff;*/
     opacity : 0.8;
     background-repeat : no-repeat;
     background-position : center;
