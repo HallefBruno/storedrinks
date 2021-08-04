@@ -38,7 +38,5 @@ public class ValidarClienteService {
         } else {
             throw new NegocioException("Cliente sem permisão para criar conta!");
         }
-
     }
-    
 }

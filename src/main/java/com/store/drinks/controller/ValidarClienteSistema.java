@@ -27,10 +27,15 @@ public class ValidarClienteSistema {
     public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
         try {
             validarClienteService.salvar(cpfCnpj);
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok("validar/criarConta");
         } catch (NegocioException ex) {
             return ResponseEntity.badRequest().body(ex);
         }
+    }
+    
+    @GetMapping("criarConta")
+    public String criarConta() {
+        return "public/CriarContaClienteSistema";
     }
     
 }

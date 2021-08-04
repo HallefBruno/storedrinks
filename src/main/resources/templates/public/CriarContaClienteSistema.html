@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Criar conta cliente sistema</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <input type="hidden" id="contextApp" th:value="@{/}" />
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 mt-5">
+                    <div class="shadow-sm mb-5 bg-body rounded">
+                        <div class="card">
+                            <div class="card-header">
+                                Criar conta
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <!--<label for="cpfCnpj" class="form-label">CPF/CNPJ</label>-->
+                                        <input type="text" readonly="true" class="form-control" id="cpfCnpj" name="cpfCnpj">
+<!--                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                                                <input type="password" class="form-control" id="password" name="password">
+                                            </div>
+                                        </div>
+                                        <div class="p-2">
+                                            <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 5 digitos '00000', uma letra, 'A' outro digito '0' e outra letra 'A' ex: '00000S0S' "><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btnCriarConta">
+                                        Salvar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divLoading"></div>
+        <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
+        <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
+        <script th:src="@{/clientesistema/criar.conta.cliente.js}" type="text/javascript"></script>
+    </body>
+</html>

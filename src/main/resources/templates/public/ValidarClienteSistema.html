@@ -11,21 +11,23 @@
         <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
     </head>
-    <body class="bg-light">
+    <body>
         <input type="hidden" id="contextApp" th:value="@{/}" />
         <div class="container mt-5">
             <div class="row">
                 <div class="d-flex justify-content-center">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                Autenticação para a liberação de dacriação da conta
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">Digite seu CNPJ ou CPF</p>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" aria-label="CNPJ" aria-describedby="cnpj">
-                                    <button class="btn btn-danger btnValidarClienteSistema" type="button" id="btnValidarClienteSistema" name="btnValidarClienteSistema"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <div class="shadow-sm mb-5 bg-body rounded">
+                            <div class="card">
+                                <div class="card-header">
+                                    Autenticação para a liberação da criação da conta
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">Digite seu CPF ou CNPJ</p>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" aria-label="CNPJ" aria-describedby="cnpj">
+                                        <button class="btn btn-danger btnValidarClienteSistema" type="button" id="btnValidarClienteSistema" name="btnValidarClienteSistema"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -35,6 +35,7 @@ public class Usuario implements Serializable {
 
     @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail inválido")
+    @Column(unique = true)
     private String email;
 
     private String senha;

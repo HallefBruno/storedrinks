@@ -17,7 +17,8 @@ $(function () {
                         "Content-Type": "application/json"
                     },
                     success: function (response) {
-                        alert(response);
+                        window.localStorage.setItem("cpfCnpj",btoa($("#cpfCnpj").val()));
+                        window.location.href=$("#contextApp").val()+response;
                     },
                     error: function (xhr) {
                         if(xhr.responseJSON) {
