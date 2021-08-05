@@ -39,8 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
             .antMatchers("/vendor/**")
             .antMatchers("/imagens/**")
-            .antMatchers("/public/**")
-            .antMatchers("/clientesistema/**");
+            .antMatchers("/novaconta/**");
     }
 
     @Override
@@ -49,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
         .authorizeRequests()
         .antMatchers("/validar/**").permitAll()
+        .antMatchers("/novaConta/**").permitAll()
         .and()
         .authorizeRequests()
         .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
