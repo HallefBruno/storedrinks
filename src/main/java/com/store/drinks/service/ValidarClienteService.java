@@ -23,9 +23,14 @@ public class ValidarClienteService {
     @Transactional
     public void salvar(String cpfCnpj) {
         Optional<ValidarCliente> temCnpj = clienteRepository.findByCpfCnpj(cpfCnpj);
-        if(temCnpj.isPresent()) {
+        if(temCnpj.isPresent() && temCnpj.get().getContaCriada()) {
             throw new NegocioException("Esse cliente já possui conta!");
+        } else if(!temCnpj.isPresent()) {
+            verificaSeClienteEstaCadastrado(cpfCnpj);
         }
+    }
+    
+    private void verificaSeClienteEstaCadastrado(String cpfCnpj) {
         Optional<ClienteSistema> opClienteSistema = clienteSistemaService.buscarPorCpfCnpj(cpfCnpj);
         if(opClienteSistema.isPresent()) {
             ClienteSistema clienteSistema = opClienteSistema.get();
@@ -33,6 +38,7 @@ public class ValidarClienteService {
                 ValidarCliente validarCliente = new ValidarCliente();
                 validarCliente.setCpfCnpj(cpfCnpj);
                 validarCliente.setDataValidacao(LocalDateTime.now());
+                validarCliente.setContaCriada(Boolean.FALSE);
                 clienteRepository.save(validarCliente);
             }
         } else {

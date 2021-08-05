@@ -27,8 +27,11 @@ public class ValidarCliente implements Serializable {
     @Column(name = "data_validacao", nullable = false)
     private LocalDateTime dataValidacao;
     
-    @Column(name = "cpfCnpj", nullable = false)
+    @Column(name = "cpfCnpj", nullable = false, unique = true)
     private String cpfCnpj;
+    
+    @Column(name = "conta_criada", columnDefinition = "boolean default false")
+    private Boolean contaCriada;
     
     @PrePersist
     @PreUpdate
