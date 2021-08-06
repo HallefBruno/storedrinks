@@ -1,8 +1,10 @@
 
 package com.store.drinks.entidade;
 
+import com.store.drinks.util.Tenant;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -95,8 +97,8 @@ public class ClienteSistema implements Serializable {
     @Column(name = "primeiro_acesso", columnDefinition = "boolean default false")
     private Boolean primeiroAcesso;
     
-    @PrePersist
     @PreUpdate
+    @PrePersist
     private void prePersistPreUpdate() {
         this.bairro = StringUtils.strip(this.bairro);
         this.cidade = StringUtils.strip(this.cidade);
@@ -105,6 +107,12 @@ public class ClienteSistema implements Serializable {
         this.logradouro = StringUtils.strip(this.logradouro);
         this.cep = StringUtils.getDigits(this.cep);
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
+        
+        if(Objects.isNull(this.acessarTelaCriarLogin)) {
+            this.acessarTelaCriarLogin = Boolean.FALSE;
+        }
+        if(Objects.isNull(this.primeiroAcesso)) {
+            this.primeiroAcesso = Boolean.FALSE;
+        }
     }
-
 }

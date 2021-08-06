@@ -2,7 +2,7 @@
 package com.store.drinks.controller;
 
 import com.store.drinks.execption.NegocioException;
-import com.store.drinks.service.ValidarClienteService;
+import com.store.drinks.service.NovaContaClienteSistema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ValidarClienteSistema {
     
     @Autowired
-    private ValidarClienteService validarClienteService;
+    private NovaContaClienteSistema validarClienteService;
     
     @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
     public String pageValidarCliente() {
@@ -26,7 +26,7 @@ public class ValidarClienteSistema {
     @GetMapping("validar/cliente")
     public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
         try {
-            validarClienteService.salvar(cpfCnpj);
+            validarClienteService.salvaValidarCliente(cpfCnpj);
             return ResponseEntity.ok("novaConta");
         } catch (NegocioException ex) {
             return ResponseEntity.badRequest().body(ex);

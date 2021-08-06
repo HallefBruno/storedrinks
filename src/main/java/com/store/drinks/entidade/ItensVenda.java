@@ -44,4 +44,7 @@ public class ItensVenda implements Serializable {
     @JsonBackReference
     private Venda venda;
     
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
 }

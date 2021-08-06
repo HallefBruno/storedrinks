@@ -120,6 +120,10 @@ public class EntradaProduto implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
+    
     @PrePersist
     @PreUpdate
     private void removeCaracterEspeciais() {

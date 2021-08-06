@@ -47,4 +47,7 @@ public class AbrirCaixa implements Serializable {
     @Column(nullable = false)
     private Boolean aberto;
     
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
 }

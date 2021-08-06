@@ -3,6 +3,7 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.ValidarCliente;
+import com.store.drinks.entidade.dto.NovaContaDTO;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ValidarClienteRepository;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class ValidarClienteService {
+public class NovaContaClienteSistema {
     
     @Autowired
     private ValidarClienteRepository clienteRepository;
@@ -21,7 +22,7 @@ public class ValidarClienteService {
     private ClienteSistemaService clienteSistemaService;
     
     @Transactional
-    public void salvar(String cpfCnpj) {
+    public void salvaValidarCliente(String cpfCnpj) {
         Optional<ValidarCliente> temCnpj = clienteRepository.findByCpfCnpj(cpfCnpj);
         if(temCnpj.isPresent() && temCnpj.get().getContaCriada()) {
             throw new NegocioException("Esse cliente já possui conta!");
@@ -38,11 +39,15 @@ public class ValidarClienteService {
                 ValidarCliente validarCliente = new ValidarCliente();
                 validarCliente.setCpfCnpj(cpfCnpj);
                 validarCliente.setDataValidacao(LocalDateTime.now());
-                validarCliente.setContaCriada(Boolean.FALSE);
                 clienteRepository.save(validarCliente);
             }
         } else {
             throw new NegocioException("Cliente sem permisão para criar conta!");
         }
+    }
+    
+    @Transactional
+    public void salvarNovaContaSistema(NovaContaDTO novaContaDTO) {
+        
     }
 }

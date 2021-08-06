@@ -1,13 +1,17 @@
 
 package com.store.drinks.entidade;
 
+import com.store.drinks.util.Tenant;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
@@ -71,12 +75,24 @@ public class Produto implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
+    
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
         this.codigoBarra = StringUtils.strip(this.codigoBarra);
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
         this.codProduto = StringUtils.strip(this.codProduto);
+        if(Objects.isNull(this.ativo)) {
+            this.ativo = Boolean.FALSE;
+        }
+        tenant();
+    }
+    
+    private void tenant() {
+        this.clienteSistema = new Tenant().usuario().getClienteSistema();
     }
 
 }

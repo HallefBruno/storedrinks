@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import lombok.Data;
@@ -40,5 +42,9 @@ public class Venda implements Serializable {
     @Min(value = 0, message = "Valor mínimo")
     @Column(name = "valor_total_venda", nullable = false)
     private BigDecimal valorTotalVenda;
+    
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
     
 }

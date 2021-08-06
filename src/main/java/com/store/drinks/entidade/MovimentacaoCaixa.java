@@ -55,4 +55,7 @@ public class MovimentacaoCaixa implements Serializable {
     @JoinColumn(nullable = false)
     private Venda venda;
     
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @ManyToOne
+    private ClienteSistema clienteSistema;
 }

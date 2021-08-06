@@ -15,7 +15,7 @@
                 <div th:replace="layout/fragments/Menu :: menu"></div>
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div id="nenhumProduto" style="display: none;"></div>
                             <th:block th:include="fragments/MensagemSucesso"></th:block>
                             <form th:action="${entradaProduto.id} == null ? @{/entradas/salvar} : @{/entradas/update/{codigo}(codigo=${entradaProduto.id})}" method="post" th:object="${entradaProduto}">

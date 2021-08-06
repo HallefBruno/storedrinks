@@ -26,6 +26,7 @@ public class ProdutoService {
 
     @Transactional
     public void salvar(Produto produto) {
+        if(Objects.isNull(produto.getAtivo())) produto.setAtivo(Boolean.FALSE);
         produtoRepository.save(produto);
     }
 

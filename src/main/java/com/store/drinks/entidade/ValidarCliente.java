@@ -3,6 +3,7 @@ package com.store.drinks.entidade;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +39,11 @@ public class ValidarCliente implements Serializable {
     private void prePersistPreUpdate() {
         this.cpfCnpj = StringUtils.strip(this.cpfCnpj);
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
+        
+        if(Objects.isNull(this.contaCriada)) {
+            this.contaCriada = Boolean.FALSE;
+        }
+        
     }
     
 }
