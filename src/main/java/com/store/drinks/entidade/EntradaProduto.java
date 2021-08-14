@@ -33,8 +33,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @DynamicUpdate
 @Table(name = "entrada_produto")
-@EqualsAndHashCode
-public class EntradaProduto implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class EntradaProduto extends TenantValue implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -134,6 +134,10 @@ public class EntradaProduto implements Serializable {
         this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
         this.formaPagamento = StringUtils.strip(this.formaPagamento);
         this.fornecedor = StringUtils.strip(this.fornecedor);
+        if(StringUtils.isBlank(this.tenant)) {
+            this.tenant = getTenantValue();
+        }
+        this.tenant = StringUtils.strip(this.tenant);
     }
     
 }

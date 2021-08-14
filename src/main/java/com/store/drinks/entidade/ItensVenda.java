@@ -25,8 +25,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "itens_venda")
 @DynamicUpdate
-@EqualsAndHashCode
-public class ItensVenda implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class ItensVenda extends TenantValue implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +57,9 @@ public class ItensVenda implements Serializable {
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
+        if(StringUtils.isBlank(this.tenant)) {
+            this.tenant = getTenant();
+        }
         this.tenant = StringUtils.strip(this.tenant);
     }
 }

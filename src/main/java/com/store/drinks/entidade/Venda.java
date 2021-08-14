@@ -6,18 +6,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -30,8 +26,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @Data
 @Entity
 @DynamicUpdate
-@EqualsAndHashCode
-public class Venda implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class Venda extends TenantValue implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +55,9 @@ public class Venda implements Serializable {
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
+        if(StringUtils.isBlank(this.tenant)) {
+            this.tenant = getTenantValue();
+        }
         this.tenant = StringUtils.strip(this.tenant);
     }
     
