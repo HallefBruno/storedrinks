@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,7 +59,7 @@ public class ProdutoController {
             if (result.hasErrors()) {
                 return init(produto);
             }
-            this.produtoService.salvar(produto);
+            produtoService.salvar(produto);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
@@ -77,7 +76,7 @@ public class ProdutoController {
             if (result.hasErrors()) {
                 return init(produto);
             }
-            this.produtoService.update(produto,codigo);
+            produtoService.update(produto,codigo);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);

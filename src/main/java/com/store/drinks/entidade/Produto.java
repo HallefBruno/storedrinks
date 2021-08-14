@@ -1,7 +1,6 @@
 
 package com.store.drinks.entidade;
 
-import com.store.drinks.util.Tenant;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
@@ -27,8 +25,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @Data
 @Entity
 @DynamicUpdate
-@EqualsAndHashCode
-public class Produto implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class Produto extends TenantValue implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,9 +73,12 @@ public class Produto implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
-    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    @ManyToOne
-    private ClienteSistema clienteSistema;
+    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    //@ManyToOne
+    //private ClienteSistema clienteSistema;
+    @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    private String tenant;
     
     @PrePersist
     @PreUpdate
@@ -85,16 +86,14 @@ public class Produto implements Serializable {
         this.codigoBarra = StringUtils.strip(this.codigoBarra);
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
         this.codProduto = StringUtils.strip(this.codProduto);
+        if(StringUtils.isBlank(this.tenant)) {
+            this.tenant = getTenantValue();
+            this.tenant = StringUtils.strip(this.tenant);
+        }
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }
-        tenant();
     }
-    
-    private void tenant() {
-        this.clienteSistema = new Tenant().usuario().getClienteSistema();
-    }
-
 }
 //final Locale brLocale = new Locale("pt", "BR");
 //final NumberFormat brFormat = NumberFormat.getCurrencyInstance(brLocale);

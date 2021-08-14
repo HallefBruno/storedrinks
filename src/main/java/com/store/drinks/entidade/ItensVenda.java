@@ -11,11 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
@@ -44,7 +47,16 @@ public class ItensVenda implements Serializable {
     @JsonBackReference
     private Venda venda;
     
-    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    @ManyToOne
-    private ClienteSistema clienteSistema;
+    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    //@ManyToOne
+    //private ClienteSistema clienteSistema;
+    @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    private String tenant;
+    
+    @PrePersist
+    @PreUpdate
+    private void prePersistPreUpdate() {
+        this.tenant = StringUtils.strip(this.tenant);
+    }
 }

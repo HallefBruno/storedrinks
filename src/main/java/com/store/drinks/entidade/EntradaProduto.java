@@ -120,9 +120,12 @@ public class EntradaProduto implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
-    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    @ManyToOne
-    private ClienteSistema clienteSistema;
+    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    //@ManyToOne
+    //private ClienteSistema clienteSistema;
+    @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    private String tenant;
     
     @PrePersist
     @PreUpdate

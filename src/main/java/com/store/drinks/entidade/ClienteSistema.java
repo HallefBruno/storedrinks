@@ -1,7 +1,6 @@
 
 package com.store.drinks.entidade;
 
-import com.store.drinks.util.Tenant;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
