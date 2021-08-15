@@ -34,7 +34,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @DynamicUpdate
 @Table(name = "entrada_produto")
 @EqualsAndHashCode(callSuper = false)
-public class EntradaProduto extends TenantValue implements Serializable {
+public class EntradaProduto extends TenantService implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

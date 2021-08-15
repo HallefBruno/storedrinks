@@ -26,7 +26,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "abrir_caixa")
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class AbrirCaixa extends TenantValue implements Serializable {
+public class AbrirCaixa extends TenantService implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

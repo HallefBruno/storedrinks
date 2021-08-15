@@ -1,6 +1,8 @@
 package com.store.drinks.repository.querys.produto;
 
 import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.Tenant;
+import com.store.drinks.entidade.TenantService;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +14,20 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
+public class ProdutoRepositoryImpl extends TenantService implements ProdutoRepositoryCustom {
 
     @PersistenceContext
     private EntityManager manager;
+    
+    @Autowired
+    private HttpServletRequest request;
     
     @Autowired
     private RowsUtil rowsUtil;
@@ -54,6 +60,9 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
             predicates.add(predicate);
         }
         
+        predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), getTenantValue().toUpperCase()));
+        predicates.add(predicate);
+        
         query.select(morador);
         query.where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Produto> typedQuery = manager.createQuery(query);
@@ -84,8 +93,10 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
             predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
         }
         
+        Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), getTenantValue().toUpperCase()));
+        
         query.select(produto);
-        query.where(predicateOr, cb.isTrue(isAtivo));
+        query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
         TypedQuery<Produto> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);

@@ -26,7 +26,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class Produto extends TenantValue implements Serializable {
+public class Produto extends TenantService implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,11 +88,11 @@ public class Produto extends TenantValue implements Serializable {
         this.codProduto = StringUtils.strip(this.codProduto);
         if(StringUtils.isBlank(this.tenant)) {
             this.tenant = getTenantValue();
-            this.tenant = StringUtils.strip(this.tenant);
         }
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }
+        this.tenant = StringUtils.strip(this.tenant);
     }
 }
 //final Locale brLocale = new Locale("pt", "BR");

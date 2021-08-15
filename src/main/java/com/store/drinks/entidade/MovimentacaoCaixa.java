@@ -30,7 +30,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "movimentacao_caixa")
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class MovimentacaoCaixa extends TenantValue implements Serializable {
+public class MovimentacaoCaixa extends TenantService implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

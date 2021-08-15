@@ -1,6 +1,7 @@
 
 package com.store.drinks.util;
 
+import com.store.drinks.entidade.Tenant;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.security.UsuarioSistema;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class TenantInterceptor implements HandlerInterceptor {
         if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
             Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
             if(Objects.nonNull(usuario)) {
-                request.setAttribute("tenant", usuario.getClienteSistema().getTenant());
+                request.setAttribute(Tenant.nome.value(), usuario.getClienteSistema().getTenant());
                 return true;
             }
         }

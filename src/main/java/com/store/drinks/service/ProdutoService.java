@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.persistence.PersistenceException;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,9 +23,6 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
-    
-    @Autowired
-    private HttpServletRequest request;
 
     @Transactional
     public void salvar(Produto produto) {

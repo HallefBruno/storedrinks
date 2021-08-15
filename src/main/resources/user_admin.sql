@@ -21,5 +21,11 @@ INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (3, 2);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (3, 3);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (3, 4);
 
-INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES (
-(SELECT id FROM usuario WHERE email = 'admin@storedrink.com'), 3);
+INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'admin@storedrink.com'), 3);
+
+
+
+INSERT INTO cliente_sistema(acessar_tela_criar_login, bairro, cep, cidade, cpf_cnpj, data_atualizacao, data_cadastro, estado, logradouro, nome_comercio, primeiro_acesso, qtd_usuario, tenant)
+VALUES (true,'Vila finsocial','61650005','Goiânia','77835168009890','2021-08-05 00:10:19.887','2021-08-05 00:10:19.887','Goiás','Quandra 45 lote 3','Loja VFS',true,1,'vfs');
+INSERT INTO usuario (id,nome, email, senha,proprietario, ativo, tenant) VALUES (2,'usertest', 'usertest@storedrink.com', '$2a$10$rODOzMz60JmUUx5J39p9JOb5Ee7c2303YeH0kp42XJOW7Ch9qcBy2',true, true, (SELECT tenant FROM cliente_sistema WHERE tenant = 'vfs'));
+INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'usertest@storedrink.com'), 1);

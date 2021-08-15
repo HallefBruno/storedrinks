@@ -27,7 +27,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class Venda extends TenantValue implements Serializable {
+public class Venda extends TenantService implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

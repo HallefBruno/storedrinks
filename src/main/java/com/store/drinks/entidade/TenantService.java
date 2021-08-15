@@ -7,14 +7,14 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 
-public class TenantValue {
+public class TenantService {
     
     @Autowired
     private HttpServletRequest request;
 
-    //@RequestAttribute(value = "yourAttribute") Object 
+    //@RequestAttribute(value = "tenant")
     public String getTenantValue() {
         this.request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getAttribute("tenant").toString();
+        return request.getAttribute(Tenant.nome.value()).toString();
     }
 }
