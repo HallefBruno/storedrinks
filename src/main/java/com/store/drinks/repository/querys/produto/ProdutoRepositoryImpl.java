@@ -1,13 +1,16 @@
 package com.store.drinks.repository.querys.produto;
 
 import com.store.drinks.entidade.Produto;
-import com.store.drinks.entidade.Tenant;
-import com.store.drinks.entidade.TenantService;
+import com.store.drinks.entidade.enuns.Tenant;
+import com.store.drinks.entidade.ETenant;
+import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,14 +24,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-public class ProdutoRepositoryImpl extends TenantService implements ProdutoRepositoryCustom {
+public class ProdutoRepositoryImpl extends ETenant implements ProdutoRepositoryCustom {
 
     @PersistenceContext
     private EntityManager manager;
-    
-    @Autowired
-    private HttpServletRequest request;
-    
+
     @Autowired
     private RowsUtil rowsUtil;
     
@@ -104,4 +104,19 @@ public class ProdutoRepositoryImpl extends TenantService implements ProdutoRepos
         return new PageImpl<>(typedQuery.getResultList(),pageable, count);
 
     }
+
+    @Override
+    public void verificarExistenciaProduto(Produto produto) {
+        Query query = manager.createNamedQuery("find produto");
+        query.setParameter(1, produto.getDescricaoProduto());
+        query.setParameter(2, produto.getCodigoBarra());
+        query.setParameter(3, produto.getCodProduto());
+        query.setParameter(4, produto.getTenantValue());
+        if(!query.setMaxResults(1).getResultList().isEmpty()) {
+            String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
+            throw new NegocioException(msg);
+        }
+    }
+    
+    
 }

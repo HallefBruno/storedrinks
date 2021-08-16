@@ -23,10 +23,15 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
-
+    
     @Transactional
     public void salvar(Produto produto) {
-        produtoRepository.save(produto);
+        try {
+            produtoRepository.verificarExistenciaProduto(produto);
+            produtoRepository.save(produto);
+        } catch (NegocioException ex) {
+            throw new NegocioException(ex.getMessage());
+        }
     }
 
     @Transactional

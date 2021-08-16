@@ -1,7 +1,7 @@
 
 package com.store.drinks.util;
 
-import com.store.drinks.entidade.Tenant;
+import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.security.UsuarioSistema;
 import java.util.Objects;

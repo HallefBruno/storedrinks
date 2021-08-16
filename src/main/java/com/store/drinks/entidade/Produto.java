@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
@@ -26,7 +27,9 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class Produto extends TenantService implements Serializable {
+@NamedQuery(query = "select p.descricaoProduto, p.codigoBarra, p.codProduto from Produto p where p.descricaoProduto = ?1 or p.codigoBarra = ?2 or p.codProduto = ?3 and p.tenant = ?4 ", 
+name = "find produto")
+public class Produto extends ETenant implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,19 +39,19 @@ public class Produto extends TenantService implements Serializable {
     @NotBlank(message = "Código de barra não pode ter espaços em branco!")
     @NotEmpty(message = "Código de barra não pode ser vazio!")
     @NotNull(message = "Código de barra não pode ser null!")
-    @Column(length = 100, nullable = true, name = "codigo_barra", unique = true)
+    @Column(length = 30, nullable = true, name = "codigo_barra")
     private String codigoBarra;
     
     @NotBlank(message = "Código do produto não pode ter espaços em branco!")
     @NotEmpty(message = "Código do produto não pode ser vazio!")
     @NotNull(message = "Código do produto não pode ser null!")
-    @Column(length = 100, nullable = true, name = "codigo_produto", unique = true)
+    @Column(length = 30, nullable = true, name = "codigo_produto")
     private String codProduto;
     
     @NotBlank(message = "Descrição do produto não pode ter espaços em branco!")
     @NotEmpty(message = "Descrição do produto não pode ser vazio!")
     @NotNull(message = "Descrição do produto não pode ser null!")
-    @Column(length = 255, name = "descricao_produto", nullable = false, unique = true)
+    @Column(length = 255, name = "descricao_produto", nullable = false)
     private String descricaoProduto;
     
     @NotNull(message = "Quantidade do produto não pode ser null!")
@@ -77,7 +80,7 @@ public class Produto extends TenantService implements Serializable {
     //@ManyToOne
     //private ClienteSistema clienteSistema;
     @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
     @PrePersist

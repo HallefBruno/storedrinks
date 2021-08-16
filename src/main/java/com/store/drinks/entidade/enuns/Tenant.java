@@ -1,5 +1,5 @@
 
-package com.store.drinks.entidade;
+package com.store.drinks.entidade.enuns;
 
 public enum Tenant {
     

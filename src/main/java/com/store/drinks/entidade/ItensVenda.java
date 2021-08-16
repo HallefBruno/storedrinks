@@ -15,6 +15,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +28,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "itens_venda")
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-public class ItensVenda extends TenantService implements Serializable {
+public class ItensVenda extends ETenant implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +53,7 @@ public class ItensVenda extends TenantService implements Serializable {
     //@ManyToOne
     //private ClienteSistema clienteSistema;
     @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
     @PrePersist

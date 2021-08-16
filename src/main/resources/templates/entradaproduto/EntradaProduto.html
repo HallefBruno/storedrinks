@@ -36,7 +36,7 @@
                                                 <label for="codigoBarra" class="form-label">Cód Barra</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                                    <input type="text" th:field="*{codigoBarra}" class="form-control" id="codigoBarra" name="codigoBarra">
+                                                    <input autocomplete="off" type="text" th:field="*{codigoBarra}" class="form-control" id="codigoBarra" name="codigoBarra">
                                                 </div>
                                             </div>
                                         </div>
@@ -47,7 +47,7 @@
                                             </div>
                                             <div class="mb-3 col-sm-5 col-md-5 col-5 col-lg-3">
                                                 <label for="codigoProdutoAtual" class="form-label">Cód produto</label>
-                                                <input readonly="true" type="text" class="form-control" id="codigoProdutoAtual">
+                                                <input autocomplete="off" readonly="true" type="text" class="form-control" id="codigoProdutoAtual">
                                             </div>
                                         </div>
                                     </div>
@@ -59,29 +59,29 @@
                                             <div class="row">
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="numeroNota" class="form-label">Nº da nota</label>
-                                                    <input required th:field="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
+                                                    <input autocomplete="off" required th:field="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="cnpjCpf" class="form-label">CNPJ/CPF</label>
-                                                    <input required th:field="*{cnpjCpf}" type="text" class="form-control mascaraCpfCnpj" id="cnpjCpf" name="cnpjCpf">
+                                                    <input autocomplete="off" required th:field="*{cnpjCpf}" type="text" class="form-control mascaraCpfCnpj" id="cnpjCpf" name="cnpjCpf">
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="fornecedor" class="form-label">Fornecedor</label>
-                                                    <input required th:field="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
+                                                    <input autocomplete="off" required th:field="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="dataEmissao" class="form-label">Data emissão</label>
-                                                    <input required th:field="*{dataEmissao}" type="date" class="form-control" id="dataEmissao" name="dataEmissao">
+                                                    <input autocomplete="off" required th:field="*{dataEmissao}" type="date" class="form-control" id="dataEmissao" name="dataEmissao">
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="formaPagamento" class="form-label">Forma de pagamento</label>
-                                                    <input required th:field="*{formaPagamento}" type="text" class="form-control" id="formaPagamento" name="formaPagamento">
+                                                    <input autocomplete="off" required th:field="*{formaPagamento}" type="text" class="form-control" id="formaPagamento" name="formaPagamento">
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
@@ -97,7 +97,7 @@
                                                 <div class="col-sm-4 col-md-4 col-lg-4 col-12">
                                                     <div class="mb-3">
                                                         <label for="quantidade" class="form-label">Quantidade</label>
-                                                        <input required th:value="*{quantidade}" readonly="true" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
+                                                        <input autocomplete="off" required th:value="*{quantidade}" readonly="true" min="0" type="number" class="form-control" id="quantidade" name="quantidade">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 col-md-4 col-lg-4 col-12">
@@ -105,7 +105,7 @@
                                                         <label for="valorCusto" class="form-label">Valor de custo</label>
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                            <input required th:value="*{valorCusto}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorCusto" name="valorCusto">
+                                                            <input autocomplete="off" required th:value="*{valorCusto}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorCusto" name="valorCusto">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -114,7 +114,7 @@
                                                         <label for="valorVenda" class="form-label">Valor de venda</label>
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                            <input required th:value="*{valorVenda}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorVenda" name="valorVenda">
+                                                            <input autocomplete="off" required th:value="*{valorVenda}" readonly="true" min="0" type="text" class="form-control monetaria" id="valorVenda" name="valorVenda">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -124,21 +124,21 @@
                                                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="novaQuantidade" class="form-label">Nova quantidade</label>
                                                     <div class="input-group mb-3">
-                                                        <input th:field="*{novaQuantidade}" min="0" type="number" class="form-control" id="novaQuantidade" name="novaQuantidade">
+                                                        <input th:field="*{novaQuantidade}" autocomplete="off" min="0" type="number" class="form-control" id="novaQuantidade" name="novaQuantidade">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 col-sm-12 col-md-12 col-lg-4 col-12">
                                                     <label for="novoValorCusto" class="form-label">Novo valor custo</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                        <input th:field="*{novoValorCusto}" maxlength="6" min="0" type="text" class="form-control" id="novoValorCusto" name="novoValorCusto">
+                                                        <input th:field="*{novoValorCusto}" autocomplete="off" maxlength="6" min="0" type="text" class="form-control" id="novoValorCusto" name="novoValorCusto">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="novoValorVenda" class="form-label">Novo valor venda</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                        <input th:field="*{novoValorVenda}" maxlength="6" min="0" type="text" class="form-control" id="novoValorVenda" name="novoValorVenda">
+                                                        <input th:field="*{novoValorVenda}" autocomplete="off" maxlength="6" min="0" type="text" class="form-control" id="novoValorVenda" name="novoValorVenda">
                                                     </div>
                                                 </div>
                                             </div>

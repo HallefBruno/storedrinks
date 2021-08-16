@@ -274,12 +274,22 @@ function mensagem(icon,mensagem) {
         text: `${mensagem}`
     });
 }
-
 function removeMask(value) {
-    value = value.replace(/[^0-9.-]+/g,"");
-    var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);
-    return Number(val);
+    if(value.length >= 8) {
+        value = value.replace(/[^0-9.-]+/g,"");
+        if(!value.includes(".")) {
+            var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);
+            console.log(val);
+            return Number(val);
+        }
+    }
 }
+
+//function removeMask(value) {
+//    value = value.replace(/[^0-9.-]+/g,"");
+//    var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);
+//    return Number(val);
+//}
 
 //var table = $('#itensVenda').DataTable();
 //var colIndex = table.cell(this).index().column;

@@ -2,7 +2,7 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Produto;
-import com.store.drinks.entidade.SituacaoCompra;
+import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;

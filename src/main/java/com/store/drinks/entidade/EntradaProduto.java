@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.entidade.enuns.SituacaoCompra;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -34,7 +35,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @DynamicUpdate
 @Table(name = "entrada_produto")
 @EqualsAndHashCode(callSuper = false)
-public class EntradaProduto extends TenantService implements Serializable {
+public class EntradaProduto extends ETenant implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,7 +125,7 @@ public class EntradaProduto extends TenantService implements Serializable {
     //@ManyToOne
     //private ClienteSistema clienteSistema;
     @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
+    @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
     @PrePersist

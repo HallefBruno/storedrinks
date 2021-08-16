@@ -2,12 +2,8 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.AbrirCaixa;
-import com.store.drinks.entidade.Usuario;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.AbrirCaixaRepository;
-import com.store.drinks.repository.IAuthenticationFacade;
-import com.store.drinks.repository.UsuarioRepository;
-import com.store.drinks.security.UsuarioSistema;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +17,8 @@ public class AbrirCaixaService {
     private AbrirCaixaRepository abrirCaixaRepository;
     
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
     
-    @Autowired
-    private IAuthenticationFacade authenticationFacade;
-
     @Transactional
     public void salvar(AbrirCaixa abrirCaixa) {
         if(abrirCaixaPorUsuarioLogado()) {
@@ -34,19 +27,14 @@ public class AbrirCaixaService {
         AbrirCaixa acx = new AbrirCaixa();
         acx.setAberto(Boolean.TRUE);
         acx.setDataHoraAbertura(LocalDateTime.now());
-        acx.setUsuario(usuario());
+        acx.setUsuario(usuarioService.usuarioLogado());
         acx.setValorInicialTroco(abrirCaixa.getValorInicialTroco());
         abrirCaixaRepository.save(acx);
     }
     
     public boolean abrirCaixaPorUsuarioLogado() {
-        Optional<AbrirCaixa> caixaAberto = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuario());
+        Optional<AbrirCaixa> caixaAberto = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
         return caixaAberto.isPresent();
     }
-    
-    private Usuario usuario() {
-        Usuario usuario = ((UsuarioSistema) authenticationFacade.getAuthentication().getPrincipal()).getUsuario();
-        usuarioRepository.findById(usuario.getId());
-        return usuario;
-    }
+
 }
