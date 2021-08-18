@@ -1,0 +1,21 @@
+<th:block th:fragment="pagination (pagina)">
+    <div class="col-sm-12  text-center" th:if="${not pagina.vazia}">
+        <nav>
+            <ul class="pagination  pagination-sm" th:with="paginaAtual=${pagina.atual}">
+                <li th:class="${pagina.primeira} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="${pagina.urlParaPagina(paginaAtual - 1)}" ><span>&laquo;</span></a>
+                </li>
+                
+                <th:block th:each="p : ${#numbers.sequence(1, pagina.total)}" th:with="numeroPagina=${p - 1}">
+                    <li th:class="${paginaAtual == numeroPagina} ? 'page-item active' : 'page-item' ">
+                        <a class="page-link" th:href="${pagina.urlParaPagina(numeroPagina)}">[[${p}]]</a>
+                    </li>
+                </th:block>
+
+                <li th:class="${pagina.ultima} ? 'page-item disabled' : 'page-item'">
+                    <a class="page-link" th:href="${pagina.urlParaPagina(paginaAtual + 1)}" ><span>&raquo;</span></a> <!--th:remove="${pagina.ultima} ? tag"-->
+                </li>
+            </ul>
+        </nav>
+    </div>
+</th:block>

@@ -279,7 +279,6 @@ function removeMask(value) {
         value = value.replace(/[^0-9.-]+/g,"");
         if(!value.includes(".")) {
             var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);
-            console.log(val);
             return Number(val);
         }
     }

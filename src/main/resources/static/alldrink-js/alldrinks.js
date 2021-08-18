@@ -132,6 +132,51 @@ StoreDrink.LoadGif = (function () {
     return LoadGif;
 }());
 
+StoreDrink.Mensagem = (function () {
+    function Mensagem() {}
+    
+    Mensagem.prototype.show = function (icon,mensagem) {
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 8000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: `${icon}`,
+            text: `${mensagem}`
+        });
+
+    };
+    
+    return Mensagem;
+    
+}());
+
+
+StoreDrink.RemoveMask = (function () {
+    
+    function RemoveMask() {}
+    
+    RemoveMask.prototype.remover = function (value) {
+        if (value.length >= 8) {
+            value = value.replace(/[^0-9.-]+/g, "");
+            if (!value.includes(".")) {
+                var val = value.substring(0, value.length - 2) + "." + value.substring(value.length - 2, value.length);
+                return Number(val);
+            }
+        }
+        return value;
+    };
+    return RemoveMask;
+}());
 
 $(function () {
 

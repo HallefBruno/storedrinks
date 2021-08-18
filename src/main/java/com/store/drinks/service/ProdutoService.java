@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,9 @@ public class ProdutoService {
     @Transactional
     public void salvar(Produto produto) {
         try {
-            produtoRepository.verificarExistenciaProduto(produto);
             produtoRepository.save(produto);
-        } catch (NegocioException ex) {
-            throw new NegocioException(ex.getMessage());
+        } catch (Exception ex) {
+            throw new NegocioException(ex);
         }
     }
 

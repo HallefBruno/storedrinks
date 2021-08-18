@@ -3,15 +3,15 @@ package com.store.drinks.execption;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ManipuladorException {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -55,5 +55,26 @@ public class ManipuladorException {
         model.addAttribute("errorMessage", errorMessage);
         return "error";
     }
+    
+    @ExceptionHandler(JpaSystemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String defaultErrorHandler(HttpServletRequest req, Exception ex,Model model) {
+        String servPath = req.getServletPath();
+        String redirect = servPath.substring(0,servPath.indexOf("/",2));
+        String contextPath = req.getContextPath();
+        final String msg = ((JpaSystemException)ex).getMostSpecificCause().getLocalizedMessage();
+        model.addAttribute("errorMessage", msg);
+        model.addAttribute("path", redirect);
+        return "error";
+    }
+    
+    
+//    @ExceptionHandler(JpaSystemException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public String teste(final Throwable throwable, Model model, HttpServletRequest request) {
+//        final String msg = ((JpaSystemException)throwable).getMostSpecificCause().getLocalizedMessage();
+//        model.addAttribute("errorMessage", msg);
+//        return "error";
+//    }
 
 }

@@ -1,6 +1,10 @@
-/* global Swal */
+/* global Swal, StoreDrink */
 
 $(document).ready(function () {
+    
+    var mensagem = new StoreDrink.Mensagem();//.show("warning","Por favor conferir as datas!");
+    var rm = new StoreDrink.RemoveMask();
+    
     $("#valorCusto").mask("#,##0.00", {reverse: true});
     $("#valorVenda").mask("#,##0.00", {reverse: true});
     $("#codigoBarra").focus();
@@ -8,11 +12,13 @@ $(document).ready(function () {
     $("form").submit(function (event) {
         if($("#valorCusto").val() && $("#valorVenda").val()) {
             if($("#valorCusto").val().length > $("#valorVenda").val().length) {
-                mensagem("warning","O valor de custo precisa ser menor que o valor de venda!");
+                //mensagem.
+                //mensagem("warning","O valor de custo precisa ser menor que o valor de venda!");
+                mensagem.show("warning","O valor de custo precisa ser menor que o valor de venda!");
                 return false;
             }
-            $("#valorCusto").val(removeMask($("#valorCusto").val()));
-            $("#valorVenda").val(removeMask($("#valorVenda").val()));
+            $("#valorCusto").val(rm.remover($("#valorCusto").val()));
+            $("#valorVenda").val(rm.remover($("#valorVenda").val()));
             return true;
         }
     });
