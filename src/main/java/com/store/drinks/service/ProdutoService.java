@@ -27,11 +27,14 @@ public class ProdutoService {
     
     @Transactional
     public void salvar(Produto produto) {
-        try {
-            produtoRepository.save(produto);
-        } catch (Exception ex) {
-            throw new NegocioException(ex);
-        }
+        produtoRepository.verificarExistenciaProduto(produto);
+        produtoRepository.save(produto);
+        
+        //try {
+        //    produtoRepository.save(produto);
+        //} catch (Exception ex) {
+        //    throw new NegocioException(ex);
+        //}
     }
 
     @Transactional
@@ -39,6 +42,8 @@ public class ProdutoService {
         if (Objects.isNull(codigo)) {
             throw new NegocioException("Código não pode ser null!");
         }
+        update.setId(codigo);
+        produtoRepository.verificarExistenciaProduto(update);
         Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
         if (optionalProdutoAtual.isPresent()) {
             Produto atual = optionalProdutoAtual.get();

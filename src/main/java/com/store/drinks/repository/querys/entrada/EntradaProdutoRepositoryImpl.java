@@ -1,19 +1,18 @@
 
 package com.store.drinks.repository.querys.entrada;
 
-import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.enuns.Tenant;
+import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +25,10 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
     private EntityManager manager;
     
     @Autowired
-    private HttpServletRequest request;
+    private RowsUtil rowsUtil;
     
     @Autowired
-    private RowsUtil rowsUtil;
+    private Multitenancy multitenancy;
     
     @Override
     public Page<Produto> filtrarProdutosSelect(String descricao, Pageable pageable) {
@@ -41,7 +40,6 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
         Root<Produto> produto = query.from(Produto.class);
-        Join<Produto, ClienteSistema> clienteSistema = (Join) produto.fetch("clienteSistema");
         Path<Boolean> isAtivo = produto.get("ativo");
         Predicate predicateOr = cb.conjunction();
         
@@ -52,10 +50,10 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
             predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
         }
         
-        Predicate predicateTenant = cb.and(cb.equal(clienteSistema.get("tenant"),request.getAttribute("tenant").toString()));
+        Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
         
         query.select(produto);
-        query.where(predicateOr, cb.isTrue(isAtivo), predicateTenant);
+        query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
         TypedQuery<Produto> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);

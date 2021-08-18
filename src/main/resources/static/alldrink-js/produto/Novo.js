@@ -11,9 +11,7 @@ $(document).ready(function () {
     
     $("form").submit(function (event) {
         if($("#valorCusto").val() && $("#valorVenda").val()) {
-            if($("#valorCusto").val().length > $("#valorVenda").val().length) {
-                //mensagem.
-                //mensagem("warning","O valor de custo precisa ser menor que o valor de venda!");
+            if(Number($("#valorCusto").val()) > Number($("#valorVenda").val())) {
                 mensagem.show("warning","O valor de custo precisa ser menor que o valor de venda!");
                 return false;
             }

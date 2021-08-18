@@ -52,7 +52,7 @@ public class ItensVenda extends ETenant implements Serializable {
     //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
     //@ManyToOne
     //private ClienteSistema clienteSistema;
-    @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     

@@ -27,7 +27,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-@NamedQuery(query = "select p.descricaoProduto, p.codigoBarra, p.codProduto from Produto p where p.descricaoProduto = ?1 or p.codigoBarra = ?2 or p.codProduto = ?3 and p.tenant = ?4 ", 
+@NamedQuery(query = "from Produto p where (p.descricaoProduto = ?1 or p.codigoBarra = ?2 or p.codProduto = ?3) and p.tenant = ?4 ", 
 name = "find produto")
 public class Produto extends ETenant implements Serializable {
     
@@ -79,7 +79,7 @@ public class Produto extends ETenant implements Serializable {
     //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
     //@ManyToOne
     //private ClienteSistema clienteSistema;
-    @JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     

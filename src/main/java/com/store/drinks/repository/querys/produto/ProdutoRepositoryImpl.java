@@ -2,8 +2,8 @@ package com.store.drinks.repository.querys.produto;
 
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.Tenant;
-import com.store.drinks.entidade.ETenant;
 import com.store.drinks.execption.NegocioException;
+import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +17,22 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-public class ProdutoRepositoryImpl extends ETenant implements ProdutoRepositoryCustom {
+public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Autowired
     private RowsUtil rowsUtil;
+    
+    @Autowired
+    private Multitenancy multitenancy;
     
     @Override
     public Page<Produto> filtrar(ProdutoFilter filtro, Pageable pageable) {
@@ -60,7 +62,7 @@ public class ProdutoRepositoryImpl extends ETenant implements ProdutoRepositoryC
             predicates.add(predicate);
         }
         
-        predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), getTenantValue().toUpperCase()));
+        predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
         predicates.add(predicate);
         
         query.select(morador);
@@ -93,7 +95,7 @@ public class ProdutoRepositoryImpl extends ETenant implements ProdutoRepositoryC
             predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
         }
         
-        Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), getTenantValue().toUpperCase()));
+        Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
         
         query.select(produto);
         query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
@@ -112,9 +114,15 @@ public class ProdutoRepositoryImpl extends ETenant implements ProdutoRepositoryC
         query.setParameter(2, produto.getCodigoBarra());
         query.setParameter(3, produto.getCodProduto());
         query.setParameter(4, produto.getTenantValue());
-        if(!query.setMaxResults(1).getResultList().isEmpty()) {
-            String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
-            throw new NegocioException(msg);
+        List<Produto> resultado = query.getResultList();
+        if(!resultado.isEmpty()) {
+            if(resultado.size() == 1 && Objects.isNull(produto.getId())) {
+                String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
+                throw new NegocioException(msg);
+            } else if (resultado.size() > 1) {
+                String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
+                throw new NegocioException(msg);
+            }
         }
     }
     

@@ -8,6 +8,7 @@ import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
 import com.store.drinks.repository.ProdutoRepository;
+import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class EntradaProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+    
+    @Autowired
+    private Multitenancy multitenancy;
 
     @Transactional
     public void salvar(EntradaProduto entradaProduto) {
@@ -178,7 +182,7 @@ public class EntradaProdutoService {
 
     public Produto buscarProdutoPorCodBarra(String codBarra) {
         if (!StringUtils.isEmpty(codBarra)) {
-            Optional<Produto> produtoOptional = produtoRepository.findByCodigoBarraAndAtivoTrue(codBarra);
+            Optional<Produto> produtoOptional = produtoRepository.findByCodigoBarraAndAtivoTrueAndTenant(codBarra,multitenancy.getTenantValue());
             if (produtoOptional.isPresent()) {
                 return produtoOptional.get();
             }

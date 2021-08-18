@@ -88,7 +88,7 @@
                                                     <label for="situacaoCompra" class="form-label">Situação</label>
                                                     <select required data-placeholder="Selecione a sutuação..." th:field="*{situacaoCompra}" id="situacaoCompra" name="situacaoCompra" class="form-control">
                                                         <option value=""></option>
-                                                        <option th:each="situacaoCompra : ${T(com.store.drinks.entidade.SituacaoCompra).values()}" th:value="${situacaoCompra}" th:text="${situacaoCompra.value}"></option>
+                                                        <option th:each="situacaoCompra : ${T(com.store.drinks.entidade.enuns.SituacaoCompra).values()}" th:value="${situacaoCompra}" th:text="${situacaoCompra.value}"></option>
                                                     </select>
                                                 </div>
                                             </div>
