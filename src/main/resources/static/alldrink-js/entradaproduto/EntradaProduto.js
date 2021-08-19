@@ -1,7 +1,7 @@
 /* global bootstrap, Swal */
 
 $(function () {
-
+    
    $("#valorCusto").mask("#,##0.00", {reverse: true});
    $("#valorVenda").mask("#,##0.00", {reverse: true});
    $("#novoValorCusto").mask("#,##0.00", {reverse: true});
