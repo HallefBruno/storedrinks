@@ -61,5 +61,5 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
         return new PageImpl<>(typedQuery.getResultList(),pageable, count);
 
     }
-    
+
 }

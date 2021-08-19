@@ -130,7 +130,7 @@ public class EntradaProduto extends ETenant implements Serializable {
     
     @PrePersist
     @PreUpdate
-    private void removeCaracterEspeciais() {
+    private void prePersistPreUpdate() {
         this.numeroNota = StringUtils.strip(this.numeroNota);
         this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
         this.formaPagamento = StringUtils.strip(this.formaPagamento);

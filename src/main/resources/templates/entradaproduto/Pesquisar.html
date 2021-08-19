@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <th:block th:replace="fragments/CssFragment :: css"></th:block>
         <style>
-            .td-produto {
+            .limit-text {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -53,28 +53,28 @@
                                                 <tr style="font-size: 12px;" th:each="entrada : ${pagina}">
                                                     <th th:text="${entrada.id}"></th>
                                                     <th th:text="${entrada.produto.codigoBarra}"></th>
-                                                    <th class="td-produto" data-bs-toggle="popover" data-bs-trigger="hover" title="Dismissible popover" data-bs-content="And here's some amazing content. It's very engaging. Right?" th:text="${entrada.produto.descricaoProduto}"></th>
+                                                    <th class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></th>
                                                     <th th:text="${entrada.numeroNota}"></th>
-                                                    <th th:text="${entrada.fornecedor}"></th>
+                                                    <th class="limit-text" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${entrada.fornecedor}" th:text="${entrada.fornecedor}"></th>
                                                     <th style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></th>
                                                     <th style="text-align: center;" th:text="${entrada.quantidade}"></th>
                                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></th>
                                                     <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></th>
                                                     <th style="text-align: center;" th:text="${entrada.novaQuantidade}"></th>
-                                            <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
-                                                <th style="text-align: center;" th:text="${qtdEntrada}"></th>
-                                            </th:block>
-                                            <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
-                                            <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
-                                            <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorTotal)}"></th>
-                                            <th style="text-align: center;" th:text="${entrada.formaPagamento}"></th>
-                                            <th style="text-align: center;">
-                                                <div th:switch="${entrada.situacaoCompra}">
-                                                    <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
-                                                    <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
-                                                </div>
-                                            </th>
-                                            </tr>
+                                                    <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
+                                                        <th style="text-align: center;" th:text="${qtdEntrada}"></th>
+                                                    </th:block>
+                                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></th>
+                                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></th>
+                                                    <th style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorTotal)}"></th>
+                                                    <th style="text-align: center;" th:text="${entrada.formaPagamento}"></th>
+                                                    <th style="text-align: center;">
+                                                        <div th:switch="${entrada.situacaoCompra}">
+                                                            <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
+                                                            <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -94,6 +94,7 @@
             $(function () {
                 
                 $('[data-bs-toggle="popover"]').popover();
+                $('[data-bs-toggle="tooltip"]').tooltip();
                 
                 $("#entradas").DataTable({
                     searching: false,
