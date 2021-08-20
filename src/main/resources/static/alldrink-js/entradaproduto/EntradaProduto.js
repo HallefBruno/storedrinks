@@ -177,9 +177,28 @@ function popularSelectProdutos(toast) {
                 };
             },
             cache: true
+        },
+        templateResult:styleSelectAutomoveis,
+        
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        templateSelection: function (produto) {
+            if(produto && produto.text !== "Procure aqui seu produto") {
+                return $("<span class='badge bg-primary' style='font-size:13px;'>" + produto.text + "</span>");
+            }
+            return $("<span class=''>" + produto.text + "</span>");
         }
     });
 }
+
+function styleSelectAutomoveis(produto) {
+    if(produto && produto.text !== "Searching…") {
+        return $("<span class='badge bg-primary' style='font-size:13px;'>" + produto.text + "</span>");
+    }
+    return $("<span>" + produto.text + "</span>");
+}
+
 
 function clearFormShowMessage(toast) {
     $("#nenhumProduto").css("display", "block");

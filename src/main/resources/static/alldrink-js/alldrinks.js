@@ -32,6 +32,7 @@ StoreDrink.DialogoExcluir = (function () {
             if (result.isConfirmed) {
                 onExcluirConfirmado(url);
             }
+            $("#divLoading").removeClass("loading");
         });
     }
 
@@ -49,11 +50,13 @@ StoreDrink.DialogoExcluir = (function () {
         var separador = urlAtual.indexOf('?') > -1 ? '&' : '?';
         var novaUrl = urlAtual.indexOf('excluido') > -1 ? urlAtual : urlAtual + separador + 'excluido';
         window.location = novaUrl;
+        $("#divLoading").removeClass("loading");
     }
 
     function onErroExcluir(e) {
         console.log('ahahahah', e.responseText);
         Swal.fire('Oops!', e.responseText, 'error');
+        $("#divLoading").removeClass("loading");
     }
 
     return DialogoExcluir;
@@ -220,5 +223,7 @@ $(function () {
     
     var maskPhone = new StoreDrink.MaskPhoneNumber();
     maskPhone.enable();
+    
+    
     
 });

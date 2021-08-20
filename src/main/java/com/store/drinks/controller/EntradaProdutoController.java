@@ -42,8 +42,6 @@ public class EntradaProdutoController {
     }
     
     @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    //@PreAuthorize("#username == authentication.principal.username")
-    //@Secured("ADMIN")
     @PostMapping("salvar")
     public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
@@ -104,3 +102,6 @@ public class EntradaProdutoController {
     }
     
 }
+
+//@PreAuthorize("#username == authentication.principal.username")
+//@Secured("ADMIN")

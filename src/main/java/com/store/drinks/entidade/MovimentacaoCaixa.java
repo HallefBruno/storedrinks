@@ -20,8 +20,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,9 +69,7 @@ public class MovimentacaoCaixa extends ETenant implements Serializable {
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
-        if(StringUtils.isBlank(this.tenant)) {
-            this.tenant = getTenantValue();
-        }
+        this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
 }

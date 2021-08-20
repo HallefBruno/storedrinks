@@ -17,6 +17,7 @@
                         <div class="container-fluid">
                             <th:block th:include="fragments/MensagemSucesso"></th:block>
                             <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" method="post" th:object="${fornecedor}">
+                                <th:block th:include="fragments/MensagensErroValidacao"></th:block>
                                 <div class="shadow-sm mb-5 bg-body rounded">
                                     <div class="card">
                                         <h5 class="card-header">Cadastro de fornecedor</h5>
@@ -45,7 +46,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            
+                                            <input type="hidden" th:value="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
+                                            <input type="hidden" th:value="*{tenant}" id="tenant" name="tenant"/>
+                                            
                                             <div class="btn-group mt-2" role="group">
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">
                                                     Salvar
@@ -63,6 +67,8 @@
                 </main>
             </div>
         </div>
+        <div id="divLoading"></div>
         <th:block th:replace="fragments/JsFragment :: script"></th:block>
+        <script th:src="@{/alldrink-js/fornecedor/Novo.js}"></script>
     </body>
 </html>

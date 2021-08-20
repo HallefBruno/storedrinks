@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -23,16 +24,15 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
     @Override
     public void verificarExistenciaFornecedor(Fornecedor fornecedor) {
         Query query = manager.createNamedQuery("find fornecedor");
-        query.setParameter(1, fornecedor.getNome());
-        query.setParameter(2, fornecedor.getCpfCnpj());
-        query.setParameter(3, multitenancy.getTenantValue());
+        query.setParameter(1, StringUtils.getDigits(fornecedor.getCpfCnpj()));
+        query.setParameter(2, multitenancy.getTenantValue());
         List<Fornecedor> resultado = query.getResultList();
         if(!resultado.isEmpty()) {
             if(resultado.size() == 1 && Objects.isNull(fornecedor.getId())) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(),  fornecedor.getCpfCnpj());
+                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s", fornecedor.getCpfCnpj());
                 throw new NegocioException(msg);
             } else if (resultado.size() > 1) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(), fornecedor.getCpfCnpj());
+                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s", fornecedor.getCpfCnpj());
                 throw new NegocioException(msg);
             }
         }

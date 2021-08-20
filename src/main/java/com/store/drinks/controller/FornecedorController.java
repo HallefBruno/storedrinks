@@ -7,6 +7,7 @@ import com.store.drinks.service.FornecedorService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,24 +27,26 @@ public class FornecedorController {
     
     @GetMapping
     public ModelAndView pageIndex(Fornecedor fornecedor) {
-        return new ModelAndView("fornecedor/Novo").addObject(fornecedor);
+        return new ModelAndView("fornecedor/Novo");
     }
     
     @GetMapping("novo")
     public ModelAndView pageNovo(Fornecedor fornecedor) {
-        return new ModelAndView("fornecedor/Novo").addObject(fornecedor);
+        return new ModelAndView("fornecedor/Novo");
     }
     
-    @PostMapping
+    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+    @PostMapping("salvar")
     public ModelAndView salvar(@Valid Fornecedor fornecedor, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return new ModelAndView("rediredct:/fornecedor");
+                return pageIndex(fornecedor);
             }
-            this.fornecedorService.salvar(fornecedor);
+            fornecedorService.salvar(fornecedor);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
+            return pageIndex(fornecedor);
         }
         attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
         return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);

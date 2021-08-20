@@ -37,13 +37,10 @@ public class ValidarCliente implements Serializable {
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
-        this.cpfCnpj = StringUtils.strip(this.cpfCnpj);
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
-        
         if(Objects.isNull(this.contaCriada)) {
             this.contaCriada = Boolean.FALSE;
         }
-        
     }
     
 }

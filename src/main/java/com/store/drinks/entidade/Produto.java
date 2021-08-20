@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -89,13 +88,11 @@ public class Produto extends ETenant implements Serializable {
         this.codigoBarra = StringUtils.strip(this.codigoBarra);
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
         this.codProduto = StringUtils.strip(this.codProduto);
-        if(StringUtils.isBlank(this.tenant)) {
-            this.tenant = getTenantValue();
-        }
+        this.tenant = getTenantValue();
+        this.tenant = StringUtils.strip(this.tenant);
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }
-        this.tenant = StringUtils.strip(this.tenant);
     }
 }
 //final Locale brLocale = new Locale("pt", "BR");

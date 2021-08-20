@@ -50,8 +50,7 @@ public class ProdutoController {
         ModelAndView mv = new ModelAndView("produto/Novo");
         return mv;
     }
-    
-    //@Secured("teste")
+
     @PreAuthorize("hasRole('MANTER_PRODUTO')")
     @PostMapping("salvar")
     public ModelAndView salvar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {

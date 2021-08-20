@@ -1,7 +1,13 @@
 $(document).ready(function () {
-    $('.nav li a').click(function(e) {
-        $(this).removeClass('active');
-        var $parent = $(this).parent();
-        $parent.addClass('active');
+    $('a').click(function (e) {
+        $("#divLoading").addClass("loading");        
+    });
+    
+    $("button[type='submit']").click(function (e) {
+        $("#divLoading").addClass("loading");
     });
 });
+
+//setTimeout(function () {
+//  $("#divLoading").removeClass("loading");
+//}, 1000);

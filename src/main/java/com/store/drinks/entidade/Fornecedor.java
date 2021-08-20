@@ -24,7 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
-@NamedQuery(query = "from Fornecedor f where (f.nome = ?1 or f.cpfCnpj = ?2) and f.tenant = ?3 ", name = "find fornecedor")
+@NamedQuery(query = "from Fornecedor f where f.cpfCnpj = ?1 and f.tenant = ?2 ", name = "find fornecedor")
 public class Fornecedor extends ETenant implements Serializable {
     
     @Id
@@ -69,9 +69,7 @@ public class Fornecedor extends ETenant implements Serializable {
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }
-        if(StringUtils.isBlank(this.tenant)) {
-            this.tenant = getTenantValue();
-        }
+        this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
 }

@@ -54,7 +54,7 @@ public class PdvController {
             if (result.hasErrors()) {
                 return new ModelAndView("rediredct:/pdv/abrirCaixa");
             }
-            this.abrirCaixaService.salvar(abrirCaixa);
+            abrirCaixaService.salvar(abrirCaixa);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);

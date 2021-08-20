@@ -135,9 +135,7 @@ public class EntradaProduto extends ETenant implements Serializable {
         this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
         this.formaPagamento = StringUtils.strip(this.formaPagamento);
         this.fornecedor = StringUtils.strip(this.fornecedor);
-        if(StringUtils.isBlank(this.tenant)) {
-            this.tenant = getTenantValue();
-        }
+        this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
     

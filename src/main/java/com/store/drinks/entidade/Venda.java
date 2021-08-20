@@ -58,9 +58,7 @@ public class Venda extends ETenant implements Serializable {
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
-        if(StringUtils.isBlank(this.tenant)) {
-            this.tenant = getTenantValue();
-        }
+        this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
     
