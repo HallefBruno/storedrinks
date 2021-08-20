@@ -32,7 +32,7 @@ public class PdvController {
     private ProdutoService produtoService;
     
     @GetMapping
-    public ModelAndView init() {
+    public ModelAndView pageIndex() {
         if(!abrirCaixaService.abrirCaixaPorUsuarioLogado())
             return new ModelAndView("redirect:/pdv/abrirCaixa");
         return new ModelAndView("redirect:/pdv/vendas");

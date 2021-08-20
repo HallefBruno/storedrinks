@@ -40,13 +40,13 @@ public class ProdutoController {
     }
     
     @RequestMapping
-    public ModelAndView index(Produto produto) {
+    public ModelAndView pageIndex(Produto produto) {
         ModelAndView mv = new ModelAndView("produto/Novo");
         return mv;
     }
 
     @RequestMapping("novo")
-    public ModelAndView init(Produto produto) {
+    public ModelAndView pageNovo(Produto produto) {
         ModelAndView mv = new ModelAndView("produto/Novo");
         return mv;
     }
@@ -57,13 +57,13 @@ public class ProdutoController {
     public ModelAndView salvar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return init(produto);
+                return pageNovo(produto);
             }
             produtoService.salvar(produto);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
-            return init(produto);
+            return pageNovo(produto);
         }
         attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
         return new ModelAndView("redirect:/produtos/novo", HttpStatus.CREATED);
@@ -74,13 +74,13 @@ public class ProdutoController {
     public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo,  @Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return init(produto);
+                return pageNovo(produto);
             }
             produtoService.update(produto,codigo);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
-            return init(produto);
+            return pageNovo(produto);
         }
         attributes.addFlashAttribute("mensagem", "Produto alterado com sucesso!");
         return new ModelAndView("redirect:/produtos/novo", HttpStatus.OK);
@@ -107,7 +107,7 @@ public class ProdutoController {
 
     @GetMapping("{codigo}")
     public ModelAndView editar(@PathVariable("codigo") Produto produto) {
-        ModelAndView mv = init(produto);
+        ModelAndView mv = pageNovo(produto);
         mv.addObject(produto);
         return mv;
     }

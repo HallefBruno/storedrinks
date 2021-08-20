@@ -24,15 +24,15 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
     public void verificarExistenciaFornecedor(Fornecedor fornecedor) {
         Query query = manager.createNamedQuery("find fornecedor");
         query.setParameter(1, fornecedor.getNome());
-        query.setParameter(2, fornecedor.getCnpf());
+        query.setParameter(2, fornecedor.getCpfCnpj());
         query.setParameter(3, multitenancy.getTenantValue());
         List<Fornecedor> resultado = query.getResultList();
         if(!resultado.isEmpty()) {
             if(resultado.size() == 1 && Objects.isNull(fornecedor.getId())) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(),  fornecedor.getCnpf());
+                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(),  fornecedor.getCpfCnpj());
                 throw new NegocioException(msg);
             } else if (resultado.size() > 1) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(), fornecedor.getCnpf());
+                String msg = String.format("Encontra-se no sistema caracteristica desse fornecedor: %s, %s", fornecedor.getNome(), fornecedor.getCpfCnpj());
                 throw new NegocioException(msg);
             }
         }

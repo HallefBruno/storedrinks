@@ -49,7 +49,7 @@ public class EntradaProduto extends ETenant implements Serializable {
     @NotBlank(message = "Nº da nota não pode ter espaços em branco!")
     @NotEmpty(message = "Nº da nota não pode ser vazio!")
     @NotNull(message = "Nº da nota não pode ser null!")
-    @Column(length = 255,name = "numero_nota", nullable = false, unique = true)
+    @Column(length = 30,name = "numero_nota", nullable = false, unique = true)
     private String numeroNota;
     
     @NotBlank(message = "Cnpj ou cpf não pode ter espaços em branco!")
@@ -61,7 +61,7 @@ public class EntradaProduto extends ETenant implements Serializable {
     @NotBlank(message = "Fornecedor do produto não pode ter espaços em branco!")
     @NotEmpty(message = "Fornecedor do produto não pode ser vazio!")
     @NotNull(message = "Fornecedor do produto não pode ser null!")
-    @Column(length = 255,name = "fornecedor", nullable = false)
+    @Column(length = 200,name = "fornecedor", nullable = false)
     private String fornecedor;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")

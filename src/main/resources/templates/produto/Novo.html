@@ -16,8 +16,8 @@
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <div class="container-fluid">
                             <th:block th:include="fragments/MensagemSucesso"></th:block>
+                            <th:block th:include="fragments/MensagensErroValidacao"></th:block>
                             <form th:action="${produto.id} == null ? @{/produtos/salvar} : @{/produtos/update/{codigo}(codigo=${produto.id})}" method="post" th:object="${produto}">
-                                <th:block th:include="fragments/MensagensErroValidacao"></th:block>
                                 <div class="shadow-sm mb-5 bg-body rounded">
                                     <div class="card">
                                         <h5 class="card-header">Cadastro de produto</h5>
