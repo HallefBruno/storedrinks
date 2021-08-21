@@ -88,7 +88,7 @@ public class ProdutoController {
     @GetMapping("pesquisar")
     public ModelAndView pesqisar(ProdutoFilter produtoFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
         ModelAndView mv = new ModelAndView("produto/Pesquisar");
-        PageWrapper<Produto> paginaWrapper = new PageWrapper<>(this.produtoRepository.filtrar(produtoFilter, pageable),httpServletRequest);
+        PageWrapper<Produto> paginaWrapper = new PageWrapper<>(produtoRepository.filtrar(produtoFilter, pageable),httpServletRequest);
         mv.addObject("pagina", paginaWrapper);
         return mv;
     }

@@ -1,11 +1,16 @@
 
 package com.store.drinks.controller;
 
+import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.Fornecedor;
+import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.FornecedorService;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -50,5 +55,13 @@ public class FornecedorController {
         }
         attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
         return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);
+    }
+    
+    @GetMapping("pesquisar")
+    public ModelAndView pesqisar(FornecedorFilter fornecedorFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+        ModelAndView mv = new ModelAndView("fornecedor/Pesquisar");
+        PageWrapper<Fornecedor> paginaWrapper = new PageWrapper<>(fornecedorService.filtrar(fornecedorFilter, pageable),httpServletRequest);
+        mv.addObject("pagina", paginaWrapper);
+        return mv;
     }
 }

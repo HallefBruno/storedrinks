@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <form method="GET" th:object="${fornecedorFiltro}">
-                            <div class="accordion shadow mb-2 bg-body rounded" id="accordionPesquisar">
+                            <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -39,21 +39,18 @@
                                                     <div class="row">
                                                         <div class="mb-3 col-12 col-md-4 col-lg-4">
                                                             <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                                                            <input th:value="*{cpfCnpj}" autocomplete="off" type="text" class="form-control" id="cpfCnpj" name="cpfCnpj"/>
+                                                            <input th:value="${cpfCnpj}" autocomplete="off" type="text" class="form-control" id="cpfCnpj" name="cpfCnpj"/>
                                                         </div>
                                                         <div class="mb-3 col-12 col-md-4  col-lg-4">
                                                             <label for="nomeFornecedor" class="form-label">Nome</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                                                <input th:value="*{nomeFornecedor}" autocomplete="off" type="text" class="form-control" id="nomeFornecedor" name="nomeFornecedor"/>
-                                                            </div>
+                                                            <input th:value="${nomeFornecedor}" autocomplete="off" type="text" class="form-control" id="nomeFornecedor" name="nomeFornecedor"/>
                                                         </div>
                                                         <div class="mb-3 col-12 col-md-4 col-lg-4">
                                                             <label for="telefone" class="form-label">Telefone</label>
-                                                            <input type="text" autocomplete="off" th:value="*{telefone}" class="form-control" id="telefone" name="telefone"/>
+                                                            <input type="text" autocomplete="off" th:value="${telefone}" class="form-control" id="telefone" name="telefone"/>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="btn  btn-primary btn-sm">Pesquisar</button>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -61,6 +58,32 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="card shadow-sm" style="margin-top: 8px; margin-bottom: 8px;">
+                            <div class="card-body">
+                                <div class="responsive">
+                                    <table id="fornecedores" class="table table-hover caption-top" style="width:100%">
+                                        <caption>Fornecedores</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>CPF/CNPJ</th>
+                                                <th>Fornecedor</th>
+                                                <th>Telefone</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="fornecedor : ${pagina.conteudo}">
+                                                <th th:text="${fornecedor.id}"></th>
+                                                <th class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></th>
+                                                <th th:text="${fornecedor.nome}"></th>
+                                                <th class="js-phone-number" th:text="${fornecedor.telefone}"></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
                     </div>
                 </div>
             </main>
@@ -69,7 +92,7 @@
         <th:block th:replace="fragments/JsFragment :: script"></th:block>
         <script type="text/javascript">
             $(function () {
-                $("#codBarra").focus();
+                $("#cpfCnpj").focus();
                 setTimeout(() => {
                     $(".toast").toast('show');
                 }, 0);
