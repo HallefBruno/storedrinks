@@ -15,6 +15,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
@@ -62,6 +63,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<Fornecedor> query = cb.createQuery(Fornecedor.class);
         Root<Fornecedor> fornecedor = query.from(Fornecedor.class);
+        Path<Boolean> isAtivo = fornecedor.get("ativo");
         List<Predicate> predicates = new ArrayList<>();
         Predicate predicate;
         
@@ -82,6 +84,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
         
         predicate = cb.and(cb.equal(cb.upper(fornecedor.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
         predicates.add(predicate);
+        predicates.add(cb.isTrue(isAtivo));
         
         query.select(fornecedor);
         query.where(predicates.toArray(new Predicate[]{}));

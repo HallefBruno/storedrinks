@@ -67,7 +67,19 @@ $(function () {
     });
 
     $("#situacaoCompra").select2({
-        theme: "bootstrap-5"
+        theme: "bootstrap-5",
+        allowClear: true,
+        language: "pt-BR",
+        multiple: false,
+        closeOnSelect: true
+    });
+    
+    $("#fornecedor").select2({
+        theme: "bootstrap-5",
+        allowClear: true,
+        language: "pt-BR",
+        multiple: false,
+        closeOnSelect: true
     });
 
     $("#codigoBarra").focus();

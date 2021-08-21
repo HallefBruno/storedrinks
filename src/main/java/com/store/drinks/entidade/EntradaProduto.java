@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.entidade.enuns.FormaPagamento;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,11 +60,10 @@ public class EntradaProduto extends ETenant implements Serializable {
     @Column(length = 20,name = "cnpjcpf", nullable = false)
     private String cnpjCpf;
 
-    @NotBlank(message = "Fornecedor do produto não pode ter espaços em branco!")
-    @NotEmpty(message = "Fornecedor do produto não pode ser vazio!")
     @NotNull(message = "Fornecedor do produto não pode ser null!")
-    @Column(length = 200,name = "fornecedor", nullable = false)
-    private String fornecedor;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private Fornecedor fornecedor;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
@@ -106,11 +107,10 @@ public class EntradaProduto extends ETenant implements Serializable {
     @Column(nullable = false, name = "novo_valor_venda")
     private BigDecimal novoValorVenda;
     
-    @NotBlank(message = "Forma de pagamento não pode ter espaços em branco!")
-    @NotEmpty(message = "Forma de pagamento não pode ser vazio!")
     @NotNull(message = "Forma de pagamento não pode ser null!")
-    @Column(length = 255, name = "forma_pagamento", nullable = false)
-    private String formaPagamento;
+    @Column(length = 80, name = "forma_pagamento", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FormaPagamento formaPagamento;
 
     @NotNull(message = "Situacao da compra não pode ser null!")
     @Column(name = "situacao_compra", nullable = false, length = 50)
@@ -121,10 +121,6 @@ public class EntradaProduto extends ETenant implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
-    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    //@ManyToOne
-    //private ClienteSistema clienteSistema;
-    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
@@ -133,10 +129,12 @@ public class EntradaProduto extends ETenant implements Serializable {
     private void prePersistPreUpdate() {
         this.numeroNota = StringUtils.strip(this.numeroNota);
         this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
-        this.formaPagamento = StringUtils.strip(this.formaPagamento);
-        this.fornecedor = StringUtils.strip(this.fornecedor);
         this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
     
 }
+//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+//@ManyToOne
+//private ClienteSistema clienteSistema;
+//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")

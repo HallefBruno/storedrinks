@@ -75,10 +75,6 @@ public class Produto extends ETenant implements Serializable {
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
     
-    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    //@ManyToOne
-    //private ClienteSistema clienteSistema;
-    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
@@ -87,6 +83,7 @@ public class Produto extends ETenant implements Serializable {
     private void prePersistPreUpdate() {
         this.codigoBarra = StringUtils.strip(this.codigoBarra);
         this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
+        this.descricaoProduto = this.descricaoProduto.toLowerCase();
         this.codProduto = StringUtils.strip(this.codProduto);
         this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
@@ -98,3 +95,7 @@ public class Produto extends ETenant implements Serializable {
 //final Locale brLocale = new Locale("pt", "BR");
 //final NumberFormat brFormat = NumberFormat.getCurrencyInstance(brLocale);
 //System.out.println(brFormat.format(amount));
+//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+//@ManyToOne
+//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+//private ClienteSistema clienteSistema;

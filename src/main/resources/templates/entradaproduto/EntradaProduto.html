@@ -69,7 +69,11 @@
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="fornecedor" class="form-label">Fornecedor</label>
-                                                    <input autocomplete="off" required th:field="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">
+                                                    <select required data-placeholder="Selecione o fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
+                                                        <option value=""></option>
+                                                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                                                    </select>
+                                                    <!--<input autocomplete="off" required th:field="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">-->
                                                 </div>
                                             </div>
 

@@ -1,12 +1,14 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.EntradaProduto;
+import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
+import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
@@ -26,14 +28,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EntradaProdutoService {
 
-    @Autowired
     private EntradaProdutoRepository entradaProdutoRepository;
+    private ProdutoRepository produtoRepository;
+    private Multitenancy multitenancy;
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-    
-    @Autowired
-    private Multitenancy multitenancy;
+    public EntradaProdutoService(EntradaProdutoRepository entradaProdutoRepository, ProdutoRepository produtoRepository, FornecedorRepository fornecedorRepository, Multitenancy multitenancy) {
+        this.entradaProdutoRepository = entradaProdutoRepository;
+        this.produtoRepository = produtoRepository;
+        this.multitenancy = multitenancy;
+    }
 
     @Transactional
     public void salvar(EntradaProduto entradaProduto) {
@@ -164,10 +168,6 @@ public class EntradaProdutoService {
         }
     }
 
-    public List<Produto> todos() {
-        return produtoRepository.findAll();
-    }
-    
     public List<EntradaProduto> todas() {
         return entradaProdutoRepository.findAll();
     }

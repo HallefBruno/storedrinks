@@ -13,14 +13,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
@@ -48,10 +44,6 @@ public class Venda extends ETenant implements Serializable {
     @Column(name = "valor_total_venda", nullable = false)
     private BigDecimal valorTotalVenda;
     
-    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    //@ManyToOne
-    //private ClienteSistema clienteSistema;
-    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
@@ -63,3 +55,7 @@ public class Venda extends ETenant implements Serializable {
     }
     
 }
+//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+//@ManyToOne
+//private ClienteSistema clienteSistema;
+//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")

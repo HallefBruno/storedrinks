@@ -12,7 +12,7 @@ $(function () {
     
     popularSelectProdutos();
     
-    $("#produtos").focus();
+    $("#codigoBarra").focus();
     
     $("#produtos").on("select2:open", function (e) {
         $(".select2-search__field")[0].focus();

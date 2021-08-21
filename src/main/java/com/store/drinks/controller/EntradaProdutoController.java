@@ -4,7 +4,9 @@ package com.store.drinks.controller;
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.execption.NegocioException;
+import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.service.EntradaProdutoService;
+import com.store.drinks.service.FornecedorService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,15 +31,20 @@ public class EntradaProdutoController {
     @Autowired
     private EntradaProdutoService entradaProdutoService;
     
+    @Autowired
+    private FornecedorService fornecedorService;
+    
     @GetMapping
     public ModelAndView index(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
+        mv.addObject("fornecedores", fornecedorService.todos());
         return mv;
     }
     
     @GetMapping("nova")
     public ModelAndView nova(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
+        mv.addObject("fornecedores", fornecedorService.todos());
         return mv;
     }
     

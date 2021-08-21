@@ -15,8 +15,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,10 +47,6 @@ public class ItensVenda extends ETenant implements Serializable {
     @JsonBackReference
     private Venda venda;
     
-    //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-    //@ManyToOne
-    //private ClienteSistema clienteSistema;
-    //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
     @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
@@ -63,3 +57,7 @@ public class ItensVenda extends ETenant implements Serializable {
         this.tenant = StringUtils.strip(this.tenant);
     }
 }
+//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+//@ManyToOne
+//private ClienteSistema clienteSistema;
+//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")

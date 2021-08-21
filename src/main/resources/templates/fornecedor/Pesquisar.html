@@ -39,7 +39,7 @@
                                                     <div class="row">
                                                         <div class="mb-3 col-12 col-md-4 col-lg-4">
                                                             <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                                                            <input th:value="${cpfCnpj}" autocomplete="off" type="text" class="form-control" id="cpfCnpj" name="cpfCnpj"/>
+                                                            <input th:value="${cpfCnpj}" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj"/>
                                                         </div>
                                                         <div class="mb-3 col-12 col-md-4  col-lg-4">
                                                             <label for="nomeFornecedor" class="form-label">Nome</label>
@@ -47,7 +47,7 @@
                                                         </div>
                                                         <div class="mb-3 col-12 col-md-4 col-lg-4">
                                                             <label for="telefone" class="form-label">Telefone</label>
-                                                            <input type="text" autocomplete="off" th:value="${telefone}" class="form-control" id="telefone" name="telefone"/>
+                                                            <input type="text" autocomplete="off" th:value="${telefone}" class="form-control js-phone-number" id="telefone" name="telefone"/>
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
@@ -73,10 +73,10 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="fornecedor : ${pagina.conteudo}">
-                                                <th th:text="${fornecedor.id}"></th>
-                                                <th class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></th>
-                                                <th th:text="${fornecedor.nome}"></th>
-                                                <th class="js-phone-number" th:text="${fornecedor.telefone}"></th>
+                                                <td th:text="${fornecedor.id}"></td>
+                                                <td class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></td>
+                                                <td th:text="${fornecedor.nome}"></td>
+                                                <td class="js-phone-number" th:text="${fornecedor.telefone}"></td>
                                             </tr>
                                         </tbody>
                                     </table>

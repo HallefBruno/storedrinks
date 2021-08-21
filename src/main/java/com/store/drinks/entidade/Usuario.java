@@ -73,6 +73,8 @@ public class Usuario implements Serializable {
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }
+        this.nome = this.nome.toLowerCase();
+        this.email = this.email.toLowerCase();
     }
 
 }

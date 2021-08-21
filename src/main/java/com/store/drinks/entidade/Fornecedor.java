@@ -50,7 +50,7 @@ public class Fornecedor extends ETenant implements Serializable {
     @Column(length = 12, nullable = true)
     private String telefone;
 
-    @Column(length = 30, nullable = true)
+    @Column(nullable = false, updatable = false, length = 20)
     private String tenant;
     
     @Column(columnDefinition = "boolean default false")
@@ -66,6 +66,7 @@ public class Fornecedor extends ETenant implements Serializable {
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
         this.telefone = StringUtils.getDigits(this.telefone);//phoneNumberstr.replaceAll("[^0-9]", "");
         this.nome = StringUtils.strip(this.nome);
+        this.nome = this.nome.toLowerCase();
         if(Objects.isNull(this.ativo)) {
             this.ativo = Boolean.FALSE;
         }

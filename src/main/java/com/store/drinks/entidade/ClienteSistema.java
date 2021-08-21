@@ -100,10 +100,15 @@ public class ClienteSistema implements Serializable {
     @PrePersist
     private void prePersistPreUpdate() {
         this.bairro = StringUtils.strip(this.bairro);
+        this.bairro = this.bairro.toLowerCase();
         this.cidade = StringUtils.strip(this.cidade);
+        this.cidade = this.cidade.toLowerCase();
         this.estado = StringUtils.strip(this.estado);
+        this.estado = this.estado.toLowerCase();
         this.nomeComercio = StringUtils.strip(this.nomeComercio);
+        this.nomeComercio = this.nomeComercio.toLowerCase();
         this.logradouro = StringUtils.strip(this.logradouro);
+        this.logradouro = this.logradouro.toLowerCase();
         this.cep = StringUtils.getDigits(this.cep);
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
         
