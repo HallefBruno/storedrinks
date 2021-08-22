@@ -28,12 +28,6 @@ public class ProdutoService {
     public void salvar(Produto produto) {
         produtoRepository.verificarExistenciaProduto(produto);
         produtoRepository.save(produto);
-        
-        //try {
-        //    produtoRepository.save(produto);
-        //} catch (Exception ex) {
-        //    throw new NegocioException(ex);
-        //}
     }
 
     @Transactional

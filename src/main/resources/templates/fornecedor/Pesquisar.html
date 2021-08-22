@@ -69,6 +69,8 @@
                                                 <th>CPF/CNPJ</th>
                                                 <th>Fornecedor</th>
                                                 <th>Telefone</th>
+                                                <th>Situação</th>
+                                                <th class="text-center">Ação</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -77,6 +79,13 @@
                                                 <td class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></td>
                                                 <td th:text="${fornecedor.nome}"></td>
                                                 <td class="js-phone-number" th:text="${fornecedor.telefone}"></td>
+                                                <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group" role="group">
+                                                        <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
+                                                        <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}">Excluir</a>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

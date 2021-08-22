@@ -61,7 +61,7 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private Boolean proprietario;
     
-    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
+    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)
     @ManyToOne
     private ClienteSistema clienteSistema;
     

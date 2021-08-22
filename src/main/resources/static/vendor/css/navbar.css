@@ -104,3 +104,26 @@ body {
         font-size: 3.5rem;
     }
 }
+
+.icon-container {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.img-profile {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.status-circle {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: green;
+    border: 2px solid white;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}

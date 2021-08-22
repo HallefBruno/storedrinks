@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,6 +56,23 @@ public class FornecedorController {
         }
         attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
         return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);
+    }
+    
+    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+    @PostMapping("update/{codigo}")
+    public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo,  @Valid Fornecedor fornecedor, BindingResult result, RedirectAttributes attributes) {
+        try {
+            if (result.hasErrors()) {
+                return pageNovo(fornecedor);
+            }
+            fornecedorService.update(fornecedor,codigo);
+        } catch (NegocioException ex) {
+            ObjectError error = new ObjectError("erro", ex.getMessage());
+            result.addError(error);
+            return pageNovo(fornecedor);
+        }
+        attributes.addFlashAttribute("mensagem", "Fornecedor alterado com sucesso!");
+        return new ModelAndView("redirect:/fornecedor", HttpStatus.OK);
     }
     
     @GetMapping("pesquisar")
