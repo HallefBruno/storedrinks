@@ -27,7 +27,7 @@
                                                 <label for="produtos" class="form-label">Procure aqui seu produto</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="fa fa-cubes" aria-hidden="true"></i></span>
-                                                    <select id="produtos" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
+                                                    <select id="produtos" required="true" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
                                                         <option value=""></option>
                                                     </select>
                                                 </div>
@@ -57,19 +57,19 @@
                                         <div class="card-body">
 
                                             <div class="row">
-                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
                                                     <label for="numeroNota" class="form-label">Nº da nota</label>
                                                     <input autocomplete="off" required th:field="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
                                                 </div>
 
-                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+<!--                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="cnpjCpf" class="form-label">CNPJ/CPF</label>
                                                     <input autocomplete="off" required th:field="*{cnpjCpf}" type="text" class="form-control mascara-cpf-cnpj" id="cnpjCpf" name="cnpjCpf">
-                                                </div>
+                                                </div>-->
 
-                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
                                                     <label for="fornecedor" class="form-label">Fornecedor</label>
-                                                    <select required data-placeholder="Selecione o fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
+                                                    <select required data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
                                                         <option value=""></option>
                                                         <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
                                                     </select>
@@ -84,15 +84,27 @@
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
-                                                    <label for="formaPagamento" class="form-label">Forma de pagamento</label>
-                                                    <input autocomplete="off" required th:field="*{formaPagamento}" type="text" class="form-control" id="formaPagamento" name="formaPagamento">
+                                                    <div class="row g-2">
+                                                        <div class="col-8">
+                                                            <label for="formaPagamento" class="form-label">Forma de pagamento</label>
+                                                            <select required data-placeholder="Forma de pagamento..." th:field="*{formaPagamento}" id="formaPagamento" name="formaPagamento" class="form-control">
+                                                                <option value=""></option>
+                                                                <option th:each="formaPagamento : ${formasPagamento}" th:value="${formaPagamento}" th:text="${formaPagamento.value}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label for="qtdParcelas" class="form-label">Qtd. Parcela</label>
+                                                            <input autocomplete="off" th:field="*{qtdParcelas}" type="number" readonly="true" min="1" class="form-control" id="qtdParcelas" name="qtdParcelas">
+                                                            <!--<input autocomplete="off" class="form-control">-->
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                                                     <label for="situacaoCompra" class="form-label">Situação</label>
-                                                    <select required data-placeholder="Selecione a sutuação..." th:field="*{situacaoCompra}" id="situacaoCompra" name="situacaoCompra" class="form-control">
+                                                    <select required data-placeholder="Situação da compra..." th:field="*{situacaoCompra}" id="situacaoCompra" name="situacaoCompra" class="form-control">
                                                         <option value=""></option>
-                                                        <option th:each="situacaoCompra : ${T(com.store.drinks.entidade.enuns.SituacaoCompra).values()}" th:value="${situacaoCompra}" th:text="${situacaoCompra.value}"></option>
+                                                        <option th:each="situacaoCompra : ${situacoesCompra}" th:value="${situacaoCompra}" th:text="${situacaoCompra.value}"></option>
                                                     </select>
                                                 </div>
                                             </div>

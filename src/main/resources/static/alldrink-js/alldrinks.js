@@ -203,6 +203,9 @@ StoreDrink.RemoveMask = (function () {
 
 $(function () {
 
+    $('[data-bs-toggle="popover"]').popover();
+    $('[data-bs-toggle="tooltip"]').tooltip();
+    
     var dialogo = new StoreDrink.DialogoExcluir();
     dialogo.iniciar();
 
@@ -223,7 +226,6 @@ $(function () {
     
     var maskPhone = new StoreDrink.MaskPhoneNumber();
     maskPhone.enable();
-    
     
     
 });

@@ -36,5 +36,3 @@ INSERT INTO usuario (id,nome, email, senha,proprietario, ativo, tenant) VALUES (
 INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'marcos@storedrink.com'), 2);
 INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'joana@storedrink.com'), 3);
 
-
-select * from usuario;

@@ -3,6 +3,8 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.enuns.FormaPagamento;
+import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.service.EntradaProdutoService;
@@ -37,14 +39,14 @@ public class EntradaProdutoController {
     @GetMapping
     public ModelAndView index(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
-        mv.addObject("fornecedores", fornecedorService.todos());
+        addObjetosIniciais(mv);
         return mv;
     }
     
     @GetMapping("nova")
     public ModelAndView nova(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
-        mv.addObject("fornecedores", fornecedorService.todos());
+        addObjetosIniciais(mv);
         return mv;
     }
     
@@ -106,6 +108,12 @@ public class EntradaProdutoController {
         ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
         mv.addObject("pagina", entradaProdutoService.todas());
         return mv;
+    }
+    
+    public void addObjetosIniciais(ModelAndView mv) {
+        mv.addObject("fornecedores", fornecedorService.todos());
+        mv.addObject("formasPagamento", FormaPagamento.values());
+        mv.addObject("situacoesCompra", SituacaoCompra.values());
     }
     
 }

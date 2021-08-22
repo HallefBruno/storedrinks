@@ -4,7 +4,11 @@ $(document).ready(function () {
     });
     
     $("button[type='submit']").click(function (e) {
-        $("#divLoading").addClass("loading");
+        if(!$("form").get(0).checkValidity()) {
+            $("#divLoading").removeClass("loading");
+        } else {
+            $("#divLoading").addClass("loading");
+        }
     });
 });
 

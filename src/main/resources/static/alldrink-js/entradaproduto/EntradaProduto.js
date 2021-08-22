@@ -17,9 +17,9 @@ $(function () {
             "</div>" +
             "</div>";
     
-    $("form").submit(function(event) {
+    $("form").submit(function() {
         if($("#valorTotal").val()) {
-            $("#valorTotal").val($("#valorTotal").val().replace("R$ ",""));
+            $("#valorTotal").val(null);
         }
     });
     
@@ -69,7 +69,6 @@ $(function () {
     $("#situacaoCompra").select2({
         theme: "bootstrap-5",
         allowClear: true,
-        language: "pt-BR",
         multiple: false,
         closeOnSelect: true
     });
@@ -77,11 +76,25 @@ $(function () {
     $("#fornecedor").select2({
         theme: "bootstrap-5",
         allowClear: true,
-        language: "pt-BR",
         multiple: false,
         closeOnSelect: true
     });
-
+    
+    $("#formaPagamento").select2({
+        theme: "bootstrap-5",
+        allowClear: true,
+        multiple: false,
+        closeOnSelect: true
+    });
+    
+    $("#formaPagamento").on("select2:select", function (e) {
+        if(e.params.data.text.toUpperCase() === "Parcelado".toUpperCase()) {
+            $("#qtdParcelas").focus();
+            $("#qtdParcelas").attr("required",true);
+            $("#qtdParcelas").attr("readonly",false);
+        }
+    });
+    
     $("#codigoBarra").focus();
     
     $("#codigoBarra").on("focusout", function (event) {
@@ -156,7 +169,7 @@ $(function () {
 
 });
 
-function popularSelectProdutos(toast) {
+function popularSelectProdutos() {
     $("#produtos").select2({
         theme: "bootstrap-5",
         allowClear: true,
@@ -167,7 +180,6 @@ function popularSelectProdutos(toast) {
         ajax: {
             url: $("#contextApp").val() + "entradas/produtos",
             dataType: "json",
-            delay: 1000,
             data: function (params) {
                 return {
                     q: params.term,

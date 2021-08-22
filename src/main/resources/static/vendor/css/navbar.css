@@ -127,3 +127,18 @@ body {
     right: 0;
     position: absolute;
 }
+
+.limit-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+.limit-text-profile {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 190px;
+}
+       

@@ -2,6 +2,15 @@
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" th:fragment="menu">
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
+            <li class="nav-item mb-3">
+                <a class="nav-link active" th:href="@{/}">
+                    <div class="icon-container" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${#authentication.name}">
+                        <img class="img-profile" src="https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png" />
+                        <div class="status-circle"></div>
+                        <p class="limit-text-profile" sec:authentication="name"></p>
+                    </div>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" aria-current="page" th:href="@{/}">
                     <i class="fa fa-home" aria-hidden="true"></i>
@@ -71,4 +80,3 @@
         </ul>
     </div>
 </nav>
-<div id="divLoading"></div>

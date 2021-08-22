@@ -53,12 +53,6 @@ public class EntradaProduto extends ETenant implements Serializable {
     @NotNull(message = "Nº da nota não pode ser null!")
     @Column(length = 30,name = "numero_nota", nullable = false, unique = true)
     private String numeroNota;
-    
-    @NotBlank(message = "Cnpj ou cpf não pode ter espaços em branco!")
-    @NotEmpty(message = "Cnpj ou cpf não pode ser vazio!")
-    @NotNull(message = "Cnpj ou cpf não pode ser null!")
-    @Column(length = 20,name = "cnpjcpf", nullable = false)
-    private String cnpjCpf;
 
     @NotNull(message = "Fornecedor do produto não pode ser null!")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -117,6 +111,8 @@ public class EntradaProduto extends ETenant implements Serializable {
     @Enumerated(EnumType.STRING)
     private SituacaoCompra situacaoCompra;
     
+    private Integer qtdParcelas;
+    
     @Version
     @Column(name = "versao_objeto", nullable = false)
     private Integer versaoObjeto;
@@ -128,7 +124,6 @@ public class EntradaProduto extends ETenant implements Serializable {
     @PreUpdate
     private void prePersistPreUpdate() {
         this.numeroNota = StringUtils.strip(this.numeroNota);
-        this.cnpjCpf = StringUtils.getDigits(this.cnpjCpf);
         this.tenant = getTenantValue();
         this.tenant = StringUtils.strip(this.tenant);
     }
@@ -138,3 +133,8 @@ public class EntradaProduto extends ETenant implements Serializable {
 //@ManyToOne
 //private ClienteSistema clienteSistema;
 //@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
+//@NotBlank(message = "Cnpj ou cpf não pode ter espaços em branco!")
+//@NotEmpty(message = "Cnpj ou cpf não pode ser vazio!")
+//@NotNull(message = "Cnpj ou cpf não pode ser null!")
+//@Column(length = 20,name = "cnpjcpf", nullable = false)
+//private String cnpjCpf;
