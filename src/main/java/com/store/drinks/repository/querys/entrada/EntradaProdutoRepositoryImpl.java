@@ -1,15 +1,21 @@
 
 package com.store.drinks.repository.querys.entrada;
 
+import com.store.drinks.entidade.EntradaProduto;
+import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -62,4 +68,50 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
 
     }
 
+    @Override
+    public Page<EntradaProduto> filtrar(EntradasFilter filtro, Pageable pageable) {
+        
+        int paginaAtual = pageable.getPageNumber();
+        int totalRegistrosPorPagina = pageable.getPageSize();
+        int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+        
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<EntradaProduto> query = cb.createQuery(EntradaProduto.class);
+        Root<EntradaProduto> entrada = query.from(EntradaProduto.class);
+        Join<EntradaProduto, Fornecedor> fornecedor = (Join) entrada.fetch("fornecedor");
+        Join<EntradaProduto, Produto> produto = (Join) entrada.fetch("produto");
+        List<Predicate> predicates = new ArrayList<>();
+        Predicate predicate;
+        
+        if (!StringUtils.isBlank(filtro.getCodBarra())) {
+            predicate = cb.like(cb.upper(produto.get("codigoBarra")), "%" + filtro.getCodBarra() + "%");
+            predicates.add(predicate);
+        }
+        
+        if (!StringUtils.isBlank(filtro.getFornecedor())) {
+            predicate = cb.like(cb.upper(fornecedor.get("nome")), "%" + filtro.getFornecedor().toUpperCase() + "%");
+            predicates.add(predicate);
+        }
+        
+        if (!StringUtils.isBlank(filtro.getNumeroNota())) {
+            predicate = cb.like(cb.upper(entrada.get("numeroNota")), "%" + filtro.getNumeroNota() + "%");
+            predicates.add(predicate);
+        }
+        
+        if (Objects.nonNull(filtro.getDataEmissao())) {
+            Predicate pdDataInicio = cb.equal(entrada.get("dataEmissao"), filtro.getDataEmissao());
+            predicates.add(pdDataInicio);
+        }
+        
+        predicate = cb.and(cb.equal(cb.upper(entrada.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+        predicates.add(predicate);
+        
+        query.select(entrada);
+        query.where(predicates.toArray(new Predicate[]{}));
+        TypedQuery<EntradaProduto> typedQuery = manager.createQuery(query);
+        typedQuery.setFirstResult(primeiroRegistro);
+        typedQuery.setMaxResults(totalRegistrosPorPagina);
+        Long count = rowsUtil.countRows(cb, query, entrada, manager);
+        return new PageImpl<>(typedQuery.getResultList(),pageable, count);
+    }
 }

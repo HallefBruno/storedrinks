@@ -1,16 +1,22 @@
 
 package com.store.drinks.controller;
 
+import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.FormaPagamento;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.execption.NegocioException;
-import com.store.drinks.repository.FornecedorRepository;
+import com.store.drinks.repository.EntradaProdutoRepository;
+import com.store.drinks.repository.querys.entrada.EntradasFilter;
+import com.store.drinks.repository.querys.produto.ProdutoFilter;
 import com.store.drinks.service.EntradaProdutoService;
 import com.store.drinks.service.FornecedorService;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,17 +40,20 @@ public class EntradaProdutoController {
     private EntradaProdutoService entradaProdutoService;
     
     @Autowired
+    private EntradaProdutoRepository entradaProdutoRepository;
+    
+    @Autowired
     private FornecedorService fornecedorService;
     
     @GetMapping
-    public ModelAndView index(EntradaProduto entradaProduto) {
+    public ModelAndView pageIndex(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
         addObjetosIniciais(mv);
         return mv;
     }
     
     @GetMapping("nova")
-    public ModelAndView nova(EntradaProduto entradaProduto) {
+    public ModelAndView pageNova(EntradaProduto entradaProduto) {
         ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
         addObjetosIniciais(mv);
         return mv;
@@ -55,13 +64,13 @@ public class EntradaProdutoController {
     public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return nova(entradaProduto);
+                return pageNova(entradaProduto);
             }
             this.entradaProdutoService.salvar(entradaProduto);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getMessage());
             result.addError(error);
-            return nova(entradaProduto);
+            return pageNova(entradaProduto);
         }
         attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
         return new ModelAndView("redirect:/entradas/nova", HttpStatus.CREATED);
@@ -104,9 +113,11 @@ public class EntradaProdutoController {
     }
     
     @GetMapping("pesquisar")
-    public ModelAndView pesqisar() {
+    public ModelAndView pesqisar(EntradasFilter entradasFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
         ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
-        mv.addObject("pagina", entradaProdutoService.todas());
+        PageWrapper<EntradaProduto> paginaWrapper = new PageWrapper<>(entradaProdutoRepository.filtrar(entradasFilter, pageable),httpServletRequest);
+        mv.addObject("pagina", paginaWrapper);
+        mv.addObject("fornecedores", fornecedorService.todos());
         return mv;
     }
     

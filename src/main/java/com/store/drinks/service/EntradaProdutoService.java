@@ -1,7 +1,6 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.EntradaProduto;
-import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
@@ -166,10 +165,6 @@ public class EntradaProdutoService {
             BigDecimal somaTotal = BigDecimal.valueOf(entradaProduto.getNovaQuantidade() * entradaProduto.getNovoValorCusto().doubleValue());
             entradaProduto.setValorTotal(somaTotal);
         }
-    }
-
-    public List<EntradaProduto> todas() {
-        return entradaProdutoRepository.findAll();
     }
 
     public Produto buscarProdutoPorId(Long id) {

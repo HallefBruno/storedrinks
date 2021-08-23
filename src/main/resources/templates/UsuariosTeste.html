@@ -11,10 +11,12 @@
             <div class="card mt-5">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="fornecedores" class="table table-hover caption-top" style="width:100%">
+                        <table id="fornecedores" class="table table-hover caption-top">
                             <caption>Usuários de teste</caption>
                             <thead>
                                 <tr>
+                                    <th>ID</th>
+                                    <th>Comercio</th>
                                     <th>Nome</th>
                                     <th>Email</th>
                                     <th>Senha padrão</th>
@@ -24,6 +26,8 @@
                             </thead>
                             <tbody>
                                 <tr th:each="usuario : ${usuarios}">
+                                    <td th:text="${usuario.clienteSistema.tenant}"></td>
+                                    <td th:text="${usuario.clienteSistema.nomeComercio}"></td>
                                     <td th:text="${usuario.nome}"></td>
                                     <td th:text="${usuario.email}"></td>
                                     <td>12345678</td>

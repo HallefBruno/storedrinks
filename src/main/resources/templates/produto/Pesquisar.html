@@ -14,7 +14,6 @@
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <div class="container-fluid">
-                            <a th:href="@{/produtos/novo}" type="button" class="btn btn-outline-secondary btn-sm mb-2">Novo</a>
                             <div th:if="${#lists.isEmpty(pagina.conteudo)}">
                                 <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
                                     <div class="d-flex">
@@ -55,6 +54,7 @@
                                                             </div>
                                                         </div>
                                                         <button type="submit" class="btn  btn-primary btn-sm">Pesquisar</button>
+                                                        <a th:href="@{/produtos/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
                                                     </div>
                                                 </div>
                                             </div>
