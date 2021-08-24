@@ -1,7 +1,6 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Fornecedor;
-import com.store.drinks.entidade.Produto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
@@ -9,6 +8,7 @@ import com.store.drinks.repository.util.Multitenancy;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.persistence.PersistenceException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +46,16 @@ public class FornecedorService {
 //            }
             BeanUtils.copyProperties(update, atual, "id");
             fornecedorRepository.save(atual);
+        }
+    }
+    
+    @Transactional
+    public void excluir(Fornecedor fornecedor) {
+        try {
+            fornecedorRepository.delete(fornecedor);
+            fornecedorRepository.flush();
+        } catch (Exception e) {
+            throw new NegocioException("Impossível apagar o fornecedor!");
         }
     }
     

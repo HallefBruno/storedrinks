@@ -51,7 +51,7 @@
                                                             </div>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
-                                                        <a th:href="@{/fornecedor/novo}" type="button" class="btn btn-outline-secondary btn-sm mb-2">Novo</a>
+                                                        <a th:href="@{/fornecedor/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -78,7 +78,7 @@
                                                 <tr th:each="fornecedor : ${pagina.conteudo}">
                                                     <td th:text="${fornecedor.id}"></td>
                                                     <td class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></td>
-                                                    <td th:text="${fornecedor.nome}"></td>
+                                                    <td class="text-capitalize" th:text="${fornecedor.nome}"></td>
                                                     <td class="js-phone-number" th:text="${fornecedor.telefone}"></td>
                                                     <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
                                                     <td class="text-center">

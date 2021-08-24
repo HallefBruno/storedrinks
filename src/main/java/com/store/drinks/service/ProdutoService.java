@@ -53,8 +53,8 @@ public class ProdutoService {
         try {
             produtoRepository.delete(produto);
             produtoRepository.flush();
-        } catch (PersistenceException e) {
-            throw new NegocioException("Impossível apagar produto");
+        } catch (Exception e) {
+            throw new NegocioException("Impossível apagar produto!");
         }
     }
     

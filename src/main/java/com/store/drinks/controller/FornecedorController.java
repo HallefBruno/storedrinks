@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +82,24 @@ public class FornecedorController {
         ModelAndView mv = new ModelAndView("fornecedor/Pesquisar");
         PageWrapper<Fornecedor> paginaWrapper = new PageWrapper<>(fornecedorService.filtrar(fornecedorFilter, pageable),httpServletRequest);
         mv.addObject("pagina", paginaWrapper);
+        return mv;
+    }
+    
+    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+    @DeleteMapping("{codigo}")
+    public ResponseEntity<?> excluir(@PathVariable("codigo") Fornecedor fornecedor) {
+        try {
+            fornecedorService.excluir(fornecedor);
+        } catch (NegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("{codigo}")
+    public ModelAndView editar(@PathVariable("codigo") Fornecedor fornecedor) {
+        ModelAndView mv = pageNovo(fornecedor);
+        mv.addObject(fornecedor);
         return mv;
     }
 }

@@ -62,18 +62,12 @@
                                                     <input autocomplete="off" required th:field="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
                                                 </div>
 
-<!--                                                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
-                                                    <label for="cnpjCpf" class="form-label">CNPJ/CPF</label>
-                                                    <input autocomplete="off" required th:field="*{cnpjCpf}" type="text" class="form-control mascara-cpf-cnpj" id="cnpjCpf" name="cnpjCpf">
-                                                </div>-->
-
                                                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
                                                     <label for="fornecedor" class="form-label">Fornecedor</label>
                                                     <select required data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
                                                         <option value=""></option>
                                                         <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
                                                     </select>
-                                                    <!--<input autocomplete="off" required th:field="*{fornecedor}" type="text" class="form-control" id="fornecedor" name="fornecedor">-->
                                                 </div>
                                             </div>
 
@@ -95,7 +89,6 @@
                                                         <div class="col-4">
                                                             <label for="qtdParcelas" class="form-label">Qtd. Parcela</label>
                                                             <input autocomplete="off" th:field="*{qtdParcelas}" type="number" readonly="true" min="1" class="form-control" id="qtdParcelas" name="qtdParcelas">
-                                                            <!--<input autocomplete="off" class="form-control">-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -169,7 +162,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            
+                                            <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
+                                            <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
+                                            
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <div class="btn-group">
                                                     <button type="submit" class="btn btn-sm btn-outline-secondary">

@@ -77,7 +77,8 @@ $(function () {
         theme: "bootstrap-5",
         allowClear: true,
         multiple: false,
-        closeOnSelect: true
+        closeOnSelect: true,
+        dropdownCssClass: "text-capitalize"
     });
     
     $("#formaPagamento").select2({
