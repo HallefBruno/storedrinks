@@ -111,6 +111,7 @@ public class EntradaProduto extends ETenant implements Serializable {
     @Enumerated(EnumType.STRING)
     private SituacaoCompra situacaoCompra;
     
+    @Column(name = "qtd_parcelas")
     private Integer qtdParcelas;
     
     @Version

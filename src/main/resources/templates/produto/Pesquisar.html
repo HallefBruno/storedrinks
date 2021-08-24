@@ -114,25 +114,31 @@
 
                                                 <div class="row mb-3">
                                                     <div class="col-sm-3">
-                                                        <h6 class="mt-2">Valor de venda</h6>
+                                                        <h6 data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo e valor de venda" class="mt-2">Valor de C e V</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary">
                                                         <div class="input-group">
-                                                            <input type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorVenda)}">
-                                                            <span class="input-group-text">L-P:</span>
-                                                            <th:block th:with="lucro=${produto.valorVenda - produto.valorCusto}">
-                                                                <input type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucro)}" placeholder="lucro previsto" aria-label="lucro previsto">
-                                                            </th:block>
+                                                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorCusto)}">
+                                                            <span class="input-group-text">::</span>
+                                                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de venda" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorVenda)}">
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
                                                     <div class="col-sm-3">
-                                                        <h6 class="mt-2">Valor de custo</h6>
+                                                        <h6 data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto e lucro real" class="mt-2">Lucro P e R</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary">
-                                                        <input type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorCusto)}">
+                                                        <div class="input-group">
+                                                            <th:block th:with="lucroP=${produto.valorVenda - produto.valorCusto}">
+                                                                <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucroP)}">
+                                                            </th:block>
+                                                            <span class="input-group-text">::</span>
+                                                            <th:block th:with="lucroR=${produto.valorVenda * produto.quantidade}">
+                                                                <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro real" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucroR)}">
+                                                            </th:block>
+                                                        </div>
                                                     </div>
                                                 </div>
 

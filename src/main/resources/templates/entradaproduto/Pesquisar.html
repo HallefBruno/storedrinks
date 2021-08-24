@@ -89,14 +89,15 @@
                                                     <th>Fornecedor</th>
                                                     <th style="text-align: center;">Emissão</th>
                                                     <th style="text-align: center;">Quantidade</th>
+                                                    <th style="text-align: center;">Qtd entrada</th>
+                                                    <th style="text-align: center;">Nova quantidade</th>
                                                     <th style="text-align: center;">Valor custo</th>
                                                     <th style="text-align: center;">Valor venda</th>
-                                                    <th style="text-align: center;">Nova quantidade</th>
-                                                    <th style="text-align: center;">Qtd entrada</th>
                                                     <th style="text-align: center;">Novo valor custo</th>
                                                     <th style="text-align: center;">Novo valor venda</th>
                                                     <th style="text-align: center;">Valor entrada</th>
                                                     <th style="text-align: center;">Forma pagto</th>
+                                                    <th style="text-align: center;">Qtd parcela</th>
                                                     <th style="text-align: center;">Situação compra</th>
                                                 </tr>
                                             </thead>
@@ -109,16 +110,21 @@
                                                     <td class="limit-text text-capitalize" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
                                                     <td style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
                                                     <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></td>
-                                                    <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
-                                                    <th:block th:witd="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
+                                                    <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
                                                         <td style="text-align: center;" th:text="${qtdEntrada}"></td>
                                                     </th:block>
+                                                    <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
+                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></td>
+                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></td>
                                                     <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></td>
                                                     <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></td>
                                                     <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorTotal)}"></td>
                                                     <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
+                                                    <td style="text-align: center;">
+                                                        <div th:switch="${entrada.formaPagamento}">
+                                                            <span th:case="${T(com.store.drinks.entidade.enuns.FormaPagamento).PARCELADO}" class="badge bg-primary">[[${entrada.qtdParcelas}]]</span>
+                                                        </div>
+                                                    </td>
                                                     <td style="text-align: center;">
                                                         <div th:switch="${entrada.situacaoCompra}">
                                                             <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
