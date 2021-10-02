@@ -42,26 +42,21 @@
                                                 <label for="quantidade" class="form-label">Quantidade</label>
                                                 <input type="number" autocomplete="off" th:value="*{quantidade}" min="0" class="form-control" id="quantidade" name="quantidade"/>
                                             </div>
-                                            <div class="row g-1">
-                                                <div class="col-sm-5">
+                                            <div class="row">
+                                                <div class="col-sm-6">
                                                     <label for="valorCusto" class="form-label">Valor de custo</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
                                                         <input type="text" autocomplete="off" maxlength="9" th:value="*{valorCusto}" min="0" class="form-control" id="valorCusto" name="valorCusto"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-5">
+                                                <div class="col-sm-6">
                                                     <label for="valorVenda" class="form-label">Valor de venda</label>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
                                                         <input type="text" autocomplete="off" maxlength="9" th:value="*{valorVenda}" min="0" class="form-control" id="valorVenda" name="valorVenda"/>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="col-sm-1">
-                                                    <button type="button" class="btn btn-lg btn-danger btn-sm" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"><i class="fa fa-calculator" aria-hidden="true"></i></button>
-                                                </div>
-                                                
                                                 <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
                                                 <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
                                             </div>
@@ -71,6 +66,9 @@
                                                         <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
                                                         <label class="form-check-label" for="ativo">Ativo?</label>
                                                     </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <a class="link-calculadora" href="https://www.shopify.com.br/ferramentas/calculadora-margem-de-lucro" target="_blank">Calculadora de lucro</a>
                                                 </div>
                                             </div>
 
