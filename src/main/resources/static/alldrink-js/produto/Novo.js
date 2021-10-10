@@ -13,6 +13,7 @@ $(document).ready(function () {
         if($("#valorCusto").val() && $("#valorVenda").val()) {
             if(Number($("#valorCusto").val()) > Number($("#valorVenda").val())) {
                 mensagem.show("warning","O valor de custo precisa ser menor que o valor de venda!");
+                $("#divLoading").removeClass("loading");
                 return false;
             }
             $("#valorCusto").val(rm.remover($("#valorCusto").val()));
