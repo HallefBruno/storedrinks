@@ -18,7 +18,6 @@ $(function () {
         $(".select2-search__field")[0].focus();
     });
     
-    
     $("#produtos").on("select2:select", function (e) {
         const produto = e.params.data;
         quantidadeEstoqueAtual = Number(produto.quantidade);
@@ -40,29 +39,35 @@ $(function () {
     $("#quantidade").keyup(function () {
         clearTimeout(typingTimer);
         if ($("#quantidade").val()) {
-            typingTimer = setTimeout(doneTyping, intervaloDigitacao);
+            typingTimer = setTimeout(qtdAtualMaiorQtdVenda, intervaloDigitacao);
         }
     });
     
-    $(window).keyup(function (event) {
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-        if (keycode === 13) {
-            event.preventDefault();
-            if(Number($("#quantidade").val()) > quantidadeEstoqueAtual) {
-                mensagem("warning","Quantidade em estoque inválida!");
+    $(document).on("keypress", function (e) {
+        if (e.which === 13) {
+            if($("#produtos option:selected").text()) {
+                if(qtdAtualMaiorQtdVenda()) {
+                    addItemVenda();
+                }
             }
         }
     });
     
+    $("#btnItemVenda").click(function () {
+        popularProduto();
+    });
+    
     actionTableItens();
-    addItemVenda();
     acoes();
     
 });
-function doneTyping() {
-    if (Number($("#quantidade").val()) > quantidadeEstoqueAtual) {
+function qtdAtualMaiorQtdVenda() {
+    const quantidade = Number($("#quantidade").val());
+    if (quantidade > quantidadeEstoqueAtual) {
         mensagem("warning", "Quantidade em estoque inválida!");
+        return false;
     }
+    return true;
 }
 
 function popularSelectProdutos() {
@@ -117,37 +122,44 @@ function styleSelectAutomoveis(produto) {
 }
 
 function addItemVenda() {
-    var produto = {};
+    popularProduto();
     $("#btnItemVenda").click(function (event) {
-
-        if ($("#descricaoProduto").val() && Number($("#quantidade").val()) < quantidadeEstoqueAtual) {
-
-            var valorUni = Number($("#valorVenda").val());
-
-            produto = {
-                descricaoProduto: $("#descricaoProduto").val(),
-                codigoBarra: $("#codigoBarra").val(),
-                codProduto: $("#codProduto").val(),
-                valorVenda: valorUni.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}),
-                quantidade: $("#quantidade").val(),
-                valorTotal: Number($("#quantidade").val() * $("#valorVenda").val()).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
-            };
-
-            if (containsObject(produto, listProdutos)) {
-                mensagem("warning", "Esse item já está na lista, é possível alterar a quantidade");
-                return;
-            }
-
-            listProdutos.push(produto);
-            popularTable(listProdutos);
-            clearFormFocusSelect();
-        } else if (Number($("#quantidade").val()) > quantidadeEstoqueAtual) {
-            mensagem("warning", "Quantidade em estoque inválida!");
-        } else {
-            mensagem("warning", "É necessário selecionar um item!");
-        }
+        popularProduto();
     });
 }
+
+function popularProduto() {
+    var produto = {};
+    if ($("#descricaoProduto").val() && qtdAtualMaiorQtdVenda()) {
+        var valorUni = Number($("#valorVenda").val());
+        var quantidade = Number($("#quantidade").val());
+        if(quantidade === 0) {
+            quantidade = quantidade + 1;
+        }
+        produto = {
+            descricaoProduto: $("#descricaoProduto").val(),
+            codigoBarra: $("#codigoBarra").val(),
+            codProduto: $("#codProduto").val(),
+            valorVenda: valorUni.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}),
+            quantidade: quantidade,
+            valorTotal: (quantidade * $("#valorVenda").val()).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
+        };
+
+        if (containsObject(produto, listProdutos)) {
+            mensagem("warning", "Esse item já está na lista, é possível alterar a quantidade");
+            return;
+        }
+
+        listProdutos.push(produto);
+        popularTable(listProdutos);
+        clearFormFocusSelect();
+
+    } else if ($("#descricaoProduto").val().length === 0) {
+        clearFormFocusSelect();
+        mensagem("warning", "Por favor selecione um item!");
+    }
+}
+
 
 function acoes() {
 
@@ -185,7 +197,7 @@ function acoes() {
                 listProdutos[index].valorTotal = Number(qtd*vv).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
                 mensagem("success","A quantidade foi aumentada!");
             } else {
-                mensagem("warning", "Quantidade em estoque inválida!");
+                mensagem("warning", "Quantidade máxima em estoque atingida!");
             }
         }
         popularTable(listProdutos);
@@ -275,7 +287,7 @@ function mensagem(icon,mensagem) {
     });
 }
 function removeMask(value) {
-    if(value.length >= 8) {
+    if(value.length >= 7) {
         value = value.replace(/[^0-9.-]+/g,"");
         if(!value.includes(".")) {
             var val = value.substring(0,value.length-2)+"."+value.substring(value.length-2,value.length);

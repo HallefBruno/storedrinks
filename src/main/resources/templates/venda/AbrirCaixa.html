@@ -1,70 +1,70 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Abertura de caixa</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <th:block th:replace="fragments/CssFragment :: css"></th:block>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-        </symbol>
-        </svg>
-    </head>
-    
-   <body>
-        <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-        <div class="container-fluid">
-            <div class="row">
-                <div th:replace="layout/fragments/Menu :: menu"></div>
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <div class="container-fluid">
-                            <th:block th:include="fragments/MensagemSucesso"></th:block>
-                            <form th:object="${abrirCaixa}" method="post" th:action="@{/pdv/salvar}">
-                                <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-                                <div class="shadow p-3 mb-5 bg-body rounded">
-                                    <div class="card">
-                                        <h5 class="card-header">Abertura do caixa</h5>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-lg-12 col-12 col-md-12">
-                                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
-                                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                                                        <div>
-                                                            No fechamento do caixa, será somado o valor de entrada + troco.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                                    <label for="valorInicialTroco" class="form-label">valor para troco</label>
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
-                                                        <input type="text" autocomplete="off" min="0" class="form-control" th:field="*{valorInicialTroco}" id="valorInicialTroco" name="valorInicialTroco"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                Salvar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+  <head>
+    <title>Abertura de caixa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <th:block th:replace="fragments/CssFragment :: css"></th:block>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </symbol>
+  </svg>
+</head>
+
+<body>
+  <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div th:replace="layout/fragments/Menu :: menu"></div>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <div class="container-fluid">
+            <th:block th:include="fragments/MensagemSucesso"></th:block>
+            <form th:object="${abrirCaixa}" method="post" th:action="@{/pdv/salvar}">
+              <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+              <div class="shadow p-3 mb-5 bg-body rounded">
+                <div class="card">
+                  <h5 class="card-header">Abertura do caixa</h5>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-12 col-lg-12 col-12 col-md-12">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                          <div>
+                            No fechamento do caixa, será somado o valor de entrada + troco.
+                          </div>
                         </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="valorInicialTroco" class="form-label">Valor para troco</label>
+                        <div class="input-group mb-3">
+                          <span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
+                          <input required="true" type="text" autocomplete="off" min="0" class="form-control" th:field="*{valorInicialTroco}" id="valorInicialTroco" name="valorInicialTroco"/>
+                        </div>
+                      </div>
                     </div>
-                </main>
-            </div>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-        <div id="divLoading"></div>
-        <th:block th:replace="fragments/JsFragment :: script"></th:block>
-        <script type="text/javascript">
-            $(function () {
-                $("#valorInicialTroco").focus();
-                $("#valorInicialTroco").mask("#,##0.00", {reverse: true});
-            });
-        </script>
-    </body>
+      </main>
+    </div>
+  </div>
+  <div id="divLoading"></div>
+<th:block th:replace="fragments/JsFragment :: script"></th:block>
+<script type="text/javascript">
+  $(function () {
+      $("#valorInicialTroco").focus();
+      $("#valorInicialTroco").mask("#,##0.00", {reverse: true});
+  });
+</script>
+</body>
 </html>
