@@ -35,7 +35,3 @@ INSERT INTO usuario (id,nome, email, senha,proprietario, ativo, tenant) VALUES (
 INSERT INTO usuario (id,nome, email, senha,proprietario, ativo, tenant) VALUES (5,'Marcos', 'marcos@storedrink.com', '$2a$10$rODOzMz60JmUUx5J39p9JOb5Ee7c2303YeH0kp42XJOW7Ch9qcBy2',true, true, (SELECT tenant FROM cliente_sistema WHERE tenant = 'sbn'));
 INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'marcos@storedrink.com'), 2);
 INSERT INTO usuario_grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario WHERE email = 'joana@storedrink.com'), 3);
-
-
-select * from entrada_produto;
-delete from entrada_produto;
