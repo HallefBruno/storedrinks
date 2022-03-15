@@ -21,39 +21,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+  @Autowired
+  private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private LoginAttemptService loginAttemptService;
- 
-    @Autowired
-    private HttpServletRequest request;
+  @Autowired
+  private LoginAttemptService loginAttemptService;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        String ip = getClientIP();
-        if (loginAttemptService.isBlocked(ip)) {
-            throw new NegocioException("Seu acesso foi bloqueado!");
-        }
-        Optional<Usuario> usuarioOptional = usuarioRepository.porEmailEAtivo(email);
-        Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
-        return new UsuarioSistema(usuario, getPermissoes(usuario));
-    }
+  @Autowired
+  private HttpServletRequest request;
 
-    private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        List<String> permissoes = usuarioRepository.permissoes(usuario);
-        permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p.toUpperCase())));
-        return authorities;
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    String ip = getClientIP();
+    if (loginAttemptService.isBlocked(ip)) {
+      throw new NegocioException("Seu acesso foi bloqueado!");
     }
-    
-    private String getClientIP() {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
+    Optional<Usuario> usuarioOptional = usuarioRepository.porEmailEAtivo(email);
+    Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
+    return new UsuarioSistema(usuario, getPermissoes(usuario));
+  }
+
+  private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {
+    Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+    List<String> permissoes = usuarioRepository.permissoes(usuario);
+    permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p.toUpperCase())));
+    return authorities;
+  }
+
+  private String getClientIP() {
+    String xfHeader = request.getHeader("X-Forwarded-For");
+    if (xfHeader == null) {
+      return request.getRemoteAddr();
     }
+    return xfHeader.split(",")[0];
+  }
 
 }

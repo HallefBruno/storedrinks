@@ -1,4 +1,3 @@
-
 package com.store.drinks.repository;
 
 import com.store.drinks.entidade.AbrirCaixa;
@@ -9,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AbrirCaixaRepository extends JpaRepository<AbrirCaixa, Long> {
-    Optional<AbrirCaixa> findByAbertoTrueAndUsuario(Usuario usuario);
+
+  Optional<AbrirCaixa> findByAbertoTrueAndUsuario(Usuario usuario);
 }

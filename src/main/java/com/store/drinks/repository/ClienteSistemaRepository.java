@@ -1,4 +1,3 @@
-
 package com.store.drinks.repository;
 
 import com.store.drinks.entidade.ClienteSistema;
@@ -8,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClienteSistemaRepository extends JpaRepository<ClienteSistema, Long> {
-    Optional<ClienteSistema> findByCpfCnpj(String cpfCnpj);
+
+  Optional<ClienteSistema> findByCpfCnpj(String cpfCnpj);
 }

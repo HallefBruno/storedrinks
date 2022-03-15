@@ -25,106 +25,105 @@ import org.springframework.data.domain.Pageable;
 
 public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
-    @PersistenceContext
-    private EntityManager manager;
+  @PersistenceContext
+  private EntityManager manager;
 
-    @Autowired
-    private RowsUtil rowsUtil;
-    
-    @Autowired
-    private Multitenancy multitenancy;
-    
-    @Override
-    public Page<Produto> filtrar(ProdutoFilter filtro, Pageable pageable) {
-        
-        int paginaAtual = pageable.getPageNumber();
-        int totalRegistrosPorPagina = pageable.getPageSize();
-        int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
-        
-        CriteriaBuilder cb = manager.getCriteriaBuilder();
-        CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
-        Root<Produto> morador = query.from(Produto.class);
-        List<Predicate> predicates = new ArrayList<>();
-        Predicate predicate;
-        
-        if (!StringUtils.isBlank(filtro.getCodBarra())) {
-            predicate = cb.like(cb.upper(morador.get("codigoBarra")), "%" + filtro.getCodBarra().toUpperCase() + "%");
-            predicates.add(predicate);
-        }
-        
-        if (!StringUtils.isBlank(filtro.getCodProduto())) {
-            predicate = cb.like(cb.upper(morador.get("codProduto")), "%" + filtro.getCodProduto().toUpperCase() + "%");
-            predicates.add(predicate);
-        }
-        
-        if (!StringUtils.isBlank(filtro.getDescricao())) {
-            predicate = cb.like(cb.upper(morador.get("descricaoProduto")), "%" + filtro.getDescricao().toUpperCase() + "%");
-            predicates.add(predicate);
-        }
-        
-        predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
-        predicates.add(predicate);
-        
-        query.select(morador);
-        query.where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Produto> typedQuery = manager.createQuery(query);
-        typedQuery.setFirstResult(primeiroRegistro);
-        typedQuery.setMaxResults(totalRegistrosPorPagina);
-        Long count = rowsUtil.countRows(cb, query, morador, manager);
-        
-        return new PageImpl<>(typedQuery.getResultList(),pageable, count);
-    }
-    
-    @Override
-    public Page<Produto> filtrarProdutosSelect(String descricao, Pageable pageable) {
-        
-        int paginaAtual = pageable.getPageNumber();
-        int totalRegistrosPorPagina = pageable.getPageSize();
-        int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
-        
-        CriteriaBuilder cb = manager.getCriteriaBuilder();
-        CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
-        Root<Produto> produto = query.from(Produto.class);
-        Path<Boolean> isAtivo = produto.get("ativo");
-        Predicate predicateOr = cb.conjunction();
-        
-        if (!StringUtils.isBlank(descricao)) {
-            Predicate predicateCodBarra = cb.like(cb.upper(produto.get("codigoBarra")), "%" + descricao + "%");
-            Predicate predicateCodProduto = cb.like(cb.upper(produto.get("descricaoProduto")), "%" + descricao.toUpperCase() + "%");
-            Predicate descricaoProduto = cb.like(cb.upper(produto.get("codProduto")),"%" + descricao + "%");
-            predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
-        }
-        
-        Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
-        
-        query.select(produto);
-        query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
-        TypedQuery<Produto> typedQuery = manager.createQuery(query);
-        typedQuery.setFirstResult(primeiroRegistro);
-        typedQuery.setMaxResults(totalRegistrosPorPagina);
-        Long count = rowsUtil.countRows(cb, query, produto, manager);
-        return new PageImpl<>(typedQuery.getResultList(),pageable, count);
+  @Autowired
+  private RowsUtil rowsUtil;
 
+  @Autowired
+  private Multitenancy multitenancy;
+
+  @Override
+  public Page<Produto> filtrar(ProdutoFilter filtro, Pageable pageable) {
+
+    int paginaAtual = pageable.getPageNumber();
+    int totalRegistrosPorPagina = pageable.getPageSize();
+    int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
+    Root<Produto> morador = query.from(Produto.class);
+    List<Predicate> predicates = new ArrayList<>();
+    Predicate predicate;
+
+    if (!StringUtils.isBlank(filtro.getCodBarra())) {
+      predicate = cb.like(cb.upper(morador.get("codigoBarra")), "%" + filtro.getCodBarra().toUpperCase() + "%");
+      predicates.add(predicate);
     }
 
-    @Override
-    public void verificarExistenciaProduto(Produto produto) {
-        Query query = manager.createNamedQuery("find produto");
-        query.setParameter(1, produto.getDescricaoProduto());
-        query.setParameter(2, produto.getCodigoBarra());
-        query.setParameter(3, produto.getCodProduto());
-        query.setParameter(4, produto.getTenantValue());
-        List<Produto> resultado = query.getResultList();
-        if(!resultado.isEmpty()) {
-            if(resultado.size() == 1 && Objects.isNull(produto.getId())) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
-                throw new NegocioException(msg);
-            } else if (resultado.size() > 1) {
-                String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(),  produto.getCodigoBarra(), produto.getCodProduto());
-                throw new NegocioException(msg);
-            }
-        }
+    if (!StringUtils.isBlank(filtro.getCodProduto())) {
+      predicate = cb.like(cb.upper(morador.get("codProduto")), "%" + filtro.getCodProduto().toUpperCase() + "%");
+      predicates.add(predicate);
     }
-    
-    
+
+    if (!StringUtils.isBlank(filtro.getDescricao())) {
+      predicate = cb.like(cb.upper(morador.get("descricaoProduto")), "%" + filtro.getDescricao().toUpperCase() + "%");
+      predicates.add(predicate);
+    }
+
+    predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+    predicates.add(predicate);
+
+    query.select(morador);
+    query.where(predicates.toArray(new Predicate[]{}));
+    TypedQuery<Produto> typedQuery = manager.createQuery(query);
+    typedQuery.setFirstResult(primeiroRegistro);
+    typedQuery.setMaxResults(totalRegistrosPorPagina);
+    Long count = rowsUtil.countRows(cb, query, morador, manager);
+
+    return new PageImpl<>(typedQuery.getResultList(), pageable, count);
+  }
+
+  @Override
+  public Page<Produto> filtrarProdutosSelect(String descricao, Pageable pageable) {
+
+    int paginaAtual = pageable.getPageNumber();
+    int totalRegistrosPorPagina = pageable.getPageSize();
+    int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
+    Root<Produto> produto = query.from(Produto.class);
+    Path<Boolean> isAtivo = produto.get("ativo");
+    Predicate predicateOr = cb.conjunction();
+
+    if (!StringUtils.isBlank(descricao)) {
+      Predicate predicateCodBarra = cb.like(cb.upper(produto.get("codigoBarra")), "%" + descricao + "%");
+      Predicate predicateCodProduto = cb.like(cb.upper(produto.get("descricaoProduto")), "%" + descricao.toUpperCase() + "%");
+      Predicate descricaoProduto = cb.like(cb.upper(produto.get("codProduto")), "%" + descricao + "%");
+      predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
+    }
+
+    Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+
+    query.select(produto);
+    query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
+    TypedQuery<Produto> typedQuery = manager.createQuery(query);
+    typedQuery.setFirstResult(primeiroRegistro);
+    typedQuery.setMaxResults(totalRegistrosPorPagina);
+    Long count = rowsUtil.countRows(cb, query, produto, manager);
+    return new PageImpl<>(typedQuery.getResultList(), pageable, count);
+
+  }
+
+  @Override
+  public void verificarExistenciaProduto(Produto produto) {
+    Query query = manager.createNamedQuery("find produto");
+    query.setParameter(1, produto.getDescricaoProduto());
+    query.setParameter(2, produto.getCodigoBarra());
+    query.setParameter(3, produto.getCodProduto());
+    query.setParameter(4, produto.getTenantValue());
+    List<Produto> resultado = query.getResultList();
+    if (!resultado.isEmpty()) {
+      if (resultado.size() == 1 && Objects.isNull(produto.getId())) {
+        String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(), produto.getCodigoBarra(), produto.getCodProduto());
+        throw new NegocioException(msg);
+      } else if (resultado.size() > 1) {
+        String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(), produto.getCodigoBarra(), produto.getCodProduto());
+        throw new NegocioException(msg);
+      }
+    }
+  }
+
 }

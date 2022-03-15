@@ -1,4 +1,3 @@
-
 package com.store.drinks.controller;
 
 import com.store.drinks.controller.page.PageWrapper;
@@ -35,98 +34,98 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RestController
 @RequestMapping("entradas")
 public class EntradaProdutoController {
-    
-    @Autowired
-    private EntradaProdutoService entradaProdutoService;
-    
-    @Autowired
-    private EntradaProdutoRepository entradaProdutoRepository;
-    
-    @Autowired
-    private FornecedorService fornecedorService;
-    
-    @GetMapping
-    public ModelAndView pageIndex(EntradaProduto entradaProduto) {
-        ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
-        addObjetosIniciais(mv);
-        return mv;
+
+  @Autowired
+  private EntradaProdutoService entradaProdutoService;
+
+  @Autowired
+  private EntradaProdutoRepository entradaProdutoRepository;
+
+  @Autowired
+  private FornecedorService fornecedorService;
+
+  @GetMapping
+  public ModelAndView pageIndex(EntradaProduto entradaProduto) {
+    ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
+    addObjetosIniciais(mv);
+    return mv;
+  }
+
+  @GetMapping("nova")
+  public ModelAndView pageNova(EntradaProduto entradaProduto) {
+    ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
+    addObjetosIniciais(mv);
+    return mv;
+  }
+
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
+  @PostMapping("salvar")
+  public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageNova(entradaProduto);
+      }
+      this.entradaProdutoService.salvar(entradaProduto);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageNova(entradaProduto);
     }
-    
-    @GetMapping("nova")
-    public ModelAndView pageNova(EntradaProduto entradaProduto) {
-        ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
-        addObjetosIniciais(mv);
-        return mv;
+    attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
+    return new ModelAndView("redirect:/entradas/nova", HttpStatus.CREATED);
+  }
+
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
+  @GetMapping("buscar/{id}")
+  public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable(required = true, name = "id") Long id) {
+    try {
+      return ResponseEntity.ok(entradaProdutoService.buscarProdutoPorId(id));
+    } catch (NegocioException ex) {
+      return ResponseEntity.badRequest().build();
     }
-    
-    @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    @PostMapping("salvar")
-    public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, Model model, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageNova(entradaProduto);
-            }
-            this.entradaProdutoService.salvar(entradaProduto);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageNova(entradaProduto);
-        }
-        attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
-        return new ModelAndView("redirect:/entradas/nova", HttpStatus.CREATED);
+  }
+
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
+  @GetMapping("alterarSituacao/{id}")
+  public ModelAndView alterarSituacaoEntrada(@PathVariable(required = true, name = "id") Long id, RedirectAttributes attributes) {
+    entradaProdutoService.alterarSituacaoEntrada(id);
+    attributes.addFlashAttribute("mensagem", "Situação da entrada alterada com sucesso!");
+    return new ModelAndView("redirect:/entradas/pesquisar", HttpStatus.OK);
+  }
+
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
+  @GetMapping("buscar/produtoPorCodBarra/{codBarra}")
+  public ResponseEntity<Produto> buscarProdutoPorCodBarra(@PathVariable(required = true, name = "codBarra") String codBarra) {
+    try {
+      return ResponseEntity.ok(entradaProdutoService.buscarProdutoPorCodBarra(codBarra));
+    } catch (NegocioException ex) {
+      return ResponseEntity.noContent().build();
     }
-    
-    @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    @GetMapping("buscar/{id}")
-    public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable(required = true, name = "id") Long id) {
-        try {
-            return ResponseEntity.ok(entradaProdutoService.buscarProdutoPorId(id));
-        } catch (NegocioException ex) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-    
-    @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    @GetMapping("alterarSituacao/{id}")
-    public ModelAndView alterarSituacaoEntrada(@PathVariable(required = true, name = "id") Long id, RedirectAttributes attributes) {
-        entradaProdutoService.alterarSituacaoEntrada(id);
-        attributes.addFlashAttribute("mensagem", "Situação da entrada alterada com sucesso!");
-        return new ModelAndView("redirect:/entradas/pesquisar", HttpStatus.OK);
-    }
-    
-    @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    @GetMapping("buscar/produtoPorCodBarra/{codBarra}")
-    public ResponseEntity<Produto> buscarProdutoPorCodBarra(@PathVariable(required = true, name = "codBarra") String codBarra) {
-        try {
-            return ResponseEntity.ok(entradaProdutoService.buscarProdutoPorCodBarra(codBarra));
-        } catch (NegocioException ex) {
-            return ResponseEntity.noContent().build();
-        }
-    }
-    
-    @PreAuthorize("hasRole('MANTER_ENTRADA')")
-    @GetMapping("produtos")
-    public ResponseEntity<?> pesquisarProdutosAutoComplete(
-            @RequestParam(name = "q", required = false) String descricao,
-            @RequestParam(name = "page",defaultValue = "0", required = true) String page) {
-        return new ResponseEntity<>(entradaProdutoService.pesquisarProdutosAutoComplete(descricao, page),HttpStatus.OK);
-    }
-    
-    @GetMapping("pesquisar")
-    public ModelAndView pesqisar(EntradasFilter entradasFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
-        ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
-        PageWrapper<EntradaProduto> paginaWrapper = new PageWrapper<>(entradaProdutoRepository.filtrar(entradasFilter, pageable),httpServletRequest);
-        mv.addObject("pagina", paginaWrapper);
-        mv.addObject("fornecedores", fornecedorService.todos());
-        return mv;
-    }
-    
-    public void addObjetosIniciais(ModelAndView mv) {
-        mv.addObject("fornecedores", fornecedorService.todos());
-        mv.addObject("formasPagamento", FormaPagamento.values());
-        mv.addObject("situacoesCompra", SituacaoCompra.values());
-    }
-    
+  }
+
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
+  @GetMapping("produtos")
+  public ResponseEntity<?> pesquisarProdutosAutoComplete(
+    @RequestParam(name = "q", required = false) String descricao,
+    @RequestParam(name = "page", defaultValue = "0", required = true) String page) {
+    return new ResponseEntity<>(entradaProdutoService.pesquisarProdutosAutoComplete(descricao, page), HttpStatus.OK);
+  }
+
+  @GetMapping("pesquisar")
+  public ModelAndView pesqisar(EntradasFilter entradasFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+    ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
+    PageWrapper<EntradaProduto> paginaWrapper = new PageWrapper<>(entradaProdutoRepository.filtrar(entradasFilter, pageable), httpServletRequest);
+    mv.addObject("pagina", paginaWrapper);
+    mv.addObject("fornecedores", fornecedorService.todos());
+    return mv;
+  }
+
+  public void addObjetosIniciais(ModelAndView mv) {
+    mv.addObject("fornecedores", fornecedorService.todos());
+    mv.addObject("formasPagamento", FormaPagamento.values());
+    mv.addObject("situacoesCompra", SituacaoCompra.values());
+  }
+
 }
 
 //@PreAuthorize("#username == authentication.principal.username")

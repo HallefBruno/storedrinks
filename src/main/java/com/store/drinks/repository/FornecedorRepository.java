@@ -1,4 +1,3 @@
-
 package com.store.drinks.repository;
 
 import com.store.drinks.entidade.Fornecedor;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FornecedorRepository extends JpaRepository<Fornecedor, Long>, FornecedorRepositoryCustom {
-    List<Fornecedor> findByTenantAndAtivoTrue(String tenant);
+
+  List<Fornecedor> findByTenantAndAtivoTrue(String tenant);
   //List<Fornecedor> findAllByTenantAndAtivoTrue(String tenant);
 }

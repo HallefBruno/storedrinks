@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade;
 
 import java.io.Serializable;
@@ -30,51 +29,51 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode
 public class Usuario implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
 
-    @NotBlank(message = "Nome é obrigatório")
-    private String nome;
+  @NotBlank(message = "Nome é obrigatório")
+  private String nome;
 
-    @NotBlank(message = "E-mail é obrigatório")
-    @Email(message = "E-mail inválido")
-    @Column(unique = true)
-    private String email;
+  @NotBlank(message = "E-mail é obrigatório")
+  @Email(message = "E-mail inválido")
+  @Column(unique = true)
+  private String email;
 
-    private String senha;
+  private String senha;
 
-    @Transient
-    private String confirmacaoSenha;
+  @Transient
+  private String confirmacaoSenha;
 
-    private Boolean ativo;
+  private Boolean ativo;
 
-    @Size(min = 1, message = "Selecione pelo menos um grupo")
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
-    private Set<Grupo> grupos;
+  @Size(min = 1, message = "Selecione pelo menos um grupo")
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
+  private Set<Grupo> grupos;
 
-    @Column(name = "data_nascimento")
-    private LocalDate dataNascimento;
-    
-    @Column(nullable = false)
-    private Boolean proprietario;
-    
-    @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)
-    @ManyToOne
-    private ClienteSistema clienteSistema;
-    
-    @PreUpdate
-    @PrePersist
-    private void preUpdate() {
-        this.confirmacaoSenha = senha;
-        this.email = StringUtils.strip(this.email);
-        if(Objects.isNull(this.ativo)) {
-            this.ativo = Boolean.FALSE;
-        }
-        this.nome = this.nome.toLowerCase();
-        this.email = this.email.toLowerCase();
+  @Column(name = "data_nascimento")
+  private LocalDate dataNascimento;
+
+  @Column(nullable = false)
+  private Boolean proprietario;
+
+  @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)
+  @ManyToOne
+  private ClienteSistema clienteSistema;
+
+  @PreUpdate
+  @PrePersist
+  private void preUpdate() {
+    this.confirmacaoSenha = senha;
+    this.email = StringUtils.strip(this.email);
+    if (Objects.isNull(this.ativo)) {
+      this.ativo = Boolean.FALSE;
     }
+    this.nome = this.nome.toLowerCase();
+    this.email = this.email.toLowerCase();
+  }
 
 }

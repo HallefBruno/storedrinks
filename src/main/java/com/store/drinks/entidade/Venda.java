@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -27,33 +26,33 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
 public class Venda extends ETenant implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<ItensVenda> itensVendas;
-    
-    @Column(name = "data_hora_venda", nullable = false)
-    private LocalDateTime dataHoraVenda;
 
-    @Min(value = 0, message = "Valor mínimo")
-    @Column(name = "valor_total_venda", nullable = false)
-    private BigDecimal valorTotalVenda;
-    
-    @Column(nullable = false, updatable = false, length = 20)
-    private String tenant;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.tenant = getTenantValue();
-        this.tenant = StringUtils.strip(this.tenant);
-    }
-    
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonManagedReference
+  private List<ItensVenda> itensVendas;
+
+  @Column(name = "data_hora_venda", nullable = false)
+  private LocalDateTime dataHoraVenda;
+
+  @Min(value = 0, message = "Valor mínimo")
+  @Column(name = "valor_total_venda", nullable = false)
+  private BigDecimal valorTotalVenda;
+
+  @Column(nullable = false, updatable = false, length = 20)
+  private String tenant;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.tenant = getTenantValue();
+    this.tenant = StringUtils.strip(this.tenant);
+  }
+
 }
 //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
 //@ManyToOne

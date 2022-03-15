@@ -12,21 +12,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UsuariosLogadoController {
-    
-    @Autowired
-    private SessionRegistry sessionRegistry;
 
-    @GetMapping("/loggedUsers")
-    public String getLoggedUsers(Locale locale, Model model) {
-        model.addAttribute("users", findAllLoggedInUsers());
-        return "onlines/UsuariosLogado";
-    }
-    
-    public List<UsuarioSistema> findAllLoggedInUsers() {
-        return sessionRegistry.getAllPrincipals()
-            .stream()
-            .filter(principal -> principal instanceof UsuarioSistema)
-            .map(UsuarioSistema.class::cast)
-            .collect(Collectors.toList());
-    }
+  @Autowired
+  private SessionRegistry sessionRegistry;
+
+  @GetMapping("/loggedUsers")
+  public String getLoggedUsers(Locale locale, Model model) {
+    model.addAttribute("users", findAllLoggedInUsers());
+    return "onlines/UsuariosLogado";
+  }
+
+  public List<UsuarioSistema> findAllLoggedInUsers() {
+    return sessionRegistry.getAllPrincipals()
+      .stream()
+        .filter(principal -> principal instanceof UsuarioSistema)
+        .map(UsuarioSistema.class::cast)
+        .collect(Collectors.toList());
+  }
 }

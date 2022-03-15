@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade;
 
 import java.io.Serializable;
@@ -19,28 +18,28 @@ import org.apache.commons.lang3.StringUtils;
 @Entity
 @EqualsAndHashCode
 public class ValidarCliente implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @Column(name = "data_validacao", nullable = false)
-    private LocalDateTime dataValidacao;
-    
-    @Column(name = "cpfCnpj", nullable = false, unique = true)
-    private String cpfCnpj;
-    
-    @Column(name = "conta_criada", columnDefinition = "boolean default false")
-    private Boolean contaCriada;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
-        if(Objects.isNull(this.contaCriada)) {
-            this.contaCriada = Boolean.FALSE;
-        }
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @Column(name = "data_validacao", nullable = false)
+  private LocalDateTime dataValidacao;
+
+  @Column(name = "cpfCnpj", nullable = false, unique = true)
+  private String cpfCnpj;
+
+  @Column(name = "conta_criada", columnDefinition = "boolean default false")
+  private Boolean contaCriada;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
+    if (Objects.isNull(this.contaCriada)) {
+      this.contaCriada = Boolean.FALSE;
     }
-    
+  }
+
 }

@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -27,35 +26,35 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
 public class ItensVenda extends ETenant implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
-    private Produto produto;
-    
-    @NotNull(message = "Quantidade do produto não pode ser null!")
-    @Min(value = 1, message = "Quantidade mínima")
-    @Column(nullable = false)
-    private Integer quantidade;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
-    @JsonBackReference
-    private Venda venda;
-    
-    @Column(nullable = false, updatable = false, length = 20)
-    private String tenant;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.tenant = getTenantValue();
-        this.tenant = StringUtils.strip(this.tenant);
-    }
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(nullable = false)
+  private Produto produto;
+
+  @NotNull(message = "Quantidade do produto não pode ser null!")
+  @Min(value = 1, message = "Quantidade mínima")
+  @Column(nullable = false)
+  private Integer quantidade;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(nullable = false)
+  @JsonBackReference
+  private Venda venda;
+
+  @Column(nullable = false, updatable = false, length = 20)
+  private String tenant;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.tenant = getTenantValue();
+    this.tenant = StringUtils.strip(this.tenant);
+  }
 }
 //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
 //@ManyToOne

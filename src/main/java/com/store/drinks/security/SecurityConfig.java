@@ -26,75 +26,75 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+  @Autowired
+  private UserDetailsService userDetailsService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-            .antMatchers("/vendor/**")
-            .antMatchers("/imagens/**")
-            .antMatchers("/novaconta/**");
-    }
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+      .antMatchers("/vendor/**")
+      .antMatchers("/imagens/**")
+      .antMatchers("/novaconta/**");
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
-        http
-            .authorizeRequests()
-                .antMatchers("/validar/**").permitAll()
-                .antMatchers("/novaConta/**").permitAll()
-                .antMatchers("/userteste/**").permitAll()
-        .and()
-            .authorizeRequests()
-                .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
-                .antMatchers("/entradas/**").hasRole("MANTER_ENTRADA")
-                .antMatchers("/fornecedor/**").access("hasRole('MANTER_FORNECEDOR')")
-                .antMatchers("/pdv/**").access("hasRole('MANTER_PDV')")
-                .antMatchers("/clienteSistema/**").access("hasRole('SUPER_USER')")
-                .antMatchers("/loggedUsers/**").access("hasRole('SUPER_USER')")
-                .anyRequest().authenticated()
-        .and()
-            .formLogin()
-                .loginPage("/login")
-                .permitAll()
-        .and()
-            .logout().deleteCookies("JSESSIONID")
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .and()
-            .sessionManagement()
-            .invalidSessionUrl("/login")
-        .and()
-            .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-        .and()
-            .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
-        .and()
-            .rememberMe().rememberMeParameter("remember-me");
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
+    http
+      .authorizeRequests()
+        .antMatchers("/validar/**").permitAll()
+        .antMatchers("/novaConta/**").permitAll()
+        .antMatchers("/userteste/**").permitAll()
+    .and()
+      .authorizeRequests()
+        .antMatchers("/produtos/**").hasRole("MANTER_PRODUTO")
+        .antMatchers("/entradas/**").hasRole("MANTER_ENTRADA")
+        .antMatchers("/fornecedor/**").access("hasRole('MANTER_FORNECEDOR')")
+        .antMatchers("/pdv/**").access("hasRole('MANTER_PDV')")
+        .antMatchers("/clienteSistema/**").access("hasRole('SUPER_USER')")
+        .antMatchers("/loggedUsers/**").access("hasRole('SUPER_USER')")
+        .anyRequest().authenticated()
+    .and()
+      .formLogin()
+        .loginPage("/login")
+        .permitAll()
+    .and()
+      .logout().deleteCookies("JSESSIONID")
+      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+    .and()
+      .sessionManagement()
+      .invalidSessionUrl("/login")
+    .and()
+      .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+    .and()
+      .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
+    .and()
+      .rememberMe().rememberMeParameter("remember-me");
+  }
     
     @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
+  public AccessDeniedHandler accessDeniedHandler() {
+    return new CustomAccessDeniedHandler();
+  }
 
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public SessionRegistry sessionRegistry() {
+    return new SessionRegistryImpl();
+  }
+
+  @Bean
+  public HttpSessionEventPublisher httpSessionEventPublisher() {
+    return new HttpSessionEventPublisher();
+  }
 
 }

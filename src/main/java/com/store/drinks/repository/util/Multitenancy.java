@@ -1,4 +1,3 @@
-
 package com.store.drinks.repository.util;
 
 import com.store.drinks.entidade.enuns.Tenant;
@@ -10,13 +9,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 public class Multitenancy {
-    
-    @Autowired
-    private HttpServletRequest request;
 
-    public String getTenantValue() {
-        this.request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getAttribute(Tenant.nome.value()).toString();
-    }
-    
+  @Autowired
+  private HttpServletRequest request;
+
+  public String getTenantValue() {
+    this.request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    return request.getAttribute(Tenant.nome.value()).toString();
+  }
+
 }

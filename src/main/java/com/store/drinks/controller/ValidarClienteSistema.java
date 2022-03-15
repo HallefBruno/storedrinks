@@ -1,4 +1,3 @@
-
 package com.store.drinks.controller;
 
 import com.store.drinks.execption.NegocioException;
@@ -14,28 +13,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ValidarClienteSistema {
-    
-    @Autowired
-    private NovaContaClienteSistema validarClienteService;
-    
-    @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
-    public String pageValidarCliente() {
-        return "novaconta/ValidarClienteSistema";
+
+  @Autowired
+  private NovaContaClienteSistema validarClienteService;
+
+  @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
+  public String pageValidarCliente() {
+    return "novaconta/ValidarClienteSistema";
+  }
+
+  @GetMapping("validar/cliente")
+  public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
+    try {
+      validarClienteService.salvaValidarCliente(cpfCnpj);
+      return ResponseEntity.ok("novaConta");
+    } catch (NegocioException ex) {
+      return ResponseEntity.badRequest().body(ex);
     }
-    
-    @GetMapping("validar/cliente")
-    public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
-        try {
-            validarClienteService.salvaValidarCliente(cpfCnpj);
-            return ResponseEntity.ok("novaConta");
-        } catch (NegocioException ex) {
-            return ResponseEntity.badRequest().body(ex);
-        }
-    }
-    
-    @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
-    public String pageNovaConta() {
-        return "novaconta/CriarContaClienteSistema";
-    }
-    
+  }
+
+  @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
+  public String pageNovaConta() {
+    return "novaconta/CriarContaClienteSistema";
+  }
+
 }

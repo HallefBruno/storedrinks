@@ -1,4 +1,3 @@
-
 package com.store.drinks.controller;
 
 import com.store.drinks.entidade.ClienteSistema;
@@ -21,47 +20,47 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/clienteSistema")
 public class ClienteSistemaController {
-    
-    @Autowired
-    private ClienteSistemaService clienteSistemaService;
-    
-    @PreAuthorize("hasRole('SUPER_USER')")
-    @GetMapping("/novo")
-    public String index(ClienteSistema clienteSistema, Model model) {
-        model.addAttribute("clienteSistema", clienteSistema);
-        return "clientesistema/Novo";
+
+  @Autowired
+  private ClienteSistemaService clienteSistemaService;
+
+  @PreAuthorize("hasRole('SUPER_USER')")
+  @GetMapping("/novo")
+  public String index(ClienteSistema clienteSistema, Model model) {
+    model.addAttribute("clienteSistema", clienteSistema);
+    return "clientesistema/Novo";
+  }
+
+  @PreAuthorize("hasRole('SUPER_USER')")
+  @GetMapping
+  public ModelAndView novo(ClienteSistema clienteSistema) {
+    ModelAndView modelAndView = new ModelAndView("clientesistema/Novo");
+    modelAndView.addObject("clienteSistema", clienteSistema);
+    return modelAndView;
+  }
+
+  @PreAuthorize("hasRole('SUPER_USER')")
+  @GetMapping("/pesquisar")
+  public String pesquisar(ClienteSistema clienteSistema, Model model) {
+    model.addAttribute("clienteSistema", clienteSistema);
+    return "clientesistema/Pesquisar";
+  }
+
+  @PreAuthorize("hasRole('SUPER_USER')")
+  @PostMapping("/salvar")
+  public ModelAndView salvar(@Valid ClienteSistema clienteSistema, BindingResult result, Model model, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return novo(clienteSistema);
+      }
+      clienteSistemaService.salvar(clienteSistema);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return novo(clienteSistema);
     }
-    
-    @PreAuthorize("hasRole('SUPER_USER')")
-    @GetMapping
-    public ModelAndView novo(ClienteSistema clienteSistema) {
-        ModelAndView modelAndView = new ModelAndView("clientesistema/Novo");
-        modelAndView.addObject("clienteSistema", clienteSistema);
-        return modelAndView;
-    }
-    
-    @PreAuthorize("hasRole('SUPER_USER')")
-    @GetMapping("/pesquisar")
-    public String pesquisar(ClienteSistema clienteSistema, Model model) {
-        model.addAttribute("clienteSistema", clienteSistema);
-        return "clientesistema/Pesquisar";
-    }
-    
-    @PreAuthorize("hasRole('SUPER_USER')")
-    @PostMapping("/salvar")
-    public ModelAndView salvar(@Valid ClienteSistema clienteSistema, BindingResult result, Model model, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return novo(clienteSistema);
-            }
-            clienteSistemaService.salvar(clienteSistema);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return novo(clienteSistema);
-        }
-        attributes.addFlashAttribute("mensagem", "Novo cliente sistema cadastrado com sucesso!");
-        return new ModelAndView("redirect:/clienteSistema", HttpStatus.CREATED);
-    }
-    
+    attributes.addFlashAttribute("mensagem", "Novo cliente sistema cadastrado com sucesso!");
+    return new ModelAndView("redirect:/clienteSistema", HttpStatus.CREATED);
+  }
+
 }

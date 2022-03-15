@@ -1,4 +1,3 @@
-
 package com.store.drinks.util;
 
 import com.store.drinks.entidade.enuns.Tenant;
@@ -13,19 +12,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class TenantInterceptor implements HandlerInterceptor {
-    
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-            Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
-            if(Objects.nonNull(usuario)) {
-                request.setAttribute(Tenant.nome.value(), usuario.getClienteSistema().getTenant());
-                return true;
-            }
-        }
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
+      Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
+      if (Objects.nonNull(usuario)) {
+        request.setAttribute(Tenant.nome.value(), usuario.getClienteSistema().getTenant());
         return true;
+      }
     }
+    return true;
+  }
 
 }

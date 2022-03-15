@@ -1,4 +1,3 @@
-
 package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Usuario;
@@ -12,15 +11,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("userteste")
 public class UsuariosTesteController {
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    @GetMapping
-    public ModelAndView pageIndex(Usuario usuario) {
-        ModelAndView mv = new ModelAndView("UsuariosTeste");
-        mv.addObject("usuarios", usuarioRepository.findAll());
-        return mv;
-    }
-    
+
+  @Autowired
+  private UsuarioRepository usuarioRepository;
+
+  @GetMapping
+  public ModelAndView pageIndex(Usuario usuario) {
+    ModelAndView mv = new ModelAndView("UsuariosTeste");
+    mv.addObject("usuarios", usuarioRepository.findAll());
+    return mv;
+  }
+
 }

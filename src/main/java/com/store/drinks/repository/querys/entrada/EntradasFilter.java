@@ -1,4 +1,3 @@
-
 package com.store.drinks.repository.querys.entrada;
 
 import java.util.Date;
@@ -11,11 +10,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Builder
 @AllArgsConstructor
 public class EntradasFilter {
-    
-    private String numeroNota;
-    private String fornecedor;
-    private String codBarra;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dataEmissao;
-    
+
+  private String numeroNota;
+  private String fornecedor;
+  private String codBarra;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date dataEmissao;
+
 }

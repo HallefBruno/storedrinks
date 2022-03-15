@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade;
 
 import com.store.drinks.entidade.enuns.FormaPagamento;
@@ -32,42 +31,42 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = false)
 public class MovimentacaoCaixa extends ETenant implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @Min(value = 0, message = "Valor mínimo")
-    @Column(name = "valor_entrada", nullable = false)
-    private BigDecimal valorEntrada;
-    
-    @Min(value = 0, message = "Valor mínimo")
-    @Column(name = "valor_saida", nullable = false)
-    private BigDecimal valorSaida;
-    
-    @NotNull(message = "Forma de pagamento não pode ser null!")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "forma_pagamento", nullable = false)
-    private FormaPagamento formaPagamento;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "abrir_caixa",nullable = false)
-    private AbrirCaixa abrirCaixa;
-    
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(nullable = false)
-    private Venda venda;
-    
-    @Column(nullable = false, updatable = false, length = 20)
-    private String tenant;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.tenant = getTenantValue();
-        this.tenant = StringUtils.strip(this.tenant);
-    }
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @Min(value = 0, message = "Valor mínimo")
+  @Column(name = "valor_entrada", nullable = false)
+  private BigDecimal valorEntrada;
+
+  @Min(value = 0, message = "Valor mínimo")
+  @Column(name = "valor_saida", nullable = false)
+  private BigDecimal valorSaida;
+
+  @NotNull(message = "Forma de pagamento não pode ser null!")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "forma_pagamento", nullable = false)
+  private FormaPagamento formaPagamento;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "abrir_caixa", nullable = false)
+  private AbrirCaixa abrirCaixa;
+
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(nullable = false)
+  private Venda venda;
+
+  @Column(nullable = false, updatable = false, length = 20)
+  private String tenant;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.tenant = getTenantValue();
+    this.tenant = StringUtils.strip(this.tenant);
+  }
 }
 //@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
 //@ManyToOne

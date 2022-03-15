@@ -1,4 +1,3 @@
-
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Permissao;
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PermissaoService {
-    
-    @Autowired
-    private PermissaoRepository permissaoRepository;
-    
-    public List<Permissao> todas() {
-        return permissaoRepository.findAll(Sort.unsorted().descending());
-    }
-    
+
+  @Autowired
+  private PermissaoRepository permissaoRepository;
+
+  public List<Permissao> todas() {
+    return permissaoRepository.findAll(Sort.unsorted().descending());
+  }
+
 }

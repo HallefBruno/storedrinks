@@ -11,28 +11,26 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ManipuladorException {
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String internalError(Exception ex, final Model model, HttpServletRequest request) {
-        String servPath = request.getServletPath();
-        String redirect = servPath.substring(0,servPath.indexOf("/",2));
-        String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
-        model.addAttribute("errorMessage", msg);
-        model.addAttribute("path", redirect);
-        return "error";
-    }
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public String internalError(Exception ex, final Model model, HttpServletRequest request) {
+    String servPath = request.getServletPath();
+    String redirect = servPath.substring(0, servPath.indexOf("/", 2));
+    String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
+    model.addAttribute("errorMessage", msg);
+    model.addAttribute("path", redirect);
+    return "error";
+  }
 
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String nullPointerException(Model model,HttpServletRequest request) {
-        String servPath = request.getServletPath();
-        String redirect = servPath.substring(0,servPath.indexOf("/",2));
-        model.addAttribute("errorMessage", "Erro grave, por favor entrar em contato com admin do sistema!");
-        model.addAttribute("path", redirect);
-        return "error";
-    }
-
-    
+  @ExceptionHandler(NullPointerException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public String nullPointerException(Model model, HttpServletRequest request) {
+    String servPath = request.getServletPath();
+    String redirect = servPath.substring(0, servPath.indexOf("/", 2));
+    model.addAttribute("errorMessage", "Erro grave, por favor entrar em contato com admin do sistema!");
+    model.addAttribute("path", redirect);
+    return "error";
+  }
 
 //    @ExceptionHandler(NegocioException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -64,7 +62,6 @@ public class ManipuladorException {
 //        model.addAttribute("errorMessage", errorMessage);
 //        return "error";
 //    }
-    
 //    @ExceptionHandler(JpaSystemException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    public String defaultErrorHandler(HttpServletRequest req, Exception ex,Model model) {
@@ -76,5 +73,4 @@ public class ManipuladorException {
 //        model.addAttribute("path", redirect);
 //        return "error";
 //    }
-
 }

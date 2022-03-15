@@ -1,4 +1,3 @@
-
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.ClienteSistema;
@@ -12,19 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClienteSistemaService {
-    
-    @Autowired
-    private ClienteSistemaRepository clienteSistemaRepository;
-    
-    @PreAuthorize("hasRole('SUPER_USER')")
-    @Transactional
-    public void salvar(ClienteSistema clienteSistema) {
-        clienteSistema.setDataCadastro(LocalDateTime.now());
-        clienteSistema.setDataAtualizacao(clienteSistema.getDataCadastro());
-        clienteSistemaRepository.save(clienteSistema);
-    }
-    
-    public Optional<ClienteSistema> buscarPorCpfCnpj(String cpfCnpj) {
-        return clienteSistemaRepository.findByCpfCnpj(cpfCnpj);
-    }
+
+  @Autowired
+  private ClienteSistemaRepository clienteSistemaRepository;
+
+  @PreAuthorize("hasRole('SUPER_USER')")
+  @Transactional
+  public void salvar(ClienteSistema clienteSistema) {
+    clienteSistema.setDataCadastro(LocalDateTime.now());
+    clienteSistema.setDataAtualizacao(clienteSistema.getDataCadastro());
+    clienteSistemaRepository.save(clienteSistema);
+  }
+
+  public Optional<ClienteSistema> buscarPorCpfCnpj(String cpfCnpj) {
+    return clienteSistemaRepository.findByCpfCnpj(cpfCnpj);
+  }
 }

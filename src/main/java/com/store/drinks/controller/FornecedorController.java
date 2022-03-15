@@ -1,4 +1,3 @@
-
 package com.store.drinks.controller;
 
 import com.store.drinks.controller.page.PageWrapper;
@@ -29,77 +28,77 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("fornecedor")
 public class FornecedorController {
-    
-    @Autowired
-    private FornecedorService fornecedorService;
-    
-    @GetMapping
-    public ModelAndView pageIndex(Fornecedor fornecedor) {
-        return new ModelAndView("fornecedor/Novo");
+
+  @Autowired
+  private FornecedorService fornecedorService;
+
+  @GetMapping
+  public ModelAndView pageIndex(Fornecedor fornecedor) {
+    return new ModelAndView("fornecedor/Novo");
+  }
+
+  @GetMapping("novo")
+  public ModelAndView pageNovo(Fornecedor fornecedor) {
+    return new ModelAndView("fornecedor/Novo");
+  }
+
+  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+  @PostMapping("salvar")
+  public ModelAndView salvar(@Valid Fornecedor fornecedor, BindingResult result, Model model, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageIndex(fornecedor);
+      }
+      fornecedorService.salvar(fornecedor);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageIndex(fornecedor);
     }
-    
-    @GetMapping("novo")
-    public ModelAndView pageNovo(Fornecedor fornecedor) {
-        return new ModelAndView("fornecedor/Novo");
+    attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
+    return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);
+  }
+
+  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+  @PostMapping("update/{codigo}")
+  public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Fornecedor fornecedor, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageNovo(fornecedor);
+      }
+      fornecedorService.update(fornecedor, codigo);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageNovo(fornecedor);
     }
-    
-    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
-    @PostMapping("salvar")
-    public ModelAndView salvar(@Valid Fornecedor fornecedor, BindingResult result, Model model, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageIndex(fornecedor);
-            }
-            fornecedorService.salvar(fornecedor);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageIndex(fornecedor);
-        }
-        attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
-        return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);
+    attributes.addFlashAttribute("mensagem", "Fornecedor alterado com sucesso!");
+    return new ModelAndView("redirect:/fornecedor", HttpStatus.OK);
+  }
+
+  @GetMapping("pesquisar")
+  public ModelAndView pesqisar(FornecedorFilter fornecedorFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+    ModelAndView mv = new ModelAndView("fornecedor/Pesquisar");
+    PageWrapper<Fornecedor> paginaWrapper = new PageWrapper<>(fornecedorService.filtrar(fornecedorFilter, pageable), httpServletRequest);
+    mv.addObject("pagina", paginaWrapper);
+    return mv;
+  }
+
+  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
+  @DeleteMapping("{codigo}")
+  public ResponseEntity<?> excluir(@PathVariable("codigo") Fornecedor fornecedor) {
+    try {
+      fornecedorService.excluir(fornecedor);
+    } catch (NegocioException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    
-    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
-    @PostMapping("update/{codigo}")
-    public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo,  @Valid Fornecedor fornecedor, BindingResult result, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageNovo(fornecedor);
-            }
-            fornecedorService.update(fornecedor,codigo);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageNovo(fornecedor);
-        }
-        attributes.addFlashAttribute("mensagem", "Fornecedor alterado com sucesso!");
-        return new ModelAndView("redirect:/fornecedor", HttpStatus.OK);
-    }
-    
-    @GetMapping("pesquisar")
-    public ModelAndView pesqisar(FornecedorFilter fornecedorFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
-        ModelAndView mv = new ModelAndView("fornecedor/Pesquisar");
-        PageWrapper<Fornecedor> paginaWrapper = new PageWrapper<>(fornecedorService.filtrar(fornecedorFilter, pageable),httpServletRequest);
-        mv.addObject("pagina", paginaWrapper);
-        return mv;
-    }
-    
-    @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
-    @DeleteMapping("{codigo}")
-    public ResponseEntity<?> excluir(@PathVariable("codigo") Fornecedor fornecedor) {
-        try {
-            fornecedorService.excluir(fornecedor);
-        } catch (NegocioException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        return ResponseEntity.ok().build();
-    }
-    
-    @GetMapping("{codigo}")
-    public ModelAndView editar(@PathVariable("codigo") Fornecedor fornecedor) {
-        ModelAndView mv = pageNovo(fornecedor);
-        mv.addObject(fornecedor);
-        return mv;
-    }
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("{codigo}")
+  public ModelAndView editar(@PathVariable("codigo") Fornecedor fornecedor) {
+    ModelAndView mv = pageNovo(fornecedor);
+    mv.addObject(fornecedor);
+    return mv;
+  }
 }
