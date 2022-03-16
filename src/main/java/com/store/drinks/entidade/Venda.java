@@ -43,7 +43,7 @@ public class Venda extends ETenant implements Serializable {
   @Column(name = "valor_total_venda", nullable = false)
   private BigDecimal valorTotalVenda;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @PrePersist

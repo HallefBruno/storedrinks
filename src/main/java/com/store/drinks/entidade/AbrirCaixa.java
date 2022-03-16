@@ -49,7 +49,7 @@ public class AbrirCaixa extends ETenant implements Serializable {
   @Column(nullable = false)
   private Boolean aberto;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @PrePersist

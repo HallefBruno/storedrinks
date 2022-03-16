@@ -1,74 +1,74 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <th:block th:replace="fragments/CssFragment :: css"></th:block>
-        <title>Cadastro de fornecedor</title>
-    </head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+  <title>Cadastro de fornecedor</title>
+</head>
 
-    <body>
-        <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-        <div class="container-fluid">
-            <div class="row">
-                <div th:replace="layout/fragments/Menu :: menu"></div>
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <div class="container-fluid">
-                            <th:block th:include="fragments/MensagemSucesso"></th:block>
-                            <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" method="post" th:object="${fornecedor}">
-                                <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-                                <div class="shadow-sm mb-5 bg-body rounded">
-                                    <div class="card">
-                                        <h5 class="card-header">Cadastro de fornecedor</h5>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="mb-3 col-sm-4">
-                                                    <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                                                    <div class="input-group">
-                                                        <input th:field="*{cpfCnpj}" required="true" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 col-sm-4">
-                                                    <label for="nome" class="form-label">Nome</label>
-                                                    <input th:field="*{nome}" required="true" autocomplete="off" type="text" class="form-control" id="nome" name="nome">
-                                                </div>
-                                                <div class="mb-3 col-sm-4">
-                                                    <label for="telefone" class="form-label">Telefone</label>
-                                                    <input required="true" th:field="*{telefone}" autocomplete="off" type="text" class="form-control js-phone-number" id="telefone" name="telefone">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-2 mb-1">
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
-                                                        <label class="form-check-label" for="ativo">Ativo?</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
-                                            <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
-                                            
-                                            <div class="btn-group mt-2" role="group">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                    Salvar
-                                                </button>
-                                                <a type="button" th:href="@{/fornecedor/pesquisar}" class="btn btn-sm btn-outline-secondary">
-                                                    Pesquisar
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+<body>
+  <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div th:replace="layout/fragments/Menu :: menu"></div>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <div class="container-fluid">
+            <th:block th:include="fragments/MensagemSucesso"></th:block>
+            <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" method="post" th:object="${fornecedor}">
+              <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+              <div class="shadow-sm mb-5 bg-body rounded">
+                <div class="card">
+                  <h5 class="card-header">Cadastro de fornecedor</h5>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="mb-3 col-sm-4">
+                        <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                        <div class="input-group">
+                          <input th:field="*{cpfCnpj}" required="true" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
                         </div>
+                      </div>
+                      <div class="mb-3 col-sm-4">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input th:field="*{nome}" required="true" autocomplete="off" type="text" class="form-control" id="nome" name="nome">
+                      </div>
+                      <div class="mb-3 col-sm-4">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input required="true" th:field="*{telefone}" autocomplete="off" type="text" class="form-control js-phone-number" id="telefone" name="telefone">
+                      </div>
                     </div>
-                </main>
-            </div>
+                    <div class="row">
+                      <div class="col-sm-2 mb-1">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
+                          <label class="form-check-label" for="ativo">Ativo?</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
+                    <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
+
+                    <div class="btn-group mt-2" role="group">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">
+                        Salvar
+                      </button>
+                      <a type="button" th:href="@{/fornecedor/pesquisar}" class="btn btn-sm btn-outline-secondary">
+                        Pesquisar
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-        <div id="divLoading"></div>
-        <th:block th:replace="fragments/JsFragment :: script"></th:block>
-        <script th:src="@{/alldrink-js/fornecedor/Novo.js}"></script>
-    </body>
+      </main>
+    </div>
+  </div>
+  <div id="divLoading"></div>
+  <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  <script th:src="@{/alldrink-js/fornecedor/Novo.js}"></script>
+</body>
 </html>

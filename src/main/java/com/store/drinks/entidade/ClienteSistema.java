@@ -34,19 +34,19 @@ public class ClienteSistema implements Serializable {
   @NotBlank(message = "Nome do comercio não pode ter espaços em branco!")
   @NotEmpty(message = "Nome do comercio não pode ser vazio!")
   @NotNull(message = "Nome do comercio não pode ser null!")
-  @Column(name = "nome_comercio", nullable = false)
+  @Column(name = "nome_comercio", nullable = false, length = 255)
   private String nomeComercio;
 
   @NotBlank(message = "CPF/CNPJ não pode ter espaços em branco!")
   @NotEmpty(message = "CPF/CNPJ não pode ser vazio!")
   @NotNull(message = "CPF/CNPJ não pode ser null!")
-  @Column(name = "cpf_cnpj", nullable = false, unique = true)
+  @Column(name = "cpf_cnpj", nullable = false, unique = true, length = 18)
   private String cpfCnpj;
 
   @NotBlank(message = "Tenant não pode ter espaços em branco!")
   @NotEmpty(message = "Tenant não pode ser vazio!")
   @NotNull(message = "Tenant não pode ser null!")
-  @Column(name = "tenant", nullable = false, unique = true)
+  @Column(name = "tenant", nullable = false, unique = true, length = 50)
   private String tenant;
 
   @Column(name = "data_cadastro", nullable = false)
@@ -58,31 +58,31 @@ public class ClienteSistema implements Serializable {
   @NotBlank(message = "Estado não pode ter espaços em branco!")
   @NotEmpty(message = "Estado não pode ser vazio!")
   @NotNull(message = "Estado não pode ser null!")
-  @Column(name = "estado", nullable = false)
+  @Column(name = "estado", nullable = false, length = 100)
   private String estado;
 
   @NotBlank(message = "Cidade não pode ter espaços em branco!")
   @NotEmpty(message = "Cidade não pode ser vazio!")
   @NotNull(message = "Cidade não pode ser null!")
-  @Column(name = "cidade", nullable = false)
+  @Column(name = "cidade", nullable = false, length = 200)
   private String cidade;
 
   @NotBlank(message = "Bairro não pode ter espaços em branco!")
   @NotEmpty(message = "Bairro não pode ser vazio!")
   @NotNull(message = "Bairro não pode ser null!")
-  @Column(name = "bairro", nullable = false)
+  @Column(name = "bairro", nullable = false, length = 200)
   private String bairro;
 
   @NotBlank(message = "CEP não pode ter espaços em branco!")
   @NotEmpty(message = "CEP não pode ser vazio!")
   @NotNull(message = "CEP não pode ser null!")
-  @Column(nullable = false)
+  @Column(nullable = false, length = 10)
   private String cep;
 
   @NotBlank(message = "Logradouro não pode ter espaços em branco!")
   @NotEmpty(message = "Logradouro não pode ser vazio!")
   @NotNull(message = "Logradouro não pode ser null!")
-  @Column(nullable = false)
+  @Column(nullable = false, length = 100)
   private String logradouro;
 
   @NotNull(message = "Quantidade usuário não pode ser null!")

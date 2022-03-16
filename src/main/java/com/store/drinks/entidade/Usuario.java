@@ -19,6 +19,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,7 +35,9 @@ public class Usuario implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
-
+  
+  @NotEmpty(message = "Nome não pode ser vazio!")
+  @NotNull(message = "Nome não pode ser null!")
   @NotBlank(message = "Nome é obrigatório")
   private String nome;
 
@@ -41,12 +45,15 @@ public class Usuario implements Serializable {
   @Email(message = "E-mail inválido")
   @Column(unique = true)
   private String email;
-
+  
+  @NotEmpty(message = "Senha não pode ser vazio!")
+  @NotNull(message = "Senha não pode ser null!")
+  @NotBlank(message = "Senha é obrigatório")
   private String senha;
 
   @Transient
   private String confirmacaoSenha;
-
+  
   private Boolean ativo;
 
   @Size(min = 1, message = "Selecione pelo menos um grupo")
@@ -66,7 +73,7 @@ public class Usuario implements Serializable {
 
   @PreUpdate
   @PrePersist
-  private void preUpdate() {
+  private void prePersistPreUpdate() {
     this.confirmacaoSenha = senha;
     this.email = StringUtils.strip(this.email);
     if (Objects.isNull(this.ativo)) {

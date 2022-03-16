@@ -58,7 +58,7 @@ public class MovimentacaoCaixa extends ETenant implements Serializable {
   @JoinColumn(nullable = false)
   private Venda venda;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @PrePersist

@@ -49,7 +49,7 @@ public class Fornecedor extends ETenant implements Serializable {
   @Column(length = 12, nullable = true)
   private String telefone;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @Column(columnDefinition = "boolean default false")

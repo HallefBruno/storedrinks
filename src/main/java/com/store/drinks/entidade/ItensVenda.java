@@ -46,7 +46,7 @@ public class ItensVenda extends ETenant implements Serializable {
   @JsonBackReference
   private Venda venda;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @PrePersist

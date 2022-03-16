@@ -1,181 +1,179 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Pesquisa de entradas</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    </head>
+  <head>
+    <title>Pesquisa de entradas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+  </head>
 
-    <body>
-        <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-        <div class="container-fluid">
-            <div class="row">
-                <div th:replace="layout/fragments/Menu :: menu"></div>
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <div class="container-fluid">
-                            <th:block th:include="fragments/MensagemSucesso"></th:block>
-                            <div th:if="${#lists.isEmpty(pagina.conteudo)}">
-                                <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
-                                    <div class="d-flex">
-                                        <div class="toast-body">
-                                            <p class="">Nenhuma entrada encontrada!</p>
-                                        </div>
-                                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <form method="GET" th:object="${entradasFilter}">
-                                <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                Pesquisar
-                                            </button>
-                                        </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
-                                            <div class="accordion-body">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="mb-3 col-12 col-md-4  col-lg-3">
-                                                                <label for="numeroNota" class="form-label">Número da nota</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text"><i class="fa fa-sticky-note-o" aria-hidden="true"></i></span>
-                                                                    <input th:field="*{numeroNota}" autocomplete="off" type="text" class="form-control" name="numeroNota"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mb-3 col-12 col-md-4 col-lg-3">
-                                                                <label for="fornecedor" class="form-label">Fornecedor</label>
-                                                                <select data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
-                                                                    <option value=""></option>
-                                                                    <option class="text-capitalize" th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="mb-3 col-12 col-md-4 col-lg-3">
-                                                                <label for="codBarra" class="form-label">Cód Barra</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                                                                    <input type="text" autocomplete="off" th:field="*{codBarra}" class="form-control" name="codBarra"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mb-3 col-12 col-md-4 col-lg-3">
-                                                                <label for="dataEmissao" class="form-label">Data emissão</label>
-                                                                <input type="date" autocomplete="off" th:field="*{dataEmissao}" class="form-control" name="dataEmissao"/>
-                                                            </div>
-                                                        </div>
-                                                        <button type="submit" class="btn  btn-primary btn-sm">Pesquisar</button>
-                                                        <a th:href="@{/entradas}" class="btn btn-outline-secondary btn-sm">Nova</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            
-                            <div class="card shadow-sm" style="margin-top: 5px; margin-bottom: 5px;">
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="entradas" class="table table-hover caption-top">
-                                            <caption>Registro de entradas no estoque</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Cód barra</th>
-                                                    <th>Produto</th>
-                                                    <th>Nº nota</th>
-                                                    <th>Fornecedor</th>
-                                                    <th style="text-align: center;">Emissão</th>
-                                                    <th style="text-align: center;">Quantidade</th>
-                                                    <th style="text-align: center;">Qtd entrada</th>
-                                                    <th style="text-align: center;">Nova quantidade</th>
-                                                    <th style="text-align: center;">Valor custo</th>
-                                                    <th style="text-align: center;">Valor venda</th>
-                                                    <th style="text-align: center;">Novo valor custo</th>
-                                                    <th style="text-align: center;">Novo valor venda</th>
-                                                    <th style="text-align: center;">Valor entrada</th>
-                                                    <th style="text-align: center;">Forma pagto</th>
-                                                    <th style="text-align: center;">Qtd parcela</th>
-                                                    <th style="text-align: center;">Situação compra</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr th:each="entrada : ${pagina.conteudo}">
-                                                    <td th:text="${entrada.id}"></td>
-                                                    <td th:text="${entrada.produto.codigoBarra}"></td>
-                                                    <td class="limit-text text-capitalize" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
-                                                    <td th:text="${entrada.numeroNota}"></td>
-                                                    <td class="limit-text text-capitalize" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
-                                                    <td style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
-                                                    <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
-                                                    <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
-                                                        <td style="text-align: center;" th:text="${qtdEntrada}"></td>
-                                                    </th:block>
-                                                    <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></td>
-                                                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorTotal)}"></td>
-                                                    <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
-                                                    <td style="text-align: center;">
-                                                        <div th:switch="${entrada.formaPagamento}">
-                                                            <span th:case="${T(com.store.drinks.entidade.enuns.FormaPagamento).PARCELADO}" class="badge bg-primary">[[${entrada.qtdParcelas}]]</span>
-                                                        </div>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <div th:switch="${entrada.situacaoCompra}">
-                                                            <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
-                                                            <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
-                        </div>
-                    </div>
-                </main>
+<body>
+  <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div th:replace="layout/fragments/Menu :: menu"></div>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <div class="container-fluid">
+            <th:block th:include="fragments/MensagemSucesso"></th:block>
+            <div th:if="${#lists.isEmpty(pagina.conteudo)}">
+              <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <p class="">Nenhuma entrada encontrada!</p>
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
             </div>
+            <form method="GET" th:object="${entradasFilter}">
+              <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Pesquisar
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
+                    <div class="accordion-body">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="mb-3 col-12 col-md-4  col-lg-3">
+                              <label for="numeroNota" class="form-label">Número da nota</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-sticky-note-o" aria-hidden="true"></i></span>
+                                <input th:field="*{numeroNota}" autocomplete="off" type="text" class="form-control" name="numeroNota"/>
+                              </div>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-3">
+                              <label for="fornecedor" class="form-label">Fornecedor</label>
+                              <select data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
+                                <option value=""></option>
+                                <option class="text-capitalize" th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
+                              </select>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-3">
+                              <label for="codBarra" class="form-label">Cód Barra</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                                <input type="text" autocomplete="off" th:field="*{codBarra}" class="form-control" name="codBarra"/>
+                              </div>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-3">
+                              <label for="dataEmissao" class="form-label">Data emissão</label>
+                              <input type="date" autocomplete="off" th:field="*{dataEmissao}" class="form-control" name="dataEmissao"/>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn  btn-primary btn-sm">Pesquisar</button>
+                          <a th:href="@{/entradas}" class="btn btn-outline-secondary btn-sm">Nova</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="card shadow-sm" style="margin-top: 5px; margin-bottom: 5px;">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="entradas" class="table table-hover caption-top">
+                    <caption>Registro de entradas no estoque</caption>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Cód barra</th>
+                        <th>Produto</th>
+                        <th>Nº nota</th>
+                        <th>Fornecedor</th>
+                        <th style="text-align: center;">Emissão</th>
+                        <th style="text-align: center;">Quantidade</th>
+                        <th style="text-align: center;">Qtd entrada</th>
+                        <th style="text-align: center;">Nova quantidade</th>
+                        <th style="text-align: center;">Valor custo</th>
+                        <th style="text-align: center;">Valor venda</th>
+                        <th style="text-align: center;">Novo valor custo</th>
+                        <th style="text-align: center;">Novo valor venda</th>
+                        <th style="text-align: center;">Valor entrada</th>
+                        <th style="text-align: center;">Forma pagto</th>
+                        <th style="text-align: center;">Qtd parcela</th>
+                        <th style="text-align: center;">Situação compra</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="entrada : ${pagina.conteudo}">
+                        <td th:text="${entrada.id}"></td>
+                        <td th:text="${entrada.produto.codigoBarra}"></td>
+                        <td class="limit-text text-capitalize" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
+                        <td th:text="${entrada.numeroNota}"></td>
+                        <td class="limit-text text-capitalize" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
+                        <td style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
+                        <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
+                    <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">
+                      <td style="text-align: center;" th:text="${qtdEntrada}"></td>
+                    </th:block>
+                    <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
+                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></td>
+                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorVenda)}"></td>
+                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorCusto)}"></td>
+                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.novoValorVenda)}"></td>
+                    <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorTotal)}"></td>
+                    <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
+                    <td style="text-align: center;">
+                      <div th:switch="${entrada.formaPagamento}">
+                        <span th:case="${T(com.store.drinks.entidade.enuns.FormaPagamento).PARCELADO}" class="badge bg-primary">[[${entrada.qtdParcelas}]]</span>
+                      </div>
+                    </td>
+                    <td style="text-align: center;">
+                      <div th:switch="${entrada.situacaoCompra}">
+                        <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>
+                        <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{codigo}(codigo=${entrada.id})}" class="btn btn-link">Aberta</a></span>
+                      </div>
+                    </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
+          </div>
         </div>
-        <div id="divLoading"></div>
-        <th:block th:replace="fragments/JsFragment :: script"></th:block>
-        <script type="text/javascript">
-            $(function () {
-                
-                $("#fornecedor").select2({
-                    theme: "bootstrap-5",
-                    allowClear: true,
-                    multiple: false,
-                    closeOnSelect: true,
-                    dropdownCssClass: "text-capitalize"
-                });
-                
-                $("#numeroNota").focus();
-                setTimeout(() => {
-                    $(".toast").toast('show');
-                }, 0);
-                
-                $("#entradas").DataTable({
-                    searching: false,
-                    destroy: true,
-                    paging: false,
-                    info: false,
-                    responsive: true,
-                    lengthChange: false
-                    //pageLength: 10,
-                    //language: {
-                        //url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
-                    //}
-                });
-                //$("#entradas").DataTable().columns.adjust().draw();
-            });
-            
-        </script>
-    </body>
+      </main>
+    </div>
+  </div>
+  <div id="divLoading"></div>
+  <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  <script type="text/javascript">
+    $(function () {
+      $("#fornecedor").select2({
+        theme: "bootstrap-5",
+        allowClear: true,
+        multiple: false,
+        closeOnSelect: true,
+        dropdownCssClass: "text-capitalize"
+      });
+
+      $("#numeroNota").focus();
+      setTimeout(() => {
+        $(".toast").toast('show');
+      }, 0);
+
+      $("#entradas").DataTable({
+        searching: false,
+        destroy: true,
+        paging: false,
+        info: false,
+        responsive: true,
+        lengthChange: false
+        //pageLength: 10,
+        //language: {
+        //url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+        //}
+      });
+      //$("#entradas").DataTable().columns.adjust().draw();
+    });
+  </script>
+</body>
 </html>

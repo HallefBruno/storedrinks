@@ -58,12 +58,12 @@ public class Produto extends ETenant implements Serializable {
 
   @NotNull(message = "Valor de custo não pode ser null!")
   @Min(value = 0, message = "Valor de custo mínima")
-  @Column(nullable = false, name = "valor_venda")
+  @Column(nullable = false, name = "valor_custo")
   private BigDecimal valorCusto;
 
   @NotNull(message = "Valor de venda não pode ser null!")
   @Min(value = 0, message = "Valor de venda mínima")
-  @Column(nullable = false, name = "valor_custo")
+  @Column(nullable = false, name = "valor_venda")
   private BigDecimal valorVenda;
 
   @Column(columnDefinition = "boolean default false")
@@ -73,7 +73,7 @@ public class Produto extends ETenant implements Serializable {
   @Column(name = "versao_objeto", nullable = false)
   private Integer versaoObjeto;
 
-  @Column(nullable = false, updatable = false, length = 20)
+  @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
   @PrePersist
