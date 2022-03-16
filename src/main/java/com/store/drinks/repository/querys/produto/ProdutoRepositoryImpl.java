@@ -43,34 +43,34 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     CriteriaQuery<Produto> query = cb.createQuery(Produto.class);
-    Root<Produto> morador = query.from(Produto.class);
+    Root<Produto> produto = query.from(Produto.class);
     List<Predicate> predicates = new ArrayList<>();
     Predicate predicate;
 
     if (!StringUtils.isBlank(filtro.getCodBarra())) {
-      predicate = cb.like(cb.upper(morador.get("codigoBarra")), "%" + filtro.getCodBarra().toUpperCase() + "%");
+      predicate = cb.like(cb.upper(produto.get("codigoBarra")), "%" + filtro.getCodBarra().toUpperCase() + "%");
       predicates.add(predicate);
     }
 
     if (!StringUtils.isBlank(filtro.getCodProduto())) {
-      predicate = cb.like(cb.upper(morador.get("codProduto")), "%" + filtro.getCodProduto().toUpperCase() + "%");
+      predicate = cb.like(cb.upper(produto.get("codProduto")), "%" + filtro.getCodProduto().toUpperCase() + "%");
       predicates.add(predicate);
     }
 
     if (!StringUtils.isBlank(filtro.getDescricao())) {
-      predicate = cb.like(cb.upper(morador.get("descricaoProduto")), "%" + filtro.getDescricao().toUpperCase() + "%");
+      predicate = cb.like(cb.upper(produto.get("descricaoProduto")), "%" + filtro.getDescricao().toUpperCase() + "%");
       predicates.add(predicate);
     }
 
-    predicate = cb.and(cb.equal(cb.upper(morador.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+    predicate = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
     predicates.add(predicate);
 
-    query.select(morador);
-    query.where(predicates.toArray(new Predicate[]{}));
+    query.select(produto);
+    query.where(predicates.toArray(Predicate[]::new));
     TypedQuery<Produto> typedQuery = manager.createQuery(query);
     typedQuery.setFirstResult(primeiroRegistro);
     typedQuery.setMaxResults(totalRegistrosPorPagina);
-    Long count = rowsUtil.countRows(cb, query, morador, manager);
+    Long count = rowsUtil.countRows(cb, query, produto, manager);
 
     return new PageImpl<>(typedQuery.getResultList(), pageable, count);
   }

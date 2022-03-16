@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <title>Mensagens Recebidas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+  </head>
+  <body>
+    <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div th:replace="layout/fragments/Menu :: menu"></div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="container-fluid">
+              <div class="card shadow-sm" style="margin-top: 5px; margin-bottom: 5px;">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="mensagens" class="table table-hover caption-top">
+                    <caption>Mensagens recebidas</caption>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th style="text-align: center;">Remetente</th>
+                        <th style="text-align: center;">Mensagem</th>
+                        <th style="text-align: center;">Lida</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>001</td>
+                        <td>SUD</td>
+                        <td>Olá seja bem vindo</td>
+                        <td>Não</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  </body>
+</html>
+          

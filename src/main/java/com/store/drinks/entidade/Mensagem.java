@@ -1,6 +1,7 @@
 package com.store.drinks.entidade;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,6 +49,9 @@ public class Mensagem extends ETenant implements Serializable {
 
   @Column(columnDefinition = "boolean default false", nullable = false)
   private Boolean lida;
+  
+  @Column(nullable = false, name = "data_hora_mensagem_recebida")
+  private LocalDateTime dataHoraMensagemRecebida;
 
   @PrePersist
   @PreUpdate
