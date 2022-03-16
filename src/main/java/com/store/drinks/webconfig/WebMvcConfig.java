@@ -1,6 +1,6 @@
 package com.store.drinks.webconfig;
 
-import com.store.drinks.util.TenantInterceptor;
+import com.store.drinks.filters.TenantInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

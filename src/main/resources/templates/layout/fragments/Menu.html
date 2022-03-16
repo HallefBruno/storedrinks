@@ -1,4 +1,7 @@
 <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
+<style>
+  
+</style>
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" th:fragment="menu">
   <div class="position-sticky pt-3">
     <ul class="nav flex-column">
@@ -53,6 +56,21 @@
           Online
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" target="_blank" th:href="@{/mensagens}">
+          <i class="fa fa-comments-o" aria-hidden="true"></i>
+          Mensagens
+          <span class="badge bg-secondary">4</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" target="_blank" th:href="@{/novaConversa}">
+          <i class="fa fa-commenting" aria-hidden="true"></i>
+          Nova conversa
+        </a>
+      </li>
+
       <li class="nav-item">
         <a class="nav-link" th:href="@{/clienteSistema/novo}">
           <i class="fa fa-handshake-o" aria-hidden="true"></i>

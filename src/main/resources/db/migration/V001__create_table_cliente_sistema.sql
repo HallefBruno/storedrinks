@@ -12,5 +12,5 @@ create table if not exists cliente_sistema(
   logradouro varchar(100) not null,
   qtd_usuario int8 not null,
   acessar_tela_criar_login boolean null default false,
-  primeiro_acesso boolean null default false
+  primeiro_acesso boolean not null default false
 );

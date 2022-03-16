@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $('a').click(function (e) {
-    if (!$(this).is(".link-calculadora")) {
+    if (!$(this).is(".link-calculadora") && ($(this).attr("target") === undefined)) {
       $("#divLoading").addClass("loading");
     }
   });

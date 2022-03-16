@@ -1,6 +1,6 @@
 create table if not exists fornecedor (
   id bigserial not null,
-  ativo bool NULL DEFAULT false,
+  ativo boolean not null default false,
   cpf_cnpj varchar(14) not null,
   nome varchar(200) not null,
   telefone varchar(12) not null,

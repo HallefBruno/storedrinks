@@ -1,4 +1,4 @@
-package com.store.drinks.util;
+package com.store.drinks.filters;
 
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.entidade.Usuario;
@@ -17,7 +17,7 @@ public class TenantInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
+    if (!(authentication instanceof AnonymousAuthenticationToken) && Objects.nonNull(authentication)) {
       Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
       if (Objects.nonNull(usuario)) {
         request.setAttribute(Tenant.nome.value(), usuario.getClienteSistema().getTenant());
