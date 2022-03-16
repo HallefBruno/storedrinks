@@ -3,6 +3,7 @@
   <head>
     <title>Mensagens Recebidas</title>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
   </head>
@@ -16,6 +17,15 @@
             <div class="container-fluid">
               <div class="card shadow-sm" style="margin-top: 5px; margin-bottom: 5px;">
               <div class="card-body">
+                <div class="callout-md callout-info">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="lidas" name="lidas">
+                      <label class="form-check-label" for="lidas">Não Lidas</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-2">Nova mensagem</button>
+                  </div>
+                </div>
                 <div class="table-responsive">
                   <table id="mensagens" class="table table-hover caption-top">
                     <caption>Mensagens recebidas</caption>

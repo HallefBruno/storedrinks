@@ -25,9 +25,14 @@ public class MensagemController {
   @Autowired
   private MensagemService mensagemService;
 
-  @GetMapping
+  @GetMapping("/recebidas")
   public ModelAndView pageIndex() {
     return new ModelAndView("mensagem/Recebidas");
+  }
+  
+  @GetMapping("/nova")
+  public ModelAndView pageNovaMensagem() {
+    return new ModelAndView("mensagem/Nova"); 
   }
   
   @GetMapping("/pesquisar")

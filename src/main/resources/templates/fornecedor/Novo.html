@@ -18,7 +18,7 @@
             <th:block th:include="fragments/MensagemSucesso"></th:block>
             <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" method="post" th:object="${fornecedor}">
               <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-              <div class="shadow-sm mb-5 bg-body rounded">
+              <div class="shadow-sm mb-5">
                 <div class="card">
                   <h5 class="card-header">Cadastro de fornecedor</h5>
                   <div class="card-body">

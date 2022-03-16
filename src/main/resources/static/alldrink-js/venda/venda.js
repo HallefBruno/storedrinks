@@ -34,7 +34,7 @@ $(function () {
   });
 
   var typingTimer;
-  var intervaloDigitacao = 700;
+  var intervaloDigitacao = 1500;
 
   $("#quantidade").keyup(function () {
     clearTimeout(typingTimer);
