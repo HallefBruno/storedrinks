@@ -12,8 +12,21 @@ $(function () {
       language: "pt-BR",
       multiple: false,
       closeOnSelect: true,
+      data: usuarios,
       templateResult: templateResultUsuario,
-      data: usuarios
+      escapeMarkup: function (markup) {
+        return markup;
+      },
+      templateSelection: function (usuario) {
+        if (usuario && usuario.text !== "Destinatário") {
+          var html = 
+          `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.comercio} </span>
+           <span class='badge bg-light text-dark' style='font-size:13px; text-align-last: right;'> ${usuario.email} </span>
+          `;
+          return html;
+        }
+        return $("<span class=''>" + usuario.text + "</span>");
+      }
     });
   });
   
@@ -21,7 +34,11 @@ $(function () {
 
 function templateResultUsuario(usuario) {
   if (usuario && usuario.text !== "Searching…") {
-    return $("<span class='badge bg-primary' style='font-size:13px;'>" + usuario.text + "</span>");
+    var html = 
+    `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.comercio} </span>
+     <span class='badge bg-light text-dark' style='font-size:13px; text-align-last: right;'> ${usuario.email} </span>
+    `;
+    return html;
   }
   return $("<span>" + usuario.text + "</span>");
 }

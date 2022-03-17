@@ -18,7 +18,7 @@
           <div class="container-fluid">
             <div id="nenhumProduto" style="display: none;"></div>
             <th:block th:include="fragments/MensagemSucesso"></th:block>
-            <form th:action="${entradaProduto.id} == null ? @{/entradas/salvar} : @{/entradas/update/{codigo}(codigo=${entradaProduto.id})}" method="post" th:object="${entradaProduto}">
+            <form th:action="${entradaProduto.id} == null ? @{/entradas} : @{/entradas/update/{codigo}(codigo=${entradaProduto.id})}" method="post" th:object="${entradaProduto}">
               <th:block th:include="fragments/MensagensErroValidacao"></th:block>
               <div class="card shadow-sm" style="margin-top: 5px;">
                 <div class="card-body">

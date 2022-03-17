@@ -14,4 +14,5 @@ public class Usuariodto {
   private String id;
   private String text;
   private String email;
+  private String comercio;
 }

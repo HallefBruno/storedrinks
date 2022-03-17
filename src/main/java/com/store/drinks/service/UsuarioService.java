@@ -32,6 +32,7 @@ public class UsuarioService {
       usuariodto.setId(usuario.getId().toString());
       usuariodto.setEmail(usuario.getEmail());
       usuariodto.setText(usuarioLogado.getClienteSistema().getTenant());
+      usuariodto.setComercio(usuarioLogado.getClienteSistema().getNomeComercio());
       usuariodtos.add(usuariodto);
     });
     return usuariodtos;
