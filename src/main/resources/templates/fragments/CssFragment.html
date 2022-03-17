@@ -1,6 +1,7 @@
 <th:block th:fragment="css">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <input type="hidden" name="context" id="context" th:value="@{/}" />
   <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css"/>

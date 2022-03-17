@@ -25,7 +25,7 @@ public class UsuarioService {
   
   public List<Usuariodto> buscarUsuariosPorTenant() {
     var usuarioLogado = usuarioLogado();
-    var filtroUsuariosPorTenant = usuarioRepository.findByAllAtivoTrueAndTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());
+    var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());
     var usuariodtos = new ArrayList<Usuariodto>();
     filtroUsuariosPorTenant.forEach(usuario -> {
       var usuariodto = Usuariodto.builder().build();

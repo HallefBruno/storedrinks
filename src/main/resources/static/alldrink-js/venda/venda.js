@@ -100,7 +100,7 @@ function popularSelectProdutos() {
       },
       cache: true
     },
-    templateResult: styleSelectAutomoveis,
+    templateResult: templateResultProduto,
 
     escapeMarkup: function (markup) {
       return markup;
@@ -114,7 +114,7 @@ function popularSelectProdutos() {
   });
 }
 
-function styleSelectAutomoveis(produto) {
+function templateResultProduto(produto) {
   if (produto && produto.text !== "Searching…") {
     return $("<span class='badge bg-primary' style='font-size:13px;'>" + produto.text + "</span>");
   }

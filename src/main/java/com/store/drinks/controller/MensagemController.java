@@ -2,15 +2,18 @@
 package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Mensagem;
+import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.service.MensagemService;
+import com.store.drinks.service.UsuarioService;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +23,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/mensagens")
+@RequiredArgsConstructor
 public class MensagemController {
   
-  @Autowired
-  private MensagemService mensagemService;
+  private final MensagemService mensagemService;
+  private final UsuarioService usuarioService;
 
   @GetMapping("/recebidas")
   public ModelAndView pageIndex() {
@@ -33,6 +37,15 @@ public class MensagemController {
   @GetMapping("/nova")
   public ModelAndView pageNovaMensagem() {
     return new ModelAndView("mensagem/Nova"); 
+  }
+  
+  @GetMapping("/usuarios")
+  public ResponseEntity<List<Usuariodto>> listaUsuarioPorTenant() {
+    var listaUsuarios = usuarioService.buscarUsuariosPorTenant();
+    if(!ObjectUtils.isEmpty(listaUsuarios) && !listaUsuarios.isEmpty()) {
+      return ResponseEntity.ok(listaUsuarios);
+    }
+    return ResponseEntity.noContent().build();
   }
   
   @GetMapping("/pesquisar")
