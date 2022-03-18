@@ -2,6 +2,7 @@ package com.store.drinks.repository.util;
 
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,7 +20,7 @@ public class RowsUtil<T> {
     CriteriaQuery<Long> query = createCountQuery(criteriaBuilder, criteriaQuery, root);
     return entityManager.createQuery(query).getSingleResult();
   }
-
+  
   public Long paginacao(final CriteriaBuilder criteriaBuilder, final CriteriaQuery<T> criteriaQuery, Root<T> root, EntityManager entityManager, TypedQuery<T> typedQuery, Pageable pageable) {
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();

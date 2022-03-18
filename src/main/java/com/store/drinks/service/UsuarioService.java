@@ -5,6 +5,7 @@ import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,10 @@ public class UsuarioService {
     var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());
     var usuariodtos = new ArrayList<Usuariodto>();
     filtroUsuariosPorTenant.forEach(usuario -> {
-      var usuariodto = Usuariodto.builder().build();
-      usuariodto.setId(usuario.getId().toString());
-      usuariodto.setEmail(usuario.getEmail());
+      var usuariodto = new Usuariodto();
+      usuariodto.setId(BigInteger.valueOf(usuario.getId()));
       usuariodto.setText(usuarioLogado.getClienteSistema().getTenant());
-      usuariodto.setComercio(usuarioLogado.getClienteSistema().getNomeComercio());
+      usuariodto.setNome(usuarioLogado.getClienteSistema().getNomeComercio());
       usuariodtos.add(usuariodto);
     });
     return usuariodtos;
@@ -45,17 +45,8 @@ public class UsuarioService {
     Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
     var pagePesquisarComercio = usuarioRepository.pesquisarComercioAutoComplete(descricao, pageable);
     var select2Wrapper = new Select2Wrapper<Usuariodto>();
-    List<Usuariodto> usuariodtos = new ArrayList<>();
     select2Wrapper.setTotalItens(pagePesquisarComercio.getTotalElements());
-    pagePesquisarComercio.getContent().forEach(comercio -> {
-      var usuariodto = Usuariodto.builder().build();
-      usuariodto.setId(comercio.getId().toString());
-      usuariodto.setEmail(comercio.getEmail());
-      usuariodto.setText(comercio.getClienteSistema().getTenant());
-      usuariodto.setComercio(comercio.getClienteSistema().getNomeComercio());
-      usuariodtos.add(usuariodto);
-    });
-    select2Wrapper.setItems(usuariodtos);
+    select2Wrapper.setItems(pagePesquisarComercio.getContent());
     return select2Wrapper;
   }
 }

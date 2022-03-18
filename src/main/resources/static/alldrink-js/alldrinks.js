@@ -1,4 +1,4 @@
-/* global Swal, numeral */
+/* global Swal, numeral, Intl */
 
 var StoreDrink = StoreDrink || {};
 
@@ -81,6 +81,31 @@ StoreDrink.Security = (function () {
 
 }());
 
+StoreDrink.FormatarValor = (function () {
+  function MascaraMonetariaPrincipal() {}
+  MascaraMonetariaPrincipal.prototype.enable = function (teste) {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+    window.console.log(formatter.format(teste));
+    //console.log(formatter.format(1234567.89)); // R$ 1.234.567,89
+  };
+  return MascaraMonetariaPrincipal;
+}());
+
+StoreDrink.MaskMoneyTest = (function () {
+  function MaskMoneyTest() {
+    this.decimal = $('.js-decimal');
+    this.plain = $('.js-plain');
+  }
+  MaskMoneyTest.prototype.enable = function () {
+    this.decimal.maskNumber({decimal: ',', thousands: '.'});
+    this.plain.maskNumber({integer: true, thousands: '.'});
+  };
+  return MaskMoneyTest;
+}());
+
 StoreDrink.MascaraMoneteria = (function () {
   function MascaraMoneteria() {}
   MascaraMoneteria.prototype.enable = function () {
@@ -149,7 +174,7 @@ StoreDrink.LoadGif = (function () {
   }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      if(settings.url.includes("mensagens/destinatario?q")) {
+      if(settings.url.includes("mensagens/destinatario")) {
         this.gifLoadingAutocomplete.css("display", "block");
         return;
       }
@@ -229,6 +254,8 @@ $(function () {
 
   var maskPhone = new StoreDrink.MaskPhoneNumber();
   maskPhone.enable();
-    
+  
+  var maskPrincipal = new StoreDrink.FormatarValor();
+  maskPrincipal.enable("121212.00");
     
 });

@@ -1,18 +1,48 @@
 
 package com.store.drinks.entidade.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import java.io.Serializable;
+import java.math.BigInteger;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Usuariodto {
-  private String id;
+@Entity
+@SqlResultSetMapping(
+  name="Usuariodto",
+  classes={
+    @ConstructorResult(
+      targetClass=Usuariodto.class,
+      columns={
+        @ColumnResult(name="id"),
+        @ColumnResult(name="text"),
+        @ColumnResult(name="nome"),
+        @ColumnResult(name="tenant")
+      }
+    )
+  }
+)
+public class Usuariodto implements Serializable {
+  
+  @Id
+  private BigInteger id;
   private String text;
-  private String email;
-  private String comercio;
+  private String nome;
+  private String tenant;
+
+  public Usuariodto(BigInteger id, String text, String nome, String tenant) {
+    this.id = id;
+    this.text = text;
+    this.nome = nome;
+    this.tenant = tenant;
+  }
+
+  public Usuariodto() {
+  }
+  
+  
 }

@@ -13,13 +13,12 @@ $(function () {
     language: "pt-BR",
     multiple: false,
     closeOnSelect: true,
-    minimumInputLength: 3,
     selectionCssClass: 'select2--small',
     dropdownCssClass: 'select2--small',
     ajax: {
       url: URI.concat("mensagens/destinatario"),
       dataType: "json",
-      delay: 1000,
+      delay: 1700,
       data: function (params) {
         return {
           q: params.term,
@@ -42,9 +41,11 @@ $(function () {
       return markup;
     },
     templateSelection: function (usuario) {
+      window.console.log(usuario);
       if (usuario && usuario.text !== "Destinatário") {
         var html =
-        `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.comercio} </span>`;
+        `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.text} </span>
+         <span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.nome} </span>`;
         return html;
       }
       return $("<span class=''>" + usuario.text + "</span>");
@@ -58,7 +59,8 @@ $(function () {
 function templateResultUsuario(usuario) {
   if (usuario && usuario.text !== "Searching…") {
     var html = 
-    `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.comercio} </span>`;
+    `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.text} </span>
+     <span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.nome} </span>`;
     return html;
   }
   return $("<span>" + usuario.text + "</span>");
