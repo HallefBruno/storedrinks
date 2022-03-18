@@ -90,7 +90,7 @@ function popularSelectProdutos() {
         };
       },
       processResults: function (data, params) {
-        params.page = params.page || 0;
+        params.page = params.page || 1;
         return {
           results: data.items,
           pagination: {

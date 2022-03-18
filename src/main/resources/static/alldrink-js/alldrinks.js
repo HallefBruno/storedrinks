@@ -142,14 +142,22 @@ StoreDrink.MaskPhoneNumber = (function() {
 }());
 
 StoreDrink.LoadGif = (function () {
-
-  function LoadGif() {}
+  
+  function LoadGif() {
+    this.gifLoadingAutocomplete = $(".js-img-loading");
+    this.divLoading = $("#divLoading");
+  }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      $("#divLoading").addClass("loading");
+      if(settings.url.includes("mensagens/destinatario?q")) {
+        this.gifLoadingAutocomplete.css("display", "block");
+        return;
+      }
+      this.divLoading.addClass("loading");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
-      $("#divLoading").removeClass("loading");
+      this.divLoading.removeClass("loading");
+      this.gifLoadingAutocomplete.css("display", "none");
     }.bind(this));
   };
   return LoadGif;
@@ -157,9 +165,7 @@ StoreDrink.LoadGif = (function () {
 
 StoreDrink.Mensagem = (function () {
   function Mensagem() {}
-
   Mensagem.prototype.show = function (icon,mensagem) {
-
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -176,11 +182,8 @@ StoreDrink.Mensagem = (function () {
       icon: `${icon}`,
       text: `${mensagem}`
     });
-
   };
-
   return Mensagem;
-    
 }());
 
 

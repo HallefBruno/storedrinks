@@ -1,4 +1,7 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:brewer="http://brewer.algaworks.com">
   <head>
     <title>Entrada de produto</title>
     <meta charset="utf-8" />
@@ -57,7 +60,7 @@
                   <div class="card-body">
 
                     <div class="row">
-                      <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
+                      <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6 sd-required ">
                         <label for="numeroNota" class="form-label">Nº da nota</label>
                         <input autocomplete="off" required th:field="*{numeroNota}" type="text" class="form-control" id="numeroNota" name="numeroNota">
                       </div>

@@ -58,13 +58,13 @@ public class ProdutoService {
   }
 
   public ResultSelectProdutos pesquisarProdutosAutoComplete(String descricao, String pagina) {
-    ResultSelectProdutos resultSelectAutomoveis = new ResultSelectProdutos();
+    ResultSelectProdutos resultSelectProdutos = new ResultSelectProdutos();
     List<ProdutoSelect2> produtosDTO = new ArrayList<>();
     Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
     Page page = produtoRepository.filtrarProdutosSelect(descricao, pageable);
     if (page.hasContent()) {
       List<Produto> automovels = page.getContent();
-      resultSelectAutomoveis.setTotalItens(page.getTotalElements());
+      resultSelectProdutos.setTotalItens(page.getTotalElements());
       for (Produto produto : automovels) {
         ProdutoSelect2 produtoSelect2 = ProdutoSelect2.builder()
           .id(produto.getId().toString())
@@ -77,8 +77,8 @@ public class ProdutoService {
           .valorVenda(produto.getValorVenda().toString()).build();
         produtosDTO.add(produtoSelect2);
       }
-      resultSelectAutomoveis.setItems(produtosDTO);
+      resultSelectProdutos.setItems(produtosDTO);
     }
-    return resultSelectAutomoveis;
+    return resultSelectProdutos;
   }
 }

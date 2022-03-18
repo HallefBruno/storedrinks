@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
   <head>
     <title>Enviar Mensagem</title>
     <link rel="icon" th:href="@{/imagens/primavera.jpg}">
@@ -19,15 +19,24 @@
                 <h5 class="card-header">Envio de mensagens internas</h5>
                 <div class="card-body">
                   <div class="callout-md callout-primary">
-                    <div class="mb-3">
-                      <label for="destinatario" class="form-label">Destinatário:</label>
-                      <select type="text" class="form-control" id="destinatario" data-placeholder="Destinatário">
-                        <option value=""></option>
-                      </select>
+                    <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
+                      <div class="row g-2">
+                        <div class="col-11">
+                          <label for="destinatario" class="form-label">Destinatário:</label>
+                          <select type="text" class="form-control " id="destinatario" data-placeholder="Destinatário">
+                            <option value=""></option>
+                          </select>
+                        </div>
+                        <div class="col-1">
+                          <div class="sd-field-action__icon js-img-loading" style="display: none">
+                            <img th:src="@{/imagens/mini-loading.gif}"/>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 col-11">
                       <label for="mensagem" class="form-label">Mensagem:</label>
-                      <textarea placeholder="Sua mensagem..." class="form-control" id="mensagem" rows="3"></textarea>
+                      <textarea placeholder="Sua mensagem..." class="form-control" id="mensagem" rows="5"></textarea>
                     </div>
                     <button type="button" class="btn btn-outline-secondary btn-sm">Enviar</button>
                   </div>

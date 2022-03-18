@@ -82,7 +82,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
     predicates.add(predicate);
 
     query.select(fornecedor);
-    query.where(predicates.toArray(new Predicate[]{}));
+    query.where(predicates.toArray(Predicate[]::new));
     TypedQuery<Fornecedor> typedQuery = manager.createQuery(query);
     typedQuery.setFirstResult(primeiroRegistro);
     typedQuery.setMaxResults(totalRegistrosPorPagina);

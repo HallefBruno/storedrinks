@@ -2,17 +2,30 @@ package com.store.drinks.repository.util;
 
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RowsUtil {
+public class RowsUtil<T> {
 
+  @Deprecated
   public <T> Long countRows(final CriteriaBuilder criteriaBuilder, final CriteriaQuery<T> criteriaQuery, Root<T> root, EntityManager entityManager) {
+    CriteriaQuery<Long> query = createCountQuery(criteriaBuilder, criteriaQuery, root);
+    return entityManager.createQuery(query).getSingleResult();
+  }
+
+  public Long paginacao(final CriteriaBuilder criteriaBuilder, final CriteriaQuery<T> criteriaQuery, Root<T> root, EntityManager entityManager, TypedQuery<T> typedQuery, Pageable pageable) {
+    int paginaAtual = pageable.getPageNumber();
+    int totalRegistrosPorPagina = pageable.getPageSize();
+    int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+    typedQuery.setFirstResult(primeiroRegistro);
+    typedQuery.setMaxResults(totalRegistrosPorPagina);
     CriteriaQuery<Long> query = createCountQuery(criteriaBuilder, criteriaQuery, root);
     return entityManager.createQuery(query).getSingleResult();
   }

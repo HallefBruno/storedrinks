@@ -1,0 +1,11 @@
+.sd-required > .form-label:after {
+  content: " *";
+}
+
+.sd-field-action {
+  display: flex;
+}
+
+.sd-field-action__icon {
+  margin: 35px 0 0 15px;
+}

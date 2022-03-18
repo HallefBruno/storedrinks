@@ -1,4 +1,4 @@
-package com.store.drinks.webconfig;
+package com.store.drinks.webconfig.thymeleaf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Description;
