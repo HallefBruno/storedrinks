@@ -106,7 +106,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
     if(!ObjectUtils.isEmpty(singleResult)) {
       count = Long.parseLong(singleResult.toString());
     }
-    Query query = manager.createNativeQuery(sqlUnion.toString());
+    Query query = manager.createNativeQuery(sqlUnion.toString(),"Usuariodto");
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();
     int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
