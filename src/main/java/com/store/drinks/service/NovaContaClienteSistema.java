@@ -2,7 +2,6 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.ValidarCliente;
-import com.store.drinks.entidade.dto.NovaContadto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ValidarClienteRepository;
 import java.time.LocalDateTime;
@@ -43,10 +42,5 @@ public class NovaContaClienteSistema {
     } else {
       throw new NegocioException("Cliente sem permisão para criar conta!");
     }
-  }
-
-  @Transactional
-  public void salvarNovaContaSistema(NovaContadto novaContaDTO) {
-
   }
 }
