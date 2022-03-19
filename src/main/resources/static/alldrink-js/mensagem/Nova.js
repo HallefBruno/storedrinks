@@ -1,10 +1,11 @@
-/* global Swal */
+/* global Swal, StoreDrink */
 
 $(function () {
   
   const URI = $("#context").val();
   const URL_USUARIOS = URI.concat("mensagens/usuarios");
-  var comercio = {};
+  var dataSelect2 = null;
+  var textMensagem = $("#mensagem");
   
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
@@ -21,7 +22,7 @@ $(function () {
     ajax: {
       url: URI.concat("mensagens/destinatario"),
       dataType: "json",
-      delay: 1700,
+      delay: 1200,
       data: function (params) {
         return {
           q: params.term,
@@ -55,45 +56,41 @@ $(function () {
   });
   
   $("#destinatario").on("select2:select", function (e) {
-    comercio = e.params.data;
+    dataSelect2 = e.params.data;
+  });
+  
+  $("#destinatario").on("select2:open", function (e) {
+    dataSelect2 = null;
   });
   
   $("#btnEnviar").click(function () {
-    $.ajax({
-      url: $("#contextApp").val() + "validar/cliente",
-      type: "post",
-      dataType: 'json',
-      contentType: "application/json",
-      data: JSON.stringify(comercio),
-      success: function (response) {
-        
-      },
-      error: function (xhr) {
-        if (xhr.responseJSON) {
-          Swal.fire(
-            'Atenção!',
-            `${xhr.responseJSON.message}`,
-            'warning'
-          );
-        } else if (xhr.responseText) {
-          Swal.fire(
-            'Atenção!',
-            `${xhr.responseText}`,
-            'warning'
-          );
+    
+    if (validacaoCampos(dataSelect2, textMensagem)) {
+      
+      var mensagem = {
+        id: dataSelect2.id,
+        tenant: dataSelect2.tenant,
+        destinatario: dataSelect2.nome,
+        mensagem: textMensagem.val(),
+        usuario: {id:dataSelect2.id.id}
+      };
+      
+      $.ajax({
+        url: URI.concat("mensagens"),
+        type: "post",
+        dataType: 'json',
+        contentType: "application/json",
+        data: JSON.stringify(mensagem),
+        success: function (response) {
+          
+        },
+        error: function (xhr) {
+          window.console.log(xhr);
         }
-        window.console.log(xhr);
-      },
-      beforeSend: function () {
-        $("#divLoading").addClass("loading");
-      },
-      complete: function () {
-        $("#divLoading").removeClass("loading");
-      }
-    });
-    console.log(comercio);
+      });
+    }
+    console.log(dataSelect2);
   });
-  
 });
 
 function templateResultUsuario(usuario) {
@@ -104,4 +101,26 @@ function templateResultUsuario(usuario) {
     return html;
   }
   return $("<span>" + usuario.text + "</span>");
+}
+
+function validacaoCampos(dataSelect2, textMensagem) {
+  var isValida = true;
+  var toast = new StoreDrink.Toast();
+  if (dataSelect2 === null || dataSelect2 === undefined) {
+    $("#destinatario").addClass("is-invalid");
+    toast.show('error','Destinatário é obrigatório!','top-right');
+    isValida = false;
+  } else {
+    $("#destinatario").removeClass("is-invalid");
+  }
+  
+  if(textMensagem.val() === null || textMensagem.val() === undefined || textMensagem.val() === "") {
+    $("#mensagem").addClass("is-invalid");
+    toast.show('error','Mensagem é obrigatório!','top-right');
+    isValida = false;
+  } else {
+    $("#mensagem").removeClass("is-invalid");
+  }
+  
+  return isValida;
 }

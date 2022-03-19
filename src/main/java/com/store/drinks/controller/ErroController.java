@@ -24,7 +24,7 @@ public class ErroController implements ErrorController {
         return "403";
       }
     }
-    return "error";
+    return "";
   }
 
 }

@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Enviar Mensagem</title>
-    <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
@@ -21,9 +20,9 @@
                   <div class="callout-md callout-primary">
                     <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
                       <div class="row g-2">
-                        <div class="col-9 col-sm-9 col-md-11 col-lg-11">
+                        <div class="col-9 col-sm-9 col-md-11 col-lg-11 sd-required">
                           <label for="destinatario" class="form-label">Destinatário:</label>
-                          <select type="text" class="form-control " id="destinatario" data-placeholder="Destinatário">
+                          <select type="text" class="form-control" id="destinatario" data-placeholder="Destinatário">
                             <option value=""></option>
                           </select>
                         </div>
@@ -34,9 +33,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="mb-3 col-9 col-sm-9 col-md-11 col-lg-11">
+                    <div class="mb-3 col-9 col-sm-9 col-md-11 col-lg-11 sd-required">
                       <label for="mensagem" class="form-label">Mensagem:</label>
-                      <textarea placeholder="Sua mensagem..." class="form-control" id="mensagem" rows="5"></textarea>
+                      <textarea placeholder="Sua mensagem..." class="form-control" id="mensagem" name="mensagem" rows="5"></textarea>
                     </div>
                     <button id="btnEnviar" type="button" class="btn btn-outline-secondary btn-sm">Enviar</button>
                   </div>
@@ -45,11 +44,6 @@
             </div>
           </div>
         </main>
-      </div>
-    </div>
-    <div id="divLoading">
-      <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden">Loading...</span>
       </div>
     </div>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>

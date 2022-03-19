@@ -1,4 +1,4 @@
-/* global Swal, numeral, Intl */
+/* global Swal, numeral, Intl, bootstrap */
 
 var StoreDrink = StoreDrink || {};
 
@@ -54,7 +54,7 @@ StoreDrink.DialogoExcluir = (function () {
   }
 
   function onErroExcluir(e) {
-    console.log('ahahahah', e.responseText);
+    console.log(e.responseText);
     Swal.fire('Oops!', e.responseText, 'error');
     $("#divLoading").removeClass("loading");
   }
@@ -188,6 +188,29 @@ StoreDrink.LoadGif = (function () {
   return LoadGif;
 }());
 
+
+StoreDrink.AjaxError = (function () {
+  function AjaxError() {}
+  AjaxError.prototype.enable = function () {
+    $(document).ajaxError(function (event, jqXHR, settings) {
+      if (jqXHR.status === 0) {
+      } else if (jqXHR.status === 400) {
+        $.each(jqXHR.responseJSON.errors, function (i, item) {
+          alert(item.field);
+          $.toast({
+            heading: `${item.field}`,
+            text: `${item.message}`,
+            position: 'top-right',
+            loader: false,
+            icon: 'error'
+          });
+        });
+      }
+    }.bind(this));
+  };
+  return AjaxError;
+}());
+
 StoreDrink.Mensagem = (function () {
   function Mensagem() {}
   Mensagem.prototype.show = function (icon,mensagem) {
@@ -211,6 +234,34 @@ StoreDrink.Mensagem = (function () {
   return Mensagem;
 }());
 
+StoreDrink.Toast = (function () {
+  /*
+    bottom-left
+    bottom-right
+    bottom-center
+    top-right
+    top-left
+    top-center
+    mid-center
+   */
+  function Toast() {}
+  
+  /*
+   * @param {type} icon
+   * @param {type} text
+   * @param {type} position
+   */
+  
+  Toast.prototype.show = function (icon,text,position) {
+    $.toast({
+      text: `${text}`,
+      position: `${position}`,
+      loader: false,
+      icon: `${icon}`
+    });
+  };
+  return Toast;
+}());
 
 StoreDrink.RemoveMask = (function () {
     
@@ -257,5 +308,8 @@ $(function () {
   
   var maskPrincipal = new StoreDrink.FormatarValor();
   maskPrincipal.enable("121212.00");
-    
+  
+  var ajaxError = new StoreDrink.AjaxError();
+  ajaxError.enable();
+  
 });

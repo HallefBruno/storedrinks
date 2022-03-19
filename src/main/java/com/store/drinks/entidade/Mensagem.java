@@ -56,7 +56,7 @@ public class Mensagem extends ETenant implements Serializable {
   @Column(nullable = false, name = "data_hora_mensagem_recebida")
   private LocalDateTime dataHoraMensagemRecebida;
   
-  @JoinColumn(nullable = false)
+  @JoinColumn(name = "usuario_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private Usuario usuario;
   
