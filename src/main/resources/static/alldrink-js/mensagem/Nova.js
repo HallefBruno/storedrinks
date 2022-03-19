@@ -1,7 +1,10 @@
+/* global Swal */
+
 $(function () {
   
   const URI = $("#context").val();
   const URL_USUARIOS = URI.concat("mensagens/usuarios");
+  var comercio = {};
   
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
@@ -41,26 +44,63 @@ $(function () {
       return markup;
     },
     templateSelection: function (usuario) {
-      window.console.log(usuario);
       if (usuario && usuario.text !== "Destinatário") {
         var html =
-        `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.text} </span>
-         <span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.nome} </span>`;
+        `<span class='badge bg-secondary'> ${usuario.text} </span>
+         <span class='badge bg-secondary' text-dark'> ${usuario.nome} </span>`;
         return html;
       }
       return $("<span class=''>" + usuario.text + "</span>");
     }
   });
   
+  $("#destinatario").on("select2:select", function (e) {
+    comercio = e.params.data;
+  });
+  
+  $("#btnEnviar").click(function () {
+    $.ajax({
+      url: $("#contextApp").val() + "validar/cliente",
+      type: "post",
+      dataType: 'json',
+      contentType: "application/json",
+      data: JSON.stringify(comercio),
+      success: function (response) {
+        
+      },
+      error: function (xhr) {
+        if (xhr.responseJSON) {
+          Swal.fire(
+            'Atenção!',
+            `${xhr.responseJSON.message}`,
+            'warning'
+          );
+        } else if (xhr.responseText) {
+          Swal.fire(
+            'Atenção!',
+            `${xhr.responseText}`,
+            'warning'
+          );
+        }
+        window.console.log(xhr);
+      },
+      beforeSend: function () {
+        $("#divLoading").addClass("loading");
+      },
+      complete: function () {
+        $("#divLoading").removeClass("loading");
+      }
+    });
+    console.log(comercio);
+  });
+  
 });
-
-
 
 function templateResultUsuario(usuario) {
   if (usuario && usuario.text !== "Searching…") {
     var html = 
-    `<span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.text} </span>
-     <span class='badge bg-light text-dark' style='font-size:13px;'> ${usuario.nome} </span>`;
+    `<span class='badge bg-secondary'> ${usuario.text} </span>
+     <span class='badge bg-secondary'> ${usuario.nome} </span>`;
     return html;
   }
   return $("<span>" + usuario.text + "</span>");

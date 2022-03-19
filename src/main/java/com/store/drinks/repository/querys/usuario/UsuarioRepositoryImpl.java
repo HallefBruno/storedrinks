@@ -2,8 +2,6 @@ package com.store.drinks.repository.querys.usuario;
 
 import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.Usuario;
-import com.store.drinks.entidade.dto.Usuariodto;
-import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.Optional;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.ObjectUtils;
 
 public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
@@ -33,8 +29,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
   @Autowired
   private RowsUtil rowsUtil;
 
-  @Autowired
-  private Multitenancy multitenancy;
 
   @Override
   public Optional<Usuario> porEmailEAtivo(String email) {
@@ -76,43 +70,4 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
     return new PageImpl<>(typedQuery.getResultList(), pageable, count);
 
   }
-
-  @Override
-  public Page<Usuariodto> pesquisarComercioAutoComplete(String comercio, Pageable pageable) {
-    StringBuilder sqlUnion = new StringBuilder();
-    StringBuilder sqlCount = new StringBuilder();
-
-    if (!StringUtils.isBlank(comercio)) {
-      sqlUnion.append(" and cs.nome_comercio ilike ").append("%").append(comercio).append("%");
-    }
-
-    sqlCount.append(" select count(*) as numero_registro ");
-    sqlCount.append(" from( ");
-    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, cs.tenant ");
-    sqlUnion.append(" from cliente_sistema cs ");
-    sqlUnion.append(" inner join usuario u on(cs.tenant = u.tenant) ");
-    sqlUnion.append(" where u.proprietario = true ");
-    sqlUnion.append(" union ");
-    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, cs.tenant ");
-    sqlUnion.append(" from cliente_sistema cs ");
-    sqlUnion.append(" inner join usuario u on(cs.tenant = u.tenant) ");
-    sqlUnion.append(" where u.tenant = '").append(multitenancy.getTenantValue()).append("' ");
-    sqlCount.append(sqlUnion);
-    sqlCount.append(" )count ");
-    
-    Long count = null;
-    Query longQuery = manager.createNativeQuery(sqlCount.toString());
-    Object singleResult = longQuery.getSingleResult();
-    if(!ObjectUtils.isEmpty(singleResult)) {
-      count = Long.parseLong(singleResult.toString());
-    }
-    Query query = manager.createNativeQuery(sqlUnion.toString(),"Usuariodto");
-    int paginaAtual = pageable.getPageNumber();
-    int totalRegistrosPorPagina = pageable.getPageSize();
-    int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
-    query.setFirstResult(primeiroRegistro);
-    query.setMaxResults(totalRegistrosPorPagina);
-    return new PageImpl<>(query.getResultList(), pageable, count);
-  }
-
 }

@@ -54,7 +54,7 @@ public class MensagemController {
   public ResponseEntity<?> pesquisarProdutosAutoComplete(
     @RequestParam(name = "q", required = false) String descricao,
     @RequestParam(name = "page", defaultValue = "0", required = true) String page) {
-    return new ResponseEntity<>(usuarioService.pesquisarComercioAutoComplete(descricao, page), HttpStatus.OK);
+    return new ResponseEntity<>(mensagemService.pesquisarComercioAutoComplete(descricao, page), HttpStatus.OK);
   }
   
   @GetMapping("/pesquisar")
