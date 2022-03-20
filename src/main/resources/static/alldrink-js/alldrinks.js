@@ -181,6 +181,11 @@ StoreDrink.LoadGif = (function () {
       this.divLoading.addClass("loading");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
+      if(settings.url !== null && settings.url !== "" && settings.url === "/alldrinks/mensagens") {
+        if(jqxhr.status === 201 && settings.type === "POST") {
+          alert("OK");
+        } 
+      }
       this.divLoading.removeClass("loading");
       this.gifLoadingAutocomplete.css("display", "none");
     }.bind(this));
@@ -236,28 +241,29 @@ StoreDrink.Mensagem = (function () {
 
 StoreDrink.Toast = (function () {
   /*
-    bottom-left
-    bottom-right
-    bottom-center
-    top-right
-    top-left
-    top-center
-    mid-center
+   bottom-left
+   bottom-right
+   bottom-center
+   top-right
+   top-left
+   top-center
+   mid-center
    */
   function Toast() {}
-  
   /*
    * @param {type} icon
+   * @param {type} heading 
    * @param {type} text
    * @param {type} position
    */
-  
-  Toast.prototype.show = function (icon,text,position) {
+  Toast.prototype.show = function (icon,heading,text,position) {
     $.toast({
+      heading: `${heading}`,
       text: `${text}`,
       position: `${position}`,
       loader: false,
-      icon: `${icon}`
+      icon: `${icon}`,
+      hideAfter: 5000
     });
   };
   return Toast;
@@ -311,5 +317,5 @@ $(function () {
   
   var ajaxError = new StoreDrink.AjaxError();
   ajaxError.enable();
-  
+
 });

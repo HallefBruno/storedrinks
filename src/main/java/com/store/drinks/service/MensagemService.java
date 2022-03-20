@@ -23,7 +23,6 @@ public class MensagemService {
   @Transactional
   @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   public void salvarMensagem(Mensagem mensagem) {
-    mensagem.setLida(Boolean.FALSE);
     mensagem.setDataHoraMensagemRecebida(LocalDateTime.now());
     mensagemRepository.save(mensagem);
   }

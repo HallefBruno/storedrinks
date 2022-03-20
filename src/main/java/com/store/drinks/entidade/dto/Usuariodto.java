@@ -21,6 +21,7 @@ import lombok.Data;
         @ColumnResult(name="id"),
         @ColumnResult(name="text"),
         @ColumnResult(name="nome"),
+        @ColumnResult(name="destinatario"),
         @ColumnResult(name="tenant")
       }
     )
@@ -32,12 +33,14 @@ public class Usuariodto implements Serializable {
   private BigInteger id;
   private String text;
   private String nome;
+  private String destinatario;
   private String tenant;
 
-  public Usuariodto(BigInteger id, String text, String nome, String tenant) {
+  public Usuariodto(BigInteger id, String text, String nome, String destinatario, String tenant) {
     this.id = id;
     this.text = text;
     this.nome = nome;
+    this.destinatario = destinatario;
     this.tenant = tenant;
   }
 

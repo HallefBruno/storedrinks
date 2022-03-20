@@ -6,6 +6,7 @@ $(function () {
   const URL_USUARIOS = URI.concat("mensagens/usuarios");
   var dataSelect2 = null;
   var textMensagem = $("#mensagem");
+  $("#destinatario").focus();
   
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
@@ -68,11 +69,10 @@ $(function () {
     if (validacaoCampos(dataSelect2, textMensagem)) {
       
       var mensagem = {
-        id: dataSelect2.id,
         tenant: dataSelect2.tenant,
-        destinatario: dataSelect2.nome,
+        destinatario: dataSelect2.destinatario,
         mensagem: textMensagem.val(),
-        usuario: {id:dataSelect2.id.id}
+        usuario: {id:dataSelect2.id}
       };
       
       $.ajax({
@@ -81,15 +81,18 @@ $(function () {
         dataType: 'json',
         contentType: "application/json",
         data: JSON.stringify(mensagem),
-        success: function (response) {
-          
+        statusCode: {
+          201: function (response) {
+            var toast = new StoreDrink.Toast();
+            toast.show('success','Atenção','Mensagem enviada com sucesso!','top-right');
+            clearFormFocusSelect();
+          }
         },
         error: function (xhr) {
           window.console.log(xhr);
         }
       });
     }
-    console.log(dataSelect2);
   });
 });
 
@@ -108,7 +111,7 @@ function validacaoCampos(dataSelect2, textMensagem) {
   var toast = new StoreDrink.Toast();
   if (dataSelect2 === null || dataSelect2 === undefined) {
     $("#destinatario").addClass("is-invalid");
-    toast.show('error','Destinatário é obrigatório!','top-right');
+    toast.show('error','Atenção','Destinatário é obrigatório!','top-right');
     isValida = false;
   } else {
     $("#destinatario").removeClass("is-invalid");
@@ -116,11 +119,18 @@ function validacaoCampos(dataSelect2, textMensagem) {
   
   if(textMensagem.val() === null || textMensagem.val() === undefined || textMensagem.val() === "") {
     $("#mensagem").addClass("is-invalid");
-    toast.show('error','Mensagem é obrigatório!','top-right');
+    toast.show('error','Atenção','Mensagem é obrigatório!','top-right');
     isValida = false;
   } else {
     $("#mensagem").removeClass("is-invalid");
   }
   
   return isValida;
+}
+
+function clearFormFocusSelect() {
+  $("form").trigger("reset");
+  $("#mensagem").val("");
+  $("#destinatario").val(null).trigger("change");
+  $("#destinatario").focus();
 }

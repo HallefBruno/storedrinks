@@ -30,12 +30,12 @@ public class MensagemRepositoryImpl implements MensagemRepositoryCustom {
     }
     sqlCount.append(" select count(*) as numero_registro ");
     sqlCount.append(" from( ");
-    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, cs.tenant ");
+    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, u.email as destinatario, cs.tenant ");
     sqlUnion.append(" from cliente_sistema cs ");
     sqlUnion.append(" inner join usuario u on(cs.tenant = u.tenant) ");
     sqlUnion.append(" where u.proprietario = true ").append(sqlNomeComercio);
     sqlUnion.append(" union ");
-    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, cs.tenant ");
+    sqlUnion.append(" select u.id, cs.nome_comercio as text, u.nome, u.email as destinatario, cs.tenant ");
     sqlUnion.append(" from cliente_sistema cs ");
     sqlUnion.append(" inner join usuario u on(cs.tenant = u.tenant) ");
     sqlUnion.append(" where u.tenant = '").append(multitenancy.getTenantValue()).append("' ");
