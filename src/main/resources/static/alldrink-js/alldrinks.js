@@ -223,8 +223,8 @@ StoreDrink.AjaxError = (function () {
 }());
 
 StoreDrink.ShowToastContainsMessage = (function () {
-  function ShowToastContainsMessage() {
-  }
+  function ShowToastContainsMessage() {}
+  
   ShowToastContainsMessage.prototype.enable = function () {
     var html = 
       `<div id="liveRoot" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; opacity: 0.7">

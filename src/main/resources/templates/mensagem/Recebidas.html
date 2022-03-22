@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="pt-BR">
   <head>
     <title>Mensagens Recebidas</title>
     <meta charset="UTF-8">
@@ -32,18 +32,13 @@
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th style="text-align: center;">Remetente</th>
+                        <th style="text-align: center;">Destinatário</th>
                         <th style="text-align: center;">Mensagem</th>
                         <th style="text-align: center;">Lida</th>
+                        <th style="text-align: center;">Recebida em</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>001</td>
-                        <td>SUD</td>
-                        <td>Olá seja bem vindo</td>
-                        <td>Não</td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -55,6 +50,7 @@
       </div>
     </div>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script th:src="@{/alldrink-js/mensagem/Recebidas.js}" type="text/javascript"></script>
   </body>
 </html>
           

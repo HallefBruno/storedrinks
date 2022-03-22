@@ -3,11 +3,12 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.Mensagem;
 import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.wrapper.DataTable;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
 import com.store.drinks.repository.MensagemRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,8 +42,18 @@ public class MensagemService {
     return mensagemRepository.existemMensagensNaoLidas(tenant, usuarioId);
   }
   
-  public List<Mensagem> findAllByLida(Boolean lida, Pageable pageable) {
-    return mensagemRepository.findAllByLida(lida, pageable);
+  public DataTable<Mensagem> findAllByLida(Boolean lida, int draw, int start, int length) {
+    int page = start/length;
+    Pageable pageable = PageRequest.of(page,length);
+    DataTable<Mensagem> dataTable = new DataTable<>();
+    Page<Mensagem> pageMensagens = mensagemRepository.findAllByLida(lida, pageable);
+    dataTable.setData(pageMensagens.getContent());
+    dataTable.setDraw(draw);
+    dataTable.setStart(start);
+    dataTable.setRecordsTotal(pageMensagens.getTotalElements());
+    dataTable.setRecordsFiltered(pageMensagens.getTotalElements());
+    //return mensagemRepository.findAllByLida(lida, pageable);
+    return dataTable;
   }
   
   public Select2Wrapper<Usuariodto> pesquisarComercioAutoComplete(String descricao, String pagina) {

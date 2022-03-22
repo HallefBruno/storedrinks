@@ -86,10 +86,16 @@ $(function () {
             var toast = new StoreDrink.Toast();
             toast.show('success','Atenção','Mensagem enviada com sucesso!','top-right');
             clearFormFocusSelect();
+            if(dataSelect2.id === $("meta[name=listing-page-url]").attr("content")) {
+              var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
+              showToastContainsMessage.enable();
+            }
           }
         },
         error: function (xhr) {
-          window.console.log(xhr);
+          if(status >= 400) {
+            window.console.log(xhr);
+          }
         }
       });
     }
