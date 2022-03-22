@@ -62,10 +62,22 @@ public class MensagemController {
     return ResponseEntity.ok(mensagemService.findAllByLida(lida, pageable));
   }
   
+  @GetMapping("/nao-lidas")
+  public ResponseEntity<Void> existemMensagensNaoLidas() {
+    Boolean isMensagensNaoLidas = mensagemService.existemMensagensNaoLidas();
+    return isMensagensNaoLidas ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
+  }
+  
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public void enviarMensagem(@RequestBody(required = true) @Valid Mensagem mensagem) {
     mensagemService.salvarMensagem(mensagem);
+  }
+  
+  @PostMapping("/notificado")
+  @ResponseStatus(HttpStatus.OK)
+  public void marcarComoNotificado() {
+    mensagemService.marcarComoNotificado();
   }
   
 }

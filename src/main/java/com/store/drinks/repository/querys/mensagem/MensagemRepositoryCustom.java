@@ -11,4 +11,5 @@ public interface MensagemRepositoryCustom {
   
   @Cacheable("comercio")
   Page<Usuariodto> pesquisarComercioAutoComplete(String comercio, Pageable pageable);
+  Boolean existemMensagensNaoLidas(String tenant, Long usuarioId);
 }

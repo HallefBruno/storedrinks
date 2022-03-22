@@ -174,22 +174,29 @@ StoreDrink.LoadGif = (function () {
   }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      if(settings.url.includes("mensagens/destinatario")) {
-        this.gifLoadingAutocomplete.css("display", "block");
+      if(!naoInvocarGifLoading(settings.url,this.gifLoadingAutocomplete.bind(this))) {
         return;
       }
       this.divLoading.addClass("loading");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
-      if(settings.url !== null && settings.url !== "" && settings.url === "/alldrinks/mensagens") {
-        if(jqxhr.status === 201 && settings.type === "POST") {
-          alert("OK");
-        } 
-      }
       this.divLoading.removeClass("loading");
       this.gifLoadingAutocomplete.css("display", "none");
     }.bind(this));
   };
+  
+  function naoInvocarGifLoading(url,element) {
+    if(url.includes("mensagens/notificado")) {
+      return false;
+    } else if (url.includes("mensagens/nao-lidas")) {
+      return false;
+    } else if (url.includes("mensagens/destinatario")) {
+      element.css("display", "block");
+      return false;
+    }
+    return true;
+  }
+  
   return LoadGif;
 }());
 
@@ -201,7 +208,6 @@ StoreDrink.AjaxError = (function () {
       if (jqXHR.status === 0) {
       } else if (jqXHR.status === 400) {
         $.each(jqXHR.responseJSON.errors, function (i, item) {
-          alert(item.field);
           $.toast({
             heading: `${item.field}`,
             text: `${item.message}`,
@@ -214,6 +220,87 @@ StoreDrink.AjaxError = (function () {
     }.bind(this));
   };
   return AjaxError;
+}());
+
+StoreDrink.ShowToastContainsMessage = (function () {
+  function ShowToastContainsMessage() {
+  }
+  ShowToastContainsMessage.prototype.enable = function () {
+    var html = 
+      `<div id="liveRoot" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; opacity: 0.7">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+          <div id="toastHeader" class="toast-header">
+            <i id="faInfo" class="fa fa-info-circle" aria-hidden="true"></i>
+            <strong id="strong" style="margin-left: 5px;" class="me-auto">Antenção!</strong>
+            <button id="btnClose" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div id="toastBody" class="toast-body">
+            <i id="faEnvelope" class="fa fa-envelope" aria-hidden="true"></i> Você possui mensagem!
+          </div>
+        </div>
+      </div>`;
+    
+    $.ajax({
+      url: $("#context").val().concat("mensagens/nao-lidas"),
+      type: "get",
+      statusCode: {
+        200: function (response) {
+          $("html").find(".container-fluid").append(html);
+          $("#liveToast").toast("show");
+          addEventsMouse();
+          $("#btnClose").click(function (event) {
+            event.stopPropagation();
+            $.post($("#context").val().concat("mensagens/notificado"), function () {});
+          });
+        }
+      },
+      success: function (response) {
+      },
+      error: function (xhr) {
+        window.console.log(xhr);
+      }
+    });
+  };
+  
+  function addEventsMouse() {
+    $("#liveRoot").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#liveToast").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#toastBody").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#toastHeader").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#btnClose").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#strong").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#faInfo").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#faEnvelope").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#liveToast").mouseout(function () {
+      $("#liveRoot").css('opacity', 0.8);
+    });
+  }
+  
+  return ShowToastContainsMessage;
 }());
 
 StoreDrink.Mensagem = (function () {
@@ -317,5 +404,8 @@ $(function () {
   
   var ajaxError = new StoreDrink.AjaxError();
   ajaxError.enable();
-
+  
+  var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
+  showToastContainsMessage.enable();
+  
 });

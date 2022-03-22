@@ -19,12 +19,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class MensagemService {
   
   private final MensagemRepository mensagemRepository;
+  private final UsuarioService usuarioService;
   
   @Transactional
   @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   public void salvarMensagem(Mensagem mensagem) {
+    mensagem.setNotificado(Boolean.FALSE);
     mensagem.setDataHoraMensagemRecebida(LocalDateTime.now());
     mensagemRepository.save(mensagem);
+  }
+  
+  public int marcarComoNotificado() {
+    String tenant = usuarioService.usuarioLogado().getClienteSistema().getTenant();
+    Long usuarioId = usuarioService.usuarioLogado().getId();
+    return mensagemRepository.updateNotificarMensagem(tenant, usuarioId);
+  }
+  
+  public Boolean existemMensagensNaoLidas() {
+    String tenant = usuarioService.usuarioLogado().getClienteSistema().getTenant();
+    Long usuarioId = usuarioService.usuarioLogado().getId();
+    return mensagemRepository.existemMensagensNaoLidas(tenant, usuarioId);
   }
   
   public List<Mensagem> findAllByLida(Boolean lida, Pageable pageable) {
@@ -39,5 +53,4 @@ public class MensagemService {
     select2Wrapper.setItems(pagePesquisarComercio.getContent());
     return select2Wrapper;
   }
-  
 }

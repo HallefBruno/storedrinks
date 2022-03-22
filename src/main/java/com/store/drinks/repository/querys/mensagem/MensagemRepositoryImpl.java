@@ -2,6 +2,7 @@ package com.store.drinks.repository.querys.mensagem;
 
 import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.repository.util.Multitenancy;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -55,5 +56,16 @@ public class MensagemRepositoryImpl implements MensagemRepositoryCustom {
     query.setFirstResult(primeiroRegistro);
     query.setMaxResults(totalRegistrosPorPagina);
     return new PageImpl<>(query.getResultList(), pageable, count);
+  }
+  
+  @Override
+  public Boolean existemMensagensNaoLidas(String tenant, Long usuarioId) {
+    StringBuilder sql = new StringBuilder();
+    sql.append(" select men.notificado from mensagem men ");
+    sql.append(" where men.tenant = '").append(tenant).append("' ");
+    sql.append(" and men.usuario_id = ").append(usuarioId);
+    Query query = manager.createNativeQuery(sql.toString());
+    List<Boolean> booleans = (List<Boolean>) query.getResultList();
+    return booleans.stream().anyMatch(bool -> bool.equals(Boolean.FALSE));
   }
 }
