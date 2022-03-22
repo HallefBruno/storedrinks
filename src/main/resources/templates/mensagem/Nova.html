@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title>Enviar Mensagem</title>
     <meta charset="UTF-8">
+    <meta name="_flag" th:content="${#authentication.getPrincipal().getUsuario().getId()}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
   </head>

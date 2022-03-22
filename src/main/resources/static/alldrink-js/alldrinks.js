@@ -254,8 +254,6 @@ StoreDrink.ShowToastContainsMessage = (function () {
           });
         }
       },
-      success: function (response) {
-      },
       error: function (xhr) {
         window.console.log(xhr);
       }
