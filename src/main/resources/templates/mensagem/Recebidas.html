@@ -6,6 +6,12 @@
     <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <style>
+      .dataTable > thead > tr > th[class*="sort"]:before,
+      .dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+      }
+    </style>
   </head>
   <body>
     <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
@@ -26,14 +32,14 @@
                     <button type="button" class="btn btn-outline-secondary btn-sm mt-2">Nova mensagem</button>
                   </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive setblockUI">
                   <table id="mensagens" class="table table-hover caption-top">
                     <caption>Mensagens recebidas</caption>
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th style="text-align: center;">Destinatário</th>
-                        <th style="text-align: center;">Mensagem</th>
+                        <th>Destinatário</th>
+                        <th>Mensagem</th>
                         <th style="text-align: center;">Lida</th>
                         <th style="text-align: center;">Recebida em</th>
                       </tr>
