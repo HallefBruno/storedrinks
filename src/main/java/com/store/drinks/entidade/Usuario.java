@@ -1,7 +1,10 @@
 package com.store.drinks.entidade;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -16,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
@@ -24,14 +28,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 
-@Data
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
-@EqualsAndHashCode
 public class Usuario implements Serializable {
 
   @Id
@@ -69,10 +69,104 @@ public class Usuario implements Serializable {
 
   @Column(nullable = false)
   private Boolean proprietario;
+  
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", orphanRemoval = true)
+  @JsonManagedReference
+  private Set<Mensagem> mensagens;
 
   @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JsonBackReference
   private ClienteSistema clienteSistema;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getSenha() {
+    return senha;
+  }
+
+  public void setSenha(String senha) {
+    this.senha = senha;
+  }
+
+  public String getConfirmacaoSenha() {
+    return confirmacaoSenha;
+  }
+
+  public void setConfirmacaoSenha(String confirmacaoSenha) {
+    this.confirmacaoSenha = confirmacaoSenha;
+  }
+
+  public Boolean getAtivo() {
+    return ativo;
+  }
+
+  public void setAtivo(Boolean ativo) {
+    this.ativo = ativo;
+  }
+
+  public Set<Grupo> getGrupos() {
+    return grupos;
+  }
+
+  public void setGrupos(Set<Grupo> grupos) {
+    this.grupos = grupos;
+  }
+
+  public LocalDate getDataNascimento() {
+    return dataNascimento;
+  }
+
+  public void setDataNascimento(LocalDate dataNascimento) {
+    this.dataNascimento = dataNascimento;
+  }
+
+  public Boolean getProprietario() {
+    return proprietario;
+  }
+
+  public void setProprietario(Boolean proprietario) {
+    this.proprietario = proprietario;
+  }
+
+  public Set<Mensagem> getMensagens() {
+    return mensagens;
+  }
+
+  public void setMensagens(Set<Mensagem> mensagens) {
+    this.mensagens.clear();
+    this.mensagens.addAll(mensagens);
+  }
+
+  public ClienteSistema getClienteSistema() {
+    return clienteSistema;
+  }
+
+  public void setClienteSistema(ClienteSistema clienteSistema) {
+    this.clienteSistema = clienteSistema;
+  }
 
   @PreUpdate
   @PrePersist

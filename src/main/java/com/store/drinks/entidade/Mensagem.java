@@ -1,27 +1,40 @@
 package com.store.drinks.entidade;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 
-@Data
 @Entity
-@EqualsAndHashCode(callSuper = false)
-public class Mensagem extends ETenant implements Serializable {
+@DynamicUpdate
+@NamedEntityGraph(
+  name = "graph.Mensagem", 
+  attributeNodes = @NamedAttributeNode(value = "usuario", subgraph = "subgraph.usuario"), 
+  subgraphs = {
+    @NamedSubgraph(name = "subgraph.usuario", attributeNodes = @NamedAttributeNode(value = "clienteSistema", subgraph = "subgraph.clienteSistema"))
+  }
+)
+public class Mensagem implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +63,83 @@ public class Mensagem extends ETenant implements Serializable {
   @Column(columnDefinition = "boolean default false", nullable = false)
   private Boolean lida;
   
+  @Column(columnDefinition = "boolean default false", nullable = false)
+  private Boolean notificado;
+  
   @Column(nullable = false, name = "data_hora_mensagem_recebida")
   private LocalDateTime dataHoraMensagemRecebida;
+  
+  @JoinColumn
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonBackReference
+  private Usuario usuario;
+
+  public Mensagem() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
+
+  public String getDestinatario() {
+    return destinatario;
+  }
+
+  public void setDestinatario(String destinatario) {
+    this.destinatario = destinatario;
+  }
+
+  public String getMensagem() {
+    return mensagem;
+  }
+
+  public void setMensagem(String mensagem) {
+    this.mensagem = mensagem;
+  }
+
+  public Boolean getLida() {
+    return lida;
+  }
+
+  public void setLida(Boolean lida) {
+    this.lida = lida;
+  }
+
+  public Boolean getNotificado() {
+    return notificado;
+  }
+
+  public void setNotificado(Boolean notificado) {
+    this.notificado = notificado;
+  }
+
+  public LocalDateTime getDataHoraMensagemRecebida() {
+    return dataHoraMensagemRecebida;
+  }
+
+  public void setDataHoraMensagemRecebida(LocalDateTime dataHoraMensagemRecebida) {
+    this.dataHoraMensagemRecebida = dataHoraMensagemRecebida;
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+  }
 
   @PrePersist
   @PreUpdate
@@ -62,7 +150,7 @@ public class Mensagem extends ETenant implements Serializable {
     if (Objects.isNull(this.lida)) {
       this.lida = Boolean.FALSE;
     }
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
   }
 

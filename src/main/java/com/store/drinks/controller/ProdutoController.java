@@ -14,7 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,7 +52,7 @@ public class ProdutoController {
 
   @PreAuthorize("hasRole('MANTER_PRODUTO')")
   @PostMapping("salvar")
-  public ModelAndView salvar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
+  public ModelAndView salvar(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
         return pageNovo(produto);

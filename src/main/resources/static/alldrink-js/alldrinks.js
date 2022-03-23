@@ -1,4 +1,4 @@
-/* global Swal, numeral */
+/* global Swal, numeral, Intl, bootstrap */
 
 var StoreDrink = StoreDrink || {};
 
@@ -54,7 +54,7 @@ StoreDrink.DialogoExcluir = (function () {
   }
 
   function onErroExcluir(e) {
-    console.log('ahahahah', e.responseText);
+    console.log(e.responseText);
     Swal.fire('Oops!', e.responseText, 'error');
     $("#divLoading").removeClass("loading");
   }
@@ -79,6 +79,31 @@ StoreDrink.Security = (function () {
 
   return Security;
 
+}());
+
+StoreDrink.FormatarValor = (function () {
+  function MascaraMonetariaPrincipal() {}
+  MascaraMonetariaPrincipal.prototype.enable = function (teste) {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+    window.console.log(formatter.format(teste));
+    //console.log(formatter.format(1234567.89)); // R$ 1.234.567,89
+  };
+  return MascaraMonetariaPrincipal;
+}());
+
+StoreDrink.MaskMoneyTest = (function () {
+  function MaskMoneyTest() {
+    this.decimal = $('.js-decimal');
+    this.plain = $('.js-plain');
+  }
+  MaskMoneyTest.prototype.enable = function () {
+    this.decimal.maskNumber({decimal: ',', thousands: '.'});
+    this.plain.maskNumber({integer: true, thousands: '.'});
+  };
+  return MaskMoneyTest;
 }());
 
 StoreDrink.MascaraMoneteria = (function () {
@@ -149,8 +174,7 @@ StoreDrink.LoadGif = (function () {
   }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      if(settings.url.includes("mensagens/destinatario?q")) {
-        this.gifLoadingAutocomplete.css("display", "block");
+      if(!naoInvocarGifLoading(settings.url,this.gifLoadingAutocomplete.bind(this))) {
         return;
       }
       this.divLoading.addClass("loading");
@@ -160,7 +184,121 @@ StoreDrink.LoadGif = (function () {
       this.gifLoadingAutocomplete.css("display", "none");
     }.bind(this));
   };
+  
+  function naoInvocarGifLoading(url,element) {
+    if(url.includes("mensagens/notificado")) {
+      return false;
+    } else if (url.includes("mensagens/nao-lidas")) {
+      return false;
+    } else if (url.includes("mensagens/destinatario")) {
+      element.css("display", "block");
+      return false;
+    }
+    return true;
+  }
+  
   return LoadGif;
+}());
+
+
+StoreDrink.AjaxError = (function () {
+  function AjaxError() {}
+  AjaxError.prototype.enable = function () {
+    $(document).ajaxError(function (event, jqXHR, settings) {
+      if (jqXHR.status === 0) {
+      } else if (jqXHR.status === 400) {
+        $.each(jqXHR.responseJSON.errors, function (i, item) {
+          $.toast({
+            heading: `${item.field}`,
+            text: `${item.message}`,
+            position: 'top-right',
+            loader: false,
+            icon: 'error'
+          });
+        });
+      }
+    }.bind(this));
+  };
+  return AjaxError;
+}());
+
+StoreDrink.ShowToastContainsMessage = (function () {
+  function ShowToastContainsMessage() {}
+  
+  ShowToastContainsMessage.prototype.enable = function () {
+    var html = 
+      `<div id="liveRoot" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; opacity: 0.7">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+          <div id="toastHeader" class="toast-header">
+            <i id="faInfo" class="fa fa-info-circle" aria-hidden="true"></i>
+            <strong id="strong" style="margin-left: 5px;" class="me-auto">Antenção!</strong>
+            <button id="btnClose" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div id="toastBody" class="toast-body">
+            <i id="faEnvelope" class="fa fa-envelope" aria-hidden="true"></i> Você possui mensagem!
+          </div>
+        </div>
+      </div>`;
+    
+    $.ajax({
+      url: $("#context").val().concat("mensagens/nao-lidas"),
+      type: "get",
+      statusCode: {
+        200: function (response) {
+          $("html").find(".container-fluid").append(html);
+          $("#liveToast").toast("show");
+          addEventsMouse();
+          $("#btnClose").click(function (event) {
+            event.stopPropagation();
+            $.post($("#context").val().concat("mensagens/notificado"), function () {});
+          });
+        }
+      },
+      error: function (xhr) {
+        window.console.log(xhr);
+      }
+    });
+  };
+  
+  function addEventsMouse() {
+    $("#liveRoot").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#liveToast").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#toastBody").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#toastHeader").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#btnClose").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#strong").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#faInfo").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#faEnvelope").mouseenter(function () {
+      $("#liveRoot").css('opacity', '');
+    });
+
+    $("#liveToast").mouseout(function () {
+      $("#liveRoot").css('opacity', 0.8);
+    });
+  }
+  
+  return ShowToastContainsMessage;
 }());
 
 StoreDrink.Mensagem = (function () {
@@ -186,6 +324,35 @@ StoreDrink.Mensagem = (function () {
   return Mensagem;
 }());
 
+StoreDrink.Toast = (function () {
+  /*
+   bottom-left
+   bottom-right
+   bottom-center
+   top-right
+   top-left
+   top-center
+   mid-center
+   */
+  function Toast() {}
+  /*
+   * @param {type} icon
+   * @param {type} heading 
+   * @param {type} text
+   * @param {type} position
+   */
+  Toast.prototype.show = function (icon,heading,text,position) {
+    $.toast({
+      heading: `${heading}`,
+      text: `${text}`,
+      position: `${position}`,
+      loader: false,
+      icon: `${icon}`,
+      hideAfter: 5000
+    });
+  };
+  return Toast;
+}());
 
 StoreDrink.RemoveMask = (function () {
     
@@ -229,6 +396,14 @@ $(function () {
 
   var maskPhone = new StoreDrink.MaskPhoneNumber();
   maskPhone.enable();
-    
-    
+  
+  var maskPrincipal = new StoreDrink.FormatarValor();
+  maskPrincipal.enable("121212.00");
+  
+  var ajaxError = new StoreDrink.AjaxError();
+  ajaxError.enable();
+  
+  var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
+  showToastContainsMessage.enable();
+  
 });

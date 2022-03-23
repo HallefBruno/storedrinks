@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ public class Venda extends ETenant implements Serializable {
 
   @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
-  private List<ItensVenda> itensVendas;
+  private Set<ItensVenda> itensVendas;
 
   @Column(name = "data_hora_venda", nullable = false)
   private LocalDateTime dataHoraVenda;

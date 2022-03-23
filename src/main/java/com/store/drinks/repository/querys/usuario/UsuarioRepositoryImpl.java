@@ -25,9 +25,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
   @PersistenceContext
   private EntityManager manager;
-  
+
   @Autowired
   private RowsUtil rowsUtil;
+
 
   @Override
   public Optional<Usuario> porEmailEAtivo(String email) {
@@ -42,9 +43,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
       .setParameter("usuario", usuario)
       .getResultList();
   }
+
   
-  @Override
-  public Page<Usuario> pesquisarComercioAutoComplete(String comercio, Pageable pageable) {
+  public Page<Usuario> pesquisarComercioAutoComplete1(String comercio, Pageable pageable) {
     CriteriaBuilder cb = manager.getCriteriaBuilder();
     EntityGraph graph = manager.getEntityGraph("graph.Usuario.clienteSistema");
     CriteriaQuery<Usuario> query = cb.createQuery(Usuario.class);
@@ -52,22 +53,21 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
     Join<Usuario, ClienteSistema> clienteSistema = (Join) usuario.fetch("clienteSistema");
     List<Predicate> predicates = new ArrayList<>();
     Predicate predicate;
-    
+
     if (!StringUtils.isBlank(comercio)) {
       predicate = cb.like(cb.upper(clienteSistema.get("nomeComercio")), "%" + comercio.toUpperCase() + "%");
       predicates.add(predicate);
     }
-    
+
     predicate = cb.equal(usuario.get("proprietario"), Boolean.TRUE);
     predicates.add(predicate);
-    
+
     query.select(usuario);
     query.where(predicates.toArray(Predicate[]::new));
     TypedQuery<Usuario> typedQuery = manager.createQuery(query);
     typedQuery.setHint("javax.persistence.fetchgraph", graph);
     Long count = rowsUtil.paginacao(cb, query, usuario, manager, typedQuery, pageable);
     return new PageImpl<>(typedQuery.getResultList(), pageable, count);
-    
-  }
 
+  }
 }

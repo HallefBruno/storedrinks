@@ -10,11 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@EqualsAndHashCode
 public class Grupo implements Serializable {
 
   @Id

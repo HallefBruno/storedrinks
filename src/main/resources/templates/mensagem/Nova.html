@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title>Enviar Mensagem</title>
-    <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta charset="UTF-8">
+    <meta name="_flag" th:content="${#authentication.getPrincipal().getUsuario().getId()}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
   </head>
@@ -21,24 +20,24 @@
                   <div class="callout-md callout-primary">
                     <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
                       <div class="row g-2">
-                        <div class="col-11">
+                        <div class="col-9 col-sm-9 col-md-11 col-lg-11 sd-required">
                           <label for="destinatario" class="form-label">Destinatário:</label>
-                          <select type="text" class="form-control " id="destinatario" data-placeholder="Destinatário">
+                          <select type="text" class="form-control" id="destinatario" data-placeholder="Destinatário">
                             <option value=""></option>
                           </select>
                         </div>
-                        <div class="col-1">
-                          <div class="sd-field-action__icon js-img-loading" style="display: none">
-                            <img th:src="@{/imagens/mini-loading.gif}"/>
+                        <div class="col-3 col-sm-3 col-md-1 col-lg-1">
+                          <div style="display: none" class="spinner-border text-secondary sd-field-action__icon js-img-loading" role="status">
+                            <span class="visually-hidden">Loading...</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="mb-3 col-11">
+                    <div class="mb-3 col-9 col-sm-9 col-md-11 col-lg-11 sd-required">
                       <label for="mensagem" class="form-label">Mensagem:</label>
-                      <textarea placeholder="Sua mensagem..." class="form-control" id="mensagem" rows="5"></textarea>
+                      <textarea maxlength="255" placeholder="Sua mensagem..." class="form-control" id="mensagem" name="mensagem" rows="5"></textarea>
                     </div>
-                    <button type="button" class="btn btn-outline-secondary btn-sm">Enviar</button>
+                    <button id="btnEnviar" type="button" class="btn btn-outline-secondary btn-sm">Enviar</button>
                   </div>
                 </div>
               </div>

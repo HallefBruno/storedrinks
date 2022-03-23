@@ -8,7 +8,7 @@
       <li class="nav-item mb-3">
         <a class="nav-link active" th:href="@{/}">
           <div class="icon-container" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${#authentication.name}">
-            <img class="img-profile" src="https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png" />
+            <img class="img-profile" th:src="@{/imagens/perfil-default.jpg}" /> <!-- https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png -->
             <div class="status-circle"></div>
             <p class="limit-text-profile" sec:authentication="name"></p>
           </div>
