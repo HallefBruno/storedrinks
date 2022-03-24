@@ -48,7 +48,7 @@
                               <label for="fornecedor" class="form-label">Fornecedor</label>
                               <select data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
                                 <option value=""></option>
-                                <option class="text-capitalize" th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
+                                <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
                               </select>
                             </div>
                             <div class="mb-3 col-12 col-md-4 col-lg-3">

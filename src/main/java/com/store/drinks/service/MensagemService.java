@@ -1,8 +1,6 @@
 
 package com.store.drinks.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.drinks.entidade.Mensagem;
 import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
@@ -10,15 +8,16 @@ import com.store.drinks.entidade.wrapper.DataTable;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
 import com.store.drinks.repository.MensagemRepository;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +38,21 @@ public class MensagemService {
     String tenant = usuarioService.usuarioLogado().getClienteSistema().getTenant();
     Long usuarioId = usuarioService.usuarioLogado().getId();
     return mensagemRepository.updateNotificarMensagem(tenant, usuarioId);
+  }
+  
+  @PreAuthorize("hasRole('LER_MENSAGENS')")
+  @Transactional
+  public void marcarComoLida(Long id) {
+    if(Objects.isNull(id) || id <= 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifacador inválido!");
+    }
+    String tenant = usuarioService.usuarioLogado().getClienteSistema().getTenant();
+    String destinatario = usuarioService.usuarioLogado().getEmail();
+    mensagemRepository.findByIdAndTenantAndDestinatario(id,tenant,destinatario).map(mensagem -> {
+      mensagem.setLida(Boolean.TRUE);
+      mensagemRepository.save(mensagem);
+      return Void.TYPE;
+    });
   }
   
   public Boolean existemMensagensNaoLidas() {

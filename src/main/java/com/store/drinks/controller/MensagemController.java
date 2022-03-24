@@ -17,6 +17,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,10 +78,16 @@ public class MensagemController {
     mensagemService.salvarMensagem(mensagem);
   }
   
-  @PostMapping("/notificado")
+  @PutMapping("/notificado")
   @ResponseStatus(HttpStatus.OK)
   public void marcarComoNotificado() {
     mensagemService.marcarComoNotificado();
+  }
+  
+  @PutMapping("/marcar-como-lida/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public void marcarComoLida(@PathVariable(required = true) Long id) {
+    mensagemService.marcarComoLida(id);
   }
   
 }

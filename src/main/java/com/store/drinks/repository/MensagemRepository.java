@@ -2,6 +2,7 @@ package com.store.drinks.repository;
 
 import com.store.drinks.entidade.Mensagem;
 import com.store.drinks.repository.querys.mensagem.MensagemRepositoryCustom;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,5 +17,7 @@ public interface MensagemRepository extends PagingAndSortingRepository<Mensagem,
   @Modifying
   @Query("update Mensagem men set men.notificado = true where men.notificado = false and men.tenant = :tenant and men.usuario.id = :id")
   int updateNotificarMensagem(@Param("tenant") String tenant, @Param("id") Long id);
-
+  
+  Optional<Mensagem> findByIdAndTenantAndDestinatario(Long id, String tenant, String email);
+  
 }

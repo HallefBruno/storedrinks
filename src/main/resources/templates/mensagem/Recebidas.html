@@ -3,7 +3,6 @@
   <head>
     <title>Mensagens Recebidas</title>
     <meta charset="UTF-8">
-    <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
     <style>
@@ -33,7 +32,7 @@
                   </div>
                 </div>
                 <div class="table-responsive setblockUI">
-                  <table id="mensagens" class="table table-hover caption-top">
+                  <table style="background-color: #fafafa"  id="mensagens" class="table table-hover caption-top ">
                     <caption>Mensagens recebidas</caption>
                     <thead>
                       <tr>
@@ -53,6 +52,7 @@
         </main>
       </div>
     </div>
+    <th:block th:replace="modal/ModalMensagem :: modalMensagem"></th:block>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
     <script th:src="@{/alldrink-js/mensagem/Recebidas.js}" type="text/javascript"></script>
   </body>

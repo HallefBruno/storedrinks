@@ -1,3 +1,5 @@
+/* global moment */
+
 function setDefaultsDataTable(parametros) {
   
   if(parametros.btnActions)  {
@@ -33,10 +35,45 @@ function setDefaultsDataTable(parametros) {
   });
 }
 
+jQuery.fn.dataTable.render.ellipsis = function (cutoff, wordbreak, escapeHtml) {
+  var esc = function (t) {
+    return t
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  };
+  return function (d, type, row) {
+    if (type !== 'display') {
+      return d;
+    }
+    if (typeof d !== 'number' && typeof d !== 'string') {
+      return d;
+    }
+    d = d.toString();
+    if (d.length <= cutoff) {
+      return d;
+    }
+    var shortened = d.substr(0, cutoff - 1);
+    if (wordbreak) {
+      shortened = shortened.replace(/\s([^\s]*)$/, '');
+    }
+    if (escapeHtml) {
+      shortened = esc(shortened);
+    }
+    return '<span class="ellipsis" title="' + esc(d) + '">' + shortened + '&#8230;</span>';
+  };
+};
+
+
 function mascaraStringTel(numero) {
   if (numero.length === 10) {
     return numero.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
   } else {
     return numero.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
   }
+}
+
+function formatDataHora(value) {
+  return moment(value).format("DD/MM/YYYY, HH:mm:ss");
 }
