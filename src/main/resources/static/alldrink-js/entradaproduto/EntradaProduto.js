@@ -93,6 +93,10 @@ $(function () {
       $("#qtdParcelas").focus();
       $("#qtdParcelas").attr("required", true);
       $("#qtdParcelas").attr("readonly", false);
+    } else {
+      $("#qtdParcelas").val(null);
+      $("#qtdParcelas").attr("required", false);
+      $("#qtdParcelas").attr("readonly", true);
     }
   });
 

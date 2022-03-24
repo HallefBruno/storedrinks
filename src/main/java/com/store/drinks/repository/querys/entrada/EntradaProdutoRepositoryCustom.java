@@ -10,4 +10,6 @@ public interface EntradaProdutoRepositoryCustom {
   public Page<EntradaProduto> filtrar(EntradasFilter filtro, Pageable pageable);
 
   public Page<Produto> filtrarProdutosSelect(String descricao, Pageable pageable);
+  
+  public Boolean temProdutoMesmoNumeroNota(String numeroNota);
 }

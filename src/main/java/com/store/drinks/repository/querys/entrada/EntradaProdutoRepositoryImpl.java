@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -112,5 +113,21 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
     typedQuery.setMaxResults(totalRegistrosPorPagina);
     Long count = rowsUtil.countRows(cb, query, entrada, manager);
     return new PageImpl<>(typedQuery.getResultList(), pageable, count);
+  }
+  
+  @Override
+  public Boolean temProdutoMesmoNumeroNota(String numeroNota) {
+    CriteriaBuilder cb = manager.getCriteriaBuilder();
+    CriteriaQuery<EntradaProduto> query = cb.createQuery(EntradaProduto.class);
+    Root<EntradaProduto> entrada = query.from(EntradaProduto.class);
+    List<Predicate> predicates = new ArrayList<>();
+    Predicate predicate;
+    predicate = cb.like(cb.upper(entrada.get("numeroNota")), "%" + numeroNota + "%");
+    predicates.add(predicate);
+    query.select(entrada);
+    query.where(predicates.toArray(new Predicate[]{}));
+    TypedQuery<EntradaProduto> typedQuery = manager.createQuery(query);
+    
+    return !typedQuery.getResultList().isEmpty();
   }
 }

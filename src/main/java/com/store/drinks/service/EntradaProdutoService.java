@@ -41,8 +41,12 @@ public class EntradaProdutoService {
   @Transactional
   public void salvar(EntradaProduto entradaProduto) {
     
-    if ( entradaProduto.getCodigoBarra().length() < 9 ) {
-      throw new NegocioException("Código de barras incompleto");
+    if ( entradaProduto.getNumeroNota().length() < 9 ) {
+      throw new NegocioException("Código de barras incompleto.");
+    }
+    
+    if (entradaProdutoRepository.temProdutoMesmoNumeroNota(entradaProduto.getNumeroNota())) {
+      throw new NegocioException("Código de barras já cadastrado no sistema.");
     }
     
     Produto produto = buscarProdutoPorCodBarra(entradaProduto.getCodigoBarra());
@@ -226,7 +230,7 @@ public class EntradaProdutoService {
     }
     throw new NegocioException("Código produto inválido!");
   }
-
+  
   public ResultSelectProdutos pesquisarProdutosAutoComplete(String descricao, String pagina) {
     ProdutoSelect2 produtoDTO = new ProdutoSelect2();
     ResultSelectProdutos resultSelectAutomoveis = new ResultSelectProdutos();
