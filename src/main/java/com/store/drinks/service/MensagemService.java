@@ -1,12 +1,17 @@
 
 package com.store.drinks.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.drinks.entidade.Mensagem;
 import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
 import com.store.drinks.entidade.wrapper.DataTable;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
 import com.store.drinks.repository.MensagemRepository;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,11 +47,12 @@ public class MensagemService {
     return mensagemRepository.existemMensagensNaoLidas(tenant, usuarioId);
   }
   
-  public DataTable<Mensagem> findAllByLida(Boolean lida, int draw, int start, int length) {
+  public DataTable<Mensagemdto> findAllByLida(Boolean lida, int draw, int start, int length) {
+    String email = usuarioService.usuarioLogado().getEmail();
     int page = start/length;
     Pageable pageable = PageRequest.of(page,length);
-    DataTable<Mensagem> dataTable = new DataTable<>();
-    Page<Mensagem> pageMensagens = mensagemRepository.findAllByLida(lida, pageable);
+    DataTable<Mensagemdto> dataTable = new DataTable<>();
+    Page<Mensagemdto> pageMensagens = mensagemRepository.findAllByLida(lida,email, pageable);
     dataTable.setData(pageMensagens.getContent());
     dataTable.setDraw(draw);
     dataTable.setStart(start);

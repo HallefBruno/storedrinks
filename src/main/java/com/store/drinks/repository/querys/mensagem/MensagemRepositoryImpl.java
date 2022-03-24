@@ -1,6 +1,7 @@
 package com.store.drinks.repository.querys.mensagem;
 
 import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -67,5 +68,38 @@ public class MensagemRepositoryImpl implements MensagemRepositoryCustom {
     Query query = manager.createNativeQuery(sql.toString());
     List<Boolean> booleans = (List<Boolean>) query.getResultList();
     return booleans.stream().anyMatch(bool -> bool.equals(Boolean.FALSE));
+  }
+
+  @Override
+  public Page<Mensagemdto> findAllByLida(Boolean lida,String remetente, Pageable pageable) {
+    StringBuilder sql = new StringBuilder();
+    StringBuilder sqlCount = new StringBuilder();
+    sqlCount.append(" select count(*) as numero_registro ");
+    sqlCount.append(" from( ");
+    sql.append(" select me.*, cs.nome_comercio as remetente ");
+    sql.append(" from mensagem me ");
+    sql.append(" inner join usuario u on (u.id = me.usuario_id) ");
+    sql.append(" inner join cliente_sistema cs on (cs.tenant = u.tenant) ");
+    sql.append(" where me.destinatario = '").append(remetente).append("' ");
+    sql.append(" and me.tenant = '").append(multitenancy.getTenantValue()).append("' ");
+    sql.append(" and me.lida = false ");
+    sql.append(" order by me.data_hora_mensagem_recebida desc ");
+    sqlCount.append(sql);
+    sqlCount.append(" )count ");
+    
+    Long count = null;
+    Query longQuery = manager.createNativeQuery(sqlCount.toString());
+    Object singleResult = longQuery.getSingleResult();
+    if (!ObjectUtils.isEmpty(singleResult)) {
+      count = Long.parseLong(singleResult.toString());
+    }
+    Query query = manager.createNativeQuery(sql.toString(), "Mensagemdto");
+    int paginaAtual = pageable.getPageNumber();
+    int totalRegistrosPorPagina = pageable.getPageSize();
+    int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+    query.setFirstResult(primeiroRegistro);
+    query.setMaxResults(totalRegistrosPorPagina);
+    return new PageImpl<>(query.getResultList(), pageable, count);
+    
   }
 }

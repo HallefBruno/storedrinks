@@ -3,7 +3,6 @@
 $(function () {
   
   const URI = $("#context").val();
-  const URL_USUARIOS = URI.concat("mensagens/usuarios");
   var dataSelect2 = null;
   var textMensagem = $("#mensagem");
   $("#destinatario").focus();

@@ -6,16 +6,27 @@ $(function () {
   
   var parametros = {
     columns: [
-      {data: "id", orderable: false, className: 'text-center'},
-      {data: "destinatario", orderable: false},
-      {data: "mensagem", orderable: false},
-      {data: "lida", orderable: false, className: 'text-center'},
-      {data: "dataHoraMensagemRecebida", orderable: false, className: 'text-center',
+      {data: "remetente", orderable: false,
+        render: function(data) {
+          return "<span class='sd-fw-bold__curso-mouse'>"+data+"</span>";
+        }
+      },
+      {data: "mensagem", orderable: false, width: "30px",
+        render: function(data) {
+          return "<span class='sd-fw-bold__curso-mouse sb-limit-text'>"+data+"</span>";
+        }
+      },
+      {data: "dataHoraMensagemRecebida", orderable: false,
         render: function (data,type,row,meta) {
-          return moment(data).format('dd/MM/yyyy, h:mm:ss a');
+          return "<span class='sd-fw-bold__curso-mouse'>"+moment(data).format('DD/MM/YYYY, hh:mm:ss')+"</span>";
         }
       }
     ],
+    
+    columnDefs: [
+      {className: "sb-limit-text", "targets": [0]}
+    ],
+    
     btnActions: false
   };
 
@@ -25,6 +36,11 @@ $(function () {
     ajax: {
       url: context + "mensagens/pesquisar/".concat($('#lidas').is(':checked'))
     }
+  });
+
+  $('#mensagens tbody').on('click', 'tr', function () {
+    var data = $("#mensagens").DataTable().row(this).data();
+    window.console.log(data);
   });
   
 });

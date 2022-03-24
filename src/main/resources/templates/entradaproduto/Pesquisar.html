@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
   </head>
-
 <body>
   <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
   <div class="container-fluid">
@@ -104,9 +103,9 @@
                       <tr th:each="entrada : ${pagina.conteudo}">
                         <td th:text="${entrada.id}"></td>
                         <td th:text="${entrada.produto.codigoBarra}"></td>
-                        <td class="limit-text text-capitalize" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
+                        <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
                         <td th:text="${entrada.numeroNota}"></td>
-                        <td class="limit-text text-capitalize" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
+                        <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Fornecedor" th:attr="data-bs-content=${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
                         <td style="text-align: center;" th:text="${#dates.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
                         <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
                     <th:block th:with="qtdEntrada=${entrada.novaQuantidade - entrada.quantidade}">

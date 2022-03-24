@@ -22,6 +22,7 @@ function setDefaultsDataTable(parametros) {
     processing: false,
     destroy: true,
     pageLength: 10,
+    responsive: true,
     info: true,
     lengthChange: false,
     language: {

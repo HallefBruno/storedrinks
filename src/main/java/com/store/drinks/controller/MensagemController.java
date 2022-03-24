@@ -3,6 +3,7 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Mensagem;
 import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
 import com.store.drinks.entidade.wrapper.DataTable;
 import com.store.drinks.service.MensagemService;
 import com.store.drinks.service.UsuarioService;
@@ -57,7 +58,7 @@ public class MensagemController {
   }
   
   @GetMapping("/pesquisar/{lida}")
-  public ResponseEntity<DataTable<Mensagem>> pesquisar(@PathVariable(required = true) Boolean lida, 
+  public ResponseEntity<DataTable<Mensagemdto>> pesquisar(@PathVariable(required = true) Boolean lida, 
     @RequestParam(name = "draw", required = false) Integer draw, 
     @RequestParam(name = "start", required = false) Integer start,  
     @RequestParam(name = "length", required = false) Integer length) {
