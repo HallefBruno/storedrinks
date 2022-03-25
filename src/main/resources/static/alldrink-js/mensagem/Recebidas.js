@@ -42,8 +42,8 @@ $(function () {
   });
 
   $("#mensagens tbody").on("click", "tr", function (e) {
-    e.stopImmediatePropagation();
-    var mensagem = $("#mensagens").DataTable().row(this).data();
+    var mensagem = null;
+    mensagem = $("#mensagens").DataTable().row(this).data();
     $(this).find("td").each(function () {
       $(this).removeClass("sd-fw-bold__cursor-mouse");
     });
@@ -54,13 +54,13 @@ $(function () {
     
     modalMensagem.modal('show');
     
-    modalMensagem.on("shown.bs.modal", function (e) {
+    modalMensagem.off("hidden.bs.modal").on("shown.bs.modal", function (e) {
       modalMensagem.find(".remetente").text(mensagem.remetente);
       modalMensagem.find(".dataHoraEnviada").text(formatDataHora(mensagem.dataHoraMensagemRecebida));
       modalMensagem.find(".mensagem").val(mensagem.mensagem);
     });
     
-    modalMensagem.on("hidden.bs.modal", function (e) {
+    modalMensagem.off("hidden.bs.modal").on("hidden.bs.modal", function (e) {
       $.ajax({
         url: context.concat("mensagens/marcar-como-lida/").concat(mensagem.id),
         method: 'PUT',
@@ -73,6 +73,6 @@ $(function () {
         }
       });
     });
+    $('#modalMensagem').dispose();
   });
-  
 });

@@ -252,7 +252,7 @@ StoreDrink.ShowToastContainsMessage = (function () {
           addEventsMouse();
           $("#btnClose").click(function (event) {
             event.stopPropagation();
-            $.post($("#context").val().concat("mensagens/notificado"), function () {});
+            //$.post($("#context").val().concat("mensagens/notificado"), function () {});
             $.ajax({
               url: $("#context").val().concat("mensagens/notificado"),
               method: 'PUT',

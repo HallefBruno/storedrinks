@@ -50,6 +50,7 @@ public class MensagemService {
     String destinatario = usuarioService.usuarioLogado().getEmail();
     mensagemRepository.findByIdAndTenantAndDestinatario(id,tenant,destinatario).map(mensagem -> {
       mensagem.setLida(Boolean.TRUE);
+      mensagem.setNotificado(Boolean.TRUE);
       mensagemRepository.save(mensagem);
       return Void.TYPE;
     });

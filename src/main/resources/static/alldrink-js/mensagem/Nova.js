@@ -76,7 +76,7 @@ $(function () {
       
       $.ajax({
         url: URI.concat("mensagens"),
-        type: "post",
+        type: "POST",
         dataType: 'json',
         contentType: "application/json",
         data: JSON.stringify(mensagem),
@@ -85,7 +85,7 @@ $(function () {
             var toast = new StoreDrink.Toast();
             toast.show('success','Atenção','Mensagem enviada com sucesso!','top-right');
             clearFormFocusSelect();
-            if(dataSelect2.id === $("meta[name=listing-page-url]").attr("content")) {
+            if(dataSelect2.id === Number($("meta[name=_flag]").attr("content"))) {
               var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
               showToastContainsMessage.enable();
             }
