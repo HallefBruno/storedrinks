@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, UsuarioRepositoryCustom {
-  Optional<Usuario> findByEmail(String email);
+  
+  @EntityGraph(attributePaths = {"clienteSistema"})
+  Optional<Usuario> findByEmailAndAtivoTrue(String email);
   
   @EntityGraph(attributePaths = {"clienteSistema"})
   List<Usuario> findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(String tenant, String email);

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -60,20 +59,24 @@ public class Usuario implements Serializable {
   private Boolean ativo;
 
   @Size(min = 1, message = "Selecione pelo menos um grupo")
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
   private Set<Grupo> grupos;
-
+  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
+  @JsonManagedReference
+  private Set<MensagensEnviadas> mensagensEnviadas;
+  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
+  @JsonManagedReference
+  private Set<MensagensRecebidas> mensagensRecebidas;
+  
   @Column(name = "data_nascimento")
   private LocalDate dataNascimento;
 
   @Column(nullable = false)
   private Boolean proprietario;
   
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", orphanRemoval = true)
-  @JsonManagedReference
-  private Set<Mensagem> mensagens;
-
   @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)
   @ManyToOne(fetch = FetchType.EAGER)
   @JsonBackReference
@@ -151,13 +154,20 @@ public class Usuario implements Serializable {
     this.proprietario = proprietario;
   }
 
-  public Set<Mensagem> getMensagens() {
-    return mensagens;
+  public Set<MensagensEnviadas> getMensagensEnviadas() {
+    return mensagensEnviadas;
   }
 
-  public void setMensagens(Set<Mensagem> mensagens) {
-    this.mensagens.clear();
-    this.mensagens.addAll(mensagens);
+  public void setMensagensEnviadas(Set<MensagensEnviadas> mensagensEnviadas) {
+    this.mensagensEnviadas = mensagensEnviadas;
+  }
+
+  public Set<MensagensRecebidas> getMensagensRecebidas() {
+    return mensagensRecebidas;
+  }
+
+  public void setMensagensRecebidas(Set<MensagensRecebidas> mensagensRecebidas) {
+    this.mensagensRecebidas = mensagensRecebidas;
   }
 
   public ClienteSistema getClienteSistema() {
@@ -168,6 +178,9 @@ public class Usuario implements Serializable {
     this.clienteSistema = clienteSistema;
   }
 
+  
+  
+  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {

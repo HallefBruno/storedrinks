@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepositoryCustom {
-  Optional<Usuario> porEmailEAtivo(String email);
+  Optional<Usuario> findByUserLogin(String email);
   List<String> permissoes(Usuario usuario);
-  
 }

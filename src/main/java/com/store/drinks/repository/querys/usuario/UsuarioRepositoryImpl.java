@@ -31,7 +31,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
 
   @Override
-  public Optional<Usuario> porEmailEAtivo(String email) {
+  public Optional<Usuario> findByUserLogin(String email) {
     return manager
       .createQuery("select u from Usuario u where lower(u.email) = lower(:email) and u.ativo = true", Usuario.class)
       .setParameter("email", email).getResultList().stream().findFirst();

@@ -7,6 +7,7 @@ import com.store.drinks.security.UsuarioSistema;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,10 @@ public class UsuarioService {
     return usuario;
   }
   
+  public Optional<Usuario> findByEmailAndAtivoTrue(String email) {
+    return usuarioRepository.findByEmailAndAtivoTrue(email);
+  }
+
   public List<Usuariodto> buscarUsuariosPorTenant() {
     var usuarioLogado = usuarioLogado();
     var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());

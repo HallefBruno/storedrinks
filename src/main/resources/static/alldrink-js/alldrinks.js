@@ -196,6 +196,10 @@ StoreDrink.LoadGif = (function () {
     } else if (url.includes("mensagens/destinatario")) {
       element.css("display", "block");
       return false;
+    } else if (url.includes("vendor/internationalisation/pt_br.json")) {
+      return false;
+    } else if (url.includes("mensagens/marcar-como-lida/")) {
+      return false;
     }
     return true;
   }
@@ -227,7 +231,7 @@ StoreDrink.AjaxError = (function () {
 StoreDrink.ShowToastContainsMessage = (function () {
   function ShowToastContainsMessage() {}
   
-  ShowToastContainsMessage.prototype.enable = function () {
+  ShowToastContainsMessage.prototype.showToast = function () {
     var html = 
       `<div id="liveRoot" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; opacity: 0.7">
         <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
@@ -252,7 +256,6 @@ StoreDrink.ShowToastContainsMessage = (function () {
           addEventsMouse();
           $("#btnClose").click(function (event) {
             event.stopPropagation();
-            //$.post($("#context").val().concat("mensagens/notificado"), function () {});
             $.ajax({
               url: $("#context").val().concat("mensagens/notificado"),
               method: 'PUT',
@@ -268,6 +271,10 @@ StoreDrink.ShowToastContainsMessage = (function () {
     });
   };
   
+  ShowToastContainsMessage.prototype.hideToast = function () {
+    $("#liveToast").hide();
+  };
+
   function addEventsMouse() {
     $("#liveRoot").mouseenter(function () {
       $("#liveRoot").css('opacity', '');
@@ -305,7 +312,6 @@ StoreDrink.ShowToastContainsMessage = (function () {
       $("#liveRoot").css('opacity', 0.8);
     });
   }
-  
   return ShowToastContainsMessage;
 }());
 
@@ -412,6 +418,6 @@ $(function () {
   ajaxError.enable();
   
   var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
-  showToastContainsMessage.enable();
+  showToastContainsMessage.showToast();
   
 });

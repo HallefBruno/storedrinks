@@ -1,4 +1,6 @@
-package com.store.drinks.repository.querys.mensagem;
+
+
+package com.store.drinks.repository.querys.mensagensRecebidas;
 
 import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
@@ -14,7 +16,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
-public class MensagemRepositoryImpl implements MensagemRepositoryCustom {
+
+public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepositoryCustom {
   
   @PersistenceContext
   private EntityManager manager;
@@ -60,11 +63,12 @@ public class MensagemRepositoryImpl implements MensagemRepositoryCustom {
   }
   
   @Override
-  public Boolean existemMensagensNaoLidas(String tenant, Long usuarioId) {
+  public Boolean existemMensagensNaoLidas(String destinatario) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" select men.notificado from mensagem men ");
-    sql.append(" where men.tenant = '").append(tenant).append("' ");
-    sql.append(" and men.usuario_id = ").append(usuarioId);
+    sql.append(" select men.notificado from mensagens_recebidas men ");
+    sql.append(" where men.destinatario = '").append(destinatario).append("' ");
+    sql.append(" and men.lida = false ");
+    sql.append(" and men.notificado = false; ");
     Query query = manager.createNativeQuery(sql.toString());
     List<Boolean> booleans = (List<Boolean>) query.getResultList();
     return booleans.stream().anyMatch(bool -> bool.equals(Boolean.FALSE));

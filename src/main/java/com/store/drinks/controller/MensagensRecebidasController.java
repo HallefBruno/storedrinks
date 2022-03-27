@@ -1,17 +1,18 @@
 
 package com.store.drinks.controller;
 
-import com.store.drinks.entidade.Mensagem;
+import com.store.drinks.entidade.MensagensRecebidas;
+import com.store.drinks.entidade.dto.Mensagemdto;
 import com.store.drinks.entidade.dto.Usuariodto;
-import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
-import com.store.drinks.entidade.wrapper.DataTable;
-import com.store.drinks.service.MensagemService;
+import com.store.drinks.entidade.wrapper.DataTableWrapper;
+import com.store.drinks.service.MensagensRecebidasService;
 import com.store.drinks.service.UsuarioService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,21 +28,24 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/mensagens")
 @RequiredArgsConstructor
-public class MensagemController {
+public class MensagensRecebidasController {
   
-  private final MensagemService mensagemService;
+  private final MensagensRecebidasService mensagensRecebidasService;
   private final UsuarioService usuarioService;
-
+  
+  @PreAuthorize("hasRole('LER_MENSAGEM')")
   @GetMapping("/recebidas")
   public ModelAndView pageIndex() {
     return new ModelAndView("mensagem/Recebidas");
   }
   
+  @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   @GetMapping("/nova")
   public ModelAndView pageNovaMensagem() {
     return new ModelAndView("mensagem/Nova"); 
   }
   
+  @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   @GetMapping("/usuarios")
   public ResponseEntity<List<Usuariodto>> listaUsuarioPorTenant() {
     var listaUsuarios = usuarioService.buscarUsuariosPorTenant();
@@ -51,43 +55,49 @@ public class MensagemController {
     return ResponseEntity.noContent().build();
   }
   
+  @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   @GetMapping("/destinatario")
   public ResponseEntity<?> pesquisarProdutosAutoComplete(
     @RequestParam(name = "q", required = false) String descricao,
     @RequestParam(name = "page", defaultValue = "0", required = true) String page) {
-    return new ResponseEntity<>(mensagemService.pesquisarComercioAutoComplete(descricao, page), HttpStatus.OK);
+    return new ResponseEntity<>(mensagensRecebidasService.pesquisarComercioAutoComplete(descricao, page), HttpStatus.OK);
   }
   
+  @PreAuthorize("hasRole('LER_MENSAGEM')")
   @GetMapping("/pesquisar/{lida}")
-  public ResponseEntity<DataTable<Mensagemdto>> pesquisar(@PathVariable(required = true) Boolean lida, 
+  public ResponseEntity<DataTableWrapper<MensagensRecebidas>> pesquisar(@PathVariable(required = true) Boolean lida, 
     @RequestParam(name = "draw", required = false) Integer draw, 
     @RequestParam(name = "start", required = false) Integer start,  
     @RequestParam(name = "length", required = false) Integer length) {
-    return ResponseEntity.ok(mensagemService.findAllByLida(lida, draw, start, length));
+    return ResponseEntity.ok(mensagensRecebidasService.findAllByLida(lida, draw, start, length));
   }
   
+  @PreAuthorize("hasRole('LER_MENSAGEM')")
   @GetMapping("/nao-lidas")
   public ResponseEntity<Void> existemMensagensNaoLidas() {
-    Boolean isMensagensNaoLidas = mensagemService.existemMensagensNaoLidas();
+    Boolean isMensagensNaoLidas = mensagensRecebidasService.existemMensagensNaoLidas();
     return isMensagensNaoLidas ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
   }
   
+  @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void enviarMensagem(@RequestBody(required = true) @Valid Mensagem mensagem) {
-    mensagemService.salvarMensagem(mensagem);
+  public void enviarMensagem(@RequestBody(required = true) @Valid Mensagemdto mensagem) {
+    mensagensRecebidasService.salvarMensagemEnviadaRecebida(mensagem);
   }
   
+  @PreAuthorize("hasRole('LER_MENSAGEM')")
   @PutMapping("/notificado")
   @ResponseStatus(HttpStatus.OK)
   public void marcarComoNotificado() {
-    mensagemService.marcarComoNotificado();
+    mensagensRecebidasService.marcarComoNotificado();
   }
   
+  @PreAuthorize("hasRole('LER_MENSAGEM')")
   @PutMapping("/marcar-como-lida/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void marcarComoLida(@PathVariable(required = true) Long id) {
-    mensagemService.marcarComoLida(id);
+    mensagensRecebidasService.marcarComoLida(id);
   }
   
 }

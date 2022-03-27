@@ -2,7 +2,7 @@ package com.store.drinks.entidade.wrapper;
 
 import java.util.List;
 
-public class DataTable<E> {
+public class DataTableWrapper<E> {
 
   private int draw;
   private int start;

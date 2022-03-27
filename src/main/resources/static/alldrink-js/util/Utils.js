@@ -74,6 +74,19 @@ function mascaraStringTel(numero) {
   }
 }
 
+function isEmpaty(object) {
+  if (({}).toString.call(object) === '[object Object]') {
+    return true;
+  } else if (({}).toString.call(object) === '[object Array]') {
+    if (object.length > 0) {
+      return true;
+    }
+  } else if (({}).toString.call(object) === '[object Null]') {
+    return false;
+  }
+  return false;
+}
+
 function formatDataHora(value) {
   return moment(value).format("DD/MM/YYYY, HH:mm:ss");
 }

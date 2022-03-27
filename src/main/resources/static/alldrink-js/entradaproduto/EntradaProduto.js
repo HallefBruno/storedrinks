@@ -8,14 +8,15 @@ $(function () {
   $("#novoValorVenda").mask("#,##0.00", {reverse: true});
   $("#valorTotal").mask("#,##0.00", {reverse: true});
 
-  var toast = "<div style='height: 44px; width: 100%;' class='toast align-items-center text-white bg-warning border-0 mt-1 mb-1' data-delay='5000' data-animation='true' data-autohide='true' role='alert' aria-live='assertive' aria-atomic='true'>" +
-          "<div class='d-flex'>" +
-          "<div class='toast-body'>" +
-          "<p class=''>Nenhum produto encontrado!</p>" +
-          "</div>" +
-          "<button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button>" +
-          "</div>" +
-          "</div>";
+  var toast = 
+    `<div style='height: 44px; width: 100%;' class='toast align-items-center text-white bg-warning border-0 mt-1 mb-1' data-delay='5000' data-animation='true' data-autohide='true' role='alert' aria-live='assertive' aria-atomic='true'>" +
+      "<div class='d-flex'>"
+        "<div class='toast-body'>"
+          "<p class=''>Nenhum produto encontrado!</p>"
+        "</div>"
+        "<button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button>" +
+      "</div>"
+    "</div>"`;
 
   $("form").submit(function () {
     if ($("#valorTotal").val()) {
@@ -188,7 +189,7 @@ function popularSelectProdutos() {
         };
       },
       processResults: function (data, params) {
-        params.page = params.page || 0;
+        params.page = params.page || 1;
         if (data.items === null) {
           $("form").trigger("reset");
           $("#produtos").val(null).trigger("change");

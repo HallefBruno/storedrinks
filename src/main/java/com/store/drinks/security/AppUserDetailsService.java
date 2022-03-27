@@ -1,7 +1,6 @@
 package com.store.drinks.security;
 
 import com.store.drinks.entidade.Usuario;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.service.LoginAttemptService;
 import java.util.Collection;
@@ -11,12 +10,14 @@ import java.util.Optional;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class AppUserDetailsService implements UserDetailsService {
@@ -34,9 +35,9 @@ public class AppUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     String ip = getClientIP();
     if (loginAttemptService.isBlocked(ip)) {
-      throw new NegocioException("Seu acesso foi bloqueado!");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Seu acesso foi bloqueado!");
     }
-    Optional<Usuario> usuarioOptional = usuarioRepository.porEmailEAtivo(email);
+    Optional<Usuario> usuarioOptional = usuarioRepository.findByUserLogin(email);
     Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
     return new UsuarioSistema(usuario, getPermissoes(usuario));
   }

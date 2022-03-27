@@ -9,6 +9,8 @@ $(function () {
   
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
+    $("#destinatario").val(null).trigger("change");
+    $("#destinatario").focus();
   });
 
   $("#destinatario").select2({
@@ -47,8 +49,8 @@ $(function () {
     templateSelection: function (usuario) {
       if (usuario && usuario.text !== "Destinatário") {
         var html =
-        `<span class='badge bg-secondary'> ${usuario.text} </span>
-         <span class='badge bg-secondary' text-dark'> ${usuario.nome} </span>`;
+        `<span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
+         <span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
         return html;
       }
       return $("<span class=''>" + usuario.text + "</span>");
@@ -67,11 +69,10 @@ $(function () {
     
     if (validacaoCampos(dataSelect2, textMensagem)) {
       
-      var mensagem = {
+      var mensagemdto = {
         tenant: dataSelect2.tenant,
         destinatario: dataSelect2.destinatario,
-        mensagem: textMensagem.val(),
-        usuario: {id:dataSelect2.id}
+        mensagem: textMensagem.val()
       };
       
       $.ajax({
@@ -79,7 +80,7 @@ $(function () {
         type: "POST",
         dataType: 'json',
         contentType: "application/json",
-        data: JSON.stringify(mensagem),
+        data: JSON.stringify(mensagemdto),
         statusCode: {
           201: function (response) {
             var toast = new StoreDrink.Toast();
@@ -87,7 +88,7 @@ $(function () {
             clearFormFocusSelect();
             if(dataSelect2.id === Number($("meta[name=_flag]").attr("content"))) {
               var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
-              showToastContainsMessage.enable();
+              showToastContainsMessage.showToast();
             }
           }
         },
@@ -104,8 +105,8 @@ $(function () {
 function templateResultUsuario(usuario) {
   if (usuario && usuario.text !== "Searching…") {
     var html = 
-    `<span class='badge bg-secondary'> ${usuario.text} </span>
-     <span class='badge bg-secondary'> ${usuario.nome} </span>`;
+    `<span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
+     <span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
     return html;
   }
   return $("<span>" + usuario.text + "</span>");
@@ -114,7 +115,7 @@ function templateResultUsuario(usuario) {
 function validacaoCampos(dataSelect2, textMensagem) {
   var isValida = true;
   var toast = new StoreDrink.Toast();
-  if (dataSelect2 === null || dataSelect2 === undefined) {
+  if (dataSelect2 === undefined || dataSelect2 === null) {
     $("#destinatario").addClass("is-invalid");
     toast.show('error','Atenção','Destinatário é obrigatório!','top-right');
     isValida = false;
