@@ -178,9 +178,6 @@ public class Usuario implements Serializable {
     this.clienteSistema = clienteSistema;
   }
 
-  
-  
-  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {
@@ -192,5 +189,4 @@ public class Usuario implements Serializable {
     this.nome = this.nome.toLowerCase();
     this.email = this.email.toLowerCase();
   }
-
 }

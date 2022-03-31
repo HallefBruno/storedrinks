@@ -112,17 +112,18 @@
                           <td style="text-align: center;" th:text="${qtdEntrada}"></td>
                         </th:block>
                         <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
-                        <td style="text-align: center;" th:text="${#numbers.formatCurrency(entrada.valorCusto)}"></td>
-                        <td style="text-align: center;" th:text="${'R' + #numbers.formatCurrency(entrada.valorVenda)}"></td>
-                        <td style="text-align: center;" th:text="${'R' + #numbers.formatCurrency(entrada.novoValorCusto)}"></td>
-                        <td style="text-align: center;" th:text="${'R' + #numbers.formatCurrency(entrada.novoValorVenda)}"></td>
-                        <td style="text-align: center;" th:text="${'R' + #numbers.formatCurrency(entrada.valorTotal)}"></td>
+                        <td style="text-align: center;" th:text="${{entrada.valorCusto}}"></td>
+                        <td style="text-align: center;" th:text="${{entrada.valorVenda}}"></td>
+                        <td style="text-align: center;" th:text="${{entrada.novoValorCusto}}"></td>
+                        <td style="text-align: center;" th:text="${{entrada.novoValorVenda}}"></td>
+                        <td style="text-align: center;" th:text="${{entrada.valorTotal}}"></td>
                         <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
-                        <td style="text-align: center;">
-                          <div th:switch="${entrada.formaPagamento}">
+                        <div th:switch="${entrada.formaPagamento}">
+                          <td style="text-align: center;">
                             <span th:case="${T(com.store.drinks.entidade.enuns.FormaPagamento).PARCELADO}" class="badge bg-primary">[[${entrada.qtdParcelas}]]</span>
-                          </div>
-                        </td>
+                            <span th:case="*">1</span>
+                          </td>
+                        </div>
                         <td style="text-align: center;">
                           <div th:switch="${entrada.situacaoCompra}">
                             <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" class="badge bg-primary">[[${entrada.situacaoCompra}]]</span>

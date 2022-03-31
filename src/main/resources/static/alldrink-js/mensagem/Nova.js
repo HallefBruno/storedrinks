@@ -9,8 +9,8 @@ $(function () {
   
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
-    $("#destinatario").val(null).trigger("change");
     $("#destinatario").focus();
+    $("#destinatario").val(null).trigger("change");
   });
 
   $("#destinatario").select2({

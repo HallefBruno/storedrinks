@@ -7,7 +7,6 @@ import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
-import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
@@ -16,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,18 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class EntradaProdutoService {
 
   private final EntradaProdutoRepository entradaProdutoRepository;
   private final ProdutoRepository produtoRepository;
   private final Multitenancy multitenancy;
-
-  @Autowired
-  public EntradaProdutoService(EntradaProdutoRepository entradaProdutoRepository, ProdutoRepository produtoRepository, FornecedorRepository fornecedorRepository, Multitenancy multitenancy) {
-    this.entradaProdutoRepository = entradaProdutoRepository;
-    this.produtoRepository = produtoRepository;
-    this.multitenancy = multitenancy;
-  }
 
   @Transactional
   public void salvar(EntradaProduto entradaProduto) {
@@ -172,7 +165,7 @@ public class EntradaProdutoService {
     if (opProduto.isPresent()) {
       return opProduto.get();
     }
-    throw new NegocioException("Produto não encontrado");
+    throw new NegocioException("Produto não encontrado!");
   }
 
   public Produto buscarProdutoPorCodBarra(String codBarra) {

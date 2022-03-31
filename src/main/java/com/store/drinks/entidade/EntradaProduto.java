@@ -2,6 +2,7 @@ package com.store.drinks.entidade;
 
 import com.store.drinks.entidade.enuns.FormaPagamento;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,7 +38,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @DynamicUpdate
 @Table(name = "entrada_produto")
 @EqualsAndHashCode(callSuper = false)
-public class EntradaProduto extends ETenant implements Serializable {
+public class EntradaProduto implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -125,7 +126,7 @@ public class EntradaProduto extends ETenant implements Serializable {
   @PreUpdate
   private void prePersistPreUpdate() {
     this.numeroNota = StringUtils.strip(this.numeroNota);
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
   }
 

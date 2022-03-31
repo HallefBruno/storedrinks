@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -15,16 +16,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
 @DynamicUpdate
-@EqualsAndHashCode(callSuper = false)
 @NamedQuery(query = "from Fornecedor f where f.cpfCnpj = ?1 and f.tenant = ?2 ", name = "find fornecedor")
-public class Fornecedor extends ETenant implements Serializable {
+public class Fornecedor implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +68,7 @@ public class Fornecedor extends ETenant implements Serializable {
     if (Objects.isNull(this.ativo)) {
       this.ativo = Boolean.FALSE;
     }
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
   }
 }

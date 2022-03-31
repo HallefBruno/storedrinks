@@ -89,7 +89,7 @@ StoreDrink.FormatarValor = (function () {
       style: 'currency',
       currency: 'BRL'
     });
-    window.console.log(formatter.format(teste));
+    //window.console.log(formatter.format(teste));
     //console.log(formatter.format(1234567.89)); // R$ 1.234.567,89
   };
   return MascaraMonetariaPrincipal;
@@ -193,12 +193,17 @@ StoreDrink.LoadGif = (function () {
       return false;
     } else if (url.includes("mensagens/nao-lidas")) {
       return false;
-    } else if (url.includes("mensagens/destinatario")) {
-      element.css("display", "block");
-      return false;
     } else if (url.includes("vendor/internationalisation/pt_br.json")) {
       return false;
     } else if (url.includes("mensagens/marcar-como-lida/")) {
+      return false;
+    } else if(url.includes("entradas/buscar/")) {
+      return false;
+    } else if (url.includes("mensagens/destinatario")) {
+      element.css("display", "block");
+      return false;
+    } else if(url.includes("entradas/produtos")) {
+      element.css("display", "block");
       return false;
     }
     return true;

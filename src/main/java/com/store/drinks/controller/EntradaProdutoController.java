@@ -10,7 +10,6 @@ import com.store.drinks.repository.EntradaProdutoRepository;
 import com.store.drinks.repository.querys.entrada.EntradasFilter;
 import com.store.drinks.service.EntradaProdutoService;
 import com.store.drinks.service.FornecedorService;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,17 +37,10 @@ public class EntradaProdutoController {
   private final EntradaProdutoService entradaProdutoService;
   private final EntradaProdutoRepository entradaProdutoRepository;
   private final FornecedorService fornecedorService;
-
+  
+  
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping
-  public ModelAndView pageIndex(EntradaProduto entradaProduto) {
-    ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
-    mv.addObject("fornecedores", fornecedorService.todos());
-    mv.addObject("formasPagamento", FormaPagamento.values());
-    mv.addObject("situacoesCompra", SituacaoCompra.values());
-    return mv;
-  }
-
-  @GetMapping("/nova")
   public ModelAndView pageNova(EntradaProduto entradaProduto) {
     ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
     mv.addObject("fornecedores", fornecedorService.todos());
@@ -109,7 +101,8 @@ public class EntradaProdutoController {
     @RequestParam(name = "page", defaultValue = "0", required = true) String page) {
     return new ResponseEntity<>(entradaProdutoService.pesquisarProdutosAutoComplete(descricao, page), HttpStatus.OK);
   }
-
+  
+  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/pesquisar")
   public ModelAndView pesqisar(EntradasFilter entradasFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
