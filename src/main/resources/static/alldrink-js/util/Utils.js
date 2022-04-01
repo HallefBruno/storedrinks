@@ -75,13 +75,22 @@ function mascaraStringTel(numero) {
 }
 
 function isEmpaty(object) {
+  console.log(object);
   if (({}).toString.call(object) === '[object Object]') {
     return true;
   } else if (({}).toString.call(object) === '[object Array]') {
     if (object.length > 0) {
       return true;
     }
+  } else if (({}).toString.call(object) === '[object String]' && object.length > 0) {
+    return true;
+  } else if (({}).toString.call(object) === '[object Date]') {
+    return true;
   } else if (({}).toString.call(object) === '[object Null]') {
+    return false;
+  } else if (({}).toString.call(object) === '[object Undefined]') {
+    return false;
+  } else if (({}).toString.call(object) === '[object String]' && object.length === 0) {
     return false;
   }
   return false;

@@ -32,14 +32,30 @@ function validarCampos() {
     return;
   }
   
+  let numeroNota = $("#numeroNota");
+  let fornecedor = $("#fornecedor");
+  let dataEmissao = $("#dataEmissao");
   
-//  idProduto = $("#produto").select2("data")[0].id;
-//  if(idProduto === undefined || idProduto === "") {
-//    $("#produto").addClass("is-invalid");
-//    toast.show('error','Atenção','Produto é obrigatório!','top-right');
-//  } else {
-//    $("#produto").removeClass("is-invalid");
-//  }
+  if(!isEmpaty(numeroNota.val())) {
+    numeroNota.addClass("is-invalid");
+    toast.show('error','Atenção','Número da nota é obritória!','top-right');
+  } else {
+    numeroNota.removeClass("is-invalid");
+  }
+  
+  if(!isEmpaty(fornecedor.val())) {
+    fornecedor.addClass("is-invalid");
+    toast.show('error','Atenção','Fornecedor é obrigatório!','top-right');
+  } else {
+    fornecedor.removeClass("is-invalid");
+  }
+  
+  if(!isEmpaty(dataEmissao.val())) {
+    dataEmissao.addClass("is-invalid");
+    toast.show('error','Atenção','Data de emissão é obrigatória!','top-right');
+  } else {
+    dataEmissao.removeClass("is-invalid");
+  }
 }
 
 function getProdutoEventCodBarra(URI) {
@@ -76,6 +92,7 @@ function getProdutoEventCodBarra(URI) {
           $("#valorCusto").focus();
           $("#valorVenda").focus();
           $("#quantidade").focus();
+          $("#produto").focus();
         }
       });
 
@@ -116,6 +133,7 @@ function produtoSelectionado(URI) {
         $("#valorCusto").focus();
         $("#valorVenda").focus();
         $("#quantidade").focus();
+        $("#produto").focus();
       } else {
         //clearFormShowMessage(toast);
       }
@@ -207,7 +225,6 @@ function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
   });
 }
 
-
 //function validarCampos() {
 //  $.each($("form")[0], function(){
 //    getValue = $(this)[0];
@@ -218,3 +235,11 @@ function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
 //    }
 //  });
 //}
+
+//  idProduto = $("#produto").select2("data")[0].id;
+//  if(idProduto === undefined || idProduto === "") {
+//    $("#produto").addClass("is-invalid");
+//    toast.show('error','Atenção','Produto é obrigatório!','top-right');
+//  } else {
+//    $("#produto").removeClass("is-invalid");
+//  }

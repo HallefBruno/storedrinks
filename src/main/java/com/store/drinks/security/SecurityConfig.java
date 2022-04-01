@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers("/imagens/**")
       .antMatchers("/novaconta/**");
   }
-
+  
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
