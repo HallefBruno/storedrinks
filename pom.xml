@@ -14,7 +14,7 @@
   <name>storedrinks</name>
   <description>Sistema de gestão de distribuidora de bebidas</description>
   <properties>
-    <java.version>17</java.version>
+    <java.version>11</java.version>
   </properties>
   <dependencies>
     <dependency>

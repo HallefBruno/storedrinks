@@ -1,4 +1,4 @@
-/* global StoreDrink */
+/* global StoreDrink, EnumEntradaProduto, moment */
 var toast = new StoreDrink.Toast();
 
 $(function () {
@@ -16,9 +16,38 @@ $(function () {
   $("#btnSalvar").click(function() {
     validarCampos();
     let entradaProduto = {};
+    
     $.each($("form").serializeArray(), function (i, field) {
-      entradaProduto[field.name] = field.value;
+      entradaProduto[field.name] = field.value === "" ? null : field.value;
     });
+    
+    let produto = {id:Number(entradaProduto.produto)};
+    let fornecedor = {id:Number(entradaProduto.fornecedor)};
+    
+    entradaProduto["produto"] = produto;
+    entradaProduto["fornecedor"] = fornecedor;
+    entradaProduto["dataEmissao"] = moment($("#dataEmissao").val()).format('YYYY-MM-DD');
+    
+    window.console.log(entradaProduto,produto);
+    
+    $.ajax({
+      url: URI.concat("entradas"),
+      type: "POST",
+      dataType: 'json',
+      contentType: "application/json",
+      data: JSON.stringify(entradaProduto),
+      statusCode: {
+        201: function (response) {
+          toast.show('success', 'Atenção', 'Mensagem enviada com sucesso!', 'top-right');
+        }
+      },
+      error: function (xhr) {
+        if (status >= 400) {
+          window.console.log(xhr);
+        }
+      }
+    });
+   
     window.console.log(entradaProduto);
   });
   
@@ -27,7 +56,7 @@ $(function () {
 function validarCampos() {
   
   let descricaoProdutoAtual = $("#descricaoProdutoAtual").val();
-  if(descricaoProdutoAtual === undefined || descricaoProdutoAtual === "") {
+  if(isEmpaty(descricaoProdutoAtual)) {
     toast.show('error','Atenção','É necessário selecionar um produto!','top-right');
     return;
   }
@@ -35,33 +64,53 @@ function validarCampos() {
   let numeroNota = $("#numeroNota");
   let fornecedor = $("#fornecedor");
   let dataEmissao = $("#dataEmissao");
+  let formaPagamento = $("#formaPagamento");
+  let qtdParcelas = $("#qtdParcelas");
   
-  if(!isEmpaty(numeroNota.val())) {
+  if(isEmpaty(numeroNota.val())) {
     numeroNota.addClass("is-invalid");
     toast.show('error','Atenção','Número da nota é obritória!','top-right');
   } else {
     numeroNota.removeClass("is-invalid");
   }
   
-  if(!isEmpaty(fornecedor.val())) {
+  if(isEmpaty(fornecedor.val())) {
     fornecedor.addClass("is-invalid");
     toast.show('error','Atenção','Fornecedor é obrigatório!','top-right');
   } else {
     fornecedor.removeClass("is-invalid");
   }
   
-  if(!isEmpaty(dataEmissao.val())) {
+  if(isEmpaty(dataEmissao.val())) {
     dataEmissao.addClass("is-invalid");
     toast.show('error','Atenção','Data de emissão é obrigatória!','top-right');
   } else {
     dataEmissao.removeClass("is-invalid");
+  }
+  
+  if(isEmpaty(formaPagamento.val())) {
+    formaPagamento.addClass("is-invalid");
+    toast.show('error','Atenção','Forma de pagamento é obrigatória!','top-right');
+  } else {
+    formaPagamento.removeClass("is-invalid");
+  }
+  
+  if(!isEmpaty(formaPagamento.val()) && formaPagamento.val() === EnumEntradaProduto.CARTAO_CREDITO) {
+    if(isEmpaty(qtdParcelas.val())) {
+      qtdParcelas.addClass("is-invalid");
+      toast.show('error','Atenção','Quantidade de parcelas é obrigatória!','top-right');
+    } else {
+      qtdParcelas.removeClass("is-invalid");
+    }
+  } else {
+    qtdParcelas.removeClass("is-invalid");
   }
 }
 
 function getProdutoEventCodBarra(URI) {
   $("#codigoBarra").on("focusout", function (event) {
     let codBarra = $("#codigoBarra").val();
-    if (codBarra !== undefined && codBarra !== null && codBarra !== "") {
+    if (!isEmpaty(codBarra)) {
       $.get(URI.concat(`entradas/buscar/produtoPorCodBarra/${codBarra}`), function (data) {
         if (data === undefined || data === null && codBarra !== "") {
           clearFormShowMessage();
@@ -95,11 +144,6 @@ function getProdutoEventCodBarra(URI) {
           $("#produto").focus();
         }
       });
-
-    } else if ($("#codigoBarra").val() === "") {
-      $("form").trigger("reset");
-      $("#produtos").val(null).trigger("change");
-      $("#situacaoCompra").val(null).trigger("change");
     }
   });
 }
@@ -223,6 +267,17 @@ function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
     multiple: false,
     closeOnSelect: true
   });
+  
+  $("#formaPagamento").on("select2:select", function (e) {
+    if(EnumEntradaProduto.CARTAO_CREDITO === e.params.data.id) {
+      $("#qtdParcelas").prop("readonly",false);
+      $("#qtdParcelas").focus();
+    } else {
+      $("#qtdParcelas").val("");
+      $("#qtdParcelas").prop("readonly",true);
+    }
+  });
+  
 }
 
 //function validarCampos() {
@@ -243,3 +298,10 @@ function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
 //  } else {
 //    $("#produto").removeClass("is-invalid");
 //  }
+
+
+//else if ($("#codigoBarra").val() === "") {
+//  $("form").trigger("reset");
+//  $("#produtos").val(null).trigger("change");
+//  $("#situacaoCompra").val(null).trigger("change");
+//}

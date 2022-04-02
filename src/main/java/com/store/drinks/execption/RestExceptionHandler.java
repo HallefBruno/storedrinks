@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     apiError.setStatus(status);
     return handleExceptionInternal(ex, apiError, headers, HttpStatus.BAD_REQUEST, request);
   }
+
+  @Override
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    ApiError apiError = new ApiError();
+    apiError.setMessage("Por favor, verifique o JSON enviado!");
+    apiError.setStatus(status);
+    return handleExceptionInternal(ex, apiError, headers, HttpStatus.BAD_REQUEST, request);
+  }
+  
+  
   
   @Data
   public class ApiError {

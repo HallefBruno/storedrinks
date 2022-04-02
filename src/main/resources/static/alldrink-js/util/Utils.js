@@ -75,27 +75,35 @@ function mascaraStringTel(numero) {
 }
 
 function isEmpaty(object) {
-  console.log(object);
   if (({}).toString.call(object) === '[object Object]') {
-    return true;
+    return false;
   } else if (({}).toString.call(object) === '[object Array]') {
     if (object.length > 0) {
-      return true;
+      return false;
     }
   } else if (({}).toString.call(object) === '[object String]' && object.length > 0) {
-    return true;
+    return false;
   } else if (({}).toString.call(object) === '[object Date]') {
-    return true;
+    return false;
   } else if (({}).toString.call(object) === '[object Null]') {
-    return false;
+    return true;
   } else if (({}).toString.call(object) === '[object Undefined]') {
-    return false;
+    return true;
   } else if (({}).toString.call(object) === '[object String]' && object.length === 0) {
-    return false;
+    return true;
   }
-  return false;
+  return true;
 }
 
 function formatDataHora(value) {
   return moment(value).format("DD/MM/YYYY, HH:mm:ss");
 }
+
+const EnumEntradaProduto = {
+  PIX: "PIX",
+  CARTAO_CREDITO: "CARTAO_CREDITO",
+  CARTAO_DEBITO: "CARTAO_DEBITO",
+  DINHEIRO: "DINHEIRO"
+};
+
+Object.freeze(EnumEntradaProduto);

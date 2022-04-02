@@ -24,10 +24,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 @RequestMapping("/entradas")
@@ -48,22 +50,12 @@ public class EntradaProdutoController {
     mv.addObject("situacoesCompra", SituacaoCompra.values());
     return mv;
   }
-
+  
   @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @PostMapping
-  public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, RedirectAttributes attributes) {
-    try {
-      if (result.hasErrors()) {
-        return pageNova(entradaProduto);
-      }
-      entradaProdutoService.salvar(entradaProduto);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
-      result.addError(error);
-      return pageNova(entradaProduto);
-    }
-    attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
-    return new ModelAndView("redirect:/entradas/nova");
+  public ResponseEntity<EntradaProduto> salvar(@Valid @RequestBody(required = true) EntradaProduto entradaProduto) {
+    entradaProdutoService.salvar(entradaProduto);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @PreAuthorize("hasRole('MANTER_ENTRADA')")
@@ -116,3 +108,20 @@ public class EntradaProdutoController {
 
 //@PreAuthorize("#username == authentication.principal.username")
 //@Secured("ADMIN")
+//ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedObjectId).toUri()
+//@PreAuthorize("hasRole('MANTER_ENTRADA')")
+//  @PostMapping
+//  public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, RedirectAttributes attributes) {
+//    try {
+//      if (result.hasErrors()) {
+//        return pageNova(entradaProduto);
+//      }
+//      entradaProdutoService.salvar(entradaProduto);
+//    } catch (NegocioException ex) {
+//      ObjectError error = new ObjectError("erro", ex.getMessage());
+//      result.addError(error);
+//      return pageNova(entradaProduto);
+//    }
+//    attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
+//    return new ModelAndView("redirect:/entradas/nova");
+//  }

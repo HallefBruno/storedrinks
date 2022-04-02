@@ -5,7 +5,6 @@ public enum FormaPagamento {
   PIX("Pix"),
   CARTAO_CREDITO("Cartão crédito"),
   CARTAO_DEBITO("Cartão débito"),
-  PARCELADO("Parcelado"),
   DINHEIRO("Dinheiro");
 
   private final String value;

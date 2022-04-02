@@ -1,12 +1,14 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.EntradaProduto;
+import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
+import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
@@ -29,14 +31,17 @@ public class EntradaProdutoService {
 
   private final EntradaProdutoRepository entradaProdutoRepository;
   private final ProdutoRepository produtoRepository;
+  private final FornecedorRepository fornecedorRepository;
   private final Multitenancy multitenancy;
 
   @Transactional
   public void salvar(EntradaProduto entradaProduto) {
     Produto produto = buscarProdutoPorCodBarra(entradaProduto.getCodigoBarra());
+    Fornecedor fornecedor = fornecedorRepository.getById(entradaProduto.getFornecedor().getId());
     setarNovosValores(entradaProduto, produto);
-    produto = produtoRepository.save(produto);
-    entradaProduto.setProduto(produto);
+    var produtoSalvo = produtoRepository.save(produto);
+    entradaProduto.setProduto(produtoSalvo);
+    entradaProduto.setFornecedor(fornecedor);
     entradaProdutoRepository.save(entradaProduto);
   }
 

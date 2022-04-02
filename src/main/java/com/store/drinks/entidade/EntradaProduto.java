@@ -5,7 +5,7 @@ import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,8 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
@@ -28,7 +26,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,7 +34,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @DynamicUpdate
 @Table(name = "entrada_produto")
-@EqualsAndHashCode(callSuper = false)
 public class EntradaProduto implements Serializable {
 
   @Id
@@ -56,14 +52,13 @@ public class EntradaProduto implements Serializable {
   private String numeroNota;
 
   @NotNull(message = "Fornecedor do produto não pode ser null!")
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Fornecedor fornecedor;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @Temporal(TemporalType.DATE)
   @Column(name = "data_emissao", nullable = false)
-  private Date dataEmissao;
+  private LocalDate dataEmissao;
 
   @NotNull(message = "Quantidade não pode ser null!")
   @Min(value = 0, message = "Quantidade mínima")

@@ -218,15 +218,26 @@ StoreDrink.AjaxError = (function () {
     $(document).ajaxError(function (event, jqXHR, settings) {
       if (jqXHR.status === 0) {
       } else if (jqXHR.status === 400) {
-        $.each(jqXHR.responseJSON.errors, function (i, item) {
+        window.console.log(jqXHR.responseJSON);
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errors && jqXHR.responseJSON.errors.length > 0) {
+          $.each(jqXHR.responseJSON.errors, function (i, item) {
+            $.toast({
+              heading: `${item.field}`,
+              text: `${item.message}`,
+              position: 'top-right',
+              loader: false,
+              icon: 'error'
+            });
+          });
+        } else if (jqXHR.responseJSON.message) {
           $.toast({
-            heading: `${item.field}`,
-            text: `${item.message}`,
+            heading: `${"Atenção!"}`,
+            text: `${jqXHR.responseJSON.message}`,
             position: 'top-right',
             loader: false,
             icon: 'error'
           });
-        });
+        }
       }
     }.bind(this));
   };

@@ -28,7 +28,7 @@ $(function () {
   $("#mensagens tbody").on("click", "tr", function (e) {
     var mensagem = null;
     mensagem = $("#mensagens").DataTable().row(this).data();
-    if(isEmpaty(mensagem)) {
+    if(!isEmpaty(mensagem)) {
       var modalMensagem = $('#modalMensagem');
       modalMensagem.modal('show');
 
