@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
   <head>
     <title>Pesquisa de produtos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <th:block th:replace="fragments/CssFragment :: css"></th:block>
-</head>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+  </head>
 <body>
   <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
   <div class="container-fluid">
@@ -118,9 +118,9 @@
                         </div>
                         <div class="col-sm-9 text-secondary">
                           <div class="input-group">
-                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorCusto)}">
+                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo" type="text" readonly="true" class="form-control" th:value="${{produto.valorCusto}}">
                             <span class="input-group-text">::</span>
-                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de venda" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(produto.valorVenda)}">
+                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de venda" type="text" readonly="true" class="form-control" th:value="${{produto.valorVenda}}">
                           </div>
                         </div>
                       </div>
@@ -132,11 +132,11 @@
                         <div class="col-sm-9 text-secondary">
                           <div class="input-group">
                             <th:block th:with="lucroP=${produto.valorVenda - produto.valorCusto}">
-                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucroP)}">
+                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto" type="text" readonly="true" class="form-control" th:value="${{lucroP}}">
                             </th:block>
                             <span class="input-group-text">::</span>
                             <th:block th:with="lucroR=${(produto.valorVenda - produto.valorCusto) * produto.quantidade}">
-                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro real" type="text" readonly="true" class="form-control" th:value="${#numbers.formatCurrency(lucroR)}">
+                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro real" type="text" readonly="true" class="form-control" th:value="${{lucroR}}">
                             </th:block>
                           </div>
                         </div>

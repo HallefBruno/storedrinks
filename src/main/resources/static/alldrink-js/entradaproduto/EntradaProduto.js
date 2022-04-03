@@ -12,52 +12,63 @@ $(function () {
   iniciarSelectFornecedorSituacaoCompraFormaPagamento();
   getProdutoEventCodBarra(URI);
   
-  
   $("#btnSalvar").click(function() {
-    validarCampos();
-    let entradaProduto = {};
-    
-    $.each($("form").serializeArray(), function (i, field) {
-      entradaProduto[field.name] = field.value === "" ? null : field.value;
-    });
-    
-    let produto = {id:Number(entradaProduto.produto)};
-    let fornecedor = {id:Number(entradaProduto.fornecedor)};
-    
-    entradaProduto["produto"] = produto;
-    entradaProduto["fornecedor"] = fornecedor;
-    entradaProduto["dataEmissao"] = moment($("#dataEmissao").val()).format('YYYY-MM-DD');
-    
-    window.console.log(entradaProduto,produto);
-    
-    $.ajax({
-      url: URI.concat("entradas"),
-      type: "POST",
-      dataType: 'json',
-      contentType: "application/json",
-      data: JSON.stringify(entradaProduto),
-      statusCode: {
-        201: function (response) {
-          toast.show('success', 'Atenção', 'Mensagem enviada com sucesso!', 'top-right');
-        }
-      },
-      error: function (xhr) {
-        if (status >= 400) {
-          window.console.log(xhr);
-        }
+    if(validarCampos()) {
+
+      let entradaProduto = {};
+      
+      $.each($("form").serializeArray(), function (i, field) {
+        entradaProduto[field.name] = field.value === "" ? null : field.value;
+      });
+
+      let produto = {id:Number(entradaProduto.produto)};
+      let fornecedor = {id:Number(entradaProduto.fornecedor)};
+
+      entradaProduto["produto"] = produto;
+      entradaProduto["fornecedor"] = fornecedor;
+      entradaProduto["dataEmissao"] = moment($("#dataEmissao").val()).format('YYYY-MM-DD');
+      
+      if(!isEmpaty(entradaProduto.novoValorCusto)) {
+        let novoValorCusto = entradaProduto.novoValorCusto.replace(",","");
+        entradaProduto["novoValorCusto"] = novoValorCusto;
       }
-    });
-   
-    window.console.log(entradaProduto);
+      
+      if(!isEmpaty(entradaProduto.novoValorVenda)) {
+        let novoValorVenda = entradaProduto.novoValorVenda.replace(",","");
+        entradaProduto["novoValorVenda"] = novoValorVenda;
+      }
+      
+      $.ajax({
+        url: URI.concat("entradas"),
+        type: "POST",
+        dataType: 'json',
+        contentType: "application/json",
+        data: JSON.stringify(entradaProduto),
+        statusCode: {
+          201: function (response) {
+            toast.show('success', 'Atenção', 'Entrada salva com sucesso!', 'top-right');
+            clearForm();
+          }
+        },
+        error: function (xhr) {
+          if (status >= 400) {
+            window.console.log(xhr);
+          }
+        }
+      });
+      window.console.log(entradaProduto);
+    }
   });
-  
 });
 
 function validarCampos() {
   
+  let isCamposValidos = true;
   let descricaoProdutoAtual = $("#descricaoProdutoAtual").val();
+  
   if(isEmpaty(descricaoProdutoAtual)) {
     toast.show('error','Atenção','É necessário selecionar um produto!','top-right');
+    isCamposValidos = false;
     return;
   }
   
@@ -66,10 +77,12 @@ function validarCampos() {
   let dataEmissao = $("#dataEmissao");
   let formaPagamento = $("#formaPagamento");
   let qtdParcelas = $("#qtdParcelas");
+  let situacaoCompra = $("#situacaoCompra");
   
   if(isEmpaty(numeroNota.val())) {
     numeroNota.addClass("is-invalid");
     toast.show('error','Atenção','Número da nota é obritória!','top-right');
+    isCamposValidos = false;
   } else {
     numeroNota.removeClass("is-invalid");
   }
@@ -77,6 +90,7 @@ function validarCampos() {
   if(isEmpaty(fornecedor.val())) {
     fornecedor.addClass("is-invalid");
     toast.show('error','Atenção','Fornecedor é obrigatório!','top-right');
+    isCamposValidos = false;
   } else {
     fornecedor.removeClass("is-invalid");
   }
@@ -84,6 +98,7 @@ function validarCampos() {
   if(isEmpaty(dataEmissao.val())) {
     dataEmissao.addClass("is-invalid");
     toast.show('error','Atenção','Data de emissão é obrigatória!','top-right');
+    isCamposValidos = false;
   } else {
     dataEmissao.removeClass("is-invalid");
   }
@@ -91,20 +106,31 @@ function validarCampos() {
   if(isEmpaty(formaPagamento.val())) {
     formaPagamento.addClass("is-invalid");
     toast.show('error','Atenção','Forma de pagamento é obrigatória!','top-right');
+    isCamposValidos = false;
   } else {
     formaPagamento.removeClass("is-invalid");
+  }
+  
+  if(isEmpaty(situacaoCompra.val())) {
+    situacaoCompra.addClass("is-invalid");
+    toast.show('error','Atenção','Situação da compra é obrigatória!','top-right');
+    isCamposValidos = false;
+  } else {
+    situacaoCompra.removeClass("is-invalid");
   }
   
   if(!isEmpaty(formaPagamento.val()) && formaPagamento.val() === EnumEntradaProduto.CARTAO_CREDITO) {
     if(isEmpaty(qtdParcelas.val())) {
       qtdParcelas.addClass("is-invalid");
       toast.show('error','Atenção','Quantidade de parcelas é obrigatória!','top-right');
+      isCamposValidos = false;
     } else {
       qtdParcelas.removeClass("is-invalid");
     }
-  } else {
-    qtdParcelas.removeClass("is-invalid");
   }
+
+  console.log(isCamposValidos);
+  return isCamposValidos;
 }
 
 function getProdutoEventCodBarra(URI) {
@@ -113,7 +139,7 @@ function getProdutoEventCodBarra(URI) {
     if (!isEmpaty(codBarra)) {
       $.get(URI.concat(`entradas/buscar/produtoPorCodBarra/${codBarra}`), function (data) {
         if (data === undefined || data === null && codBarra !== "") {
-          clearFormShowMessage();
+          clearForm();
           $("#codigoBarra").focus();
           toast.show('info','Atenção','Nenhum produto encontrado!','top-right');
         }
@@ -239,11 +265,12 @@ function styleTemplateResult(produto) {
   return $("<span>" + produto.text + "</span>");
 }
 
-function clearFormShowMessage() {
+function clearForm() {
   $("form").trigger("reset");
   $("#produto").val(null).trigger("change");
   $("#situacaoCompra").val(null).trigger("change");
   $("#formaPagamento").val(null).trigger("change");
+  $("#fornecedor").val(null).trigger("change");
 }
 
 function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
