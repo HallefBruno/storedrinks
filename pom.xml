@@ -11,6 +11,7 @@
   <groupId>com.store.drinks</groupId>
   <artifactId>storedrinks</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
   <name>storedrinks</name>
   <description>Sistema de gestão de distribuidora de bebidas</description>
   <properties>
