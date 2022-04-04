@@ -18,7 +18,11 @@ $(function () {
     paging: false,
     info: false,
     responsive: true,
-    lengthChange: false
+    lengthChange: false,
+    scrollX: true,
+    language: {
+      url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
+    }
   });
   $("#entradas").DataTable().columns.adjust().draw();
 });

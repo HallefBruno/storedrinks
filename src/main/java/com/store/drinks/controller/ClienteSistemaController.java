@@ -4,8 +4,7 @@ import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.ClienteSistemaService;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,19 +18,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/clienteSistema")
+@RequiredArgsConstructor
+@PreAuthorize("hasRole('SUPER_USER')")
 public class ClienteSistemaController {
 
-  @Autowired
-  private ClienteSistemaService clienteSistemaService;
+  private final ClienteSistemaService clienteSistemaService;
 
-  @PreAuthorize("hasRole('SUPER_USER')")
   @GetMapping("/novo")
   public String index(ClienteSistema clienteSistema, Model model) {
     model.addAttribute("clienteSistema", clienteSistema);
     return "clientesistema/Novo";
   }
 
-  @PreAuthorize("hasRole('SUPER_USER')")
   @GetMapping
   public ModelAndView novo(ClienteSistema clienteSistema) {
     ModelAndView modelAndView = new ModelAndView("clientesistema/Novo");
@@ -39,14 +37,12 @@ public class ClienteSistemaController {
     return modelAndView;
   }
 
-  @PreAuthorize("hasRole('SUPER_USER')")
   @GetMapping("/pesquisar")
   public String pesquisar(ClienteSistema clienteSistema, Model model) {
     model.addAttribute("clienteSistema", clienteSistema);
     return "clientesistema/Pesquisar";
   }
 
-  @PreAuthorize("hasRole('SUPER_USER')")
   @PostMapping("/salvar")
   public ModelAndView salvar(@Valid ClienteSistema clienteSistema, BindingResult result, Model model, RedirectAttributes attributes) {
     try {
@@ -60,7 +56,7 @@ public class ClienteSistemaController {
       return novo(clienteSistema);
     }
     attributes.addFlashAttribute("mensagem", "Novo cliente sistema cadastrado com sucesso!");
-    return new ModelAndView("redirect:/clienteSistema", HttpStatus.CREATED);
+    return new ModelAndView("redirect:/clienteSistema");
   }
 
 }

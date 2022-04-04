@@ -1,6 +1,7 @@
 package com.store.drinks.security;
 
 import com.store.drinks.service.LoginAttemptService;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -19,11 +20,10 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
   @Override
   public void onApplicationEvent(final AuthenticationSuccessEvent authenticationSuccessEvent) {
     final String xfHeader = request.getHeader("X-Forwarded-For");
-    if (xfHeader == null) {
+    if (Objects.isNull(xfHeader)) {
       loginAttemptService.loginSucceeded(request.getRemoteAddr());
     } else {
       loginAttemptService.loginSucceeded(xfHeader.split(",")[0]);
     }
   }
-
 }

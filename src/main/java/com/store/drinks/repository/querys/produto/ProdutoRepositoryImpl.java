@@ -113,7 +113,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     query.setParameter(1, produto.getDescricaoProduto());
     query.setParameter(2, produto.getCodigoBarra());
     query.setParameter(3, produto.getCodProduto());
-    query.setParameter(4, produto.getTenantValue());
+    query.setParameter(4, produto.getTenant());
     List<Produto> resultado = query.getResultList();
     if (!resultado.isEmpty()) {
       if (resultado.size() == 1 && Objects.isNull(produto.getId())) {
@@ -125,5 +125,4 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
       }
     }
   }
-
 }

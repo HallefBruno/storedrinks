@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -16,17 +17,16 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
 @DynamicUpdate
-@EqualsAndHashCode(callSuper = false)
 @NamedQuery(query = "from Produto p where (p.descricaoProduto = ?1 or p.codigoBarra = ?2 or p.codProduto = ?3) and p.tenant = ?4 ",name = "find produto")
-public class Produto extends ETenant implements Serializable {
+public class Produto implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,18 +36,21 @@ public class Produto extends ETenant implements Serializable {
   @NotBlank(message = "Código de barra não pode ter espaços em branco!")
   @NotEmpty(message = "Código de barra não pode ser vazio!")
   @NotNull(message = "Código de barra não pode ser null!")
+  @Size(max = 30, min = 3, message = "Limite mínimo de caracter é 3 e máximo 30")
   @Column(length = 30, nullable = true, name = "codigo_barra")
   private String codigoBarra;
 
   @NotBlank(message = "Código do produto não pode ter espaços em branco!")
   @NotEmpty(message = "Código do produto não pode ser vazio!")
   @NotNull(message = "Código do produto não pode ser null!")
+  @Size(max = 30, min = 3, message = "Limite mínimo de caracter é 3 e máximo 30")
   @Column(length = 30, nullable = true, name = "codigo_produto")
   private String codProduto;
 
   @NotBlank(message = "Descrição do produto não pode ter espaços em branco!")
   @NotEmpty(message = "Descrição do produto não pode ser vazio!")
   @NotNull(message = "Descrição do produto não pode ser null!")
+  @Size(max = 255, message = "Limite máximo de caracter é 255")
   @Column(length = 255, name = "descricao_produto", nullable = false)
   private String descricaoProduto;
 
@@ -83,17 +86,10 @@ public class Produto extends ETenant implements Serializable {
     this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
     this.descricaoProduto = this.descricaoProduto.toLowerCase();
     this.codProduto = StringUtils.strip(this.codProduto);
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
     if (Objects.isNull(this.ativo)) {
       this.ativo = Boolean.FALSE;
     }
   }
 }
-//final Locale brLocale = new Locale("pt", "BR");
-//final NumberFormat brFormat = NumberFormat.getCurrencyInstance(brLocale);
-//System.out.println(brFormat.format(amount));
-//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-//@ManyToOne
-//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
-//private ClienteSistema clienteSistema;

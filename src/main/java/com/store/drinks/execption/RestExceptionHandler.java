@@ -8,10 +8,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -35,7 +39,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, apiError, headers, HttpStatus.BAD_REQUEST, request);
   }
   
+  @ExceptionHandler(value = { ResponseStatusException.class })
+  protected ResponseEntity<Object> responseStatusException(ResponseStatusException ex, WebRequest request) {
+    ApiError apiError = new ApiError();
+    apiError.setMessage(ex.getReason());
+    apiError.setStatus(ex.getStatus());
+    return new ResponseEntity(apiError, ex.getStatus());
+  }
   
+  @ExceptionHandler(value  = { NegocioException.class })
+  protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
+    ApiError apiError = new ApiError();
+    apiError.setMessage(ex.getMessage());
+    apiError.setStatus(HttpStatus.CONFLICT);
+    return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
+  }
   
   @Data
   public class ApiError {

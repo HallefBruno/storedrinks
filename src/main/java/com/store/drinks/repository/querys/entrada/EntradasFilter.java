@@ -1,6 +1,6 @@
 package com.store.drinks.repository.querys.entrada;
 
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class EntradasFilter {
   private String fornecedor;
   private String codBarra;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date dataEmissao;
+  private LocalDate dataEmissao;
 
 }

@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .rememberMe().rememberMeParameter("remember-me");
   }
     
-    @Bean
+  @Bean
   public AccessDeniedHandler accessDeniedHandler() {
     return new CustomAccessDeniedHandler();
   }

@@ -22,8 +22,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,9 @@ public class EntradaProdutoService {
 
   @Transactional
   public void salvar(EntradaProduto entradaProduto) {
+    
+    entradaProdutoRepository.findByNumeroNota(entradaProduto.getNumeroNota()).ifPresent(e->{numeroNotaInvalidoException();});
+    
     Produto produto = buscarProdutoPorCodBarra(entradaProduto.getCodigoBarra());
     Fornecedor fornecedor = fornecedorRepository.getById(entradaProduto.getFornecedor().getId());
     setarNovosValores(entradaProduto, produto);
@@ -208,5 +213,9 @@ public class EntradaProdutoService {
     BigDecimal itemCost = valorCusto.multiply(new BigDecimal(quantidade));
     BigDecimal totalCost = new BigDecimal(BigInteger.ZERO);
     return totalCost.add(itemCost);
+  }
+
+  private void numeroNotaInvalidoException() {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Número da nota inválido!");
   }
 }

@@ -6,18 +6,16 @@ import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ValidarClienteRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@RequiredArgsConstructor
 public class NovaContaClienteSistema {
-
-  @Autowired
-  private ValidarClienteRepository clienteRepository;
-
-  @Autowired
-  private ClienteSistemaService clienteSistemaService;
+  
+  private final ValidarClienteRepository clienteRepository;
+  private final ClienteSistemaService clienteSistemaService;
 
   @Transactional
   public void salvaValidarCliente(String cpfCnpj) {

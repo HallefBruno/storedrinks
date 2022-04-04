@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +17,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -24,8 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "abrir_caixa")
 @DynamicUpdate
-@EqualsAndHashCode(callSuper = false)
-public class AbrirCaixa extends ETenant implements Serializable {
+public class AbrirCaixa implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +54,7 @@ public class AbrirCaixa extends ETenant implements Serializable {
   @PrePersist
   @PreUpdate
   private void prePersistPreUpdate() {
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
   }
 }

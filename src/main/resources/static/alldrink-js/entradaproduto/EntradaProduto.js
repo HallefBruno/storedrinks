@@ -56,7 +56,6 @@ $(function () {
           }
         }
       });
-      window.console.log(entradaProduto);
     }
   });
 });
@@ -124,12 +123,15 @@ function validarCampos() {
       qtdParcelas.addClass("is-invalid");
       toast.show('error','Atenção','Quantidade de parcelas é obrigatória!','top-right');
       isCamposValidos = false;
+    } else if (Number(qtdParcelas.val()) <= 0) {
+      qtdParcelas.addClass("is-invalid");
+      toast.show('error','Atenção','Quantidade de parcelas é inválida!','top-right');
+      isCamposValidos = false;
     } else {
       qtdParcelas.removeClass("is-invalid");
     }
   }
 
-  console.log(isCamposValidos);
   return isCamposValidos;
 }
 
@@ -167,7 +169,7 @@ function getProdutoEventCodBarra(URI) {
           $("#valorCusto").focus();
           $("#valorVenda").focus();
           $("#quantidade").focus();
-          $("#produto").focus();
+          $("#numeroNota").focus();
         }
       });
     }

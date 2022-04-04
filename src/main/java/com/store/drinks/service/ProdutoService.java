@@ -32,7 +32,7 @@ public class ProdutoService {
   @Transactional
   public void update(Produto update, Long codigo) {
     if (Objects.isNull(codigo)) {
-      throw new NegocioException("Código não pode ser null!");
+      throw new NegocioException("Identificador inválido!");
     }
     update.setId(codigo);
     produtoRepository.verificarExistenciaProduto(update);
@@ -40,7 +40,7 @@ public class ProdutoService {
     if (optionalProdutoAtual.isPresent()) {
       Produto atual = optionalProdutoAtual.get();
       if (!Objects.equals(atual.getVersaoObjeto(), update.getVersaoObjeto())) {
-        throw new NegocioException("Erro de concorrência. Esse produto já foi alterado anteriormente.");
+        throw new NegocioException("Houve uma alteração neste produto, faça uma nova busca");
       }
       BeanUtils.copyProperties(update, atual, "id");
       produtoRepository.save(atual);
@@ -53,7 +53,7 @@ public class ProdutoService {
       produtoRepository.delete(produto);
       produtoRepository.flush();
     } catch (Exception e) {
-      throw new NegocioException("Impossível apagar produto!");
+      throw new NegocioException("Não foi possível excluir o produto!");
     }
   }
 

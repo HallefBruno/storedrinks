@@ -7,10 +7,9 @@ import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.FornecedorService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -27,10 +26,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("fornecedor")
+@RequiredArgsConstructor
+@PreAuthorize("hasRole('MANTER_FORNECEDOR')")
 public class FornecedorController {
 
-  @Autowired
-  private FornecedorService fornecedorService;
+  private final FornecedorService fornecedorService;
 
   @GetMapping
   public ModelAndView pageIndex(Fornecedor fornecedor) {
@@ -42,7 +42,6 @@ public class FornecedorController {
     return new ModelAndView("fornecedor/Novo");
   }
 
-  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
   @PostMapping("salvar")
   public ModelAndView salvar(@Valid Fornecedor fornecedor, BindingResult result, Model model, RedirectAttributes attributes) {
     try {
@@ -56,10 +55,9 @@ public class FornecedorController {
       return pageIndex(fornecedor);
     }
     attributes.addFlashAttribute("mensagem", "Fornecedor salvo com sucesso!");
-    return new ModelAndView("redirect:/fornecedor", HttpStatus.CREATED);
+    return new ModelAndView("redirect:/fornecedor");
   }
 
-  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
   @PostMapping("update/{codigo}")
   public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Fornecedor fornecedor, BindingResult result, RedirectAttributes attributes) {
     try {
@@ -73,7 +71,7 @@ public class FornecedorController {
       return pageNovo(fornecedor);
     }
     attributes.addFlashAttribute("mensagem", "Fornecedor alterado com sucesso!");
-    return new ModelAndView("redirect:/fornecedor", HttpStatus.OK);
+    return new ModelAndView("redirect:/fornecedor");
   }
 
   @GetMapping("pesquisar")
@@ -84,7 +82,6 @@ public class FornecedorController {
     return mv;
   }
 
-  @PreAuthorize("hasRole('MANTER_FORNECEDOR')")
   @DeleteMapping("{codigo}")
   public ResponseEntity<?> excluir(@PathVariable("codigo") Fornecedor fornecedor) {
     try {

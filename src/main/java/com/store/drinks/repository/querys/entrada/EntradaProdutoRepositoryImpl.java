@@ -106,7 +106,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
     predicates.add(predicate);
 
     query.select(entrada);
-    query.where(predicates.toArray(new Predicate[]{}));
+    query.where(predicates.toArray(Predicate[]::new));
     TypedQuery<EntradaProduto> typedQuery = manager.createQuery(query);
     typedQuery.setFirstResult(primeiroRegistro);
     typedQuery.setMaxResults(totalRegistrosPorPagina);

@@ -13,9 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 public class TenantInterceptor implements HandlerInterceptor {
   
-  //private @Autowired MensagemService mensagemService;
-  
   @Override
+  @SuppressWarnings("null")
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken) && Objects.nonNull(authentication)) {

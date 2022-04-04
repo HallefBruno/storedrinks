@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -64,7 +63,7 @@ public class ProdutoController {
       return pageNovo(produto);
     }
     attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
-    return new ModelAndView("redirect:/produtos/novo", HttpStatus.CREATED);
+    return new ModelAndView("redirect:/produtos/novo");
   }
 
   @PreAuthorize("hasRole('MANTER_PRODUTO')")
@@ -81,7 +80,7 @@ public class ProdutoController {
       return pageNovo(produto);
     }
     attributes.addFlashAttribute("mensagem", "Produto alterado com sucesso!");
-    return new ModelAndView("redirect:/produtos/novo", HttpStatus.OK);
+    return new ModelAndView("redirect:/produtos/novo");
   }
 
   @GetMapping("pesquisar")
