@@ -12,6 +12,15 @@ $(document).ready(function () {
       $("#divLoading").addClass("loading");
     }
   });
+  
+  $("li.nav-item a.nav-link").mouseover(function () {
+    $(this).prop("style","color: #ffff; background: #8451d6");
+  });
+  
+  $("li.nav-item a.nav-link").mouseout(function () {
+    $(this).attr("style","");
+  });
+  
 });
 
 //setTimeout(function () {
