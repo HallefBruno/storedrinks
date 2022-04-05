@@ -1,0 +1,40 @@
+<html lang="pt-BR">
+  <head>
+    <title>About page</title>
+    <meta charset="UTF-8">
+    <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .container {
+        width: auto;
+        max-width: 680px;
+        padding: 0 15px;
+      }
+    </style>
+  </head>
+  <body class="d-flex flex-column h-100">
+    <main class="flex-shrink-0">
+      <div class="container">
+        <p class="lead mt-5">Ambiente do sistema: [[${ambiente}]]</p>
+      </div>
+    </main>
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">storedrinks</span>
+      </div>
+    </footer>
+    <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+  </body>
+</html>
