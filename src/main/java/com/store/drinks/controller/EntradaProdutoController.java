@@ -3,7 +3,7 @@ package com.store.drinks.controller;
 import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Produto;
-import com.store.drinks.entidade.enuns.FormaPagamento;
+import com.store.drinks.entidade.enuns.TipoPagamento;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
@@ -44,7 +44,7 @@ public class EntradaProdutoController {
   public ModelAndView pageNova(EntradaProduto entradaProduto) {
     ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
     mv.addObject("fornecedores", fornecedorService.todos());
-    mv.addObject("formasPagamento", FormaPagamento.values());
+    mv.addObject("formasPagamento", TipoPagamento.values());
     mv.addObject("situacoesCompra", SituacaoCompra.values());
     return mv;
   }

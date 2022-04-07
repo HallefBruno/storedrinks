@@ -10,7 +10,7 @@ $(function () {
   $("#destinatario").on("select2:open", function (e) {
     $(".select2-search__field")[0].focus();
     $("#destinatario").focus();
-    $("#destinatario").val(null).trigger("change");
+    //$("#destinatario").val(null).trigger("change");
   });
 
   $("#destinatario").select2({
@@ -49,8 +49,8 @@ $(function () {
     templateSelection: function (usuario) {
       if (usuario && usuario.text !== "Destinatário") {
         var html =
-        `<span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
-         <span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
+        `<span class='badge bg-secondary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
+         <span class='badge bg-secondary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
         return html;
       }
       return $("<span class=''>" + usuario.text + "</span>");
@@ -103,10 +103,10 @@ $(function () {
 });
 
 function templateResultUsuario(usuario) {
-  if (usuario && usuario.text !== "Searching…") {
+  if (usuario && !usuario.text.includes("Buscando")) {
     var html = 
-    `<span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
-     <span class='badge bg-primary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
+    `<span class='badge bg-secondary fw-normal' style='font-size: 12px;'> ${usuario.text} </span>
+     <span class='badge bg-secondary fw-normal' style='font-size: 12px;'> ${usuario.destinatario} </span>`;
     return html;
   }
   return $("<span>" + usuario.text + "</span>");

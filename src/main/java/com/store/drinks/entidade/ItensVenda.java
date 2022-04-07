@@ -1,7 +1,9 @@
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,17 +17,13 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Data
 @Entity
 @Table(name = "itens_venda")
 @DynamicUpdate
-@EqualsAndHashCode(callSuper = false)
-public class ItensVenda extends ETenant implements Serializable {
+public class ItensVenda implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +34,8 @@ public class ItensVenda extends ETenant implements Serializable {
   @JoinColumn(nullable = false)
   private Produto produto;
 
-  @NotNull(message = "Quantidade do produto não pode ser null!")
-  @Min(value = 1, message = "Quantidade mínima")
+  @NotNull(message = "Quantidade do produto é obrigatória!")
+  @Min(value = 1, message = "Quantidade inválida!")
   @Column(nullable = false)
   private Integer quantidade;
 
@@ -52,11 +50,70 @@ public class ItensVenda extends ETenant implements Serializable {
   @PrePersist
   @PreUpdate
   private void prePersistPreUpdate() {
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
   }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Produto getProduto() {
+    return produto;
+  }
+
+  public void setProduto(Produto produto) {
+    this.produto = produto;
+  }
+
+  public Integer getQuantidade() {
+    return quantidade;
+  }
+
+  public void setQuantidade(Integer quantidade) {
+    this.quantidade = quantidade;
+  }
+
+  public Venda getVenda() {
+    return venda;
+  }
+
+  public void setVenda(Venda venda) {
+    this.venda = venda;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 47 * hash + Objects.hashCode(this.id);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final ItensVenda other = (ItensVenda) obj;
+    return Objects.equals(this.id, other.id);
+  }
+  
 }
-//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-//@ManyToOne
-//private ClienteSistema clienteSistema;
-//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")

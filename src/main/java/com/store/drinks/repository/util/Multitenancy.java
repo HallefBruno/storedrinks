@@ -15,7 +15,7 @@ public class Multitenancy {
 
   public String getTenantValue() {
     this.request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    return request.getAttribute(Tenant.nome.value()).toString();
+    return request.getAttribute(Tenant.NAME.value()).toString();
   }
 
 }

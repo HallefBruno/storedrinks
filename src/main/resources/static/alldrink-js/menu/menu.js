@@ -14,7 +14,7 @@ $(document).ready(function () {
   });
   
   $("li.nav-item a.nav-link").mouseover(function () {
-    $(this).prop("style","color: #ffff; background: #8451d6");
+    $(this).prop("style","color: #56008f; background: #f5f5f5; font-weight: 500");
   });
   
   $("li.nav-item a.nav-link").mouseout(function () {

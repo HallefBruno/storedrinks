@@ -78,7 +78,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
       predicates.add(predicate);
     }
 
-    predicate = cb.and(cb.equal(cb.upper(fornecedor.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+    predicate = cb.and(cb.equal(cb.upper(fornecedor.get(Tenant.NAME.value())), multitenancy.getTenantValue().toUpperCase()));
     predicates.add(predicate);
 
     query.select(fornecedor);

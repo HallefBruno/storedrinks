@@ -55,7 +55,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
       predicateOr = cb.or(predicateCodBarra, predicateCodProduto, descricaoProduto);
     }
 
-    Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+    Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.NAME.value())), multitenancy.getTenantValue().toUpperCase()));
 
     query.select(produto);
     query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
@@ -102,7 +102,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
       predicates.add(pdDataInicio);
     }
 
-    predicate = cb.and(cb.equal(cb.upper(entrada.get(Tenant.nome.value())), multitenancy.getTenantValue().toUpperCase()));
+    predicate = cb.and(cb.equal(cb.upper(entrada.get(Tenant.NAME.value())), multitenancy.getTenantValue().toUpperCase()));
     predicates.add(predicate);
 
     query.select(entrada);

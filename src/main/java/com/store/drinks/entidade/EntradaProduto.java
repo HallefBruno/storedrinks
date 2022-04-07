@@ -1,6 +1,5 @@
 package com.store.drinks.entidade;
 
-import com.store.drinks.entidade.enuns.FormaPagamento;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
@@ -29,6 +28,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.store.drinks.entidade.enuns.FormaPagamento;
 
 @Data
 @Entity
@@ -97,7 +97,7 @@ public class EntradaProduto implements Serializable {
   @Column(nullable = false, name = "novo_valor_venda")
   private BigDecimal novoValorVenda;
 
-  @NotNull(message = "Forma de pagamento não pode ser null!")
+  @NotNull(message = "Forma de pagamento é obrigatória!")
   @Column(length = 80, name = "forma_pagamento", nullable = false)
   @Enumerated(EnumType.STRING)
   private FormaPagamento formaPagamento;

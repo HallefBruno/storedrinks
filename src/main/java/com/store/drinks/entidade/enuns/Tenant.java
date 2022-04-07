@@ -2,7 +2,7 @@ package com.store.drinks.entidade.enuns;
 
 public enum Tenant {
 
-  nome("tenant");
+  NAME("tenant");
 
   private final String value;
 

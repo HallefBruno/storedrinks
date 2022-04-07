@@ -21,7 +21,7 @@ public class TenantInterceptor implements HandlerInterceptor {
       if (Objects.nonNull(authentication.getPrincipal())) {
         Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
         if (Objects.nonNull(usuario)) {
-          request.setAttribute(Tenant.nome.value(), usuario.getClienteSistema().getTenant());
+          request.setAttribute(Tenant.NAME.value(), usuario.getClienteSistema().getTenant());
           return true;
         }
       }

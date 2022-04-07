@@ -1,60 +1,64 @@
 package com.store.drinks.entidade;
 
-import com.store.drinks.entidade.enuns.FormaPagamento;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Data
 @Entity
 @Table(name = "movimentacao_caixa")
 @DynamicUpdate
-@EqualsAndHashCode(callSuper = false)
-public class MovimentacaoCaixa extends ETenant implements Serializable {
+public class MovimentacaoCaixa implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
+  
+  @NotNull(message = "Valor recebido é obrigatório!")
+  @Min(value = 0, message = "Valor recebido não pode ser negativo!")
+  @Column(name = "valor_recebido", nullable = false)
+  private BigDecimal valorRecebido;
+  
+  @NotNull(message = "Valor de troco é obrigatório!")
+  @Min(value = 0, message = "Valor mínimo não pode ser negativo!")
+  @Column(name = "valor_troco", nullable = false)
+  private BigDecimal valorTroco;
+  
+  @NotNull(message = "Valor desconto é obrigatório!")
+  @Min(value = 0, message = "Valor de desconto não pode ser negativo!")
+  @Column(name = "valor_desconto", nullable = false)
+  private BigDecimal valorDesconto;
+  
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
+  @JsonBackReference
+  private Set<FormaPagamento> formaPagamento;
 
-  @Min(value = 0, message = "Valor mínimo")
-  @Column(name = "valor_entrada", nullable = false)
-  private BigDecimal valorEntrada;
-
-  @Min(value = 0, message = "Valor mínimo")
-  @Column(name = "valor_saida", nullable = false)
-  private BigDecimal valorSaida;
-
-  @NotNull(message = "Forma de pagamento não pode ser null!")
-  @Enumerated(EnumType.STRING)
-  @Column(name = "forma_pagamento", nullable = false)
-  private FormaPagamento formaPagamento;
-
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "abrir_caixa", nullable = false)
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(nullable = false)
   private AbrirCaixa abrirCaixa;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(nullable = false)
   private Venda venda;
 
@@ -64,11 +68,105 @@ public class MovimentacaoCaixa extends ETenant implements Serializable {
   @PrePersist
   @PreUpdate
   private void prePersistPreUpdate() {
-    this.tenant = getTenantValue();
+    this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
+    if(Objects.isNull(this.valorRecebido)) {
+      this.valorRecebido = BigDecimal.ZERO;
+    }
+    
+    if(Objects.isNull(this.valorTroco)) {
+      this.valorTroco = BigDecimal.ZERO;
+    }
+    
+    if(Objects.isNull(valorDesconto)) {
+      this.valorDesconto = BigDecimal.ZERO;
+    }
   }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 89 * hash + Objects.hashCode(this.id);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final MovimentacaoCaixa other = (MovimentacaoCaixa) obj;
+    return Objects.equals(this.id, other.id);
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public BigDecimal getValorRecebido() {
+    return valorRecebido;
+  }
+
+  public void setValorRecebido(BigDecimal valorRecebido) {
+    this.valorRecebido = valorRecebido;
+  }
+
+  public BigDecimal getValorTroco() {
+    return valorTroco;
+  }
+
+  public void setValorTroco(BigDecimal valorTroco) {
+    this.valorTroco = valorTroco;
+  }
+
+  public BigDecimal getValorDesconto() {
+    return valorDesconto;
+  }
+
+  public void setValorDesconto(BigDecimal valorDesconto) {
+    this.valorDesconto = valorDesconto;
+  }
+
+  public Set<FormaPagamento> getFormaPagamento() {
+    return formaPagamento;
+  }
+
+  public void setFormaPagamento(Set<FormaPagamento> formaPagamento) {
+    this.formaPagamento = formaPagamento;
+  }
+
+  public AbrirCaixa getAbrirCaixa() {
+    return abrirCaixa;
+  }
+
+  public void setAbrirCaixa(AbrirCaixa abrirCaixa) {
+    this.abrirCaixa = abrirCaixa;
+  }
+
+  public Venda getVenda() {
+    return venda;
+  }
+
+  public void setVenda(Venda venda) {
+    this.venda = venda;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
+  
 }
-//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-//@ManyToOne
-//private ClienteSistema clienteSistema;
-//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")

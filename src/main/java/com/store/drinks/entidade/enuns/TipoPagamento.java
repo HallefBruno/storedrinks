@@ -1,7 +1,7 @@
 package com.store.drinks.entidade.enuns;
 
-public enum FormaPagamento {
-  
+public enum TipoPagamento {
+
   PIX("Pix"),
   CARTAO_CREDITO("Cartão crédito"),
   CARTAO_DEBITO("Cartão débito"),
@@ -9,7 +9,7 @@ public enum FormaPagamento {
 
   private final String value;
 
-  private FormaPagamento(String value) {
+  private TipoPagamento(String value) {
     this.value = value;
   }
 
