@@ -19,7 +19,7 @@ public class ModelAndViewException {
     String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
     model.addAttribute("errorMessage", msg);
     model.addAttribute("path", redirect);
-    return "error";
+    return "Error";
   }
 
   @ExceptionHandler(NullPointerException.class)
@@ -29,9 +29,9 @@ public class ModelAndViewException {
     String redirect = servPath.substring(0, servPath.indexOf("/", 2));
     model.addAttribute("errorMessage", "Erro grave, por favor entrar em contato com admin do sistema!");
     model.addAttribute("path", redirect);
-    return "error";
+    return "Error";
   }
-
+  
 //    @ExceptionHandler(NegocioException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    public String badRequest(Exception ex, final Model model, HttpServletRequest request) {

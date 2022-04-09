@@ -1,11 +1,13 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.AbrirCaixa;
+import com.store.drinks.execption.CaixaAbertoPorUsuarioException;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.AbrirCaixaRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +32,12 @@ public class AbrirCaixaService {
   }
 
   public boolean abrirCaixaPorUsuarioLogado() {
-    Optional<AbrirCaixa> caixaAberto = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
-    return caixaAberto.isPresent();
+    try {
+      Optional<AbrirCaixa> caixaAberto = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+      return caixaAberto.isPresent();
+    } catch (IncorrectResultSizeDataAccessException ex) {
+      throw new CaixaAbertoPorUsuarioException("Não é possível realizar a venda, pois existe mais de um caixa aberto para este usuário");
+    }
   }
 
 }

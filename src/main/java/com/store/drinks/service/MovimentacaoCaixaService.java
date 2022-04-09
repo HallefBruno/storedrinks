@@ -10,11 +10,9 @@ import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.Venda;
 import com.store.drinks.entidade.enuns.TipoPagamento;
-import com.store.drinks.repository.FormaPagamentoRepository;
-import com.store.drinks.repository.ItensVendaRepository;
+import com.store.drinks.repository.AbrirCaixaRepository;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
-import com.store.drinks.repository.VendaRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -27,9 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MovimentacaoCaixaService {
   
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
-  private final VendaRepository vendaRepository;
-  private final ItensVendaRepository itensVendaRepository;
-  private final FormaPagamentoRepository formaPagamentoRepository;
+  private final AbrirCaixaRepository abrirCaixaRepository;
   private final UsuarioService usuarioService;
   private final ProdutoRepository produtoRepository;
   
@@ -50,6 +46,8 @@ public class MovimentacaoCaixaService {
     abrirCaixa.setTenant(tenant);
     abrirCaixa.setValorInicialTroco(BigDecimal.TEN);
     abrirCaixa.setUsuario(usuario);
+    
+    abrirCaixaRepository.save(abrirCaixa);
     
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setTenant(tenant);

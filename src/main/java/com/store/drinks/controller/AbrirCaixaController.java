@@ -7,6 +7,7 @@ import com.store.drinks.service.AbrirCaixaService;
 import com.store.drinks.service.ProdutoService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/pdv")
 @PreAuthorize("hasRole('MANTER_PDV')")
-public class PdvController {
+public class AbrirCaixaController {
 
   @Autowired
   private AbrirCaixaService abrirCaixaService;
@@ -37,7 +38,7 @@ public class PdvController {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
       return new ModelAndView("redirect:/pdv/abrirCaixa");
     }
-    return new ModelAndView("redirect:/pdv/vendas");
+    return new ModelAndView("venda/RealizarVenda");
   }
 
   @GetMapping("/abrirCaixa")
@@ -47,6 +48,9 @@ public class PdvController {
 
   @GetMapping("/vendas")
   public ModelAndView vendas(Venda venda) {
+    if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
+      return new ModelAndView("redirect:/pdv/abrirCaixa");
+    }
     return new ModelAndView("venda/RealizarVenda");
   }
 
