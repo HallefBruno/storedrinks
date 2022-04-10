@@ -82,18 +82,9 @@ StoreDrink.Security = (function () {
 
 }());
 
-StoreDrink.FormatarValor = (function () {
-  function MascaraMonetariaPrincipal() {}
-  MascaraMonetariaPrincipal.prototype.enable = function (teste) {
-    const formatter = new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    });
-    //window.console.log(formatter.format(teste));
-    //console.log(formatter.format(1234567.89)); // R$ 1.234.567,89
-  };
-  return MascaraMonetariaPrincipal;
-}());
+
+let formatter = new Intl.NumberFormat('pt-BR', {style: 'currency',currency: 'BRL'});
+
 
 StoreDrink.Mask = (function () {
   function Mask() {
@@ -409,6 +400,14 @@ $(function () {
 
   $('[data-bs-toggle="popover"]').popover();
   $('[data-bs-toggle="tooltip"]').tooltip();
+  
+  let url = $(location).attr("href");
+  console.log(url);
+  if(url.includes("localhost") || url.includes("127.0.0.1") && $("#leftClick").val() === undefined) {
+    $(document).bind("contextmenu", function (e) {
+      return false;
+    });
+  }
     
   var dialogo = new StoreDrink.DialogoExcluir();
   dialogo.iniciar();
@@ -433,10 +432,7 @@ $(function () {
   
   var mask = new StoreDrink.Mask();
   mask.enable();
-  
-  var maskPrincipal = new StoreDrink.FormatarValor();
-  maskPrincipal.enable("121212.00");
-  
+
   var ajaxError = new StoreDrink.AjaxError();
   ajaxError.enable();
   

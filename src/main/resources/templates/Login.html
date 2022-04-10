@@ -95,6 +95,11 @@
             hideAfter: 8000
           });
         }
+        if(!url.includes("localhost") && !url.includes("127.0.0.1")) {
+          $(document).bind("contextmenu", function (e) {
+            return false;
+          });
+        }
       });
     </script>
   </body>

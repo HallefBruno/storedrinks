@@ -3,6 +3,9 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <input type="hidden" name="context" id="context" th:value="@{/}" />
+  <th:block sec:authorize="hasRole('SUPER_USER')">
+  <input type="hidden" name="leftClick" id="leftClick" th:value="true" />
+  </th:block>
   <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/dataTables.bootstrap5.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/responsive.dataTables.min.css}" rel="stylesheet" type="text/css"/>

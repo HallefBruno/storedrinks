@@ -1,7 +1,8 @@
-/* global StoreDrink */
+/* global StoreDrink, formatter */
 
 let mensagem = new StoreDrink.Mensagem();
 let listProdutos = [];
+let produto = {};
 let quantidadeEstoqueAtual = 0;
 
 $(function () {
@@ -37,7 +38,7 @@ function popularSelectProdutos() {
   });
   
   $("#produtos").on("select2:select", function (e) {
-    const produto = e.params.data;
+    produto = e.params.data;
     window.console.log(produto);
     quantidadeEstoqueAtual = Number(produto.quantidade);
     $("#descricaoProduto").val(produto.descricaoProduto);
@@ -45,7 +46,9 @@ function popularSelectProdutos() {
     $("#codProduto").val(produto.codProduto);
     $("#valorVenda").val("R$ " + produto.valorVenda);
     $("#qtdEstoque").val(produto.quantidade);
+    $("#quantidade").val(1);
     $("#quantidade").focus();
+    $("#quantidade").select();
   });
   
   $("#produtos").on("select2:unselecting", function (e) {
@@ -139,7 +142,7 @@ function qtdAtualMaiorQtdVenda() {
       bgColor: '#000000',
       textColor: '#ffffff',
       position: 'top-right',
-      hideAfter: 7000,
+      hideAfter: 5000,
       loader: false
     });
     $("#quantidade").val("");
@@ -149,30 +152,47 @@ function qtdAtualMaiorQtdVenda() {
 }
 
 function addProduto() {
-  var produto = {};
+  let prod = {};
   if ($("#descricaoProduto").val() && qtdAtualMaiorQtdVenda()) {
-    var valorUni = Number($("#valorVenda").val());
-    var quantidade = Number($("#quantidade").val());
-    if (quantidade === 0) {
-      quantidade = quantidade + 1;
-    }
-    produto = {
+    let valorVenda = Number(produto.valorVenda);
+    let quantidade = Number($("#quantidade").val());
+    
+    prod = {
       descricaoProduto: $("#descricaoProduto").val(),
       codigoBarra: $("#codigoBarra").val(),
       codProduto: $("#codProduto").val(),
-      valorVenda: valorUni.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}),
+      valorVenda: formatter.format(valorVenda),
       quantidade: quantidade,
-      valorTotal: (quantidade * $("#valorVenda").val()).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
+      valorTotal: formatter.format((quantidade * valorVenda))
     };
     
-    listProdutos.push(produto);
-    //popularTable(listProdutos);
+    listProdutos.push(prod);
+    popularTable(listProdutos);
     clearFormFocusSelect();
 
   } else if ($("#descricaoProduto").val().length === 0) {
     clearFormFocusSelect();
     mensagemToast("Por favor selecione um item!","#000000","#ffffff");
   }
+}
+
+function popularTable(listProdutos) {
+  $("#itensVenda").DataTable().clear().draw();
+  $.each(listProdutos, function (index, produto) {
+    var htmlbtnGroup = `
+      <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
+          <button data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btnDiminuirQuantidade btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
+          <button data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btnAumentarQuantidade btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+          <button data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btnRemoverItemVenda btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+      </div>`;
+    $("#itensVenda").DataTable().row.add([
+      produto.descricaoProduto,
+      produto.valorVenda,
+      produto.quantidade,
+      produto.valorTotal,
+      htmlbtnGroup
+    ]).draw(false);
+  });
 }
 
 function mensagemToast(text, bgColor, textColor) {
@@ -182,13 +202,7 @@ function mensagemToast(text, bgColor, textColor) {
     bgColor: `${bgColor}`,
     textColor: `${textColor}`,
     position: 'top-right',
-    hideAfter: 7000,
+    hideAfter: 5000,
     loader: false
   });
 }
-
-
-//if (containsAttInList(produto, produto.codigoBarra, listProdutos)) {
-//  mensagemToast("Este produto ja foi selecionado!", "#b89a06", "#000000");
-//  return;
-//}
