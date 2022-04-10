@@ -95,16 +95,18 @@ StoreDrink.FormatarValor = (function () {
   return MascaraMonetariaPrincipal;
 }());
 
-StoreDrink.MaskMoneyTest = (function () {
-  function MaskMoneyTest() {
+StoreDrink.Mask = (function () {
+  function Mask() {
     this.decimal = $('.js-decimal');
     this.plain = $('.js-plain');
+    this.number = $('.js-number');
   }
-  MaskMoneyTest.prototype.enable = function () {
-    this.decimal.maskNumber({decimal: ',', thousands: '.'});
-    this.plain.maskNumber({integer: true, thousands: '.'});
+  Mask.prototype.enable = function () {
+    this.decimal.mask({decimal: ',', thousands: '.'});
+    this.plain.mask({integer: true, thousands: '.'});
+    this.number.mask("0000", {reverse: true });
   };
-  return MaskMoneyTest;
+  return Mask;
 }());
 
 StoreDrink.MascaraMoneteria = (function () {
@@ -198,6 +200,8 @@ StoreDrink.LoadGif = (function () {
     } else if (url.includes("mensagens/marcar-como-lida/")) {
       return false;
     } else if(url.includes("entradas/buscar/")) {
+      return false;
+    } else if(url.includes("vendas/produtos")) {
       return false;
     } else if (url.includes("mensagens/destinatario")) {
       element.css("display", "block");
@@ -338,7 +342,7 @@ StoreDrink.Mensagem = (function () {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 8000,
+      timer: 5000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -373,7 +377,7 @@ StoreDrink.Toast = (function () {
    */
   Toast.prototype.show = function (icon,heading,text,position) {
     $.toast({
-      heading: `${heading}`,
+      heading: `<p class='mb-1'>${heading}<p><hr/>`,
       text: `${text}`,
       position: `${position}`,
       loader: false,
@@ -426,6 +430,9 @@ $(function () {
 
   var maskPhone = new StoreDrink.MaskPhoneNumber();
   maskPhone.enable();
+  
+  var mask = new StoreDrink.Mask();
+  mask.enable();
   
   var maskPrincipal = new StoreDrink.FormatarValor();
   maskPrincipal.enable("121212.00");

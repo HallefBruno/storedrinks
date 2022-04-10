@@ -9,15 +9,13 @@
   </head>
   <body>
     <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-    <input type="hidden" name="contextApp" id="contextApp" th:value="@{/}" />
     <div class="container-fluid">
       <div class="row">
         <div th:replace="layout/fragments/Menu :: menu"></div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <div class="container-fluid">
-              <form th:object="${venda}" method="post" th:action="@{/pdv/salvar}">
-                <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+              <form>
                 <div class="shadow-sm mb-3 bg-body rounded">
                   <div class="card">
                     <h5 class="card-header">Venda de produtos</h5>
@@ -46,23 +44,27 @@
                           <label for="descricaoProduto" class="form-label">Descrição do produto</label>
                           <input readonly="true" type="text" autocomplete="off" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
                         </div>
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
+                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
                           <label for="codProduto" class="form-label">Cód Produto</label>
                           <input readonly="true" type="text" autocomplete="off" class="form-control" id="codProduto" name="codProduto"/>
                         </div>
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-3">
+                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
                           <label for="valorVenda" class="form-label">Valor de venda</label>
                           <input readonly="true" type="text" autocomplete="off" class="form-control" id="valorVenda" name="valorVenda"/>
+                        </div>
+                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
+                          <label for="qtdEstoque" class="form-label">Qtd em estoque</label>
+                          <input readonly="true" type="text" autocomplete="off" class="form-control" id="qtdEstoque" name="qtdEstoque"/>
                         </div>
                       </div>
 
                       <div class="mb-3">
-                        <label for="quantidade" class="form-label">Quantidade</label>
-                        <input type="number" autocomplete="off" min="1" class="form-control" id="quantidade" name="quantidade"/>
+                        <label for="quantidade" class="form-label">Quantidade</label> <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
+                        <input type="text" autocomplete="off" min="1" maxlength="4" class="form-control js-number" id="quantidade" name="quantidade" oninput="javascript: if (this.value.length > 0 && Number(this.value.slice(0, 1)) === 0) this.value = 1 ;"/>
                       </div>
 
                       <div class="btn-group mt-2" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" id="btnItemVenda" class="btn btn-sm btn-warning text-white">
+                        <button type="button" id="btnItemVenda" class="btn btn-sm btn-primary text-white">
                           Adicionar
                         </button>
                       </div>
@@ -89,7 +91,7 @@
                       </tbody>
                     </table>
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                      <span>Valor total da compra:</span>
+                      <span>Valor total da venda:</span>
                     </div>
                   </div>
                 </div>

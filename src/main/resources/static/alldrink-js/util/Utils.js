@@ -95,6 +95,10 @@ function isEmpaty(object) {
   return true;
 }
 
+function containsAttInList(obj,att, list) {
+  return list.some(elem => elem[`${att}`] === obj[`${att}`]);
+}
+
 function formatDataHora(value) {
   return moment(value).format("DD/MM/YYYY, HH:mm:ss");
 }
