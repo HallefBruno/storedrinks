@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
+    http.sessionManagement().maximumSessions(1).expiredUrl("/login?invalid-session=true");
     http
       .authorizeRequests()
         .antMatchers("/validar/**").permitAll()
