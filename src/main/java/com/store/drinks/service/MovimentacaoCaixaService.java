@@ -15,6 +15,7 @@ import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -81,8 +82,8 @@ public class MovimentacaoCaixaService {
     return itensVenda;
   }
   
-  private Set<ItensVenda> getItensVendas(Venda venda) {
-    return Set.of(getItensVenda(venda));
+  private List<ItensVenda> getItensVendas(Venda venda) {
+    return List.of(getItensVenda(venda));
   }
   
   private Set<FormaPagamento> formaPagamentos(MovimentacaoCaixa movimentacaoCaixa) {

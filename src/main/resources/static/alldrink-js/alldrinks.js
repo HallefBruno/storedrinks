@@ -161,7 +161,6 @@ StoreDrink.MaskPhoneNumber = (function() {
 }());
 
 StoreDrink.LoadGif = (function () {
-  
   function LoadGif() {
     this.gifLoadingAutocomplete = $(".js-img-loading");
     this.divLoading = $("#divLoading");
@@ -193,6 +192,8 @@ StoreDrink.LoadGif = (function () {
     } else if(url.includes("entradas/buscar/")) {
       return false;
     } else if(url.includes("vendas/produtos")) {
+      return false;
+    } else if(url.includes("/update-quantidade/")) {
       return false;
     } else if (url.includes("mensagens/destinatario")) {
       element.css("display", "block");
@@ -269,7 +270,7 @@ StoreDrink.ShowToastContainsMessage = (function () {
             event.stopPropagation();
             $.ajax({
               url: $("#context").val().concat("mensagens/notificado"),
-              method: 'PUT',
+              method: "PUT",
               success: function (data) {},
               error: function (error) {window.console.debug(error);}
             });
@@ -402,8 +403,7 @@ $(function () {
   $('[data-bs-toggle="tooltip"]').tooltip();
   
   let url = $(location).attr("href");
-  console.log(url);
-  if(url.includes("localhost") || url.includes("127.0.0.1") && $("#leftClick").val() === undefined) {
+  if(!url.includes("localhost") && !url.includes("127.0.0.1") && $("#leftClick").val() === undefined) {
     $(document).bind("contextmenu", function (e) {
       return false;
     });

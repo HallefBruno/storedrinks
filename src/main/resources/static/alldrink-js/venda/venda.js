@@ -1,14 +1,15 @@
 /* global StoreDrink, formatter */
-
 let mensagem = new StoreDrink.Mensagem();
 let listProdutos = [];
 let produto = {};
-let quantidadeEstoqueAtual = 0;
+let quantidadeEstoqueAtual = null;
+const ENDPOINT = "vendas";
 
 $(function () {
   initDataTable();
   popularSelectProdutos();
   eventKeyEnter();
+  eventButtonAddVenda();
 });
 
 function initDataTable() {
@@ -39,7 +40,6 @@ function popularSelectProdutos() {
   
   $("#produtos").on("select2:select", function (e) {
     produto = e.params.data;
-    window.console.log(produto);
     quantidadeEstoqueAtual = Number(produto.quantidade);
     $("#descricaoProduto").val(produto.descricaoProduto);
     $("#codigoBarra").val(produto.codBarra);
@@ -63,7 +63,7 @@ function popularSelectProdutos() {
     closeOnSelect: true,
     minimumInputLength: 3,
     ajax: {
-      url: `${$("#context").val()}vendas/produtos`,
+      url: `${$("#context").val()}${ENDPOINT}/produtos`,
       dataType: "json",
       delay: 1000,
       data: function (params) {
@@ -73,6 +73,9 @@ function popularSelectProdutos() {
         };
       },
       processResults: function (data, params) {
+        if(data.items === null) {
+          data.items = new Array({id:'',text:''});
+        }
         params.page = params.page || 1;
         return {
           results: data.items,
@@ -84,10 +87,6 @@ function popularSelectProdutos() {
       cache: true
     },
     templateResult: templateResultProduto,
-
-    escapeMarkup: function (markup) {
-      return markup;
-    },
     templateSelection: function (produto) {
       if (produto && produto.text !== "Procure aqui seu produto") {
         return $("<span class='badge bg-secondary fw-normal' style='font-size:14px;'>" + produto.text + "</span>");
@@ -98,10 +97,10 @@ function popularSelectProdutos() {
 }
 
 function templateResultProduto(produto) {
-  if (produto && !produto.text.includes("Buscando")) {
-    return $("<span class='badge bg-secondary fw-normal' style='font-size:14px;'>" + produto.text + "</span>");
+  if (produto.loading) {
+    return $(`<span class='badge bg-secondary fw-normal' style='font-size:14px;'>${produto.text}</span>`);
   }
-  return $("<span>" + produto.text + "</span>");
+  return $("<span class='badge bg-secondary fw-normal' style='font-size:14px;'>" + produto.text + "</span>");
 }
 
 function clearFormFocusSelect() {
@@ -111,7 +110,6 @@ function clearFormFocusSelect() {
 }
 
 function eventKeyEnter() {
-  
   let typingTimer;
   let intervaloDigitacao = 800;
 
@@ -134,17 +132,9 @@ function eventKeyEnter() {
 }
 
 function qtdAtualMaiorQtdVenda() {
-  const quantidade = Number($("#quantidade").val());
-  if (quantidade > quantidadeEstoqueAtual) {
-    $.toast({
-      heading: "<p class='mb-1'>Atenção<p><hr/>",
-      text: 'Você não possui essa quantidade em estoque!',
-      bgColor: '#000000',
-      textColor: '#ffffff',
-      position: 'top-right',
-      hideAfter: 5000,
-      loader: false
-    });
+  let quantidade = Number($("#quantidade").val());
+  if (quantidade > Number(quantidadeEstoqueAtual)) {
+    mensagemToast("Você não possui essa quantidade em estoque!","#000000","#ffffff");
     $("#quantidade").val("");
     return false;
   }
@@ -152,12 +142,10 @@ function qtdAtualMaiorQtdVenda() {
 }
 
 function addProduto() {
-  let prod = {};
-  if ($("#descricaoProduto").val() && qtdAtualMaiorQtdVenda()) {
+  let quantidade = Number($("#quantidade").val());
+  if (quantidade > 0) {
     let valorVenda = Number(produto.valorVenda);
-    let quantidade = Number($("#quantidade").val());
-    
-    prod = {
+    let prod = {
       descricaoProduto: $("#descricaoProduto").val(),
       codigoBarra: $("#codigoBarra").val(),
       codProduto: $("#codProduto").val(),
@@ -166,14 +154,37 @@ function addProduto() {
       valorTotal: formatter.format((quantidade * valorVenda))
     };
     
-    listProdutos.push(prod);
-    popularTable(listProdutos);
-    clearFormFocusSelect();
+    let listaMesmoProdutos = listProdutos.filter(function (produto) {
+      return produto.codigoBarra === prod.codigoBarra;
+    });
 
+    let qtdProdutosPorItem = 0;
+    $.each(listaMesmoProdutos, function (i, produto) {
+      qtdProdutosPorItem += produto.quantidade;
+    });
+
+    if (qtdProdutosPorItem <= quantidadeEstoqueAtual && (qtdProdutosPorItem + quantidade) <= quantidadeEstoqueAtual) {
+      listProdutos.push(prod);
+      quantidadeEstoqueAtual = null;
+      popularTable(listProdutos);
+      somaValorTotalVenda(listProdutos);
+      clearFormFocusSelect();
+    } else {
+      mensagemToast("Você não possui essa quantidade em estoque!", "#000000", "#ffffff");
+    }
+    
   } else if ($("#descricaoProduto").val().length === 0) {
     clearFormFocusSelect();
-    mensagemToast("Por favor selecione um item!","#000000","#ffffff");
+    mensagemToast("Por favor selecione um item!", "#000000", "#ffffff");
+  } else {
+    mensagemToast("A quantidade de produto precisa ser maior que zero!", "#000000", "#ffffff");
   }
+}
+
+function eventButtonAddVenda() {
+  $("#btnItemVenda").click(function () {
+    addProduto();
+  });
 }
 
 function popularTable(listProdutos) {
@@ -181,9 +192,8 @@ function popularTable(listProdutos) {
   $.each(listProdutos, function (index, produto) {
     var htmlbtnGroup = `
       <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
-          <button data-key='${produto.codigoBarra}' type="button" title="Diminuir quantidade" class="btnDiminuirQuantidade btn btn-outline-secondary"><i class="fa fa-minus" aria-hidden="true"></i></i></button>
-          <button data-key='${produto.codigoBarra}' type="button" title='Aumentar quantidade' class="btnAumentarQuantidade btn btn-outline-secondary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-          <button data-key='${produto.codigoBarra}' type='button' title='Remover item' class='btnRemoverItemVenda btn btn-outline-secondary'><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        <button data-key='${produto.codigoBarra}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Diminuir quantidade' class='btnDiminuirQuantidade btn btn-outline-secondary'><i class='fa fa-minus' aria-hidden='true'></i></i></button>
+        <button data-key='${produto.codigoBarra}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Remover item' class='btnRemoverItemVenda btn btn-outline-secondary'><i class='fa fa-trash-o' aria-hidden='true'></i></button>
       </div>`;
     $("#itensVenda").DataTable().row.add([
       produto.descricaoProduto,
@@ -192,6 +202,19 @@ function popularTable(listProdutos) {
       produto.valorTotal,
       htmlbtnGroup
     ]).draw(false);
+  });
+}
+
+function somaValorTotalVenda(listProdutos) {
+  console.log(listProdutos);
+  let valorTotal = "";
+  let soma = 0;
+  $.each(listProdutos, function(index, produto) {
+    valorTotal = produto.valorTotal.replace("R$ ","");
+    valorTotal = valorTotal.replace(".","");
+    valorTotal = valorTotal.replace(",",".");
+    soma = soma + Number(valorTotal);
+    $(".valorTotal").text(formatter.format(soma));
   });
 }
 

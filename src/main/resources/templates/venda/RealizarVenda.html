@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title>Vendas</title>
     <meta charset="UTF-8">
-    <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
   </head>
@@ -63,7 +62,7 @@
                         <input type="text" autocomplete="off" min="1" maxlength="4" class="form-control js-number" id="quantidade" name="quantidade" oninput="javascript: if (this.value.length > 0 && Number(this.value.slice(0, 1)) === 0) this.value = 1 ;"/>
                       </div>
 
-                      <div class="btn-group mt-2" role="group" aria-label="Basic mixed styles example">
+                      <div class="btn-group mt-2" role="group" aria-label="adicionar">
                         <button type="button" id="btnItemVenda" class="btn btn-sm btn-primary text-white">
                           Adicionar
                         </button>
@@ -75,23 +74,25 @@
               <div class="shadow-sm mb-2 bg-body rounded">
                 <div class="card" style="margin-top: 5px;">
                   <div class="card-body">
-                    <table id="itensVenda" class="table table-hover caption-top">
-                      <caption>Detalhes da venda</caption>
-                      <thead>
-                        <tr style="font-size: 12px;">
-                          <th>Produto</th>
-                          <th>Valor unitário</th>
-                          <th>Quantidade</th>
-                          <th>Valor total</th>
-                          <th>Ações</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
+                    <div class="callout-md callout-verde-cana">
+                      <table id="itensVenda" class="table table-hover caption-top">
+                        <caption>Detalhes da venda</caption>
+                        <thead>
+                          <tr style="font-size: 12px;">
+                            <th>Produto</th>
+                            <th>Valor unitário</th>
+                            <th>Quantidade</th>
+                            <th>Valor total</th>
+                            <th>Ações</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <hr class="my-4">
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                      <span>Valor total da venda:</span>
+                      <div class="fw-bold fs-6"><mark>Total:<mark><span style="margin-left: 4px;" class="valorTotal">0.00</span></mark></div>
                     </div>
                   </div>
                 </div>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="pt-BR">
   <head>
     <title>Abertura de caixa</title>
     <meta charset="UTF-8">
@@ -25,7 +24,7 @@
               <th:block th:include="fragments/MensagemSucesso"></th:block>
               <form th:object="${abrirCaixa}" method="post" th:action="@{/pdv/salvar}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-                <div class="shadow p-3 mb-5 bg-body rounded">
+                <div class="shadow-sm mb-5 bg-body rounded">
                   <div class="card">
                     <h5 class="card-header">Abertura do caixa</h5>
                     <div class="card-body">

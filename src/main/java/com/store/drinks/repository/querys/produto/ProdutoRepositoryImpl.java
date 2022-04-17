@@ -96,9 +96,9 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     }
 
     Predicate prediTenant = cb.and(cb.equal(cb.upper(produto.get(Tenant.NAME.value())), multitenancy.getTenantValue().toUpperCase()));
-
+    
     query.select(produto);
-    query.where(predicateOr, cb.isTrue(isAtivo), prediTenant);
+    query.where(predicateOr, cb.isTrue(isAtivo), prediTenant, cb.and(cb.gt(produto.get("quantidade"), 0)));
     TypedQuery<Produto> typedQuery = manager.createQuery(query);
     typedQuery.setFirstResult(primeiroRegistro);
     typedQuery.setMaxResults(totalRegistrosPorPagina);

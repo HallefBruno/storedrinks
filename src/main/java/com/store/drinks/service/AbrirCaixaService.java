@@ -33,11 +33,15 @@ public class AbrirCaixaService {
 
   public boolean abrirCaixaPorUsuarioLogado() {
     try {
-      Optional<AbrirCaixa> caixaAberto = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
-      return caixaAberto.isPresent();
+      Optional<AbrirCaixa> cxAberto = caixaAberto();
+      return cxAberto.isPresent();
     } catch (IncorrectResultSizeDataAccessException ex) {
       throw new CaixaAbertoPorUsuarioException("Não é possível realizar a venda, pois existe mais de um caixa aberto para este usuário");
     }
+  }
+  
+  public Optional<AbrirCaixa> caixaAberto() {
+    return abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
   }
 
 }

@@ -5,6 +5,7 @@ import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public class Venda implements Serializable {
 
   @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
-  private Set<ItensVenda> itensVendas;
+  private List<ItensVenda> itensVendas;
 
   @Column(name = "data_hora_venda", nullable = false)
   private LocalDateTime dataHoraVenda;
@@ -65,11 +66,11 @@ public class Venda implements Serializable {
     this.id = id;
   }
 
-  public Set<ItensVenda> getItensVendas() {
+  public List<ItensVenda> getItensVendas() {
     return itensVendas;
   }
 
-  public void setItensVendas(Set<ItensVenda> itensVendas) {
+  public void setItensVendas(List<ItensVenda> itensVendas) {
     this.itensVendas = itensVendas;
   }
 

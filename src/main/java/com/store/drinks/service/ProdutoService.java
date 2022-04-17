@@ -5,23 +5,30 @@ import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ProdutoRepository;
+import com.store.drinks.repository.util.Multitenancy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.persistence.LockModeType;
+import javax.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class ProdutoService {
 
   private final ProdutoRepository produtoRepository;
+  private final Multitenancy multitenancy;
 
   @Transactional
   public void salvar(Produto produto) {
@@ -31,20 +38,36 @@ public class ProdutoService {
 
   @Transactional
   public void update(Produto update, Long codigo) {
-    if (Objects.isNull(codigo)) {
-      throw new NegocioException("Identificador inválido!");
-    }
-    update.setId(codigo);
-    produtoRepository.verificarExistenciaProduto(update);
-    Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
-    if (optionalProdutoAtual.isPresent()) {
-      Produto atual = optionalProdutoAtual.get();
-      if (!Objects.equals(atual.getVersaoObjeto(), update.getVersaoObjeto())) {
-        throw new NegocioException("Houve uma alteração neste produto, faça uma nova busca");
+    try {
+      if (Objects.isNull(codigo)) {
+        throw new NegocioException("Identificador inválido!");
       }
-      BeanUtils.copyProperties(update, atual, "id");
-      produtoRepository.save(atual);
+      update.setId(codigo);
+      produtoRepository.verificarExistenciaProduto(update);
+      Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
+      if (optionalProdutoAtual.isPresent()) {
+        Produto atual = optionalProdutoAtual.get();
+        BeanUtils.copyProperties(update, atual, "id");
+        produtoRepository.save(atual);
+      }
+    } catch (OptimisticLockException ex) {
+      throw new NegocioException("Houve uma alteração neste produto, faça uma nova busca");
     }
+  }
+  
+  @Transactional
+  public void updateQuantidadeProdutoEstoque(final String codBarra, final Integer quantidade) {
+    produtoRepository.findByProdutoForVenda(codBarra, multitenancy.getTenantValue())
+    .ifPresent(produto -> {
+      int quantidadeAtual = produto.getQuantidade();
+      if(quantidadeAtual >= quantidade) {
+        quantidadeAtual -= quantidade;
+        produto.setQuantidade(quantidadeAtual);
+        produtoRepository.saveAndFlush(produto);
+        return;
+      }
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não possui essa quantidade em estoque!");
+    });
   }
 
   @Transactional

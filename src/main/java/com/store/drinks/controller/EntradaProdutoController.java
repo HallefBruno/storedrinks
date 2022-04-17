@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/entradas")
+@PreAuthorize("hasRole('MANTER_ENTRADA')")
 @RequiredArgsConstructor
 public class EntradaProdutoController {
 
@@ -38,8 +39,6 @@ public class EntradaProdutoController {
   private final EntradaProdutoRepository entradaProdutoRepository;
   private final FornecedorService fornecedorService;
   
-  
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping
   public ModelAndView pageNova(EntradaProduto entradaProduto) {
     ModelAndView mv = new ModelAndView("entradaproduto/EntradaProduto");
@@ -49,14 +48,12 @@ public class EntradaProdutoController {
     return mv;
   }
   
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @PostMapping
   public ResponseEntity<EntradaProduto> salvar(@Valid @RequestBody(required = true) EntradaProduto entradaProduto) {
     entradaProdutoService.salvar(entradaProduto);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/buscar/{id}")
   public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable(required = true, name = "id") Long id) {
     try {
@@ -66,7 +63,6 @@ public class EntradaProdutoController {
     }
   }
 
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/alterarSituacao/{id}")
   public ModelAndView alterarSituacaoEntrada(@PathVariable(required = true, name = "id") Long id, RedirectAttributes attributes) {
     entradaProdutoService.alterarSituacaoEntrada(id);
@@ -74,7 +70,6 @@ public class EntradaProdutoController {
     return new ModelAndView("redirect:/entradas/pesquisar");
   }
 
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/buscar/produtoPorCodBarra/{codBarra}")
   public ResponseEntity<Produto> buscarProdutoPorCodBarra(@PathVariable(required = true, name = "codBarra") String codBarra) {
     try {
@@ -84,7 +79,6 @@ public class EntradaProdutoController {
     }
   }
 
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/produtos")
   public ResponseEntity<?> pesquisarProdutosAutoComplete(
     @RequestParam(name = "q", required = false) String descricao,
@@ -92,7 +86,6 @@ public class EntradaProdutoController {
     return new ResponseEntity<>(entradaProdutoService.pesquisarProdutosAutoComplete(descricao, page), HttpStatus.OK);
   }
   
-  @PreAuthorize("hasRole('MANTER_ENTRADA')")
   @GetMapping("/pesquisar")
   public ModelAndView pesqisar(EntradasFilter entradasFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("entradaproduto/Pesquisar");
