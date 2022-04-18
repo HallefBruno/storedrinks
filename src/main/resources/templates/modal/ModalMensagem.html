@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<div class="modal fade" id="modalMensagem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" th:fragment="modalMensagem" >
+  <div class="modal-dialog">
+    <div class="modal-content md-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Detalhes da mensagem</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-1 align-items-center">
+          <div class="col-auto">
+            <h6><i class="fa fa-address-book-o sd-mr__5px"></i>Partil de: </h6>
+          </div>
+          <div class="col-auto">
+            <p class="remetente" style="margin-top: 9px;"></p>
+          </div>
+        </div>
+        
+        <div class="row g-1 align-items-center">
+          <div class="col-auto">
+            <h6><i class="fa fa-calendar sd-mr__5px"></i>Data: </h6>
+          </div>
+          <div class="col-auto">
+            <p class="dataHoraEnviada" style="margin-top: 9px;"></p>
+          </div>
+        </div>
+        
+        <hr>
+        <h6>Detalhes da mensagem</h6>
+        <textarea readonly="true" rows="4" class="form-control mensagem"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

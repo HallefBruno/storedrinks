@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pesquisa de produtos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+  </head>
+<body>
+  <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div th:replace="layout/fragments/Menu :: menu"></div>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <div class="container-fluid">
+            <div th:if="${#lists.isEmpty(pagina.conteudo)}">
+              <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <p class="">Nenhum produto encontrado!</p>
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
+            </div>
+            <form method="GET" th:object="${produtoFilter}">
+              <div class="accordion shadow mb-2 bg-body rounded" id="accordionPesquisar">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Pesquisar
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
+                    <div class="accordion-body">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="mb-3 col-12 col-md-4  col-lg-4">
+                              <label for="codigoBarra" class="form-label">Cód Barra</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                                <input th:value="*{codBarra}" autocomplete="off" type="text" class="form-control" name="codBarra"/>
+                              </div>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                              <label for="codProduto" class="form-label">Cód Produto</label>
+                              <input th:value="*{codProduto}" autocomplete="off" type="text" class="form-control" name="codProduto"/>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                              <label for="descricaoProduto" class="form-label">Descrição do produto</label>
+                              <input type="text" autocomplete="off" th:value="*{descricao}" class="form-control" name="descricao"/>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn  btn-primary btn-sm">Pesquisar</button>
+                          <a th:href="@{/produtos/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div th:each="produto : ${pagina.conteudo}">
+              <div class="row g-2 mb-1">
+                <div class="col-lg-4">
+                  <div class="card p-4 mb-1 shadow bg-body rounded" style="min-height: 383px;">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <img th:src="@{/imagens/sem-perfil.png}" alt="produto" class="rounded-circle p-1" width="110">
+                        <div class="mt-4">
+                          <p class="text-secondary">[[${produto.descricaoProduto}]]</p>
+                          <span th:if="${produto.ativo}"><span class="badge bg-success text-white">Ativo</span></span>
+                          <span th:unless="${produto.ativo}"><span class="badge bg-danger text-white">Inativo</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-8">
+                  <div class="card p-4 shadow bg-body rounded">
+                    <div class="card-body">
+                      <div class="row mb-3">
+                        <div class="col-sm-3">
+                          <h6 class="mt-2">Cód barra</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
+                            <input th:value="*{produto.codigoBarra}" readonly="true" type="text" class="form-control" id="codigoBarra" name="codigoBarra">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-sm-3">
+                          <h6 class="mt-2">Cód produto</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <input type="text" readonly="true" class="form-control" th:value="${produto.codProduto}">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-sm-3">
+                          <h6 class="mt-2">Quantidade</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <input type="text" readonly="true" class="form-control" th:value="${produto.quantidade}">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-sm-3">
+                          <h6 data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo e valor de venda" class="mt-2">Valor de C e V</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <div class="input-group">
+                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de custo" type="text" readonly="true" class="form-control" th:value="${{produto.valorCusto}}">
+                            <span class="input-group-text">::</span>
+                            <input data-bs-toggle="tooltip" data-bs-placement="top" title="Valor de venda" type="text" readonly="true" class="form-control" th:value="${{produto.valorVenda}}">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-sm-3">
+                          <h6 data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto e lucro real" class="mt-2">Lucro P e R</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <div class="input-group">
+                            <th:block th:with="lucroP=${produto.valorVenda - produto.valorCusto}">
+                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro previsto" type="text" readonly="true" class="form-control" th:value="${{lucroP}}">
+                            </th:block>
+                            <span class="input-group-text">::</span>
+                            <th:block th:with="lucroR=${(produto.valorVenda - produto.valorCusto) * produto.quantidade}">
+                              <input data-bs-toggle="tooltip" data-bs-placement="top" title="Lucro real" type="text" readonly="true" class="form-control" th:value="${{lucroR}}">
+                            </th:block>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/produtos/{codigo}(codigo=${produto.id})}">Editar</a>
+                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/produtos/{codigo}(codigo=${produto.id})}" data:objeto="${produto.descricaoProduto}">Excluir</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div id="divLoading"></div>
+<th:block th:replace="fragments/JsFragment :: script"></th:block>
+<script type="text/javascript">
+  $(function () {
+    $("#codBarra").focus();
+    setTimeout(() => {
+      $(".toast").toast('show');
+    }, 0);
+  });
+</script>
+</body>
+</html>

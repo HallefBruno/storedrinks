@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Mensagens Recebidas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <style>
+      .dataTable > thead > tr > th[class*="sort"]:before,
+      .dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div th:replace="layout/fragments/Menu :: menu"></div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="container-fluid">
+              <div class="card shadow-sm" style="margin-top: 5px; margin-bottom: 5px;">
+              <div class="card-body">
+                <div class="callout-md callout-info">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="lidas" name="lidas">
+                      <label class="form-check-label check-input-lidas" for="lidas">Não Lidas</label>
+                    </div>
+                    <a type="button" th:href="@{/mensagens/nova}" class="btn btn-outline-secondary btn-sm mt-2">Nova mensagem</a>
+                  </div>
+                </div>
+                <div class="table-responsive setblockUI">
+                  <table id="mensagens" class="table table-hover caption-top ">
+                    <caption>Mensagens recebidas</caption>
+                    <thead>
+                      <tr>
+                        <th class="text-muted"><i class="fa fa-address-book-o sd-mr__5px" aria-hidden="true"></i>Remetente</th>
+                        <th class="text-muted"><i class="fa fa-envelope-o sd-mr__5px" aria-hidden="true"></i>Mensagem</th>
+                        <th class="text-muted"><i class="fa fa-calendar sd-mr__5px" aria-hidden="true"></i>Recebida em</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <th:block th:replace="modal/ModalMensagem :: modalMensagem"></th:block>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script th:src="@{/alldrink-js/mensagem/Recebidas.js}" type="text/javascript"></script>
+  </body>
+</html>
+          

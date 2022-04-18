@@ -1,0 +1,39 @@
+.sd-required > .form-label:after {
+  content: " *";
+}
+
+.sd-field-action {
+  display: flex;
+}
+
+.sd-field-action__icon {
+  margin: 29px 0 0 1px;
+}
+
+.sd-mr__5px {
+  margin-right: 5px;
+}
+
+.sd-fw-bold__cursor-mouse {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cursor-mouse {
+  cursor: pointer;
+}
+
+.sb-limit-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100px;
+}
+
+.backgroundblur {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
