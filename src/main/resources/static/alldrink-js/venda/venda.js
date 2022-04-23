@@ -1,8 +1,12 @@
-/* global StoreDrink, formatter */
+/* global StoreDrink, formatter, EnumEntradaProduto */
 let mensagem = new StoreDrink.Mensagem();
 let listProdutos = [];
 let produto = {};
 let valorTotalVenda = 0;
+let getValueInputDinehro = 0;
+let getValueInputDebito = 0;
+let getValueInputCredito = 0;
+let getValueInputPix = 0;
 let quantidadeEstoqueAtual = null;
 const CLASS_BTN_DIMINUIR = "btnDiminuirQuantidade";
 const CLASS_BTN_AUMENTAR = "btnAumentarQuantidade";
@@ -16,6 +20,7 @@ $(function () {
   eventKeyEnter();
   eventButtonAddVenda();
   eventClickRowDataTable();
+  formaPagamento();
   finalizarVenda();
 });
 
@@ -275,8 +280,8 @@ function funcQtdProdutosPorItem(prod) {
   return qtdProdutosPorItem;
 }
 
-function finalizarVenda() {
-  $("#finalizarVenda").click(function () {
+function formaPagamento() {
+  $("#formaPagamento").click(function () {
     if(listProdutos.length <= 0) {
       mensagemToast("Selecione os itens para venda!", "#000000", "#ffffff");
       $("#codigoBarra").focus();
@@ -304,11 +309,6 @@ function modalFormaPagamento() {
   let inputCredito = modalFormaPagamento.find("#credito");
   let inputPix = modalFormaPagamento.find("#pix");
   let spanTroco = modalFormaPagamento.find("#spanTroco");
-
-  let getValueInputDinehro = 0;
-  let getValueInputDebito = 0;
-  let getValueInputCredito = 0;
-  let getValueInputPix = 0;
   let soma = 0;
   
   $(document).on("keyup", `#${inputDinheiro.prop("id")}`, function (event) {
@@ -372,12 +372,17 @@ function somaValoresFormaPagamento(soma,getValueInputDinehro, getValueInputDebit
 }
 
 function clearInputModal(modalFormaPagamento) {
+  getValueInputDinehro = 0;
+  getValueInputDebito = 0;
+  getValueInputCredito = 0;
+  getValueInputPix = 0;
   modalFormaPagamento.find("#dinheiro").val("");
   modalFormaPagamento.find("#debito").val("");
   modalFormaPagamento.find("#credito").val("");
   modalFormaPagamento.find("#pix").val("");
   modalFormaPagamento.find("#dinheiro").focus();
   modalFormaPagamento.find("#spanTroco").text("0,00");
+  $("#divAlert").empty();
 }
 
 function removeMaskMonetaria(value) {
@@ -392,6 +397,69 @@ function removeMaskMonetariaCalcularValorTotalNaTabela(produto) {
   valorUnitario = valorUnitario.replace(".","");
   valorUnitario = valorUnitario.replace(",",".");
   return valorUnitario;
+}
+
+function finalizarVenda() {
+  
+  let formaPagamentos = [];
+  let formaPagamento = {};
+  let tipoPagamento = {};
+  
+  $(document).on("click", "#btnFinalizarVenda", function () {
+    
+    let existsValores = false;
+    let alertHtml = `
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <span id="msgAlert">A forma de pagamento é obrigatória.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`;
+    
+    if (getValueInputDinehro && getValueInputDinehro > 0) {
+      tipoPagamento["DINHEIRO"] = EnumEntradaProduto.DINHEIRO;
+      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["valor"] = getValueInputDinehro;
+      formaPagamentos.push(formaPagamento);
+      tipoPagamento = {};
+      formaPagamento = {};
+      existsValores = true;
+    }
+    if (getValueInputDebito && getValueInputDebito > 0) {
+      tipoPagamento["CARTAO_DEBITO"] = EnumEntradaProduto.CARTAO_DEBITO;
+      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["valor"] = getValueInputDebito;
+      formaPagamentos.push(formaPagamento);
+      tipoPagamento = {};
+      formaPagamento = {};
+      existsValores = true;
+    }
+    if (getValueInputCredito && getValueInputCredito > 0) {
+      tipoPagamento["CARTAO_CREDITO"] = EnumEntradaProduto.CARTAO_CREDITO;
+      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["valor"] = getValueInputCredito;
+      formaPagamentos.push(formaPagamento);
+      tipoPagamento = {};
+      formaPagamento = {};
+      existsValores = true;
+    }
+    if (getValueInputPix && getValueInputPix > 0) {
+      tipoPagamento["PIX"] = EnumEntradaProduto.PIX;
+      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["valor"] = getValueInputPix;
+      formaPagamentos.push(formaPagamento);
+      tipoPagamento = {};
+      formaPagamento = {};
+      existsValores = true;
+    }
+    
+    if (!existsValores) {
+      $("#divAlert").empty();
+      $("#divAlert").append(alertHtml).removeClass("visually-hidden");
+    }
+    
+    console.log(formaPagamentos);
+    
+  });
 }
 
 function mensagemToast(text, bgColor, textColor) {

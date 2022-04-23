@@ -52,7 +52,7 @@ public class MovimentacaoCaixa implements Serializable {
   
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
   @JsonBackReference
-  private Set<FormaPagamento> formaPagamento;
+  private Set<FormaPagamento> formaPagamentos;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(nullable = false)
@@ -137,12 +137,12 @@ public class MovimentacaoCaixa implements Serializable {
     this.valorDesconto = valorDesconto;
   }
 
-  public Set<FormaPagamento> getFormaPagamento() {
-    return formaPagamento;
+  public Set<FormaPagamento> getFormaPagamentos() {
+    return formaPagamentos;
   }
 
-  public void setFormaPagamento(Set<FormaPagamento> formaPagamento) {
-    this.formaPagamento = formaPagamento;
+  public void setFormaPagamentos(Set<FormaPagamento> formaPagamentos) {
+    this.formaPagamentos = formaPagamentos;
   }
 
   public AbrirCaixa getAbrirCaixa() {
@@ -168,5 +168,7 @@ public class MovimentacaoCaixa implements Serializable {
   public void setTenant(String tenant) {
     this.tenant = tenant;
   }
+
+  
   
 }

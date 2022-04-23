@@ -62,7 +62,7 @@ public class MovimentacaoCaixaService {
     movimentacaoCaixa.setValorRecebido(new BigDecimal("40.00"));
     movimentacaoCaixa.setValorTroco(BigDecimal.ZERO);
     movimentacaoCaixa.setVenda(venda);
-    movimentacaoCaixa.setFormaPagamento(formaPagamentos(movimentacaoCaixa));
+    movimentacaoCaixa.setFormaPagamentos(formaPagamentos(movimentacaoCaixa));
     return movimentacaoCaixa;
     
   }
