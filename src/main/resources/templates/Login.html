@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-100">
   <head>
     <title>Login</title>
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
     <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/vendor/css/jquery.toast.min.css}" rel="stylesheet" type="text/css"/>
-    <style>
+<!--    <style>
       html {
         height: 100%;
       }
@@ -36,14 +36,14 @@
           hsl(57deg 100% 63%) 100%
         );
       }
-    </style>
+    </style>-->
   </head>
-  <body>
+  <body class="d-flex h-100 bg-dark">
     <div id="alert"></div>
-    <div class="container">
+    <div class="container ">
       <div class="row">
         <div class="col-md-4 col-sm-8 offset-md-4 offset-sm-2 mt-4 mb-1">
-          <div class="p-4 shadow bg-white rounded-1">
+          <div class="p-4 bg-white rounded-1">
             <div class="text-center">
               <img id="image" th:src="@{/imagens/StoreDrinksLogo.png}" style="min-width: 310px; max-height: 250px; min-height: 270px;" width="100px" height="250px" alt="Logo" onmousedown="return false;"/>
             </div>

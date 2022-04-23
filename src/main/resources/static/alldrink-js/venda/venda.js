@@ -2,11 +2,13 @@
 let mensagem = new StoreDrink.Mensagem();
 let listProdutos = [];
 let produto = {};
+let valorTotalVenda = 0;
 let quantidadeEstoqueAtual = null;
 const CLASS_BTN_DIMINUIR = "btnDiminuirQuantidade";
 const CLASS_BTN_AUMENTAR = "btnAumentarQuantidade";
 const CLASS_BTN_REMOVER = "btnRemoverItem";
 const ENDPOINT = "vendas";
+const CONTEXT = $("#context").val();
 
 $(function () {
   initDataTable();
@@ -14,6 +16,7 @@ $(function () {
   eventKeyEnter();
   eventButtonAddVenda();
   eventClickRowDataTable();
+  finalizarVenda();
 });
 
 function initDataTable() {
@@ -25,7 +28,7 @@ function initDataTable() {
     filter: false,
     responsive: true,
     language: {
-      url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
+      url: `${CONTEXT}vendor/internationalisation/pt_br.json`
     },
     columnDefs: [
       {
@@ -67,7 +70,7 @@ function popularSelectProdutos() {
     closeOnSelect: true,
     minimumInputLength: 3,
     ajax: {
-      url: `${$("#context").val()}${ENDPOINT}/produtos`,
+      url: `${CONTEXT}${ENDPOINT}/produtos`,
       dataType: "json",
       delay: 1000,
       data: function (params) {
@@ -242,23 +245,21 @@ function somaValorTotalVenda(listProdutos) {
     let valorUnitario = "";
     let total = 0;
     $.each(listProdutos, function(index, produto) {
-      valorUnitario = produto.valorVenda.replace("R$ ","");
-      valorUnitario = valorUnitario.replace(".","");
-      valorUnitario = valorUnitario.replace(",",".");
+      valorUnitario = removeMaskMonetariaCalcularValorTotalNaTabela(produto);
       total = total + Number(valorUnitario*produto.quantidade);
       $(".valorTotal").text(formatter.format(total));
     });
+    valorTotalVenda = total;
     return;
   }
   $(".valorTotal").text("0,00");
+  valorTotalVenda = 0.00;
 }
 
 function calcularValorTotalNaTabela(produto) {
   let valorUnitario = "";
   let total = 0;
-  valorUnitario = produto.valorVenda.replace("R$ ","");
-  valorUnitario = valorUnitario.replace(".","");
-  valorUnitario = valorUnitario.replace(",",".");
+  valorUnitario = removeMaskMonetariaCalcularValorTotalNaTabela(produto);
   total = total + Number(valorUnitario*produto.quantidade);
   return total;
 }
@@ -274,9 +275,128 @@ function funcQtdProdutosPorItem(prod) {
   return qtdProdutosPorItem;
 }
 
+function finalizarVenda() {
+  $("#finalizarVenda").click(function () {
+    if(listProdutos.length <= 0) {
+      mensagemToast("Selecione os itens para venda!", "#000000", "#ffffff");
+      $("#codigoBarra").focus();
+    } else {
+      modalFormaPagamento();
+    }
+  });
+  $(document).keydown(function (event) {
+    if(event.ctrlKey && event.altKey && event.keyCode === 70 && listProdutos.length > 0) {
+      modalFormaPagamento();
+    }
+  });
+}
+
+function modalFormaPagamento() {
+  let modalFormaPagamento = $("#modalFormaPagamento");
+  modalFormaPagamento.modal("show");
+
+  modalFormaPagamento.one("shown.bs.modal", function (e) {
+    clearInputModal(modalFormaPagamento);
+  });
+
+  let inputDinheiro = modalFormaPagamento.find("#dinheiro");
+  let inputDebito = modalFormaPagamento.find("#debito");
+  let inputCredito = modalFormaPagamento.find("#credito");
+  let inputPix = modalFormaPagamento.find("#pix");
+  let spanTroco = modalFormaPagamento.find("#spanTroco");
+
+  let getValueInputDinehro = 0;
+  let getValueInputDebito = 0;
+  let getValueInputCredito = 0;
+  let getValueInputPix = 0;
+  let soma = 0;
+  
+  $(document).on("keyup", `#${inputDinheiro.prop("id")}`, function (event) {
+    if (inputDinheiro.val()) {
+      getValueInputDinehro = removeMaskMonetaria(inputDinheiro.val());
+      if (getValueInputDinehro >= 0) {
+        somaValoresFormaPagamento(soma, getValueInputDinehro, getValueInputDebito, getValueInputCredito, getValueInputPix, spanTroco);
+      }
+    }
+  });
+
+  $(document).on("keyup", `#${inputDebito.prop("id")}`, function (event) {
+    if (inputDebito.val()) {
+      getValueInputDebito = removeMaskMonetaria(inputDebito.val());
+      if (getValueInputDebito >= 0) {
+        somaValoresFormaPagamento(soma, getValueInputDinehro, getValueInputDebito, getValueInputCredito, getValueInputPix, spanTroco);
+      }
+    }
+  });
+
+  $(document).on("keyup", `#${inputCredito.prop("id")}`, function (event) {
+    if (inputCredito.val()) {
+      getValueInputCredito = removeMaskMonetaria(inputCredito.val());
+      if (getValueInputCredito >= 0) {
+        somaValoresFormaPagamento(soma, getValueInputDinehro, getValueInputDebito, getValueInputCredito, getValueInputPix, spanTroco);
+      }
+    }
+  });
+
+  $(document).on("keyup", `#${inputPix.prop("id")}`, function (event) {
+    if (inputPix.val()) {
+      getValueInputPix = removeMaskMonetaria(inputPix.val());
+      if (getValueInputPix >= 0) {
+        somaValoresFormaPagamento(soma, getValueInputDinehro, getValueInputDebito, getValueInputCredito, getValueInputPix, spanTroco);
+      }
+    }
+  });
+}
+
+function somaValoresFormaPagamento(soma,getValueInputDinehro, getValueInputDebito, getValueInputCredito, getValueInputPix, spanTroco) {
+  if (getValueInputDinehro) {
+    soma = soma + getValueInputDinehro;
+  }
+  if (getValueInputDebito) {
+    soma = soma + getValueInputDebito;
+  }
+  if (getValueInputCredito) {
+    soma = soma + getValueInputCredito;
+  }
+  if (getValueInputPix) {
+    soma = soma + getValueInputPix;
+  }
+  
+  if (Number(soma - valorTotalVenda) > 0) {
+    $(spanTroco).text(formatter.format(soma - valorTotalVenda));
+  } else {
+    $(spanTroco).text("0,00");
+  }
+  
+  return soma;
+}
+
+function clearInputModal(modalFormaPagamento) {
+  modalFormaPagamento.find("#dinheiro").val("");
+  modalFormaPagamento.find("#debito").val("");
+  modalFormaPagamento.find("#credito").val("");
+  modalFormaPagamento.find("#pix").val("");
+  modalFormaPagamento.find("#dinheiro").focus();
+  modalFormaPagamento.find("#spanTroco").text("0,00");
+}
+
+function removeMaskMonetaria(value) {
+  let valor = value.toString().replace("R$ ","");
+  valor = valor.replace(".","");
+  valor = valor.replace(",",".");
+  return Number(valor);
+}
+
+function removeMaskMonetariaCalcularValorTotalNaTabela(produto) {
+  let valorUnitario = produto.valorVenda.replace("R$ ","");
+  valorUnitario = valorUnitario.replace(".","");
+  valorUnitario = valorUnitario.replace(",",".");
+  return valorUnitario;
+}
+
 function mensagemToast(text, bgColor, textColor) {
   $.toast({
-    heading: `<p class='mb-1'>Atenção<p><hr/>`,
+    heading: `<p class='mb-1'>Atenção!<p><hr/>`,
     text: `${text}`,
     bgColor: `${bgColor}`,
     textColor: `${textColor}`,

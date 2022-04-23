@@ -2,9 +2,11 @@
 
 package com.store.drinks.controller;
 
+import com.store.drinks.entidade.enuns.TipoPagamento;
 import com.store.drinks.service.AbrirCaixaService;
 import com.store.drinks.service.ProdutoService;
 import com.store.drinks.service.VendaService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

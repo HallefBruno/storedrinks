@@ -63,7 +63,7 @@
                       </div>
 
                       <div class="btn-group mt-2" role="group" aria-label="adicionar">
-                        <button type="button" id="btnItemVenda" class="btn btn-sm btn-outline-secondary">
+                        <button type="button" id="btnItemVenda" class="btn btn-sm btn-info text-white">
                           Adicionar
                         </button>
                       </div>
@@ -94,12 +94,12 @@
                     
                     <div class="row">
                       <div class="col-auto me-auto">
-                        <button type="button" id="finalizarVenda" class="btn btn-sm btn-primary text-white">
-                          Finalizar
+                        <button type="button" id="finalizarVenda" class="btn btn-sm btn-dark">
+                          Forma de pagamento
                         </button>
                       </div>
                       <div class="col-auto">
-                        <div class="fw-bold fs-6"><mark>Total:<mark><span style="margin-left: 4px;" class="valorTotal">0,00</span></mark></div>
+                        <div class="fw-bold fs-6"><mark>Total:<span style="margin-left: 4px;" class="valorTotal">0,00</span></mark></div>
                       </div>
                     </div>
                   </div>
@@ -111,6 +111,7 @@
       </div>
     </div>
     <div id="divLoading"></div>
+    <th:block th:replace="modal/FormaPagamento :: modalFormaPagamento"></th:block>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
     <script th:src="@{/alldrink-js/venda/venda.js}" type="text/javascript"></script>
   </body>

@@ -103,7 +103,7 @@ StoreDrink.Mask = (function () {
 StoreDrink.MascaraMoneteria = (function () {
   function MascaraMoneteria() {}
   MascaraMoneteria.prototype.enable = function () {
-    $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: ',', decimal: '.', affixesStay: false});;
+    $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false});;
   };
   return MascaraMoneteria;
 }());

@@ -32,7 +32,7 @@ $(function () {
       var modalMensagem = $('#modalMensagem');
       modalMensagem.modal('show');
 
-      modalMensagem.off("hidden.bs.modal").on("shown.bs.modal", function (e) {
+      modalMensagem.off("shown.bs.modal").on("shown.bs.modal", function (e) {
         modalMensagem.find(".remetente").text(mensagem.remetenteDestinatarioMensagem.remetente);
         modalMensagem.find(".dataHoraEnviada").text(formatDataHora(mensagem.dataHoraMensagemRecebida));
         modalMensagem.find(".mensagem").val(mensagem.remetenteDestinatarioMensagem.mensagem);
