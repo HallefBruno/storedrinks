@@ -45,11 +45,6 @@ public class MovimentacaoCaixa implements Serializable {
   @Column(name = "valor_troco", nullable = false)
   private BigDecimal valorTroco;
   
-  @NotNull(message = "Valor desconto é obrigatório!")
-  @Min(value = 0, message = "Valor de desconto não pode ser negativo!")
-  @Column(name = "valor_desconto", nullable = false)
-  private BigDecimal valorDesconto;
-  
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
   @JsonBackReference
   private Set<FormaPagamento> formaPagamentos;
@@ -76,10 +71,6 @@ public class MovimentacaoCaixa implements Serializable {
     
     if(Objects.isNull(this.valorTroco)) {
       this.valorTroco = BigDecimal.ZERO;
-    }
-    
-    if(Objects.isNull(valorDesconto)) {
-      this.valorDesconto = BigDecimal.ZERO;
     }
   }
 
@@ -127,14 +118,6 @@ public class MovimentacaoCaixa implements Serializable {
 
   public void setValorTroco(BigDecimal valorTroco) {
     this.valorTroco = valorTroco;
-  }
-
-  public BigDecimal getValorDesconto() {
-    return valorDesconto;
-  }
-
-  public void setValorDesconto(BigDecimal valorDesconto) {
-    this.valorDesconto = valorDesconto;
   }
 
   public Set<FormaPagamento> getFormaPagamentos() {

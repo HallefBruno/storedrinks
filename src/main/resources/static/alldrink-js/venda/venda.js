@@ -158,6 +158,7 @@ function addProduto() {
   if (quantidade > 0) {
     let valorVenda = Number(produto.valorVenda);
     let prod = {
+      id: Number(produto.id),
       descricaoProduto: $("#descricaoProduto").val(),
       codigoBarra: $("#codigoBarra").val(),
       codProduto: $("#codProduto").val(),
@@ -177,7 +178,6 @@ function addProduto() {
     } else {
       mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff");
     }
-    
   } else if ($("#descricaoProduto").val().length === 0) {
     clearFormFocusSelect();
     mensagemToast("Por favor, selecione um produto!", "#000000", "#ffffff");
@@ -303,6 +303,10 @@ function modalFormaPagamento() {
   modalFormaPagamento.one("shown.bs.modal", function (e) {
     clearInputModal(modalFormaPagamento);
   });
+  
+  modalFormaPagamento.one("hidden.bs.modal", function (e) {
+    clearInputModal(modalFormaPagamento);
+  });
 
   let inputDinheiro = modalFormaPagamento.find("#dinheiro");
   let inputDebito = modalFormaPagamento.find("#debito");
@@ -361,13 +365,11 @@ function somaValoresFormaPagamento(soma,getValueInputDinehro, getValueInputDebit
   if (getValueInputPix) {
     soma = soma + getValueInputPix;
   }
-  
   if (Number(soma - valorTotalVenda) > 0) {
     $(spanTroco).text(formatter.format(soma - valorTotalVenda));
   } else {
     $(spanTroco).text("0,00");
   }
-  
   return soma;
 }
 
@@ -380,20 +382,21 @@ function clearInputModal(modalFormaPagamento) {
   modalFormaPagamento.find("#debito").val("");
   modalFormaPagamento.find("#credito").val("");
   modalFormaPagamento.find("#pix").val("");
-  modalFormaPagamento.find("#dinheiro").focus();
   modalFormaPagamento.find("#spanTroco").text("0,00");
   $("#divAlert").empty();
 }
 
 function removeMaskMonetaria(value) {
-  let valor = value.toString().replace("R$ ","");
+  let valor = value.toString().replace(" ","");
+  valor = valor.replace("R$","");
   valor = valor.replace(".","");
   valor = valor.replace(",",".");
   return Number(valor);
 }
 
 function removeMaskMonetariaCalcularValorTotalNaTabela(produto) {
-  let valorUnitario = produto.valorVenda.replace("R$ ","");
+  let valorUnitario = produto.valorVenda.replace(" ","");
+  valorUnitario = valorUnitario.replace("R$","");
   valorUnitario = valorUnitario.replace(".","");
   valorUnitario = valorUnitario.replace(",",".");
   return valorUnitario;
@@ -401,64 +404,84 @@ function removeMaskMonetariaCalcularValorTotalNaTabela(produto) {
 
 function finalizarVenda() {
   
-  let formaPagamentos = [];
-  let formaPagamento = {};
-  let tipoPagamento = {};
-  
   $(document).on("click", "#btnFinalizarVenda", function () {
     
+    let formasPagamento = [];
+    let formaPagamento = {};
     let existsValores = false;
+    let valorEntrarCaixa = 0;
+    let totalVenda = valorTotalVenda;
+    let vlFinalVenda = removeMaskMonetaria(formatter.format(totalVenda));
+    
     let alertHtml = `
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-        <span id="msgAlert">A forma de pagamento é obrigatória.</span>
+        <span id="msgAlert">A forma de pagamento é obrigatória!</span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>`;
     
     if (getValueInputDinehro && getValueInputDinehro > 0) {
-      tipoPagamento["DINHEIRO"] = EnumEntradaProduto.DINHEIRO;
-      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["formaPagamento"] = EnumEntradaProduto.DINHEIRO;
       formaPagamento["valor"] = getValueInputDinehro;
-      formaPagamentos.push(formaPagamento);
-      tipoPagamento = {};
+      formasPagamento.push(formaPagamento);
       formaPagamento = {};
       existsValores = true;
+      valorEntrarCaixa += getValueInputDinehro;
     }
     if (getValueInputDebito && getValueInputDebito > 0) {
-      tipoPagamento["CARTAO_DEBITO"] = EnumEntradaProduto.CARTAO_DEBITO;
-      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["formaPagamento"] = EnumEntradaProduto.CARTAO_DEBITO;
       formaPagamento["valor"] = getValueInputDebito;
-      formaPagamentos.push(formaPagamento);
-      tipoPagamento = {};
+      formasPagamento.push(formaPagamento);
       formaPagamento = {};
       existsValores = true;
+      valorEntrarCaixa += getValueInputDebito;
     }
     if (getValueInputCredito && getValueInputCredito > 0) {
-      tipoPagamento["CARTAO_CREDITO"] = EnumEntradaProduto.CARTAO_CREDITO;
-      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["formaPagamento"] = EnumEntradaProduto.CARTAO_CREDITO;
       formaPagamento["valor"] = getValueInputCredito;
-      formaPagamentos.push(formaPagamento);
-      tipoPagamento = {};
+      formasPagamento.push(formaPagamento);
       formaPagamento = {};
       existsValores = true;
+      valorEntrarCaixa += getValueInputCredito;
     }
     if (getValueInputPix && getValueInputPix > 0) {
-      tipoPagamento["PIX"] = EnumEntradaProduto.PIX;
-      formaPagamento["tipoPagamento"] = tipoPagamento;
+      formaPagamento["formaPagamento"] = EnumEntradaProduto.PIX;
       formaPagamento["valor"] = getValueInputPix;
-      formaPagamentos.push(formaPagamento);
-      tipoPagamento = {};
+      formasPagamento.push(formaPagamento);
       formaPagamento = {};
       existsValores = true;
+      valorEntrarCaixa += getValueInputPix;
     }
     
     if (!existsValores) {
       $("#divAlert").empty();
       $("#divAlert").append(alertHtml).removeClass("visually-hidden");
+    } else if (valorEntrarCaixa < vlFinalVenda) {
+      $("#divAlert").empty();
+      $("#divAlert").append(alertHtml).removeClass("visually-hidden");
+      $("#msgAlert").text("");
+      $("#msgAlert").text("Valor recebido está menor que o valor da venda!");                            
+    } else {
+      $("#divAlert").empty();
+      let venda = {
+        itensVenda: listProdutos,
+        formasPagamento: formasPagamento
+      };
+      
+      $.ajax({
+        url: `${CONTEXT}${ENDPOINT}/finalizar`,
+        dataType: "json",
+        contentType: "application/json",
+        method: "POST",
+        data: JSON.stringify(venda),
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR, textStatus, errorThrown);
+        }
+      });
     }
-    
-    console.log(formaPagamentos);
-    
   });
 }
 

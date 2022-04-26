@@ -42,5 +42,8 @@ public class FormaPagamento implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JsonBackReference
   private MovimentacaoCaixa movimentacaoCaixa;
+  
+  @Column(nullable = false, updatable = false, length = 50)
+  private String tenant;
 
 }

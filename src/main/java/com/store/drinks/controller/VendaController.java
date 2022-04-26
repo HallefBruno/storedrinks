@@ -1,19 +1,18 @@
 
-
 package com.store.drinks.controller;
-
-import com.store.drinks.entidade.enuns.TipoPagamento;
+import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.service.AbrirCaixaService;
 import com.store.drinks.service.ProdutoService;
 import com.store.drinks.service.VendaService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -47,6 +46,12 @@ public class VendaController {
   @ResponseStatus(HttpStatus.OK)
   public void updateQuantidadeProdutoEstoque(@PathVariable(name = "codigoBarra", required = true) String codigoBarra, @PathVariable(name = "quantidade", required = true) Integer quantidade) {
     produtoService.updateQuantidadeProdutoEstoque(codigoBarra, quantidade);
+  }
+  
+  @PostMapping("/finalizar")
+  @ResponseStatus(HttpStatus.OK)
+  public void salvarVenda(@RequestBody(required = true) Vendadto vendadto) {
+    System.out.println(vendadto.toString());
   }
   
 }
