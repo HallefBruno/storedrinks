@@ -75,9 +75,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>31.0.1-jre</version>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>31.0.1-jre</version>
     </dependency>
     <dependency>
       <groupId>com.github.mxab.thymeleaf.extras</groupId>
@@ -104,7 +104,12 @@
     <dependency>
       <groupId>org.ehcache</groupId>
       <artifactId>ehcache</artifactId>
-    </dependency> 
+    </dependency>
+    <dependency>
+      <groupId>org.modelmapper</groupId>
+      <artifactId>modelmapper</artifactId>
+      <version>3.0.0</version>
+    </dependency>
   </dependencies>
 
   <build>

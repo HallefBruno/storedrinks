@@ -421,7 +421,7 @@ function finalizarVenda() {
       </div>`;
     
     if (getValueInputDinehro && getValueInputDinehro > 0) {
-      formaPagamento["formaPagamento"] = EnumEntradaProduto.DINHEIRO;
+      formaPagamento["tipoPagamento"] = EnumEntradaProduto.DINHEIRO;
       formaPagamento["valor"] = getValueInputDinehro;
       formasPagamento.push(formaPagamento);
       formaPagamento = {};
@@ -429,7 +429,7 @@ function finalizarVenda() {
       valorEntrarCaixa += getValueInputDinehro;
     }
     if (getValueInputDebito && getValueInputDebito > 0) {
-      formaPagamento["formaPagamento"] = EnumEntradaProduto.CARTAO_DEBITO;
+      formaPagamento["tipoPagamento"] = EnumEntradaProduto.CARTAO_DEBITO;
       formaPagamento["valor"] = getValueInputDebito;
       formasPagamento.push(formaPagamento);
       formaPagamento = {};
@@ -437,7 +437,7 @@ function finalizarVenda() {
       valorEntrarCaixa += getValueInputDebito;
     }
     if (getValueInputCredito && getValueInputCredito > 0) {
-      formaPagamento["formaPagamento"] = EnumEntradaProduto.CARTAO_CREDITO;
+      formaPagamento["tipoPagamento"] = EnumEntradaProduto.CARTAO_CREDITO;
       formaPagamento["valor"] = getValueInputCredito;
       formasPagamento.push(formaPagamento);
       formaPagamento = {};
@@ -445,7 +445,7 @@ function finalizarVenda() {
       valorEntrarCaixa += getValueInputCredito;
     }
     if (getValueInputPix && getValueInputPix > 0) {
-      formaPagamento["formaPagamento"] = EnumEntradaProduto.PIX;
+      formaPagamento["tipoPagamento"] = EnumEntradaProduto.PIX;
       formaPagamento["valor"] = getValueInputPix;
       formasPagamento.push(formaPagamento);
       formaPagamento = {};

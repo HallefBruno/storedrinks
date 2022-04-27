@@ -50,8 +50,8 @@ public class VendaController {
   
   @PostMapping("/finalizar")
   @ResponseStatus(HttpStatus.OK)
-  public void salvarVenda(@RequestBody(required = true) Vendadto vendadto) {
-    System.out.println(vendadto.toString());
+  public void salvar(@RequestBody(required = true) Vendadto vendadto) {
+    vendaService.salvar(vendadto);
   }
   
 }
