@@ -41,7 +41,7 @@ public class AbrirCaixa implements Serializable {
   @Column(name = "data_hora_abertura", nullable = false)
   private LocalDateTime dataHoraAbertura;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Usuario usuario;
 

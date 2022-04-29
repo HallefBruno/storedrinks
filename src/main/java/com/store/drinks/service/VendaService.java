@@ -4,9 +4,9 @@ package com.store.drinks.service;
 import com.store.drinks.entidade.FormaPagamento;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.MovimentacaoCaixa;
-import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Venda;
 import com.store.drinks.entidade.dto.venda.Vendadto;
+import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
@@ -31,6 +31,7 @@ public class VendaService {
   private final UsuarioService usuarioService;
   private final AbrirCaixaService abrirCaixaService;
   private final ProdutoRepository produtoRepository;
+  private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   
   @Transactional
   public void salvar(Vendadto vendadto) {
@@ -44,8 +45,11 @@ public class VendaService {
       produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), multitenancy.getTenantValue())
       .ifPresent(produto -> {
         if(item.getQuantidade() > produto.getQuantidade()) {
-          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não possui essa quantidade em estoque!");
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, produto.getDescricaoProduto().concat(" está com estoque zerado, remover da lista"));
         } else {
+          int quantidadeAtual = produto.getQuantidade();
+          quantidadeAtual -= item.getQuantidade();
+          produto.setQuantidade(quantidadeAtual);
           ItensVenda itensVenda = new ItensVenda();
           itensVenda.setProduto(produto);
           itensVenda.setQuantidade(item.getQuantidade());
@@ -71,8 +75,10 @@ public class VendaService {
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
     movimentacaoCaixa.setAbrirCaixa(abrirCaixaService.caixaAberto().get());
     movimentacaoCaixa.setVenda(venda);
-    movimentacaoCaixa.setValorTroco(venda.getValorTotalVenda().subtract(somaValorFormaPagamento(formasPagamento)));
+    movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));
     movimentacaoCaixa.setValorRecebido(venda.getValorTotalVenda());
+    movimentacaoCaixaRepository.save(movimentacaoCaixa);
+    
   }
   
   private BigDecimal valorTotalVenda(List<ItensVenda> itensVenda) {
@@ -86,7 +92,7 @@ public class VendaService {
   private BigDecimal somaValorFormaPagamento(Set<FormaPagamento> formasPagamento) {
     BigDecimal somaValorFormaPagamento = formasPagamento.stream()
       .map(FormaPagamento::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-    return somaValorFormaPagamento;
+    return somaValorFormaPagamento.setScale(2, RoundingMode.HALF_UP);
   }
   
 }

@@ -8,6 +8,7 @@ let getValueInputDebito = 0;
 let getValueInputCredito = 0;
 let getValueInputPix = 0;
 let quantidadeEstoqueAtual = null;
+let modalFormPagamento = $("#modalFormaPagamento");
 const CLASS_BTN_DIMINUIR = "btnDiminuirQuantidade";
 const CLASS_BTN_AUMENTAR = "btnAumentarQuantidade";
 const CLASS_BTN_REMOVER = "btnRemoverItem";
@@ -15,6 +16,7 @@ const ENDPOINT = "vendas";
 const CONTEXT = $("#context").val();
 
 $(function () {
+  aleatoreCors();
   initDataTable();
   popularSelectProdutos();
   eventKeyEnter();
@@ -146,7 +148,7 @@ function eventKeyEnter() {
 function qtdAtualMaiorQtdVenda() {
   let quantidade = Number($("#quantidade").val());
   if (quantidade > Number(quantidadeEstoqueAtual)) {
-    mensagemToast("Você não possui essa quantidade em estoque!","#000000","#ffffff");
+    mensagemToast("Você não possui essa quantidade em estoque!","#000000","#ffffff","info");
     $("#quantidade").val("");
     return false;
   }
@@ -176,13 +178,13 @@ function addProduto() {
       somaValorTotalVenda(listProdutos);
       clearFormFocusSelect();
     } else {
-      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff");
+      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff","info");
     }
   } else if ($("#descricaoProduto").val().length === 0) {
     clearFormFocusSelect();
-    mensagemToast("Por favor, selecione um produto!", "#000000", "#ffffff");
+    mensagemToast("Por favor, selecione um produto!", "#000000", "#ffffff","info");
   } else {
-    mensagemToast("A quantidade de produto precisa ser maior que zero!", "#000000", "#ffffff");
+    mensagemToast("A quantidade de produto precisa ser maior que zero!", "#000000", "#ffffff","info");
   }
 }
 
@@ -236,7 +238,7 @@ function eventClickRowDataTable() {
         somaValorTotalVenda(listProdutos);
         return;
       }
-      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff");
+      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff","info");
     } else {
       listProdutos.splice(index, 1);
       popularTable(listProdutos);
@@ -283,7 +285,7 @@ function funcQtdProdutosPorItem(prod) {
 function formaPagamento() {
   $("#formaPagamento").click(function () {
     if(listProdutos.length <= 0) {
-      mensagemToast("Selecione os itens para venda!", "#000000", "#ffffff");
+      mensagemToast("Selecione os itens para venda!", "#000000", "#ffffff","info");
       $("#codigoBarra").focus();
     } else {
       modalFormaPagamento();
@@ -297,22 +299,21 @@ function formaPagamento() {
 }
 
 function modalFormaPagamento() {
-  let modalFormaPagamento = $("#modalFormaPagamento");
-  modalFormaPagamento.modal("show");
+  modalFormPagamento.modal("show");
 
-  modalFormaPagamento.one("shown.bs.modal", function (e) {
-    clearInputModal(modalFormaPagamento);
+  modalFormPagamento.one("shown.bs.modal", function (e) {
+    clearInputModal(modalFormPagamento);
   });
   
-  modalFormaPagamento.one("hidden.bs.modal", function (e) {
-    clearInputModal(modalFormaPagamento);
+  modalFormPagamento.one("hidden.bs.modal", function (e) {
+    clearInputModal(modalFormPagamento);
   });
 
-  let inputDinheiro = modalFormaPagamento.find("#dinheiro");
-  let inputDebito = modalFormaPagamento.find("#debito");
-  let inputCredito = modalFormaPagamento.find("#credito");
-  let inputPix = modalFormaPagamento.find("#pix");
-  let spanTroco = modalFormaPagamento.find("#spanTroco");
+  let inputDinheiro = modalFormPagamento.find("#dinheiro");
+  let inputDebito = modalFormPagamento.find("#debito");
+  let inputCredito = modalFormPagamento.find("#credito");
+  let inputPix = modalFormPagamento.find("#pix");
+  let spanTroco = modalFormPagamento.find("#spanTroco");
   let soma = 0;
   
   $(document).on("keyup", `#${inputDinheiro.prop("id")}`, function (event) {
@@ -373,16 +374,16 @@ function somaValoresFormaPagamento(soma,getValueInputDinehro, getValueInputDebit
   return soma;
 }
 
-function clearInputModal(modalFormaPagamento) {
+function clearInputModal(modalFormPagamento) {
   getValueInputDinehro = 0;
   getValueInputDebito = 0;
   getValueInputCredito = 0;
   getValueInputPix = 0;
-  modalFormaPagamento.find("#dinheiro").val("");
-  modalFormaPagamento.find("#debito").val("");
-  modalFormaPagamento.find("#credito").val("");
-  modalFormaPagamento.find("#pix").val("");
-  modalFormaPagamento.find("#spanTroco").text("0,00");
+  modalFormPagamento.find("#dinheiro").val("");
+  modalFormPagamento.find("#debito").val("");
+  modalFormPagamento.find("#credito").val("");
+  modalFormPagamento.find("#pix").val("");
+  modalFormPagamento.find("#spanTroco").text("0,00");
   $("#divAlert").empty();
 }
 
@@ -412,6 +413,7 @@ function finalizarVenda() {
     let valorEntrarCaixa = 0;
     let totalVenda = valorTotalVenda;
     let vlFinalVenda = removeMaskMonetaria(formatter.format(totalVenda));
+    let divAlert = $("#divAlert");
     
     let alertHtml = `
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -454,15 +456,15 @@ function finalizarVenda() {
     }
     
     if (!existsValores) {
-      $("#divAlert").empty();
-      $("#divAlert").append(alertHtml).removeClass("visually-hidden");
+      divAlert.empty();
+      divAlert.append(alertHtml).removeClass("visually-hidden");
     } else if (valorEntrarCaixa < vlFinalVenda) {
-      $("#divAlert").empty();
-      $("#divAlert").append(alertHtml).removeClass("visually-hidden");
-      $("#msgAlert").text("");
-      $("#msgAlert").text("Valor recebido está menor que o valor da venda!");                            
+      divAlert.empty();
+      divAlert.append(alertHtml).removeClass("visually-hidden");
+      divAlert.find("#msgAlert").text("");
+      divAlert.find("#msgAlert").text("Valor recebido está menor que o valor da venda!");                            
     } else {
-      $("#divAlert").empty();
+      divAlert.empty();
       let venda = {
         itensVenda: listProdutos,
         formasPagamento: formasPagamento
@@ -474,18 +476,54 @@ function finalizarVenda() {
         contentType: "application/json",
         method: "POST",
         data: JSON.stringify(venda),
-        success: function (response) {
-          console.log(response);
+        beforeSend: function () {
+          modalFormPagamento.find("#btnFinalizarVenda").text("");
+          modalFormPagamento.find("#btnFinalizarVenda").text("Aguarde...");
+          modalFormPagamento.find("#btnFinalizarVenda").prop("disabled",true);
+          modalFormPagamento.find("#btnVoltar").prop("disabled",true);
+          modalFormPagamento.find(".btn-close").prop("disabled",true);
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR, textStatus, errorThrown);
+        statusCode: {
+          200: function (data) {
+            listProdutos = [];
+            $("#itensVenda").DataTable().clear().draw();
+            $(".valorTotal").text("0,00");
+            modalFormPagamento.modal("hide");
+            mensagemToast("Venda finalizada com sucesso!","#34a832","#ffffff","success");
+            restoreModal();
+            $("#codigoBarra").focus();
+            $(window).scrollTop(0);
+          },
+          404: function (data) {
+            restoreModal();
+            divAlert.empty();
+            divAlert.append(alertHtml).removeClass("visually-hidden");
+            divAlert.find("#msgAlert").text("");
+            divAlert.find("#msgAlert").text(data.responseJSON.message);
+          },
+          403: function (jqXHR) {
+            restoreModal();
+            console.log(jqXHR);
+          },
+          500: function (jqXHR) {
+            restoreModal();
+            console.log(jqXHR);
+          }
         }
       });
     }
   });
 }
 
-function mensagemToast(text, bgColor, textColor) {
+function restoreModal() {
+  modalFormPagamento.find("#btnFinalizarVenda").text("");
+  modalFormPagamento.find("#btnFinalizarVenda").text("Finalizar venda");
+  modalFormPagamento.find("#btnFinalizarVenda").prop("disabled",false);
+  modalFormPagamento.find("#btnVoltar").prop("disabled",false);
+  modalFormPagamento.find(".btn-close").prop("disabled",false);
+}
+
+function mensagemToast(text, bgColor, textColor,icon) {
   $.toast({
     heading: `<p class='mb-1'>Atenção!<p><hr/>`,
     text: `${text}`,
@@ -493,6 +531,60 @@ function mensagemToast(text, bgColor, textColor) {
     textColor: `${textColor}`,
     position: 'top-right',
     hideAfter: 5000,
-    loader: false
+    loader: false,
+    icon: `${icon}`
   });
+}
+
+function aleatoreCors() {
+  let props = [
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#0dcaf0", //background-color
+      borderColor: "#0dcaf0", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#0dcaf0" //border-left-color
+    },
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#eb4034", //background-color
+      borderColor: "#eb4034", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#eb4034" //border-left-color
+    },
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#ebc634", //background-color
+      borderColor: "#ebc634", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#ebc634" //border-left-color
+    },
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#71eb34", //background-color
+      borderColor: "#71eb34", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#71eb34" //border-left-color
+    },
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#e234eb", //background-color
+      borderColor: "#e234eb", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#e234eb" //border-left-color
+    },
+    {
+      btnItemVenda: "#btnItemVenda",
+      backgroundColor: "#eb34b1", //background-color
+      borderColor: "#eb34b1", //border-color
+      divCallout: "#divCallout",
+      borderLeftColor: "#eb34b1" //border-left-color
+    }
+  ];
+  
+  posicao = Math.floor((Math.random() * 5));
+  configColor = props[posicao];
+  $(`${configColor.btnItemVenda}`).css("background-color",`${configColor.backgroundColor}`);
+  $(`${configColor.btnItemVenda}`).css("border-color",`${configColor.borderColor}`);
+  $(`${configColor.divCallout}`).css("border-left-color",`${configColor.borderLeftColor}`);
 }
