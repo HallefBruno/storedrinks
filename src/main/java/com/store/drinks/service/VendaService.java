@@ -1,10 +1,13 @@
 
 package com.store.drinks.service;
 
+import com.store.drinks.entidade.AbrirCaixa;
 import com.store.drinks.entidade.FormaPagamento;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.MovimentacaoCaixa;
+import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.venda.ItensVendadto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
@@ -42,43 +45,61 @@ public class VendaService {
     MovimentacaoCaixa movimentacaoCaixa = new MovimentacaoCaixa();
     
     vendadto.getItensVenda().forEach(item -> {
-      produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), multitenancy.getTenantValue())
+      produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), tenant)
       .ifPresent(produto -> {
         if(item.getQuantidade() > produto.getQuantidade()) {
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, produto.getDescricaoProduto().concat(" está com estoque zerado, remover da lista"));
         } else {
-          int quantidadeAtual = produto.getQuantidade();
-          quantidadeAtual -= item.getQuantidade();
-          produto.setQuantidade(quantidadeAtual);
-          ItensVenda itensVenda = new ItensVenda();
-          itensVenda.setProduto(produto);
-          itensVenda.setQuantidade(item.getQuantidade());
-          itensVenda.setVenda(venda);
-          itensVenda.setTenant(tenant);
-          itensVendas.add(itensVenda);
+          setItensVenda(produto, item, venda, itensVendas);
         }
       });
     });
     
+    Set<FormaPagamento> formasPagamento = setFormaPagamento(vendadto, movimentacaoCaixa);
+    setVenda(venda, itensVendas);
+    setMovimentacaoCaixa(movimentacaoCaixa, venda, formasPagamento);
+    movimentacaoCaixaRepository.save(movimentacaoCaixa);
+  }
+
+  private void setItensVenda(Produto produto, ItensVendadto item, Venda venda, List<ItensVenda> itensVendas) {
+    int quantidadeAtual = produto.getQuantidade();
+    quantidadeAtual -= item.getQuantidade();
+    produto.setQuantidade(quantidadeAtual);
+    ItensVenda itensVenda = new ItensVenda();
+    itensVenda.setProduto(produto);
+    itensVenda.setQuantidade(item.getQuantidade());
+    itensVenda.setVenda(venda);
+    itensVenda.setTenant(multitenancy.getTenantValue());
+    itensVendas.add(itensVenda);
+  }
+  
+  private Set<FormaPagamento> setFormaPagamento(Vendadto vendadto, MovimentacaoCaixa movimentacaoCaixa) {
     ModelMapper modelMapper = new ModelMapper();
     Set<FormaPagamento> formasPagamento = modelMapper.map(vendadto.getFormasPagamento(), new TypeToken<Set<FormaPagamento>>(){}.getType());
     formasPagamento.forEach(formaPg -> {
       formaPg.setMovimentacaoCaixa(movimentacaoCaixa);
     });
-    
+    return formasPagamento;
+  }
+  
+  private void setVenda(Venda venda, List<ItensVenda> itensVendas) {
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setItensVendas(itensVendas);
     venda.setUsurio(usuarioService.usuarioLogado());
-    venda.setTenant(tenant);
+    venda.setTenant(multitenancy.getTenantValue());
     venda.setValorTotalVenda(valorTotalVenda(itensVendas).setScale(2, RoundingMode.HALF_UP));
-    
+  }
+  
+  private void setMovimentacaoCaixa(MovimentacaoCaixa movimentacaoCaixa, Venda venda, Set<FormaPagamento> formasPagamento) {
+    AbrirCaixa abrirCaixa = new AbrirCaixa();
+    abrirCaixa.setId(1L);
+    abrirCaixa.setUsuario(usuarioService.usuarioLogado());
+    abrirCaixa.setTenant(multitenancy.getTenantValue());
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
-    movimentacaoCaixa.setAbrirCaixa(abrirCaixaService.caixaAberto().get());
+    movimentacaoCaixa.setAbrirCaixa(abrirCaixa);
     movimentacaoCaixa.setVenda(venda);
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));
-    movimentacaoCaixa.setValorRecebido(venda.getValorTotalVenda());
-    movimentacaoCaixaRepository.save(movimentacaoCaixa);
-    
+    movimentacaoCaixa.setValorRecebido(somaValorFormaPagamento(formasPagamento));
   }
   
   private BigDecimal valorTotalVenda(List<ItensVenda> itensVenda) {

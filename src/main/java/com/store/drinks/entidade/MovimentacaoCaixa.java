@@ -49,7 +49,7 @@ public class MovimentacaoCaixa implements Serializable {
   @JsonBackReference
   private Set<FormaPagamento> formaPagamentos;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
   @JoinColumn(nullable = false)
   private AbrirCaixa abrirCaixa;
 
