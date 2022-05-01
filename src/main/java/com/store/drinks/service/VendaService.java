@@ -1,7 +1,6 @@
 
 package com.store.drinks.service;
 
-import com.store.drinks.entidade.AbrirCaixa;
 import com.store.drinks.entidade.FormaPagamento;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.MovimentacaoCaixa;
@@ -32,7 +31,7 @@ public class VendaService {
   
   private final Multitenancy multitenancy;
   private final UsuarioService usuarioService;
-  private final AbrirCaixaService abrirCaixaService;
+  private final CaixaService abrirCaixaService;
   private final ProdutoRepository produtoRepository;
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   
@@ -91,12 +90,8 @@ public class VendaService {
   }
   
   private void setMovimentacaoCaixa(MovimentacaoCaixa movimentacaoCaixa, Venda venda, Set<FormaPagamento> formasPagamento) {
-    AbrirCaixa abrirCaixa = new AbrirCaixa();
-    abrirCaixa.setId(1L);
-    abrirCaixa.setUsuario(usuarioService.usuarioLogado());
-    abrirCaixa.setTenant(multitenancy.getTenantValue());
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
-    movimentacaoCaixa.setAbrirCaixa(abrirCaixa);
+    movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa());
     movimentacaoCaixa.setVenda(venda);
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));
     movimentacaoCaixa.setValorRecebido(somaValorFormaPagamento(formasPagamento));

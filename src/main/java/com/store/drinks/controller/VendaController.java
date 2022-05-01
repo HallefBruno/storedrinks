@@ -1,7 +1,7 @@
 
 package com.store.drinks.controller;
 import com.store.drinks.entidade.dto.venda.Vendadto;
-import com.store.drinks.service.AbrirCaixaService;
+import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.ProdutoService;
 import com.store.drinks.service.VendaService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class VendaController {
   
-  private final AbrirCaixaService abrirCaixaService;
+  private final CaixaService abrirCaixaService;
   private final VendaService vendaService;
   private final ProdutoService produtoService;
   

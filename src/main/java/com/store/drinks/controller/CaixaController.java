@@ -1,14 +1,11 @@
 package com.store.drinks.controller;
 
-import com.store.drinks.entidade.AbrirCaixa;
+import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.Venda;
 import com.store.drinks.execption.NegocioException;
-import com.store.drinks.service.AbrirCaixaService;
-import com.store.drinks.service.ProdutoService;
+import com.store.drinks.service.CaixaService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/pdv")
 @PreAuthorize("hasRole('MANTER_PDV')")
-public class AbrirCaixaController {
+public class CaixaController {
 
   @Autowired
-  private AbrirCaixaService abrirCaixaService;
+  private CaixaService abrirCaixaService;
 
   @GetMapping
   public ModelAndView pageIndex() {
@@ -37,7 +34,7 @@ public class AbrirCaixaController {
   }
 
   @GetMapping("/abrirCaixa")
-  public ModelAndView abrirCaixa(AbrirCaixa abrirCaixa) {
+  public ModelAndView abrirCaixa(Caixa caixa) {
     return new ModelAndView("venda/AbrirCaixa");
   }
 
@@ -50,12 +47,12 @@ public class AbrirCaixaController {
   }
 
   @PostMapping("/salvar")
-  public ModelAndView salvar(@Valid AbrirCaixa abrirCaixa, BindingResult result, Model model, RedirectAttributes attributes) {
+  public ModelAndView salvar(@Valid Caixa caixa, BindingResult result, Model model, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
         return new ModelAndView("rediredct:/pdv/abrirCaixa");
       }
-      abrirCaixaService.salvar(abrirCaixa);
+      abrirCaixaService.salvar(caixa);
     } catch (NegocioException ex) {
       ObjectError error = new ObjectError("erro", ex.getMessage());
       result.addError(error);

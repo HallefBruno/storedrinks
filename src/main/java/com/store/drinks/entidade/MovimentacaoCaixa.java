@@ -51,7 +51,7 @@ public class MovimentacaoCaixa implements Serializable {
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
   @JoinColumn(nullable = false)
-  private AbrirCaixa abrirCaixa;
+  private Caixa caixa;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(nullable = false)
@@ -128,12 +128,12 @@ public class MovimentacaoCaixa implements Serializable {
     this.formaPagamentos = formaPagamentos;
   }
 
-  public AbrirCaixa getAbrirCaixa() {
-    return abrirCaixa;
+  public Caixa getCaixa() {
+    return caixa;
   }
 
-  public void setAbrirCaixa(AbrirCaixa abrirCaixa) {
-    this.abrirCaixa = abrirCaixa;
+  public void setCaixa(Caixa caixa) {
+    this.caixa = caixa;
   }
 
   public Venda getVenda() {

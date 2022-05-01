@@ -22,7 +22,7 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <div class="container-fluid">
               <th:block th:include="fragments/MensagemSucesso"></th:block>
-              <form th:object="${abrirCaixa}" method="post" th:action="@{/pdv/salvar}">
+              <form th:object="${caixa}" method="post" th:action="@{/pdv/salvar}">
                 <th:block th:include="fragments/MensagensErroValidacao"></th:block>
                 <div class="shadow-sm mb-5 bg-body rounded">
                   <div class="card">

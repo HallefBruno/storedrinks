@@ -22,9 +22,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
-@Table(name = "abrir_caixa")
+@Table(name = "caixa")
 @DynamicUpdate
-public class AbrirCaixa implements Serializable {
+public class Caixa implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +58,3 @@ public class AbrirCaixa implements Serializable {
     this.tenant = StringUtils.strip(this.tenant);
   }
 }
-//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-//@ManyToOne
-//private ClienteSistema clienteSistema;
-//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
