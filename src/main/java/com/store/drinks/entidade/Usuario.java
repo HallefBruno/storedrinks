@@ -2,11 +2,14 @@ package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.store.drinks.entidade.dto.Usuariodto;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +24,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,6 +35,21 @@ import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
+@SqlResultSetMapping(
+  name="Usuariodto",
+  classes={
+    @ConstructorResult(
+      targetClass=Usuariodto.class,
+      columns={ 
+        @ColumnResult(name = "id", type=Long.class),
+        @ColumnResult(name = "text", type=String.class),
+        @ColumnResult(name = "nome", type=String.class),
+        @ColumnResult(name = "destinatario", type=String.class),
+        @ColumnResult(name = "tenant", type=String.class)
+      }
+    )
+  }
+)
 public class Usuario implements Serializable {
 
   @Id

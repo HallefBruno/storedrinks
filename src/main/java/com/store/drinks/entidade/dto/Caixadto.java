@@ -5,39 +5,9 @@ package com.store.drinks.entidade.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
-import javax.persistence.Id;
-import javax.persistence.SqlResultSetMapping;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@SqlResultSetMapping(name = "Caixadto",
-  entities = {
-    @EntityResult(entityClass = com.store.drinks.entidade.dto.Caixadto.class, 
-      fields = {
-        @FieldResult(name = "id", column = "id"),
-        @FieldResult(name = "aberto", column = "aberto"),
-        @FieldResult(name = "dataHoraAbertura", column = "data_hora_abertura"),
-        @FieldResult(name = "valorInicialTroco", column = "valor_inicial_troco"),
-        @FieldResult(name = "dataHoraFechamento", column = "data_hora_fechamento"),
-        @FieldResult(name = "usuarioId", column = "usuario_id"),
-        @FieldResult(name = "tenant", column = "tenant")
-      }
-    )
-  }
-)
 public class Caixadto implements Serializable {
-  
-  @Id
+
   private Long id;
   private Boolean aberto;
   private LocalDateTime dataHoraAbertura;
@@ -45,5 +15,72 @@ public class Caixadto implements Serializable {
   private LocalDateTime dataHoraFechamento;
   private String tenant;
   private Long usuarioId;
+
+  public Caixadto(Long id, Boolean aberto, LocalDateTime dataHoraAbertura, BigDecimal valorInicialTroco, LocalDateTime dataHoraFechamento, String tenant, Long usuarioId) {
+    this.id = id;
+    this.aberto = aberto;
+    this.dataHoraAbertura = dataHoraAbertura;
+    this.valorInicialTroco = valorInicialTroco;
+    this.dataHoraFechamento = dataHoraFechamento;
+    this.tenant = tenant;
+    this.usuarioId = usuarioId;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Boolean getAberto() {
+    return aberto;
+  }
+
+  public void setAberto(Boolean aberto) {
+    this.aberto = aberto;
+  }
+
+  public LocalDateTime getDataHoraAbertura() {
+    return dataHoraAbertura;
+  }
+
+  public void setDataHoraAbertura(LocalDateTime dataHoraAbertura) {
+    this.dataHoraAbertura = dataHoraAbertura;
+  }
+
+  public BigDecimal getValorInicialTroco() {
+    return valorInicialTroco;
+  }
+
+  public void setValorInicialTroco(BigDecimal valorInicialTroco) {
+    this.valorInicialTroco = valorInicialTroco;
+  }
+
+  public LocalDateTime getDataHoraFechamento() {
+    return dataHoraFechamento;
+  }
+
+  public void setDataHoraFechamento(LocalDateTime dataHoraFechamento) {
+    this.dataHoraFechamento = dataHoraFechamento;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
+
+  public Long getUsuarioId() {
+    return usuarioId;
+  }
+
+  public void setUsuarioId(Long usuarioId) {
+    this.usuarioId = usuarioId;
+  }
+  
   
 }

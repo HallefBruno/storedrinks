@@ -2,6 +2,7 @@
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.store.drinks.entidade.dto.Mensagemdto;
 import com.store.drinks.entidade.embedded.RemetenteDestinatarioMensagem;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,7 +11,9 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -32,6 +36,25 @@ import org.hibernate.annotations.DynamicUpdate;
     @NamedSubgraph(name = "subgraph.usuario", attributeNodes = @NamedAttributeNode(value = "clienteSistema", subgraph = "subgraph.clienteSistema"))
   }
 )
+
+@SqlResultSetMapping(name = "Mensagemdto",
+  entities = {
+    @EntityResult(entityClass = Mensagemdto.class, 
+      fields = {
+        @FieldResult(name = "id", column = "id"),
+        @FieldResult(name = "tenant", column = "tenant"),
+        @FieldResult(name = "destinatario", column = "destinatario"),
+        @FieldResult(name = "mensagem", column = "mensagem"),
+        @FieldResult(name = "lida", column = "lida"),
+        @FieldResult(name = "dataHoraMensagemRecebida", column = "data_hora_mensagem_recebida"),
+        @FieldResult(name = "usuarioId", column = "usuario_id"),
+        @FieldResult(name = "notificado", column = "notificado"),
+        @FieldResult(name = "remetente", column = "remetente")
+      }
+    )
+  }
+)
+
 public class MensagensRecebidas implements Serializable {
   
   @Id

@@ -31,7 +31,7 @@ public class ItensVenda implements Serializable {
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
   @JoinColumn(nullable = false)
   private Produto produto;
 
@@ -40,7 +40,7 @@ public class ItensVenda implements Serializable {
   @Column(nullable = false)
   private Integer quantidade;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   @JsonBackReference
   private Venda venda;

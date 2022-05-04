@@ -32,7 +32,7 @@ public class Venda implements Serializable {
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 
-  @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "venda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonManagedReference
   private List<ItensVenda> itensVendas;
 
@@ -45,7 +45,7 @@ public class Venda implements Serializable {
   
   @JoinColumn(nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
-  private Usuario usurio;
+  private Usuario usuario;
 
   @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
@@ -89,12 +89,12 @@ public class Venda implements Serializable {
     this.valorTotalVenda = valorTotalVenda;
   }
 
-  public Usuario getUsurio() {
-    return usurio;
+  public Usuario getUsuario() {
+    return usuario;
   }
 
-  public void setUsurio(Usuario usurio) {
-    this.usurio = usurio;
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
 
   public String getTenant() {

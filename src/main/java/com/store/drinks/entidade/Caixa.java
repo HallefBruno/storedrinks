@@ -1,10 +1,13 @@
 package com.store.drinks.entidade;
 
+import com.store.drinks.entidade.dto.Caixadto;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import lombok.Data;
@@ -24,6 +28,21 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "caixa")
 @DynamicUpdate
+@SqlResultSetMapping(
+  name="Caixadto",
+  classes={ 
+    @ConstructorResult(targetClass=Caixadto.class,
+    columns={
+      @ColumnResult(name = "id", type=Long.class),
+      @ColumnResult(name = "aberto", type=Boolean.class),
+      @ColumnResult(name = "data_hora_abertura", type=LocalDateTime.class),
+      @ColumnResult(name = "valor_inicial_troco", type=BigDecimal.class),
+      @ColumnResult(name = "data_hora_fechamento", type=LocalDateTime.class),
+      @ColumnResult(name = "tenant", type=String.class),
+      @ColumnResult(name = "usuario_id", type=Long.class)
+    })
+  }
+)
 public class Caixa implements Serializable {
 
   @Id

@@ -2,7 +2,6 @@ package com.store.drinks.repository.util;
 
 import java.util.Set;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

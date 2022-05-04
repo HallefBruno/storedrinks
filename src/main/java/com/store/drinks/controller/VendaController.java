@@ -35,6 +35,14 @@ public class VendaController {
     return new ModelAndView("venda/RealizarVenda");
   }
   
+  @GetMapping("/page-cancelar-venda")
+  public ModelAndView pageCancelarVenda() {
+    vendaService.chamarListVendasTest();
+    ModelAndView modelAndView = new ModelAndView("venda/CancelarVenda");
+    modelAndView.addObject("vendas", vendaService.chamarListVendasTest());
+    return modelAndView;
+  }
+  
   @GetMapping("/produtos")
   public ResponseEntity<?> pesquisarProdutosAutoComplete(
     @RequestParam(name = "q", required = false) String descricao,
@@ -52,6 +60,12 @@ public class VendaController {
   @ResponseStatus(HttpStatus.OK)
   public void salvar(@RequestBody(required = true) Vendadto vendadto) {
     vendaService.salvar(vendadto);
+  }
+  
+  @PutMapping("/cancelar-venada")
+  @ResponseStatus(HttpStatus.OK)
+  public void cancelarVenda(Long id) {
+    
   }
   
 }

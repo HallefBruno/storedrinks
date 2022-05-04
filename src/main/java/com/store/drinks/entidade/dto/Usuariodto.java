@@ -3,33 +3,9 @@ package com.store.drinks.entidade.dto;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.SqlResultSetMapping;
-import lombok.Data;
 
-@Data
-@Entity
-@SqlResultSetMapping(
-  name="Usuariodto",
-  classes={
-    @ConstructorResult(
-      targetClass=Usuariodto.class,
-      columns={
-        @ColumnResult(name="id"),
-        @ColumnResult(name="text"),
-        @ColumnResult(name="nome"),
-        @ColumnResult(name="destinatario"),
-        @ColumnResult(name="tenant")
-      }
-    )
-  }
-)
 public class Usuariodto implements Serializable {
   
-  @Id
   private BigInteger id;
   private String text;
   private String nome;
@@ -47,5 +23,44 @@ public class Usuariodto implements Serializable {
   public Usuariodto() {
   }
   
-  
+  public BigInteger getId() {
+    return id;
+  }
+
+  public void setId(BigInteger id) {
+    this.id = id;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getDestinatario() {
+    return destinatario;
+  }
+
+  public void setDestinatario(String destinatario) {
+    this.destinatario = destinatario;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
+
 }

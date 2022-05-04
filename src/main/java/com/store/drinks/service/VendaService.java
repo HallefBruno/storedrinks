@@ -10,6 +10,7 @@ import com.store.drinks.entidade.dto.venda.ItensVendadto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
+import com.store.drinks.repository.VendaRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,6 +21,8 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +37,12 @@ public class VendaService {
   private final CaixaService abrirCaixaService;
   private final ProdutoRepository produtoRepository;
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
+  private final VendaRepository vendaRepository;
+  
+  public List<Venda> chamarListVendasTest() {
+    Pageable pageable = PageRequest.of(Integer.valueOf("0"), 10);
+    return vendaRepository.buscarVendasParaCancelar(pageable).getContent();
+  }
   
   @Transactional
   public void salvar(Vendadto vendadto) {
@@ -84,7 +93,7 @@ public class VendaService {
   private void setVenda(Venda venda, List<ItensVenda> itensVendas) {
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setItensVendas(itensVendas);
-    venda.setUsurio(usuarioService.usuarioLogado());
+    venda.setUsuario(usuarioService.usuarioLogado());
     venda.setTenant(multitenancy.getTenantValue());
     venda.setValorTotalVenda(valorTotalVenda(itensVendas).setScale(2, RoundingMode.HALF_UP));
   }
