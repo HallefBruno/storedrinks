@@ -45,15 +45,19 @@ public class MovimentacaoCaixa implements Serializable {
   @Column(name = "valor_troco", nullable = false)
   private BigDecimal valorTroco;
   
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
   @JsonBackReference
   private Set<FormaPagamento> formaPagamentos;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Caixa caixa;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private Usuario usuario;
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Venda venda;
 
@@ -136,6 +140,14 @@ public class MovimentacaoCaixa implements Serializable {
     this.caixa = caixa;
   }
 
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+  }
+
   public Venda getVenda() {
     return venda;
   }
@@ -152,6 +164,5 @@ public class MovimentacaoCaixa implements Serializable {
     this.tenant = tenant;
   }
 
-  
   
 }

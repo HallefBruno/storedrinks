@@ -11,7 +11,7 @@
   <groupId>com.store.drinks</groupId>
   <artifactId>storedrinks</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <!--<packaging>war</packaging>-->
+  <packaging>war</packaging>
   <name>storedrinks</name>
   <description>Sistema de gestão de distribuidora de bebidas</description>
   <properties>
@@ -113,7 +113,7 @@
   </dependencies>
 
   <build>
-    <!--<finalName>${project.artifactId}</finalName>-->
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>

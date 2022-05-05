@@ -37,7 +37,6 @@ public class VendaController {
   
   @GetMapping("/page-cancelar-venda")
   public ModelAndView pageCancelarVenda() {
-    vendaService.chamarListVendasTest();
     ModelAndView modelAndView = new ModelAndView("venda/CancelarVenda");
     modelAndView.addObject("vendas", vendaService.chamarListVendasTest());
     return modelAndView;
