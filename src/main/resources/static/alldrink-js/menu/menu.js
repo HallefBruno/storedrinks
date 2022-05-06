@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $('a').click(function (e) {
-    if (!$(this).is(".link-calculadora") && ($(this).attr("target") === undefined)) {
+    console.log(e);
+    if (!$(this).is(".link-calculadora") && ($(this).attr("target") === undefined) || $(this).hasClass("invock-gif")) {
       $("#divLoading").addClass("loading");
     }
   });

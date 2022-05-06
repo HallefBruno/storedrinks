@@ -6,6 +6,7 @@ import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.venda.CancelarVendadto;
 import com.store.drinks.entidade.dto.venda.ItensVendadto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
@@ -39,9 +40,9 @@ public class VendaService {
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final VendaRepository vendaRepository;
   
-  public List<Venda> chamarListVendasTest() {
+  public List<CancelarVendadto> chamarListVendasTest() {
     Pageable pageable = PageRequest.of(Integer.valueOf("0"), 10);
-    return vendaRepository.buscarVendasParaCancelar(pageable).getContent();
+    return vendaRepository.getVendasCancelar(pageable).getContent();
   }
   
   @Transactional

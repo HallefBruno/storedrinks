@@ -10,7 +10,9 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,12 +21,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
 import javax.validation.constraints.Min;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @DynamicUpdate
+@SqlResultSetMapping(
+  name = "CancelarVendadto",
+  entities = {
+    @EntityResult(
+      entityClass = com.store.drinks.entidade.dto.venda.CancelarVendadto.class,
+      fields = {
+        @FieldResult(name = "movimentacaoCaixaId", column = "movimentacao_caixa_id"),
+        @FieldResult(name = "tenant", column = "tenant"),
+        @FieldResult(name = "valorRecebido", column = "valor_recebido"),
+        @FieldResult(name = "valorTroco", column = "valor_troco"),
+        @FieldResult(name = "caixaId", column = "caixa_id"),
+        @FieldResult(name = "vendaId", column = "venda_id"),
+        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda"),
+        @FieldResult(name = "dataHoraVenda", column = "data_hora_venda"),
+        @FieldResult(name = "usuarioId", column = "usuario_id"),
+        @FieldResult(name = "nome", column = "nome"),
+        @FieldResult(name = "email", column = "email")
+      }
+    ),
+  }
+)
 public class Venda implements Serializable {
 
   @Id
