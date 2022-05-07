@@ -1,8 +1,12 @@
 package com.store.drinks.repository.querys.venda;
 
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
+import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.service.UsuarioService;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -76,7 +80,22 @@ public class VendaRepositoryImpl implements VendaRepositoryCustom {
     int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
     query.setFirstResult(primeiroRegistro);
     query.setMaxResults(totalRegistrosPorPagina);
-    return new PageImpl<>(query.getResultList(), pageable, count);
+    List<CancelarVendadto> cancelarVendadtos = query.getResultList();
+    List<CancelarVendadto> listVendasOrdenada = cancelarVendadtos.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
+    return new PageImpl<>(listVendasOrdenada, pageable, count);
+  }
+  
+  @Override
+  public List<ItensVendaCancelardto> getItensVenda(Long vendaId) {
+    StringBuilder sqlQuery = new StringBuilder();
+    sqlQuery.append("select iv.id, iv.quantidade, p.descricao_produto ,p.valor_venda, v.valor_total_venda ");
+    sqlQuery.append("from itens_venda iv ");
+    sqlQuery.append("inner join produto p on(p.id = iv.produto_id) ");
+    sqlQuery.append("inner join venda v on (v.id = iv.venda_id) ");
+    sqlQuery.append("where iv.tenant = '").append(multitenancy.getTenantValue()).append("' ");
+    sqlQuery.append("and v.id = ").append(vendaId);
+    Query query = manager.createNativeQuery(sqlQuery.toString(), "ItensVendaCancelardto");
+    return query.getResultList();
   }
 
 }

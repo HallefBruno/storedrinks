@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CancelarVendadto implements Serializable {
+public class CancelarVendadto implements Serializable, Comparable<CancelarVendadto>{
   
   @Id
   private Long movimentacaoCaixaId;
@@ -31,5 +31,10 @@ public class CancelarVendadto implements Serializable {
   private Long usuarioId;
   private String nome;
   private String email;
+  
+  @Override
+  public int compareTo(CancelarVendadto cancelarVendadto) {
+    return this.getMovimentacaoCaixaId().compareTo(cancelarVendadto.getMovimentacaoCaixaId());
+  }
   
 }

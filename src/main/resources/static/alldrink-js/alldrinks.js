@@ -1,6 +1,6 @@
 /* global Swal, numeral, Intl, bootstrap */
 //setInterval(function() {element.innerHTML += "Hello"}, 1000);
-
+var CONTEXT = $("#context").val();
 var StoreDrink = StoreDrink || {};
 
 StoreDrink.DialogoExcluir = (function () {

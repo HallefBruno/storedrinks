@@ -13,7 +13,6 @@ const CLASS_BTN_DIMINUIR = "btnDiminuirQuantidade";
 const CLASS_BTN_AUMENTAR = "btnAumentarQuantidade";
 const CLASS_BTN_REMOVER = "btnRemoverItem";
 const ENDPOINT = "vendas";
-const CONTEXT = $("#context").val();
 
 $(function () {
   aleatoreCors();

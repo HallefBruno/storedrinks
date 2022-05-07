@@ -7,6 +7,7 @@ import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Venda;
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
+import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import com.store.drinks.entidade.dto.venda.ItensVendadto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
@@ -18,6 +19,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -40,9 +42,16 @@ public class VendaService {
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final VendaRepository vendaRepository;
   
-  public List<CancelarVendadto> chamarListVendasTest() {
+  public List<CancelarVendadto> getListVendasCancelar() {
     Pageable pageable = PageRequest.of(Integer.valueOf("0"), 10);
     return vendaRepository.getVendasCancelar(pageable).getContent();
+  }
+  
+  public List<ItensVendaCancelardto> getItensVenda(Long vendaId) {
+    if(Objects.isNull(vendaId) || vendaId < 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+    }
+    return vendaRepository.getItensVenda(vendaId);
   }
   
   @Transactional
@@ -111,7 +120,7 @@ public class VendaService {
   private BigDecimal valorTotalVenda(List<ItensVenda> itensVenda) {
     BigDecimal valorTotalVenda = BigDecimal.ZERO;
     for(ItensVenda itens : itensVenda) {
-      valorTotalVenda = valorTotalVenda.add(itens.getProduto().getValorVenda());
+      valorTotalVenda = valorTotalVenda.add(itens.getProduto().getValorVenda().multiply(BigDecimal.valueOf(itens.getQuantidade())));
     }
     return valorTotalVenda;
   }

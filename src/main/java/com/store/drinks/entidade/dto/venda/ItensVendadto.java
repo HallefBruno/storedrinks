@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItensVendadto {
-  
-  
   private Long id;
   private String codProduto;
   private String codigoBarra;

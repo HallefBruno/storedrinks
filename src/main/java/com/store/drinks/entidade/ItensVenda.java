@@ -7,7 +7,9 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -24,6 +27,22 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "itens_venda")
 @DynamicUpdate
+
+@SqlResultSetMapping(
+  name = "ItensVendaCancelardto",
+  entities = {
+    @EntityResult(
+      entityClass = com.store.drinks.entidade.dto.venda.ItensVendaCancelardto.class,
+      fields = {
+        @FieldResult(name = "id", column = "id"),
+        @FieldResult(name = "quantidade", column = "quantidade"),
+        @FieldResult(name = "descricaoProduto", column = "descricao_produto"),
+        @FieldResult(name = "valorVenda", column = "valor_venda"),
+        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda")
+      }
+    ),
+  }
+)
 public class ItensVenda implements Serializable {
 
   @Id

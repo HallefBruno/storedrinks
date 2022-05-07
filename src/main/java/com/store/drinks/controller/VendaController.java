@@ -1,9 +1,11 @@
 
 package com.store.drinks.controller;
+import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.ProdutoService;
 import com.store.drinks.service.VendaService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class VendaController {
   @GetMapping("/page-cancelar-venda")
   public ModelAndView pageCancelarVenda() {
     ModelAndView modelAndView = new ModelAndView("venda/CancelarVenda");
-    modelAndView.addObject("vendas", vendaService.chamarListVendasTest());
+    modelAndView.addObject("vendas", vendaService.getListVendasCancelar());
     return modelAndView;
   }
   
@@ -65,6 +67,14 @@ public class VendaController {
   @ResponseStatus(HttpStatus.OK)
   public void cancelarVenda(Long id) {
     
+  }
+  
+  @GetMapping("/itens-vendas/{vendaId}")
+  public ResponseEntity<List<ItensVendaCancelardto>> getItensVendas(@PathVariable(required = true, name = "vendaId") Long vendaId) {
+    if(vendaService.getItensVenda(vendaId).isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(vendaService.getItensVenda(vendaId));
   }
   
 }

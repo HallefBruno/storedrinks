@@ -39,7 +39,7 @@ public class FormaPagamento implements Serializable {
   private BigDecimal valor;
   
   @JoinColumn(nullable = false)
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JsonBackReference
   private MovimentacaoCaixa movimentacaoCaixa;
   
