@@ -98,7 +98,7 @@
                   <div class="list-group">
                     <th:block th:each="venda : ${vendas}">
                       <label id="list-historico" class="list-group-item d-flex gap-3 ">
-                        <input class="form-check-input flex-shrink-0" type="radio" style="font-size: 1.375em;" name="flexRadioDefault" th:id="${venda.movimentacaoCaixaId}">
+                        <input class="form-check-input flex-shrink-0" type="radio" style="font-size: 1.375em;" name="flexRadioDefault" th:value="${venda.movimentacaoCaixaId}" th:id="${venda.vendaId}">
                         <span class="pt-1 form-checked-content">
                           <div class="mt-1 d-flex">
                             <div class="badge bg-light text-dark">

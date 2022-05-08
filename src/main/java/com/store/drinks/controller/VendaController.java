@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,10 +64,12 @@ public class VendaController {
     vendaService.salvar(vendadto);
   }
   
-  @PutMapping("/cancelar-venada")
-  @ResponseStatus(HttpStatus.OK)
-  public void cancelarVenda(Long id) {
-    
+  @DeleteMapping("/cancelar-venada/{movimentacaoCaixaId}/{vendaId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void cancelarVenda(
+    @PathVariable(name = "movimentacaoCaixaId", required = true) Long movimentacaoCaixaId, 
+    @PathVariable(name = "vendaId", required = true) Long vendaId) {
+    vendaService.excluirVenda(movimentacaoCaixaId, vendaId);
   }
   
   @GetMapping("/itens-vendas/{vendaId}")

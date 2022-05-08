@@ -1,4 +1,4 @@
-/* global StoreDrink, formatter, EnumEntradaProduto */
+/* global StoreDrink, formatter, EnumEntradaProduto, CONTEXT */
 let mensagem = new StoreDrink.Mensagem();
 let listProdutos = [];
 let produto = {};

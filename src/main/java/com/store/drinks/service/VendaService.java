@@ -10,6 +10,7 @@ import com.store.drinks.entidade.dto.venda.CancelarVendadto;
 import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import com.store.drinks.entidade.dto.venda.ItensVendadto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
+import com.store.drinks.repository.ItensVendaRepository;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.VendaRepository;
@@ -41,6 +42,7 @@ public class VendaService {
   private final ProdutoRepository produtoRepository;
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final VendaRepository vendaRepository;
+  private final ItensVendaRepository itensVendaRepository;
   
   public List<CancelarVendadto> getListVendasCancelar() {
     Pageable pageable = PageRequest.of(Integer.valueOf("0"), 10);
@@ -77,6 +79,20 @@ public class VendaService {
     setVenda(venda, itensVendas);
     setMovimentacaoCaixa(movimentacaoCaixa, venda, formasPagamento);
     movimentacaoCaixaRepository.save(movimentacaoCaixa);
+  }
+  
+  @Transactional
+  public void excluirVenda(Long movimentacaoCaixaId, Long vendaId) {
+    if(Objects.isNull(movimentacaoCaixaId) || movimentacaoCaixaId < 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador movimentação inválido!");
+    }
+    if(Objects.isNull(vendaId) || vendaId < 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador venda inválido!");
+    }
+    
+    itensVendaRepository.findAllByVendaId(vendaId).forEach(itens -> {
+      System.out.println(itens.getQuantidade());
+    });
   }
 
   private void setItensVenda(Produto produto, ItensVendadto item, Venda venda, List<ItensVenda> itensVendas) {

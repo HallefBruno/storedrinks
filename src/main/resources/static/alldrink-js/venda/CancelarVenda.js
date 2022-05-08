@@ -1,5 +1,7 @@
 /* global CONTEXT, formatter */
 const ENDPOINT = "vendas";
+let movimentacaoCaixaId = null;
+let vendaId = null;
 
 $(function () {
   initDataTable();
@@ -17,12 +19,26 @@ function eventSelectVenda() {
         $("#btnCancelarVenda").prop("disabled",true);
       }
     });
+    vendaId = this.id;
+    movimentacaoCaixaId = this.value;
   });
 }
 
 function cancelarVenda() {
   $("#btnCancelarVenda").click(function () {
-    alert("ok");
+    $.ajax({
+      url: `${CONTEXT}${ENDPOINT}/cancelar-venada/${movimentacaoCaixaId}/${vendaId}`,
+      method: 'DELETE',
+      statusCode: {
+        204: function (data) {
+          alert("Deletado!");
+        },
+        403: function (jqXHR) {
+        },
+        500: function (jqXHR) {
+        }
+      }
+    });
   });
 }
 
