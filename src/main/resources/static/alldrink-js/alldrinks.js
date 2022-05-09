@@ -176,7 +176,8 @@ StoreDrink.LoadGif = (function () {
     $(document).ajaxComplete(function (event, jqxhr, settings) {
       this.divLoading.removeClass("loading");
       this.gifLoadingAutocomplete.css("display", "none");
-      setTimeout(() => {$(".setblockUI").unblock();}, 550);
+      $(".setblockUI").unblock();
+      //setTimeout(() => {$(".setblockUI").unblock();}, 550);
     }.bind(this));
   };
   

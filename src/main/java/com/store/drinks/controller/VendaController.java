@@ -74,10 +74,11 @@ public class VendaController {
   
   @GetMapping("/itens-vendas/{vendaId}")
   public ResponseEntity<List<ItensVendaCancelardto>> getItensVendas(@PathVariable(required = true, name = "vendaId") Long vendaId) {
-    if(vendaService.getItensVenda(vendaId).isEmpty()) {
+    var itensVenda = vendaService.getItensVenda(vendaId);
+    if (itensVenda.isEmpty()) {
       return ResponseEntity.noContent().build();
     }
-    return ResponseEntity.ok(vendaService.getItensVenda(vendaId));
+    return ResponseEntity.ok(itensVenda);
   }
   
 }

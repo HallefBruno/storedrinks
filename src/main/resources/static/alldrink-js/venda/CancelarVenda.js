@@ -1,4 +1,4 @@
-/* global CONTEXT, formatter */
+/* global CONTEXT, formatter, Swal */
 const ENDPOINT = "vendas";
 let movimentacaoCaixaId = null;
 let vendaId = null;
@@ -26,17 +26,31 @@ function eventSelectVenda() {
 
 function cancelarVenda() {
   $("#btnCancelarVenda").click(function () {
-    $.ajax({
-      url: `${CONTEXT}${ENDPOINT}/cancelar-venada/${movimentacaoCaixaId}/${vendaId}`,
-      method: 'DELETE',
-      statusCode: {
-        204: function (data) {
-          alert("Deletado!");
-        },
-        403: function (jqXHR) {
-        },
-        500: function (jqXHR) {
-        }
+    
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não será capaz de reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, exclua!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `${CONTEXT}${ENDPOINT}/cancelar-venada/${movimentacaoCaixaId}/${vendaId}`,
+          method: 'DELETE',
+          statusCode: {
+            204: function (data) {
+              Swal.fire('Atenção', 'Venda cancelada com sucesso!', 'success');
+              window.location.reload();
+            },
+            403: function (jqXHR) {
+            },
+            500: function (jqXHR) {
+            }
+          }
+        });
       }
     });
   });

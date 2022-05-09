@@ -477,7 +477,7 @@ function finalizarVenda() {
         data: JSON.stringify(venda),
         beforeSend: function () {
           modalFormPagamento.find("#btnFinalizarVenda").text("");
-          modalFormPagamento.find("#btnFinalizarVenda").text("Aguarde...");
+          modalFormPagamento.find("#btnFinalizarVenda").append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Aguarde...`);
           modalFormPagamento.find("#btnFinalizarVenda").prop("disabled",true);
           modalFormPagamento.find("#btnVoltar").prop("disabled",true);
           modalFormPagamento.find(".btn-close").prop("disabled",true);

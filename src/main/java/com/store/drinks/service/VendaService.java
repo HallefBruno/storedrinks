@@ -59,13 +59,12 @@ public class VendaService {
   @Transactional
   public void salvar(Vendadto vendadto) {
     
-    final String tenant = multitenancy.getTenantValue();
     List<ItensVenda> itensVendas = new ArrayList<>();
     Venda venda = new Venda();
     MovimentacaoCaixa movimentacaoCaixa = new MovimentacaoCaixa();
     
     vendadto.getItensVenda().forEach(item -> {
-      produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), tenant)
+      produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), tenant())
       .ifPresent(produto -> {
         if(item.getQuantidade() > produto.getQuantidade()) {
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, produto.getDescricaoProduto().concat(" está com estoque zerado, remover da lista"));
@@ -91,8 +90,14 @@ public class VendaService {
     }
     
     itensVendaRepository.findAllByVendaId(vendaId).forEach(itens -> {
-      System.out.println(itens.getQuantidade());
+      produtoRepository.findByProdutoForVenda(itens.getProduto().getCodigoBarra(), tenant())
+      .ifPresent(produto -> {
+        int quantidadeAutal = produto.getQuantidade();
+        produto.setQuantidade(quantidadeAutal + itens.getQuantidade());
+        produtoRepository.save(produto);
+      });
     });
+    movimentacaoCaixaRepository.deleteById(movimentacaoCaixaId);
   }
 
   private void setItensVenda(Produto produto, ItensVendadto item, Venda venda, List<ItensVenda> itensVendas) {
@@ -103,7 +108,7 @@ public class VendaService {
     itensVenda.setProduto(produto);
     itensVenda.setQuantidade(item.getQuantidade());
     itensVenda.setVenda(venda);
-    itensVenda.setTenant(multitenancy.getTenantValue());
+    itensVenda.setTenant(tenant());
     itensVendas.add(itensVenda);
   }
   
@@ -120,7 +125,7 @@ public class VendaService {
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setItensVendas(itensVendas);
     venda.setUsuario(usuarioService.usuarioLogado());
-    venda.setTenant(multitenancy.getTenantValue());
+    venda.setTenant(tenant());
     venda.setValorTotalVenda(valorTotalVenda(itensVendas).setScale(2, RoundingMode.HALF_UP));
   }
   
@@ -145,6 +150,10 @@ public class VendaService {
     BigDecimal somaValorFormaPagamento = formasPagamento.stream()
       .map(FormaPagamento::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
     return somaValorFormaPagamento.setScale(2, RoundingMode.HALF_UP);
+  }
+  
+  private String tenant() {
+    return multitenancy.getTenantValue();
   }
   
 }

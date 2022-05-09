@@ -75,7 +75,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="col-sm-12">
-            <div class="btn-group shadow-sm mb-2" style="background-color: white" role="group" aria-label="Grupo de botões de ação">
+            <div class="btn-group shadow-sm mb-2 setblockUI" style="background-color: white" role="group" aria-label="Grupo de botões de ação">
               <button id="btnCancelarVenda" type="button" disabled class="btn btn-sm btn-outline-secondary">
                 Cancelar venda
               </button>
@@ -97,7 +97,7 @@
                 <div class="card-body">
                   <div class="list-group">
                     <th:block th:each="venda : ${vendas}">
-                      <label id="list-historico" class="list-group-item d-flex gap-3 ">
+                      <label id="list-historico" class="list-group-item d-flex gap-3">
                         <input class="form-check-input flex-shrink-0" type="radio" style="font-size: 1.375em;" name="flexRadioDefault" th:value="${venda.movimentacaoCaixaId}" th:id="${venda.vendaId}">
                         <span class="pt-1 form-checked-content">
                           <div class="mt-1 d-flex">
@@ -123,6 +123,7 @@
                         </span>
                       </label>
                     </th:block>
+                    <span th:if="${#lists.isEmpty(vendas)}">Nenhuma venda encontrada!</span>
                   </div>
                 </div>
               </div>
@@ -137,7 +138,7 @@
                 <div class="card" style="margin-top: 5px;">
                   <div class="card-body">
                     <div id="divCallout" class="callout-md callout-primary">
-                      <table id="itensVenda" class="table table-hover caption-top">
+                      <table id="itensVenda" class="table table-hover caption-top setblockUI">
                         <caption>Itens da venda</caption>
                         <thead>
                           <tr style="font-size: 12px;">
@@ -159,10 +160,7 @@
           </div>
         </div>
       </div>
-        
-      </div>
     </div>
-    <div id="divLoading"></div>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
     <script th:src="@{/alldrink-js/venda/CancelarVenda.js}" type="text/javascript"></script>
   </body>
