@@ -4,7 +4,6 @@ import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.Usuariodto;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +34,7 @@ public class UsuarioService {
     var usuariodtos = new ArrayList<Usuariodto>();
     filtroUsuariosPorTenant.forEach(usuario -> {
       var usuariodto = new Usuariodto();
-      usuariodto.setId(BigInteger.valueOf(usuario.getId()));
+      usuariodto.setId(usuario.getId());
       usuariodto.setText(usuarioLogado.getClienteSistema().getTenant());
       usuariodto.setNome(usuarioLogado.getClienteSistema().getNomeComercio());
       usuariodtos.add(usuariodto);

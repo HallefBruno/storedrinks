@@ -110,7 +110,7 @@
                           </div>
                           <div class="mt-1 d-flex">
                             <i data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor" style="margin: 3px 5px 0px 0px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
-                            <strong data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor">[[${venda.tenant}]]</strong>
+                            <strong data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor">[[${venda.nome}]]</strong>
                           </div>
                           <div class="mt-1 d-flex" data-bs-toggle="tooltip" data-bs-placement="top" title="Data da venda">
                             <i style="margin: 2px 5px 0px 0px;" class="fa fa-calendar" aria-hidden="true"></i>
@@ -161,6 +161,7 @@
         </div>
       </div>
     </div>
+    <div id="divLoading"></div>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
     <script th:src="@{/alldrink-js/venda/CancelarVenda.js}" type="text/javascript"></script>
   </body>

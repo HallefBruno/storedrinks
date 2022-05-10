@@ -2,65 +2,26 @@
 package com.store.drinks.entidade.dto;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuariodto implements Serializable {
   
-  private BigInteger id;
+  @Id
+  private Long id;
   private String text;
   private String nome;
   private String destinatario;
   private String tenant;
-
-  public Usuariodto(BigInteger id, String text, String nome, String destinatario, String tenant) {
-    this.id = id;
-    this.text = text;
-    this.nome = nome;
-    this.destinatario = destinatario;
-    this.tenant = tenant;
-  }
-
-  public Usuariodto() {
-  }
-  
-  public BigInteger getId() {
-    return id;
-  }
-
-  public void setId(BigInteger id) {
-    this.id = id;
-  }
-
-  public String getText() {
-    return text;
-  }
-
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  public String getNome() {
-    return nome;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
-
-  public String getDestinatario() {
-    return destinatario;
-  }
-
-  public void setDestinatario(String destinatario) {
-    this.destinatario = destinatario;
-  }
-
-  public String getTenant() {
-    return tenant;
-  }
-
-  public void setTenant(String tenant) {
-    this.tenant = tenant;
-  }
-
 }

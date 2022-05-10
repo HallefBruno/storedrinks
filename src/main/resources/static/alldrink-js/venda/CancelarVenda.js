@@ -42,8 +42,8 @@ function cancelarVenda() {
           method: 'DELETE',
           statusCode: {
             204: function (data) {
-              Swal.fire('Atenção', 'Venda cancelada com sucesso!', 'success');
               window.location.reload();
+              Swal.fire('Atenção', 'Venda cancelada com sucesso!', 'success');
             },
             403: function (jqXHR) {
             },

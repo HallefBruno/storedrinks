@@ -49,6 +49,21 @@ import org.hibernate.annotations.DynamicUpdate;
     ),
   }
 )
+@SqlResultSetMapping(
+  name = "Usuariodto",
+  entities = {
+    @EntityResult(
+      entityClass = com.store.drinks.entidade.dto.Usuariodto.class,
+      fields = {
+        @FieldResult(name = "id", column = "id"),
+        @FieldResult(name = "text", column = "text"),
+        @FieldResult(name = "nome", column = "nome"),
+        @FieldResult(name = "destinatario", column = "destinatario"),
+        @FieldResult(name = "tenant", column = "tenant")
+      }
+    ),
+  }
+)
 public class Venda implements Serializable {
 
   @Id
