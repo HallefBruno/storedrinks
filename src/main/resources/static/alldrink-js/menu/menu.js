@@ -1,7 +1,9 @@
 $(document).ready(function () {
   $('a').click(function (e) {
-    console.log(e);
-    if (!$(this).is(".link-calculadora") && ($(this).attr("target") === undefined) || $(this).hasClass("invock-gif")) {
+    if (!$(this).is(".link-calculadora") && ($(this).attr("target") === undefined)) {
+      $("#divLoading").addClass("loading");
+    }
+    if($(this).hasClass("invock-gif")) {
       $("#divLoading").addClass("loading");
     }
   });
@@ -23,7 +25,3 @@ $(document).ready(function () {
   });
   
 });
-
-//setTimeout(function () {
-//  $("#divLoading").removeClass("loading");
-//}, 1000);

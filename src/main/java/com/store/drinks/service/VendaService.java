@@ -25,7 +25,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,9 +44,8 @@ public class VendaService {
   private final VendaRepository vendaRepository;
   private final ItensVendaRepository itensVendaRepository;
   
-  public List<CancelarVendadto> getListVendasCancelar() {
-    Pageable pageable = PageRequest.of(Integer.valueOf("0"), 10);
-    return vendaRepository.getVendasCancelar(pageable).getContent();
+  public Page<CancelarVendadto> getListVendasCancelar(Pageable pageable) {
+    return vendaRepository.getVendasCancelar(pageable);
   }
   
   public List<ItensVendaCancelardto> getItensVenda(Long vendaId) {
@@ -108,7 +107,6 @@ public class VendaService {
     itensVenda.setProduto(produto);
     itensVenda.setQuantidade(item.getQuantidade());
     itensVenda.setVenda(venda);
-    itensVenda.setTenant(tenant());
     itensVendas.add(itensVenda);
   }
   
@@ -125,7 +123,6 @@ public class VendaService {
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setItensVendas(itensVendas);
     venda.setUsuario(usuarioService.usuarioLogado());
-    venda.setTenant(tenant());
     venda.setValorTotalVenda(valorTotalVenda(itensVendas).setScale(2, RoundingMode.HALF_UP));
   }
   

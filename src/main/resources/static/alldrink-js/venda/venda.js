@@ -541,7 +541,7 @@ function aleatoreCors() {
       btnItemVenda: "#btnItemVenda",
       backgroundColor: "#0dcaf0", //background-color
       borderColor: "#0dcaf0", //border-color
-      divCallout: "#divCallout",
+      divCallout: "#divCallout", //element
       borderLeftColor: "#0dcaf0" //border-left-color
     },
     {

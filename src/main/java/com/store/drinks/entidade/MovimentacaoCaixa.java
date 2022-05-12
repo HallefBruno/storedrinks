@@ -22,12 +22,20 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Entity
 @Table(name = "movimentacao_caixa")
 @DynamicUpdate
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovimentacaoCaixa implements Serializable {
 
   @Id
@@ -58,8 +66,11 @@ public class MovimentacaoCaixa implements Serializable {
   private Usuario usuario;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(nullable = false)
+  @JoinColumn(nullable = true)
   private Venda venda;
+  
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private Boolean recolhimento;
 
   @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
@@ -69,13 +80,20 @@ public class MovimentacaoCaixa implements Serializable {
   private void prePersistPreUpdate() {
     this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
-    if(Objects.isNull(this.valorRecebido)) {
+    
+    if (Objects.isNull(this.valorRecebido)) {
       this.valorRecebido = BigDecimal.ZERO;
     }
-    
-    if(Objects.isNull(this.valorTroco)) {
+    if (Objects.isNull(this.valorTroco)) {
       this.valorTroco = BigDecimal.ZERO;
     }
+    if (Objects.isNull(this.recolhimento)) {
+      this.recolhimento = Boolean.FALSE;
+    }
+    if (Objects.isNull(this.venda) && this.recolhimento.equals(Boolean.FALSE)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Movimentação de caixa inválida!");
+    }
+    
   }
 
   @Override
@@ -164,5 +182,12 @@ public class MovimentacaoCaixa implements Serializable {
     this.tenant = tenant;
   }
 
+  public Boolean getRecolhimento() {
+    return recolhimento;
+  }
+
+  public void setRecolhimento(Boolean recolhimento) {
+    this.recolhimento = recolhimento;
+  }
   
 }

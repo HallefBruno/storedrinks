@@ -82,7 +82,6 @@ StoreDrink.Security = (function () {
 
 }());
 
-
 let formatter = new Intl.NumberFormat('pt-BR', {style: 'currency',currency: 'BRL'});
 
 

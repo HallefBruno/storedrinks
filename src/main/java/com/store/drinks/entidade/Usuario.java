@@ -7,8 +7,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +25,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -28,9 +33,25 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
+import com.store.drinks.entidade.dto.Usuariodto;
 
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
+
+@SqlResultSetMapping(
+  name="Usuariodto",
+  classes={ 
+    @ConstructorResult(targetClass=Usuariodto.class,
+    columns={
+      @ColumnResult(name = "id", type=Long.class),
+      @ColumnResult(name = "text", type=String.class),
+      @ColumnResult(name = "nome", type=String.class),
+      @ColumnResult(name = "destinatario", type=String.class),
+      @ColumnResult(name = "tenant", type=String.class)
+    })
+  }
+)
+
 public class Usuario implements Serializable {
 
   @Id
@@ -74,7 +95,7 @@ public class Usuario implements Serializable {
   @Column(name = "data_nascimento")
   private LocalDate dataNascimento;
 
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean proprietario;
   
   @JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false)

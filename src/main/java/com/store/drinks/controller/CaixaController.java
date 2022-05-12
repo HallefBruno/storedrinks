@@ -35,7 +35,7 @@ public class CaixaController {
 
   @GetMapping("/abrirCaixa")
   public ModelAndView abrirCaixa(Caixa caixa) {
-    return new ModelAndView("venda/AbrirCaixa");
+    return new ModelAndView("caixa/AbrirCaixa");
   }
 
   @GetMapping("/vendas")

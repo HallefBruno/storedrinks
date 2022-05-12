@@ -59,44 +59,32 @@
   <body class="bg-light">
     <div class="container">
       <div class="row">
+        <div class="col-sm-12">
+          <div class="btn-group shadow-sm mt-3 setblockUI" style="background-color: white" role="group" aria-label="Grupo de botões de ação">
+            <button id="btnCancelarVenda" type="button" disabled class="btn btn-sm btn-outline-secondary">
+              Cancelar venda
+            </button>
+            <a type="button" th:href="@{/vendas}" class="btn btn-sm btn-outline-secondary invock-gif">
+              Ir para vendas
+            </a>
+            <a type="button" th:href="@{/}" class="btn btn-sm btn-outline-secondary invock-gif">
+              Ir para dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-6">
           <div class="callout callout-danger shadow-sm">
             <i class="fa fa-history" aria-hidden="true"></i> 
             <span class="fw-bold">Histórico de vendas</span>
           </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-6">
-          <div class="callout callout-primary shadow-sm">
-            <i class="fa fa-bars" aria-hidden="true"></i> 
-            <span class="fw-bold">Itens da venda</span>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="col-sm-12">
-            <div class="btn-group shadow-sm mb-2 setblockUI" style="background-color: white" role="group" aria-label="Grupo de botões de ação">
-              <button id="btnCancelarVenda" type="button" disabled class="btn btn-sm btn-outline-secondary">
-                Cancelar venda
-              </button>
-              <a type="button" th:href="@{/vendas}" class="btn btn-sm btn-outline-secondary invock-gif">
-                Ir para vendas
-              </a>
-              <a type="button" th:href="@{/}" class="btn btn-sm btn-outline-secondary invock-gif">
-                Ir para dashboard
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-6">
           <div id="divVendas" style="height: 452px;" class="overflow-auto">
             <div class="shadow-sm mb-3 bg-body rounded">
               <div class="card" style="margin-top: 5px;">
                 <div class="card-body">
                   <div class="list-group">
-                    <th:block th:each="venda : ${vendas}">
+                    <th:block th:each="venda : ${pagina.conteudo}">
                       <label id="list-historico" class="list-group-item d-flex gap-3">
                         <input class="form-check-input flex-shrink-0" type="radio" style="font-size: 1.375em;" name="flexRadioDefault" th:value="${venda.movimentacaoCaixaId}" th:id="${venda.vendaId}">
                         <span class="pt-1 form-checked-content">
@@ -123,15 +111,20 @@
                         </span>
                       </label>
                     </th:block>
-                    <span th:if="${#lists.isEmpty(vendas)}">Nenhuma venda encontrada!</span>
+                    <span th:if="${pagina.isVazia}">Nenhuma venda encontrada!</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
         </div>
         
         <div class="col-sm-12 col-md-12 col-lg-6">
+          <div class="callout callout-primary shadow-sm">
+            <i class="fa fa-bars" aria-hidden="true"></i> 
+            <span class="fw-bold">Itens da venda</span>
+          </div>
           <div id="divItens" style="height: 452px;" class="overflow-auto">
             <div class="table-responsive">
               <div class="shadow-sm mb-3 bg-body rounded">

@@ -1,15 +1,23 @@
 
 package com.store.drinks.controller;
+import com.store.drinks.controller.page.PageWrapper;
+import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.dto.venda.CancelarVendadto;
 import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import com.store.drinks.entidade.dto.venda.Vendadto;
+import com.store.drinks.repository.querys.produto.ProdutoFilter;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.ProdutoService;
 import com.store.drinks.service.VendaService;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,10 +47,12 @@ public class VendaController {
   }
   
   @GetMapping("/page-cancelar-venda")
-  public ModelAndView pageCancelarVenda() {
-    ModelAndView modelAndView = new ModelAndView("venda/CancelarVenda");
-    modelAndView.addObject("vendas", vendaService.getListVendasCancelar());
-    return modelAndView;
+  public ModelAndView pesqisar(@PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+    ModelAndView mv = new ModelAndView("venda/CancelarVenda");
+    var list = vendaService.getListVendasCancelar(pageable);
+    PageWrapper<CancelarVendadto> paginaWrapper = new PageWrapper<>(list, httpServletRequest);
+    mv.addObject("pagina", paginaWrapper);
+    return mv;
   }
   
   @GetMapping("/produtos")

@@ -11,6 +11,9 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.store.drinks.repository.CaixaRepository;
+import java.util.Objects;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,17 +35,26 @@ public class CaixaService {
     abrirCaixaRepository.save(acx);
   }
 
+  @SuppressWarnings("null")
   public boolean abrirCaixaPorUsuarioLogado() {
     try {
       Optional<Caixadto> cxAberto = caixaAberto();
       return cxAberto.isPresent();
     } catch (IncorrectResultSizeDataAccessException ex) {
       throw new CaixaAbertoPorUsuarioException("Não é possível realizar a venda, pois existe mais de um caixa aberto para este usuário");
+    } catch (ResponseStatusException rs) {
+      if(Objects.nonNull(rs.getReason()) && rs.getReason().contains("Nenhum caixa aberto para esse usuário!")) {
+        return false;
+      }
     }
+    return false;
   }
   
   public Optional<Caixadto> caixaAberto() {
-    return abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+    var optionalCaixa = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+    return optionalCaixa.map(op -> {
+      return Optional.of(op);
+    }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
   }
   
   public Caixa getCaixa() {
