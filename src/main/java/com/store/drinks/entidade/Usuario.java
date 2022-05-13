@@ -51,7 +51,6 @@ import com.store.drinks.entidade.dto.Usuariodto;
     })
   }
 )
-
 public class Usuario implements Serializable {
 
   @Id

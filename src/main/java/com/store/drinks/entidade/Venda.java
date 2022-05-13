@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
@@ -25,30 +26,52 @@ import javax.persistence.SqlResultSetMapping;
 import javax.validation.constraints.Min;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
+import com.store.drinks.entidade.dto.venda.CancelarVendadto;
+import javax.persistence.ColumnResult;
 
 @Entity
 @DynamicUpdate
+//@SqlResultSetMapping(
+//  name = "CancelarVendadto",
+//  entities = {
+//    @EntityResult(
+//      entityClass = com.store.drinks.entidade.dto.venda.CancelarVendadto.class,
+//      fields = {
+//        @FieldResult(name = "movimentacaoCaixaId", column = "movimentacao_caixa_id"),
+//        @FieldResult(name = "tenant", column = "tenant"),
+//        @FieldResult(name = "valorRecebido", column = "valor_recebido"),
+//        @FieldResult(name = "valorTroco", column = "valor_troco"),
+//        @FieldResult(name = "caixaId", column = "caixa_id"),
+//        @FieldResult(name = "vendaId", column = "venda_id"),
+//        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda"),
+//        @FieldResult(name = "dataHoraVenda", column = "data_hora_venda"),
+//        @FieldResult(name = "usuarioId", column = "usuario_id"),
+//        @FieldResult(name = "nome", column = "nome"),
+//        @FieldResult(name = "email", column = "email")
+//      }
+//    ),
+//  }
+//)
 @SqlResultSetMapping(
-  name = "CancelarVendadto",
-  entities = {
-    @EntityResult(
-      entityClass = com.store.drinks.entidade.dto.venda.CancelarVendadto.class,
-      fields = {
-        @FieldResult(name = "movimentacaoCaixaId", column = "movimentacao_caixa_id"),
-        @FieldResult(name = "tenant", column = "tenant"),
-        @FieldResult(name = "valorRecebido", column = "valor_recebido"),
-        @FieldResult(name = "valorTroco", column = "valor_troco"),
-        @FieldResult(name = "caixaId", column = "caixa_id"),
-        @FieldResult(name = "vendaId", column = "venda_id"),
-        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda"),
-        @FieldResult(name = "dataHoraVenda", column = "data_hora_venda"),
-        @FieldResult(name = "usuarioId", column = "usuario_id"),
-        @FieldResult(name = "nome", column = "nome"),
-        @FieldResult(name = "email", column = "email")
-      }
-    ),
+  name="CancelarVendadto",
+  classes={ 
+    @ConstructorResult(targetClass=CancelarVendadto.class,
+    columns={
+      @ColumnResult(name = "movimentacao_caixa_id", type=Long.class),
+      @ColumnResult(name = "tenant", type=String.class),
+      @ColumnResult(name = "valor_recebido", type=BigDecimal.class),
+      @ColumnResult(name = "valor_troco", type=BigDecimal.class),
+      @ColumnResult(name = "caixa_id", type=Long.class),
+      @ColumnResult(name = "venda_id", type=Long.class),
+      @ColumnResult(name = "valor_total_venda", type=BigDecimal.class),
+      @ColumnResult(name = "data_hora_venda", type=LocalDateTime.class),
+      @ColumnResult(name = "usuario_id", type=Long.class),
+      @ColumnResult(name = "nome", type=String.class),
+      @ColumnResult(name = "email", type=String.class),
+    })
   }
 )
+
 public class Venda implements Serializable {
 
   @Id

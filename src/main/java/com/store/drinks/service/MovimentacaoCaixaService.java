@@ -22,24 +22,24 @@ public class MovimentacaoCaixaService {
   
   @Transactional
   public void salvar(BigDecimal valorRetirada) {
-    
-    System.out.println(movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario().get());
-    
-//    if(Objects.nonNull(valorRetirada) && valorRetirada.signum() > 0) {
-//      var caixa = caixaService.getCaixa();
-//      if(valorRetirada.compareTo(caixa.getValorInicialTroco()) <= 1) {
-//        var movimentacao = MovimentacaoCaixa.builder()
-//          .recolhimento(Boolean.TRUE)
-//          .valorRecebido(BigDecimal.ZERO)
-//          .valorTroco(valorRetirada)
-//          .usuario(usuarioService.usuarioLogado())
-//          .caixa(caixaService.getCaixa())
-//          .build();
-//        movimentacaoCaixaRepository.save(movimentacao);
-//        return;
-//      }
-//    }
-//    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor da retirada precisa ser válido!");
-//  }
+    if(Objects.nonNull(valorRetirada) && valorRetirada.signum() > 0) {
+      var caixa = caixaService.getCaixa();
+      var valorTotalEmCaixa = movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario()
+        .get()
+        .add(caixa.getValorInicialTroco());
+      if(valorRetirada.compareTo(valorTotalEmCaixa) <= 0) {
+        var movimentacao = MovimentacaoCaixa.builder()
+          .recolhimento(Boolean.TRUE)
+          .valorRecebido(BigDecimal.ZERO)
+          .valorTroco(valorRetirada)
+          .usuario(usuarioService.usuarioLogado())
+          .caixa(caixa)
+          .build();
+        movimentacaoCaixaRepository.save(movimentacao);
+        return;
+      }
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo em caixa insuficiente!");
+    }
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor da retirada precisa ser válido!");
   }
 }

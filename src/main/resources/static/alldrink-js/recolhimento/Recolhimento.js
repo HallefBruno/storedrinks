@@ -2,7 +2,7 @@
 
 $(function () {
   
-  var mensagemToast = new StoreDrink.Mensagem();
+  const toast = new StoreDrink.Toast();
   const ENDPOINT = "recolhimento";
   let valorRetirada = $("#valorRetirada");
   valorRetirada.focus();
@@ -22,7 +22,7 @@ $(function () {
         },
         statusCode: {
           201: function (data) {
-            mensagemToast.show("success","Recolhimento realizado com sucesso!");
+            toast.show("success","Atenção","Recolhimento realizado com sucesso!","top-right");
             valorRetirada.val("");
             valorRetirada.focus();
           },
@@ -36,7 +36,7 @@ $(function () {
       });
       return;
     }
-    mensagemToast.show("warning","Por favor insira o valor!");
+    toast.show("warning","Atenção","Por favor insira o valor!","top-right");
     valorRetirada.focus();
   });
 });
