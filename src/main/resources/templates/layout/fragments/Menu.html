@@ -1,10 +1,126 @@
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse shadow-none " th:fragment="menu">
+<style>
+  .text-small {
+    font-size: 85%;
+  }
+</style>
+<header class="py-3 mb-3 border-bottom " th:fragment="menu">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 dropdown">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="font-size: 85%;">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" th:href="@{/}">
+              <i class="bi bi-speedometer"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-basket2"></i> Pdv
+            </a>
+            <ul class="dropdown-menu text-small" style="font-size: 90%;" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" th:href="@{/pdv}">
+                  <i class="bi bi-shop-window"></i> Abrir caixa
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/movimentacao-caixa}">
+                  <i class="bi bi-journal-richtext"></i> Movimentação caixa
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/vendas/page-cancelar-venda}">
+                  <i class="bi bi-x-square"></i> Cancelar venda
+                </a>
+              </li>
+              
+              <li>
+                <a class="dropdown-item" th:href="@{/recolhimento}">
+                  <i class="bi bi-file-earmark-arrow-down"></i> Recolhimento
+                </a>
+              </li>
+              
+              <li>
+                <a class="dropdown-item" th:href="@{/fechar-caixa}">
+                  <i class="bi bi-arrow-clockwise"></i> Fechar caixa
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+  </nav>
+</header>
+
+<!--<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="menu">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>-->
+
+<!--<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse shadow-none " th:fragment="menu">
   <div class="position-sticky pt-3">
     <ul class="nav flex-column">
       <li class="nav-item mb-3">
         <a class="nav-link active" th:href="@{/}">
           <div class="icon-container" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${#authentication.name}">
-            <img class="img-profile" th:src="@{/imagens/perfil-default.jpg}" /> <!-- https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png -->
+            <img class="img-profile" th:src="@{/imagens/perfil-default.jpg}" />  https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png 
             <div class="status-circle"></div>
             <p class="limit-text-profile" sec:authentication="name"></p>
           </div>
@@ -129,4 +245,4 @@
       </li>
     </ul>
   </div>
-</nav>
+</nav>-->

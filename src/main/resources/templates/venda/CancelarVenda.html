@@ -80,10 +80,10 @@
             <span class="fw-bold">Histórico de vendas</span>
           </div>
           <div id="divVendas" style="height: 452px;" class="overflow-auto">
-            <div class="shadow-sm mb-3 bg-body rounded">
+            <div class="shadow-sm mb-2 bg-body rounded">
               <div class="card" style="margin-top: 5px;">
                 <div class="card-body">
-                  <div class="list-group">
+                  <div class="list-group mb-2">
                     <th:block th:each="venda : ${pagina.conteudo}">
                       <label id="list-historico" class="list-group-item d-flex gap-3">
                         <input class="form-check-input flex-shrink-0" type="radio" style="font-size: 1.375em;" name="flexRadioDefault" th:value="${venda.movimentacaoCaixaId}" th:id="${venda.vendaId}">
@@ -113,11 +113,11 @@
                     </th:block>
                     <span th:if="${pagina.isVazia}">Nenhuma venda encontrada!</span>
                   </div>
+                  <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
                 </div>
               </div>
             </div>
           </div>
-          <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
         </div>
         
         <div class="col-sm-12 col-md-12 col-lg-6">

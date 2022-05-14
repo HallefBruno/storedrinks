@@ -3,7 +3,9 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.MovimentacaoCaixa;
+import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
+import com.store.drinks.repository.querys.movimentacaoCaixa.MovimentacoesCaixaFilters;
 import java.math.BigDecimal;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +43,9 @@ public class MovimentacaoCaixaService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo em caixa insuficiente!");
     }
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor da retirada precisa ser válido!");
+  }
+  
+  public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
+    return movimentacaoCaixaRepository.movimentacoesCaixa(movimentacoesCaixaFilters, draw, start);
   }
 }
