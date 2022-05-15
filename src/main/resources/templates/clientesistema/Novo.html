@@ -4,114 +4,107 @@
     <meta charset="UTF-8">
     <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <div th:replace="fragments/CssFragment :: css"></div>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
   </head>
-<body>
-  <div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-  <div class="container-fluid">
-    <div class="row">
-      <div th:replace="layout/fragments/Menu :: menu"></div>
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <div class="container-fluid">
-            <div id="nenhumProduto" style="display: none;"></div>
-            <th:block th:include="fragments/MensagemSucesso"></th:block>
-            <form th:action="@{/clienteSistema/salvar}" method="post" th:object="${clienteSistema}">
-              <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-              <div class="shadow-sm mb-5 bg-body rounded">
-                <div class="card">
-                  <h5 class="card-header">Cadastro de novo cliente no sistema</h5>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="nomeComercio" class="form-label">Nome do comercio</label>
-                        <input required="true" th:field="*{nomeComercio}" type="text" class="form-control" id="nomeComercio" name="nomeComercio">
-                      </div>
-                      <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                        <input required="true" th:field="*{cpfCnpj}" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
-                      </div>
-                      <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="tenant" class="form-label">Tenant</label>
-                        <input required="true" type="text" th:field="*{tenant}" class="form-control" id="tenant" name="tenant"/>
-                      </div>
-                    </div>
+  <body class="bg-light">
+    <main class="container pt-4 pb-2 mb-3">
+      <div class="row">
+        <div id="nenhumProduto" style="display: none;"></div>
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <form th:action="@{/clienteSistema/salvar}" method="post" th:object="${clienteSistema}">
+          <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+          <div class="shadow-sm mb-3">
+            <div class="card">
+              <h5 class="card-header">Cadastro de novo cliente no sistema</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="nomeComercio" class="form-label">Nome do comercio</label>
+                    <input required="true" th:field="*{nomeComercio}" type="text" class="form-control" id="nomeComercio" name="nomeComercio">
+                  </div>
+                  <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                    <input required="true" th:field="*{cpfCnpj}" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
+                  </div>
+                  <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="tenant" class="form-label">Tenant</label>
+                    <input required="true" type="text" th:field="*{tenant}" class="form-control" id="tenant" name="tenant"/>
+                  </div>
+                </div>
 
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="estado" class="form-label">Estado</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{estado}" min="0" class="form-control" id="estado" name="estado"/>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="cidade" class="form-label">Cidade</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{cidade}" class="form-control" id="cidade" name="cidade"/>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="bairro" class="form-label">Bairro</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{bairro}" class="form-control" id="bairro" name="bairro"/>
-                        </div>
-                      </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="estado" class="form-label">Estado</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{estado}" min="0" class="form-control" id="estado" name="estado"/>
                     </div>
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="cep" class="form-label">CEP</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{cep}" class="form-control cep" id="cep" name="cep"/>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="logradouro" class="form-label">Logradouro</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{logradouro}" class="form-control" id="logradouro" name="logradouro"/>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-4">
-                        <label for="qtdUsuario" class="form-label">Quantidade usuário</label>
-                        <div class="input-group mb-3">
-                          <input required="true" type="text" th:field="*{qtdUsuario}" class="form-control" id="qtdUsuario" name="qtdUsuario"/>
-                        </div>
-                      </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{cidade}" class="form-control" id="cidade" name="cidade"/>
                     </div>
-
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" id="acessarTelaCriarLogin" name="acessarTelaCriarLogin" th:checked="*{acessarTelaCriarLogin}">
-                          <label class="form-check-label" for="acessarTelaCriarLogin">Criar login?</label>
-                        </div>
-                      </div>
-
-                      <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" id="primeiroAcesso" name="primeiroAcesso" th:checked="*{primeiroAcesso}">
-                          <label class="form-check-label" for="primeiroAcesso">Primeiro acesso?</label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="btn-group mt-2" role="group" aria-label="Basic mixed styles example">
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">
-                        Salvar
-                      </button>
-                      <a type="button" th:href="@{/clienteSistema/pesquisar}" class="btn btn-sm btn-outline-secondary">
-                        Pesquisar
-                      </a>
+                  </div>
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{bairro}" class="form-control" id="bairro" name="bairro"/>
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="cep" class="form-label">CEP</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{cep}" class="form-control cep" id="cep" name="cep"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="logradouro" class="form-label">Logradouro</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{logradouro}" class="form-control" id="logradouro" name="logradouro"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="qtdUsuario" class="form-label">Quantidade usuário</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="text" th:field="*{qtdUsuario}" class="form-control" id="qtdUsuario" name="qtdUsuario"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="acessarTelaCriarLogin" name="acessarTelaCriarLogin" th:checked="*{acessarTelaCriarLogin}">
+                      <label class="form-check-label" for="acessarTelaCriarLogin">Criar login?</label>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="primeiroAcesso" name="primeiroAcesso" th:checked="*{primeiroAcesso}">
+                      <label class="form-check-label" for="primeiroAcesso">Primeiro acesso?</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btn-group mt-2" role="group">
+                  <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    Salvar
+                  </button>
+                  <a type="button" th:href="@{/clienteSistema/pesquisar}" class="btn btn-sm btn-outline-secondary">
+                    Pesquisar
+                  </a>
+                </div>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
-  </div>
-  <div id="divLoading"></div>
-  <th:block th:replace="fragments/JsFragment :: script"></th:block>
-</body>
+        </form>
+      </div>
+    </main>
+    <div id="divLoading"></div>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  </body>
 </html>

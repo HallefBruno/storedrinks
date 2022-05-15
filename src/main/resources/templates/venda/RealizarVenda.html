@@ -2,155 +2,110 @@
 <html lang="pt-BR">
   <head>
     <title>Vendas</title>
-    <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    <style>
-      .text-small {
-        font-size: 85%;
-      }
-    </style>
+    <div th:replace="fragments/CssFragment :: css"></div>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
   </head>
-  <body class="d-flex flex-column h-100">
-    <div class="container-fluid">
-      <div class="row">
-        <div th:replace="layout/fragments/Menu :: menu"></div>
-        <main class="flex-shrink-0">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <div class="container-fluid">
-              <form>
-                <div class="shadow-sm mb-3 bg-body rounded">
-                  <div class="card">
-                    <h5 class="card-header">Venda de produtos</h5>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="mb-3 col-sm-8 col-md-8 col-12 col-lg-8">
-                          <label for="produtos" class="form-label">Procure aqui seu produto</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-cubes" aria-hidden="true"></i></span>
-                            <select id="produtos" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
-                              <option value=""></option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="mb-3 col-sm-4 col-md-4 col-12 col-lg-4">
-                          <label for="codigoBarra" class="form-label">Cód Barra</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                            <input autocomplete="off" autofocus="true" type="text" class="form-control" id="codigoBarra" name="codigoBarra"/>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
-                          <label for="descricaoProduto" class="form-label">Descrição do produto</label>
-                          <input readonly="true" type="text" autocomplete="off" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
-                        </div>
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
-                          <label for="codProduto" class="form-label">Cód Produto</label>
-                          <input readonly="true" type="text" autocomplete="off" class="form-control" id="codProduto" name="codProduto"/>
-                        </div>
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
-                          <label for="valorVenda" class="form-label">Valor de venda</label>
-                          <input readonly="true" type="text" autocomplete="off" class="form-control" id="valorVenda" name="valorVenda"/>
-                        </div>
-                        <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
-                          <label for="qtdEstoque" class="form-label">Qtd em estoque</label>
-                          <input readonly="true" type="text" autocomplete="off" class="form-control" id="qtdEstoque" name="qtdEstoque"/>
-                        </div>
-                      </div>
-
-                      <div class="mb-3 sd-required">
-                        <label for="quantidade" class="form-label">Quantidade</label> <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
-                        <input type="text" autocomplete="off" min="1" maxlength="4" class="form-control js-number" id="quantidade" name="quantidade" oninput="javascript: if (this.value.length > 0 && Number(this.value.slice(0, 1)) === 0) this.value = 1 ;"/>
-                      </div>
-
-                      <div class="btn-group mt-2" role="group" aria-label="adicionar">
-                        <button type="button" id="btnItemVenda" class="btn btn-sm btn-light text-white">
-                          Adicionar
-                        </button>
-                      </div>
-                    </div>
+<body class="bg-light">
+  <main class="container pt-4 mb-3">
+    <div class="row">
+      <div class="shadow-sm mb-2 p-0">
+        <div class="card">
+          <h5 class="card-header">Venda de produtos</h5>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="mb-3 col-sm-8 col-md-8 col-12 col-lg-8">
+                  <label for="produtos" class="form-label">Procure aqui seu produto</label>
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2" viewBox="0 0 16 16">
+                      <path d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6V1Zm1 0v3h6l-2.25-3H8.5ZM15 5H1v10h14V5Z"></path>
+                      </svg>
+                    </span>
+                    <select id="produtos" name="produtos" class="form-select mb-3" data-placeholder="Procure aqui seu produto"> <!--  data-allow-clear="1"-->
+                      <option value=""></option>
+                    </select>
                   </div>
                 </div>
-              </form>
-              <div class="shadow-sm mb-2 bg-body rounded">
-                <div class="card" style="margin-top: 5px;">
-                  <div class="card-body">
-                    <div id="divCallout" class="callout-md callout-primary">
-                      <table id="itensVenda" class="table table-hover caption-top">
-                        <caption>Detalhes da venda</caption>
-                        <thead>
-                          <tr style="font-size: 12px;">
-                            <th>Produto</th>
-                            <th>Valor unitário</th>
-                            <th>Quantidade</th>
-                            <th>Valor total</th>
-                            <th>Ações</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
-                    <hr class="my-4">
-                    
-                    <div class="row">
-                      <div class="col-auto me-auto">
-                        <button type="button" id="formaPagamento" class="btn btn-sm btn-dark">
-                          Forma de pagamento
-                        </button>
-                      </div>
-                      <div class="col-auto">
-                        <div class="fw-bold fs-6"><mark>Total:<span style="margin-left: 4px;" class="valorTotal">0,00</span></mark></div>
-                      </div>
-                    </div>
+                <div class="mb-3 col-sm-4 col-md-4 col-12 col-lg-4">
+                  <label for="codigoBarra" class="form-label">Cód Barra</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+                    <input autocomplete="off" autofocus="true" type="text" class="form-control" id="codigoBarra" name="codigoBarra"/>
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-6">
+                  <label for="descricaoProduto" class="form-label">Descrição do produto</label>
+                  <input readonly="true" type="text" autocomplete="off" class="form-control" id="descricaoProduto" name="descricaoProduto"/>
+                </div>
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
+                  <label for="codProduto" class="form-label">Cód Produto</label>
+                  <input readonly="true" type="text" autocomplete="off" class="form-control" id="codProduto" name="codProduto"/>
+                </div>
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
+                  <label for="valorVenda" class="form-label">Valor de venda</label>
+                  <input readonly="true" type="text" autocomplete="off" class="form-control" id="valorVenda" name="valorVenda"/>
+                </div>
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-2">
+                  <label for="qtdEstoque" class="form-label">Qtd em estoque</label>
+                  <input readonly="true" type="text" autocomplete="off" class="form-control" id="qtdEstoque" name="qtdEstoque"/>
+                </div>
+              </div>
+
+              <div class="mb-3 sd-required">
+                <label for="quantidade" class="form-label">Quantidade</label> <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
+                <input type="text" autocomplete="off" min="1" maxlength="4" class="form-control js-number" id="quantidade" name="quantidade" oninput="javascript: if (this.value.length > 0 && Number(this.value.slice(0, 1)) === 0) this.value = 1 ;"/>
+              </div>
+            </form>
+            <div class="btn-group mt-2" role="group" aria-label="adicionar">
+              <button type="button" id="btnItemVenda" class="btn btn-sm btn-light text-white">
+                Adicionar
+              </button>
             </div>
           </div>
-        </main>
+        </div>
+      </div>
+      <div class="shadow-sm mb-2 p-0">
+        <div class="card">
+          <div class="card-body">
+            <div id="divCallout" class="callout-md callout-primary">
+              <table id="itensVenda" class="table table-hover caption-top">
+                <caption>Detalhes da venda</caption>
+                <thead>
+                  <tr style="font-size: 12px;">
+                    <th>Produto</th>
+                    <th>Valor unitário</th>
+                    <th>Quantidade</th>
+                    <th>Valor total</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+              <div class="col-auto me-auto">
+                <button type="button" id="formaPagamento" class="btn btn-sm btn-dark">
+                  Forma de pagamento
+                </button>
+              </div>
+              <div class="col-auto">
+                <div class="fw-bold fs-6"><mark>Total:<span style="margin-left: 4px;" class="valorTotal">0,00</span></mark></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="divLoading"></div>
-    <th:block th:replace="modal/FormaPagamento :: modalFormaPagamento"></th:block>
-    <th:block th:replace="fragments/JsFragment :: script"></th:block>
-    <script th:src="@{/alldrink-js/venda/venda.js}" type="text/javascript"></script>
-    <script>
-      $(function () {
-        
-        if($(window).width() <= 1900) {
-          $("main").removeClass("col-xxl-10").addClass("col-xxl-11");
-          console.log($(window).width());
-        }
-        
-        if($(window).width() >= 1438) {
-          $("main").removeClass("col-xxl-11").addClass("col-xxl-10");
-          console.log($(window).width());
-        }
-        
-        $(window).on('resize', function(){
-          var win = $(this);
-          if (win.width() >= 1438 && win.width() < 1859) {
-            $("main").removeClass("col-xxl-11").addClass("col-xxl-10");
-          } else {
-            $("main").removeClass("col-xxl-10").addClass("col-xxl-11");
-          }
-//          if(win.width() < 2149) {
-//            console.log(win.width());
-//            $("main").removeClass("col-xl-11").addClass("col-xl-10");
-//          }
-//          if(win.width() > 2264) {
-//            $("main").removeClass("col-xl-10").addClass("col-xl-11");
-//          }
-//          
-//          if(win.width() > 2125 && win.width() < 2149 ) {
-//            $("main").removeClass("ms-sm-auto").prop("style","margin-left:250px");
-//          } else {
-//            $("main").addClass("ms-sm-auto").prop("style","");
-//          }
-        });
-      });
-    </script>
-  </body>
+  </main>
+  <div id="divLoading"></div>
+  <th:block th:replace="modal/FormaPagamento :: modalFormaPagamento"></th:block>
+  <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  <script th:src="@{/alldrink-js/venda/venda.js}" type="text/javascript"></script>
+</body>
 </html>
