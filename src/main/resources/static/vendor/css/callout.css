@@ -81,6 +81,13 @@
   border-left-color: #f04aff
 }
 
+.callout-yellow {
+  border-left-color: #ebdb34
+}
+
+.callout-rosa {
+  border-left-color: #eb349b
+}
 
 /*.callout {}
 .callout-info {}

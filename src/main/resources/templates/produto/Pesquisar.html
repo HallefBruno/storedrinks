@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title>Pesquisa de produtos</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <th:block th:replace="fragments/CssFragment :: css"></th:block>
-  <div th:replace="layout/fragments/Menu :: menu"></div>
-</head>
+    <meta name="description" content="Pesquisa de produtos">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+  </head>
 <body class="bg-light">
   <main class="container mt-5">
     <div th:if="${#lists.isEmpty(pagina.conteudo)}">
@@ -20,7 +19,7 @@
       </div>
     </div>
     <form method="GET" th:object="${produtoFilter}">
-      <div class="accordion shadow-sm mb-2 bg-body rounded" id="accordionPesquisar">
+      <div class="accordion shadow-sm mb-2" id="accordionPesquisar">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -64,7 +63,7 @@
     <div th:each="produto : ${pagina.conteudo}">
       <div class="row g-2 mb-1">
         <div class="col-lg-4">
-          <div class="card p-4 mb-1 shadow-sm bg-body rounded" style="min-height: 383px;">
+          <div class="card p-4 mb-1 shadow-sm" style="min-height: 383px;">
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
                 <img th:src="@{/imagens/sem-perfil.png}" alt="produto" class="rounded-circle p-1" width="110">
@@ -78,7 +77,7 @@
           </div>
         </div>
         <div class="col-lg-8">
-          <div class="card p-4 shadow-sm bg-body rounded">
+          <div class="card p-4 shadow-sm">
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-sm-3">

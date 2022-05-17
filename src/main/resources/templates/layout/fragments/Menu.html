@@ -110,6 +110,26 @@
               </li>
             </ul>
           </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown" href="#" id="navbarDropdownMensagens" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-clipboard-data"></i> Cadastros
+            </a>
+            <ul class="dropdown-menu text-small" style="font-size: 90%;" aria-labelledby="navbarDropdownMensagens">
+              <li>
+                <a class="dropdown-item" target="_blank" th:href="@{/mensagens/recebidas}">
+                  <i class="bi bi-chat"></i> Mensagens
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" target="_blank" th:href="@{/mensagens/nova}">
+                  <i class="bi bi-chat-dots"></i> Nova mensagem
+                </a>
+              </li>
+            </ul>
+          </li>
+          
         </ul>
       </div>
     </div>

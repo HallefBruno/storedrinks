@@ -1,8 +1,8 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <title>Cancelar venda</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cancelar venda">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
     <style>
       #list-historico {
@@ -97,11 +97,11 @@
                             </div>
                           </div>
                           <div class="mt-1 d-flex">
-                            <i data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor" style="margin: 3px 5px 0px 0px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <i data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor" style="margin: 3px 5px 0px 0px;" class="bi bi-person-circle"></i>
                             <strong data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor">[[${venda.nome}]]</strong>
                           </div>
                           <div class="mt-1 d-flex" data-bs-toggle="tooltip" data-bs-placement="top" title="Data da venda">
-                            <i style="margin: 2px 5px 0px 0px;" class="fa fa-calendar" aria-hidden="true"></i>
+                            <i style="margin: 2px 5px 0px 0px;" class="bi bi-calendar-week" aria-hidden="true"></i>
                             <span th:text="${#temporals.format(venda.dataHoraVenda,'dd/MM/yyyy HH:mm:ss')}"></span>
                           </div>
                           <div class="mt-1 d-flex">
@@ -121,7 +121,7 @@
         </div>
         
         <div class="col-sm-12 col-md-12 col-lg-6">
-          <div class="callout callout-primary shadow-sm">
+          <div class="callout callout-rosa shadow-sm">
             <i class="fa fa-bars" aria-hidden="true"></i> 
             <span class="fw-bold">Itens da venda</span>
           </div>
@@ -130,7 +130,7 @@
               <div class="shadow-sm mb-3 bg-body rounded">
                 <div class="card" style="margin-top: 5px;">
                   <div class="card-body">
-                    <div id="divCallout" class="callout-md callout-primary">
+                    <div id="divCallout" class="callout-md callout-rosa">
                       <table id="itensVenda" class="table table-hover caption-top setblockUI">
                         <caption>Itens da venda</caption>
                         <thead>
@@ -145,7 +145,6 @@
                         </tbody>
                       </table>
                     </div>
-                    <hr class="my-4">
                   </div>
                 </div>
               </div>

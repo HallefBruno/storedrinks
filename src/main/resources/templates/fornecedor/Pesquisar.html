@@ -1,111 +1,110 @@
 <html lang="pt-BR">
   <head>
     <title>Pesquisa de fornecedor</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pesquisa de fornecedor">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
-  </head>
-<body>
-  <div class="container-fluid">
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+</head>
+<body class="bg-light">
+  <main class="container mt-5">
     <div class="row">
-      <div th:replace="layout/fragments/Menu :: menu"></div>
-      <main class="col-md-9 ms-sm-auto col-lg-11 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <div class="container-fluid">
-            <div th:if="${#lists.isEmpty(pagina.conteudo)}">
-              <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                  <div class="toast-body">
-                    <p class="">Nenhum fornecedor encontrado!</p>
-                  </div>
-                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      <div class="col-sm-12">
+        <div class="container-fluid">
+          <div th:if="${#lists.isEmpty(pagina.conteudo)}">
+            <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex">
+                <div class="toast-body">
+                  <p class="">Nenhum fornecedor encontrado!</p>
                 </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>
             </div>
-            <form method="GET" th:object="${fornecedorFiltro}">
-              <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Pesquisar
-                    </button>
-                  </h2>
-                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
-                    <div class="accordion-body">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="row">
-                            <div class="mb-3 col-12 col-md-4 col-lg-4">
-                              <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                              <input th:value="${cpfCnpj}" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj"/>
-                            </div>
-                            <div class="mb-3 col-12 col-md-4  col-lg-4">
-                              <label for="nomeFornecedor" class="form-label">Nome</label>
-                              <input th:value="${nomeFornecedor}" autocomplete="off" type="text" class="form-control" id="nomeFornecedor" name="nomeFornecedor"/>
-                            </div>
-                            <div class="mb-3 col-12 col-md-4 col-lg-4">
-                              <label for="telefone" class="form-label">Telefone</label>
-                              <input type="text" autocomplete="off" th:value="${telefone}" class="form-control js-phone-number" id="telefone" name="telefone"/>
-                            </div>
+          </div>
+          <form method="GET" th:object="${fornecedorFiltro}">
+            <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Pesquisar
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
+                  <div class="accordion-body">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="mb-3 col-12 col-md-4 col-lg-4">
+                            <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                            <input th:value="${cpfCnpj}" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj"/>
                           </div>
-                          <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
+                          <div class="mb-3 col-12 col-md-4  col-lg-4">
+                            <label for="nomeFornecedor" class="form-label">Nome</label>
+                            <input th:value="${nomeFornecedor}" autocomplete="off" type="text" class="form-control" id="nomeFornecedor" name="nomeFornecedor"/>
+                          </div>
+                          <div class="mb-3 col-12 col-md-4 col-lg-4">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="text" autocomplete="off" th:value="${telefone}" class="form-control js-phone-number" id="telefone" name="telefone"/>
+                          </div>
+                        </div>
+                        <div class="btn-group mt-2" role="group">
                           <a th:href="@{/fornecedor/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
+                          <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </form>
-            <div class="card shadow-sm" style="margin-top: 8px; margin-bottom: 8px;">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table id="fornecedores" class="table table-hover caption-top">
-                    <caption>Fornecedores</caption>
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>CPF/CNPJ</th>
-                        <th>Fornecedor</th>
-                        <th>Telefone</th>
-                        <th>Situação</th>
-                        <th class="text-center">Ação</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="fornecedor : ${pagina.conteudo}">
-                        <td th:text="${fornecedor.id}"></td>
-                        <td class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></td>
-                        <td class="text-capitalize" th:text="${fornecedor.nome}"></td>
-                        <td class="js-phone-number" th:text="${fornecedor.telefone}"></td>
-                        <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
-                        <td class="text-center">
-                          <div class="btn-group" role="group">
-                            <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
-                            <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}">Excluir</a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+            </div>
+          </form>
+          <div class="card shadow-sm" style="margin-top: 8px; margin-bottom: 8px;">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="fornecedores" class="table table-hover caption-top">
+                  <caption>Fornecedores</caption>
+                  <thead>
+                    <tr>
+                      <td>#</td>
+                      <td>CPF/CNPJ</td>
+                      <td>Fornecedor</td>
+                      <td>Telefone</td>
+                      <td>Situação</td>
+                      <td class="text-center">Ação</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="fornecedor : ${pagina.conteudo}">
+                      <td th:text="${fornecedor.id}"></td>
+                      <td class="mascara-cpf-cnpj" th:text="${fornecedor.cpfCnpj}"></td>
+                      <td class="text-capitalize" th:text="${fornecedor.nome}"></td>
+                      <td class="js-phone-number" th:text="${fornecedor.telefone}"></td>
+                      <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
+                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}">Excluir</a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
           </div>
+          <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
         </div>
-      </main>
+      </div>
     </div>
-  </div>
+  </main>
   <div id="divLoading"></div>
-  <th:block th:replace="fragments/JsFragment :: script"></th:block>
-  <script type="text/javascript">
-    $(function () {
-      $("#cpfCnpj").focus();
-      setTimeout(() => {
-        $(".toast").toast('show');
-      }, 0);
-    });
-  </script>
+<th:block th:replace="fragments/JsFragment :: script"></th:block>
+<script type="text/javascript">
+  $(function () {
+    $("#cpfCnpj").focus();
+    setTimeout(() => {
+      $(".toast").toast('show');
+    }, 0);
+  });
+</script>
 </body>
 </html>
