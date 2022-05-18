@@ -47,7 +47,7 @@
                           </div>
                         </div>
                         <div class="btn-group mt-2" role="group">
-                          <a th:href="@{/fornecedor/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
+                          <a th:href="@{/fornecedor/novo}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
                           <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
                         </div>
                       </div>
@@ -81,7 +81,7 @@
                       <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
                       <td class="text-center">
                         <div class="btn-group" role="group">
-                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
+                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary invock-gif" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
                           <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}">Excluir</a>
                         </div>
                       </td>

@@ -4,7 +4,7 @@ import com.store.drinks.entidade.MensagensEnviadas;
 import com.store.drinks.entidade.MensagensRecebidas;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.Mensagemdto;
-import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.embedded.RemetenteDestinatarioMensagem;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
@@ -92,10 +92,10 @@ public class MensagensRecebidasService {
     return dataTable;
   }
   
-  public Select2Wrapper<Usuariodto> pesquisarComercioAutoComplete(String descricao, String pagina) {
+  public Select2Wrapper<UsuarioMensagemdto> pesquisarComercioAutoComplete(String descricao, String pagina) {
     Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
     var pagePesquisarComercio = mensagensRecebidasRepository.pesquisarComercioAutoComplete(descricao, pageable);
-    var select2Wrapper = new Select2Wrapper<Usuariodto>();
+    var select2Wrapper = new Select2Wrapper<UsuarioMensagemdto>();
     select2Wrapper.setTotalItens(pagePesquisarComercio.getTotalElements());
     select2Wrapper.setItems(pagePesquisarComercio.getContent());
     return select2Wrapper;

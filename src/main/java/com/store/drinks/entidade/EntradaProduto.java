@@ -19,7 +19,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -109,10 +108,6 @@ public class EntradaProduto implements Serializable {
 
   @Column(name = "qtd_parcelas")
   private Integer qtdParcelas;
-
-  @Version
-  @Column(name = "versao_objeto", nullable = false)
-  private Integer versaoObjeto;
 
   @Column(nullable = false, updatable = false, length = 50)
   private String tenant;

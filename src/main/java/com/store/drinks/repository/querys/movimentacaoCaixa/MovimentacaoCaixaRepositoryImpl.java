@@ -3,17 +3,22 @@
 package com.store.drinks.repository.querys.movimentacaoCaixa;
 
 import com.store.drinks.entidade.Caixa;
+import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.Usuario;
+import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
+import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import com.store.drinks.service.UsuarioService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
@@ -25,6 +30,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import org.apache.commons.lang3.BooleanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 
@@ -41,6 +47,9 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   
   @Autowired
   private RowsUtil<MovimentacaoCaixa> rowsUtil;
+  
+  @Autowired
+  private JpaUtils<UsuarioMovimentacaoCaixadto> jpaUtils;
   
   private static final String ADMIN = "Administrador";
   private static final String SUPER = "SuperUser";
@@ -115,4 +124,20 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     
     return dataTableWrapper;
   }
+  
+  @Override
+  public List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa() {
+    CriteriaBuilder builder = manager.getCriteriaBuilder();
+    CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
+    Root<Usuario> root = query.from(Usuario.class);
+    Join<Usuario, ClienteSistema> clienteSistema = root.join("clienteSistema");
+    query.multiselect(root.get("id").alias("id"), root.get("nome").alias("text"));
+    query.where(
+      builder.equal(clienteSistema.get("tenant"), multitenancy.getTenantValue())
+    );
+    List<Tuple> listTuple = manager.createQuery(query).getResultList();
+    List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,UsuarioMovimentacaoCaixadto.class);
+    return usuariosMovimentacaoCaixa;
+  }
+  
 }

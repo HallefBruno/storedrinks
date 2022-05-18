@@ -3,7 +3,7 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.MensagensRecebidas;
 import com.store.drinks.entidade.dto.Mensagemdto;
-import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.service.MensagensRecebidasService;
 import com.store.drinks.service.UsuarioService;
@@ -47,7 +47,7 @@ public class MensagensRecebidasController {
   
   @PreAuthorize("hasRole('ENVIAR_MENSAGEM')")
   @GetMapping("/usuarios")
-  public ResponseEntity<List<Usuariodto>> listaUsuarioPorTenant() {
+  public ResponseEntity<List<UsuarioMensagemdto>> listaUsuarioPorTenant() {
     var listaUsuarios = usuarioService.buscarUsuariosPorTenant();
     if(!ObjectUtils.isEmpty(listaUsuarios)) {
       return ResponseEntity.ok(listaUsuarios);

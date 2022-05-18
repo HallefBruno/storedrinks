@@ -1,5 +1,5 @@
 
-package com.store.drinks.entidade.dto;
+package com.store.drinks.entidade.dto.usuario;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuariodto implements Serializable {
+public class UsuarioMensagemdto implements Serializable {
   
   private Long id;
   private String text;

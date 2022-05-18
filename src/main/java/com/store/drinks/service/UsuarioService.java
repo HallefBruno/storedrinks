@@ -1,7 +1,7 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Usuario;
-import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
 import java.util.ArrayList;
@@ -28,12 +28,12 @@ public class UsuarioService {
     return usuarioRepository.findByEmailAndAtivoTrue(email);
   }
 
-  public List<Usuariodto> buscarUsuariosPorTenant() {
+  public List<UsuarioMensagemdto> buscarUsuariosPorTenant() {
     var usuarioLogado = usuarioLogado();
     var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());
-    var usuariodtos = new ArrayList<Usuariodto>();
+    var usuariodtos = new ArrayList<UsuarioMensagemdto>();
     filtroUsuariosPorTenant.forEach(usuario -> {
-      var usuariodto = new Usuariodto();
+      var usuariodto = new UsuarioMensagemdto();
       usuariodto.setId(usuario.getId());
       usuariodto.setText(usuarioLogado.getClienteSistema().getTenant());
       usuariodto.setNome(usuarioLogado.getClienteSistema().getNomeComercio());

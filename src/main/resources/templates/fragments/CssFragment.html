@@ -1,9 +1,7 @@
 <th:block th:fragment="css">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" th:href="@{/imagens/whiskey.png}">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" th:href="@{/imagens/whiskey.png}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <input type="hidden" name="context" id="context" th:value="@{/}" />
@@ -16,7 +14,7 @@
   <link th:href="@{/vendor/css/responsive.dataTables.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/buttons.dataTables.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/sweetalert2.min.css}" rel="stylesheet" type="text/css"/>
-  <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+  <!--<link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>-->
   <link th:href="@{/vendor/css/select2.min.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/select2-bootstrap-5-theme.css}" rel="stylesheet" type="text/css"/>
   <link th:href="@{/vendor/css/jquery.toast.min.css}" rel="stylesheet" type="text/css"/>

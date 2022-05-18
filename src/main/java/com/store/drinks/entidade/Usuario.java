@@ -10,9 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
-import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,15 +31,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
-import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
 
 @SqlResultSetMapping(
-  name="Usuariodto",
+  name="UsuarioMensagemdto",
   classes={ 
-    @ConstructorResult(targetClass=Usuariodto.class,
+    @ConstructorResult(targetClass=UsuarioMensagemdto.class,
     columns={
       @ColumnResult(name = "id", type=Long.class),
       @ColumnResult(name = "text", type=String.class),

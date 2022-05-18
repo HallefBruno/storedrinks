@@ -2,7 +2,7 @@
 
 package com.store.drinks.repository.querys.mensagensRecebidas;
 
-import com.store.drinks.entidade.dto.Usuariodto;
+import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.List;
@@ -26,7 +26,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
   private Multitenancy multitenancy;
   
   @Override
-  public Page<Usuariodto> pesquisarComercioAutoComplete(String comercio, Pageable pageable) {
+  public Page<UsuarioMensagemdto> pesquisarComercioAutoComplete(String comercio, Pageable pageable) {
     StringBuilder sqlUnion = new StringBuilder();
     StringBuilder sqlCount = new StringBuilder();
     String sqlNomeComercio = "";
@@ -53,7 +53,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
     if (!ObjectUtils.isEmpty(singleResult)) {
       count = Long.parseLong(singleResult.toString());
     }
-    Query query = manager.createNativeQuery(sqlUnion.toString(), "Usuariodto");
+    Query query = manager.createNativeQuery(sqlUnion.toString(), "UsuarioMensagemdto");
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();
     int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
