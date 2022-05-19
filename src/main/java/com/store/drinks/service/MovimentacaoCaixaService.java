@@ -51,14 +51,7 @@ public class MovimentacaoCaixaService {
   }
   
   public List<UsuarioMovimentacaoCaixadto> getUsuarios() {
-    for(com.store.drinks.entidade.Grupo grupo : usuarioService.usuarioLogado().getGrupos()) {
-      for(Grupo enumBrupo : Grupo.values()) {
-        if(enumBrupo.getValue().equals(grupo.getNome())) {
-          return movimentacaoCaixaRepository.usuariosMovimentacaoCaixa();
-        }
-      }
-    }
-    return new ArrayList<>();
+    return movimentacaoCaixaRepository.usuariosMovimentacaoCaixa();
   }
   
   public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {

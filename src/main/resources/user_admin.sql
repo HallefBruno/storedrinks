@@ -10,6 +10,7 @@ INSERT INTO permissao VALUES (4, 'ROLE_MANTER_PDV');
 INSERT INTO permissao VALUES (5, 'ROLE_MANTER_FORNECEDOR');
 INSERT INTO permissao VALUES (6, 'ROLE_ENVIAR_MENSAGEM');
 INSERT INTO permissao VALUES (7, 'ROLE_LER_MENSAGEM');
+INSERT INTO permissao VALUES (8, 'ROLE_FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA');
 
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 1);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 2);
@@ -18,12 +19,14 @@ INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 4);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 5);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 6);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 7);
+INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (1, 8);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 2);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 3);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 4);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 5);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 6);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 7);
+INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (2, 8);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (3, 4);
 INSERT INTO grupo_permissao (id_grupo, id_permissao) VALUES (3, 7);
 

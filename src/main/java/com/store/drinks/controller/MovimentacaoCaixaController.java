@@ -6,6 +6,7 @@ import com.store.drinks.service.MovimentacaoCaixaService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +25,11 @@ public class MovimentacaoCaixaController {
     return new ModelAndView("movimentacaocaixa/MovimentacaoCaixa");
   }
   
+  
   @GetMapping("/usuarios")
+  @PreAuthorize("hasRole('FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA')")
   public ResponseEntity<List<UsuarioMovimentacaoCaixadto>> getUsuarios() {
     var list = movimentacaoCaixaService.getUsuarios();
-    if(!list.isEmpty()) {
-      return ResponseEntity.ok(list);
-    }
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(list);
   }
 }
