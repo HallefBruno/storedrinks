@@ -90,20 +90,10 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     CriteriaQuery<MovimentacaoCaixa> query = builder.createQuery(MovimentacaoCaixa.class);
     Root<MovimentacaoCaixa> movimentacaoCaixa = query.from(MovimentacaoCaixa.class);
     Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");
-    Join<MovimentacaoCaixa, Usuario> usuario = movimentacaoCaixa.join("usuario");
-    //Join<MovimentacaoCaixa, FormaPagamento> formaPagamento = movimentacaoCaixa.join("formaPagamento",JoinType.LEFT);
+    
     List<Predicate> predicates = new ArrayList<>();
-    var ususarioLogado = usuarioService.usuarioLogado();
-    var permissaoAdmin = ususarioLogado.getGrupos().stream().filter(grupo -> grupo.getNome().equals(ADMIN) || grupo.getNome().equals(SUPER)).findFirst();
     
-    if(permissaoAdmin.isPresent()) {
-      predicates.add(builder.equal(movimentacaoCaixa.get("tenant"),multitenancy.getTenantValue()));
-      //if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
-        predicates.add(builder.and(builder.equal(usuario.get("id"), ususarioLogado.getId())));
-      //}
-    }
-    
-    if(BooleanUtils.isTrue(movimentacoesCaixaFilters.getSomenteCaixaAberto())) {
+    if(movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
       predicates.add(builder.isTrue(caixa.get("aberto")));
     } else {
       predicates.add(builder.isFalse(caixa.get("aberto")));

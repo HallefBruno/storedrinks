@@ -35,6 +35,27 @@ function setDefaultsDataTable(parametros) {
   });
 }
 
+function setDefaultsDataTableUsingChange(parametros) {
+
+  $.extend(true, $.fn.dataTable.defaults, {
+    searching: false,
+    scrollY: "400px",
+    scrollCollapse: true,
+    serverSide: true,
+    processing: false,
+    destroy: true,
+    pageLength: 10,
+    responsive: true,
+    info: true,
+    lengthChange: false,
+    language: {
+      url: $("#context").val()+"vendor/internationalisation/pt_br.json"
+    },
+    columnDefs: parametros.columnDefs,
+    columns: parametros.columns
+  });
+}
+
 jQuery.fn.dataTable.render.ellipsis = function (cutoff, wordbreak, escapeHtml) {
   var esc = function (t) {
     return t

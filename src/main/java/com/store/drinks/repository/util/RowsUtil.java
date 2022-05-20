@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class RowsUtil<T> {
 
-  @Deprecated
   public <T> Long countRows(final CriteriaBuilder criteriaBuilder, final CriteriaQuery<T> criteriaQuery, Root<T> root, EntityManager entityManager) {
     CriteriaQuery<Long> query = createCountQuery(criteriaBuilder, criteriaQuery, root);
     return entityManager.createQuery(query).getSingleResult();

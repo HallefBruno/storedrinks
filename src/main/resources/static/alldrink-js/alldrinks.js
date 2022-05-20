@@ -195,6 +195,8 @@ StoreDrink.LoadGif = (function () {
       return false;
     } else if(url.includes("/update-quantidade/")) {
       return false;
+    } else if(url.includes("/movimentacao-caixa/usuarios")) {
+      return false;
     } else if (url.includes("mensagens/destinatario")) {
       element.css("display", "block");
       return false;

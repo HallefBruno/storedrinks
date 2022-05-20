@@ -4,16 +4,14 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
-import com.store.drinks.entidade.enuns.Grupo;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.querys.movimentacaoCaixa.MovimentacoesCaixaFilters;
+import com.store.drinks.repository.util.ObjectMapperUtil;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +24,7 @@ public class MovimentacaoCaixaService {
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final UsuarioService usuarioService;
   private final CaixaService caixaService;
+  private final ObjectMapperUtil<MovimentacoesCaixaFilters> objectMapperUtil;
   
   @Transactional
   public void salvar(BigDecimal valorRetirada) {
@@ -54,7 +53,8 @@ public class MovimentacaoCaixaService {
     return movimentacaoCaixaRepository.usuariosMovimentacaoCaixa();
   }
   
-  public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
+  public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(String movimentacoesCaixaFiltersString, int draw, int start) {
+    MovimentacoesCaixaFilters movimentacoesCaixaFilters = objectMapperUtil.converterStringInEntity(MovimentacoesCaixaFilters.class, movimentacoesCaixaFiltersString);
     return movimentacaoCaixaRepository.movimentacoesCaixa(movimentacoesCaixaFilters, draw, start);
   }
 }
