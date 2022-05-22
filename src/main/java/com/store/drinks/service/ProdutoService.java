@@ -82,7 +82,7 @@ public class ProdutoService {
     ResultSelectProdutos resultSelectProdutos = new ResultSelectProdutos();
     List<ProdutoSelect2> produtosDTO = new ArrayList<>();
     Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
-    Page page = produtoRepository.filtrarProdutosSelect(descricao, pageable);
+    Page<Produto> page = produtoRepository.filtrarProdutosSelect(descricao, pageable);
     if (page.hasContent()) {
       List<Produto> automovels = page.getContent();
       resultSelectProdutos.setTotalItens(page.getTotalElements());

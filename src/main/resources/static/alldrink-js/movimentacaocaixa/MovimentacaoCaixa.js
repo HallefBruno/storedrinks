@@ -60,7 +60,12 @@ $(document).ready(function () {
         },
         movimentacoesCaixaFilters:JSON.stringify(movimentacoesCaixaFilters)
       }
-    }
+    },
+    drawCallback: function (settings) {
+        // Here the response
+        var response = settings.json;
+        console.log(response);
+    },
   });
   
   $("#btnPesquisar").click(function () {
@@ -77,6 +82,34 @@ $(document).ready(function () {
 
 function parametrosConfigDataTable() {
   var parametros = {
+   "columns": [
+	  { "data": "valorRecebido", 
+	  	render: function(data,type,row,meta) {
+		  return `<span class='text-success'>${formatter.format(data)}</span>`;
+		}
+	  },
+	  
+	  { "data": "valorTroco",
+	  	render: function(data,type,row,meta) {
+		  return `<span class='text-danger'>-${formatter.format(data)}</span>`;
+		}
+	  },
+	  
+	  { "data": "dataMovimentacao",
+	   	render: function (data,type,row,meta) {
+          return formatDataHora(data);
+        }
+      },
+      
+	  { "data": "recolhimento",
+	  	render: function (data,type,row,meta) {
+		  if(data) {
+			return `<span class="badge bg-warning text-black">Recolhimento</span>`;
+		  }
+          return `<span class="badge bg-primary">Normal</span>`;
+        }
+	  }
+    ],
     btnActions: false
   };
   setDefaultsDataTableUsingChange(parametros);

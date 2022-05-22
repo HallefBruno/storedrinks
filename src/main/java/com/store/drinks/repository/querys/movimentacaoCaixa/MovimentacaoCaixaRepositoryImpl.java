@@ -127,6 +127,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
 //    return dataTableWrapper;
 //  }
   
+  @SuppressWarnings("unchecked")
   @Override
   public List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa() {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -138,10 +139,11 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       builder.equal(clienteSistema.get("tenant"), multitenancy.getTenantValue())
     );
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
-    List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,UsuarioMovimentacaoCaixadto.class);
+	List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,UsuarioMovimentacaoCaixadto.class);
     return usuariosMovimentacaoCaixa;
   }
   
+  @SuppressWarnings("unchecked")
   @Override
   public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
     DataTableWrapper<MovimentacaoCaixadto> dataTableWrapper = new DataTableWrapper<>();
@@ -164,6 +166,10 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     selections.add(venda.get("id").alias("vendaId"));
     selections.add(caixa.get("id").alias("caixaId"));
     selections.add(movimentacaoCaixa.get("valorRecebido").alias("valorRecebido"));
+    selections.add(movimentacaoCaixa.get("valorTroco").alias("valorTroco"));
+    selections.add(movimentacaoCaixa.get("dataMovimentacao").alias("dataMovimentacao"));
+    selections.add(movimentacaoCaixa.get("recolhimento").alias("recolhimento"));
+    selections.add(movimentacaoCaixa.get("tenant").alias("tenant"));
     
     query.multiselect(selections);
     
@@ -175,7 +181,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     
     query.where(predicates.toArray(Predicate[]::new));
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
-    List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
+	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
     
     CriteriaQuery<Long> countQuery = cbCount.createQuery(Long.class);
     Root<MovimentacaoCaixa> tagCountRoot = countQuery.from(MovimentacaoCaixa.class);
@@ -189,7 +195,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     dataTableWrapper.setDraw(draw);
     dataTableWrapper.setStart(start);
     
-    return null;
+    return dataTableWrapper;
   }
 
   private Specification<MovimentacaoCaixa> specificationForCount(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
@@ -197,7 +203,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       List<Predicate> predicates = new ArrayList<>();
       Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");
       Join<MovimentacaoCaixa, Usuario> usuario = movimentacaoCaixa.join("usuario");
-      Join<MovimentacaoCaixa, Venda> venda = movimentacaoCaixa.join("venda");
+      Join<MovimentacaoCaixa, Venda> venda = movimentacaoCaixa.join("venda",JoinType.LEFT);
       
       if (movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
         predicates.add(criteriaBuilder.isTrue(caixa.get("aberto")));

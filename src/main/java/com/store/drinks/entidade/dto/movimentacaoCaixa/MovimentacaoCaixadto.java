@@ -18,7 +18,6 @@ public class MovimentacaoCaixadto implements Serializable {
   private Long usuarioId;
   private Long vendaId;
   private Long caixaId;
-  private Long formaPagamentoId;
   
   private Boolean recolhimento;
   private String tenant;

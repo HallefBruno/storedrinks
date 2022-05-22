@@ -35,7 +35,6 @@ public class CaixaService {
     abrirCaixaRepository.save(acx);
   }
 
-  @SuppressWarnings("null")
   public boolean abrirCaixaPorUsuarioLogado() {
     try {
       Optional<Caixadto> cxAberto = caixaAberto();
