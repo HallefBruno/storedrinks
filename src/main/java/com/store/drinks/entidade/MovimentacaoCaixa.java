@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -52,6 +53,10 @@ public class MovimentacaoCaixa implements Serializable {
   @Min(value = 0, message = "Valor mínimo não pode ser negativo!")
   @Column(name = "valor_troco", nullable = false)
   private BigDecimal valorTroco;
+  
+  @NotNull(message = "Data da movimentação é obrigatória!")
+  @Column(name = "data_movimentacao", nullable = false)
+  private LocalDateTime dataMovimentacao;
   
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movimentacaoCaixa")
   @JsonBackReference
@@ -142,6 +147,14 @@ public class MovimentacaoCaixa implements Serializable {
     this.valorTroco = valorTroco;
   }
 
+  public LocalDateTime getDataMovimentacao() {
+    return dataMovimentacao;
+  }
+
+  public void setDataMovimentacao(LocalDateTime dataMovimentacao) {
+    this.dataMovimentacao = dataMovimentacao;
+  }
+
   public Set<FormaPagamento> getFormaPagamentos() {
     return formaPagamentos;
   }
@@ -174,20 +187,20 @@ public class MovimentacaoCaixa implements Serializable {
     this.venda = venda;
   }
 
-  public String getTenant() {
-    return tenant;
-  }
-
-  public void setTenant(String tenant) {
-    this.tenant = tenant;
-  }
-
   public Boolean getRecolhimento() {
     return recolhimento;
   }
 
   public void setRecolhimento(Boolean recolhimento) {
     this.recolhimento = recolhimento;
+  }
+
+  public String getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
   
 }

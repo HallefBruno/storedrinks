@@ -3,12 +3,14 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.MovimentacaoCaixa;
+import com.store.drinks.entidade.dto.movimentacaoCaixa.MovimentacaoCaixadto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.querys.movimentacaoCaixa.MovimentacoesCaixaFilters;
 import com.store.drinks.repository.util.ObjectMapperUtil;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class MovimentacaoCaixaService {
       if(valorRetirada.compareTo(valorTotalEmCaixa) <= 0) {
         var movimentacao = MovimentacaoCaixa.builder()
           .recolhimento(Boolean.TRUE)
+          .dataMovimentacao(LocalDateTime.now())
           .valorRecebido(BigDecimal.ZERO)
           .valorTroco(valorRetirada)
           .usuario(usuarioService.usuarioLogado())
@@ -53,7 +56,7 @@ public class MovimentacaoCaixaService {
     return movimentacaoCaixaRepository.usuariosMovimentacaoCaixa();
   }
   
-  public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(String movimentacoesCaixaFiltersString, int draw, int start) {
+  public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(String movimentacoesCaixaFiltersString, int draw, int start) {
     MovimentacoesCaixaFilters movimentacoesCaixaFilters = objectMapperUtil.converterStringInEntity(MovimentacoesCaixaFilters.class, movimentacoesCaixaFiltersString);
     return movimentacaoCaixaRepository.movimentacoesCaixa(movimentacoesCaixaFilters, draw, start);
   }

@@ -4,6 +4,8 @@ let usuarios = [];
 
 $(document).ready(function () {
   
+  let isCaixaFechado = false;
+  
   if($("#usuarios").length) {
     $.get(`${CONTEXT}movimentacao-caixa/usuarios`,function (response) {
       $("#usuarios").select2({
@@ -26,7 +28,20 @@ $(document).ready(function () {
   
   parametrosConfigDataTable();
   
-  let isCaixaFechado = $("#isCaixaFechado").is(":checked");
+  
+  $("#isCaixaFechado").change(function () {
+    isCaixaFechado = this.checked;
+    $("#spanTipoCaixa").text("");
+    if (this.checked) {
+      $("#spanTipoCaixa").removeClass("bg-danger");
+      $("#spanTipoCaixa").addClass("bg-primary");
+      $("#spanTipoCaixa").text("SIM");
+    } else {
+      $("#spanTipoCaixa").removeClass("bg-primary");
+      $("#spanTipoCaixa").addClass("bg-danger");
+      $("#spanTipoCaixa").text("NÃO");
+    }
+  });
   
   var movimentacoesCaixaFilters = {
     usuarioSelect2: {
@@ -46,6 +61,15 @@ $(document).ready(function () {
         movimentacoesCaixaFilters:JSON.stringify(movimentacoesCaixaFilters)
       }
     }
+  });
+  
+  $("#btnPesquisar").click(function () {
+    tbMovimentacao.ajax.load();
+  });
+  
+  $("#btnLimpar").click(function () {
+    $("form").trigger("reset");
+    $("#usuarios").val("").trigger("change");
   });
   
 });

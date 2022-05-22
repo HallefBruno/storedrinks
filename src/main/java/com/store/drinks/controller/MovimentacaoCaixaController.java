@@ -1,17 +1,13 @@
 package com.store.drinks.controller;
 
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
-import com.store.drinks.repository.querys.movimentacaoCaixa.MovimentacoesCaixaFilters;
 import com.store.drinks.service.MovimentacaoCaixaService;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,8 +37,10 @@ public class MovimentacaoCaixaController {
     System.out.println(length);
     System.out.println(isCaixaFechado);
     System.out.println(movimentacoesCaixaFilters);
-    movimentacaoCaixaService.movimentacoesCaixa(movimentacoesCaixaFilters, draw, start);
-    return null;//return movimentacaoCaixaService.movimentacoesCaixa(new MovimentacoesCaixaFilters(), 0, 0);
+    
+    var data = movimentacaoCaixaService.movimentacoesCaixa(movimentacoesCaixaFilters,draw,start);
+    
+    return ResponseEntity.ok(data);
   }
   
   @GetMapping("/usuarios")

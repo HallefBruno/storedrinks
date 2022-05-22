@@ -133,6 +133,7 @@ public class VendaService {
     movimentacaoCaixa.setUsuario(usuarioService.usuarioLogado());
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));
     movimentacaoCaixa.setValorRecebido(somaValorFormaPagamento(formasPagamento));
+    movimentacaoCaixa.setDataMovimentacao(venda.getDataHoraVenda());
   }
   
   private BigDecimal valorTotalVenda(List<ItensVenda> itensVenda) {
