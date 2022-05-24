@@ -4,7 +4,6 @@ package com.store.drinks.repository.querys.movimentacaoCaixa;
 
 import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.ClienteSistema;
-import com.store.drinks.entidade.FormaPagamento;
 import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.Venda;
@@ -13,19 +12,14 @@ import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.repository.util.Multitenancy;
-import com.store.drinks.repository.util.RowsUtil;
 import com.store.drinks.service.UsuarioService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -33,8 +27,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
-import org.apache.commons.lang3.BooleanUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
@@ -52,9 +44,6 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   
   @Autowired
   private JpaUtils jpaUtils;
-  
-  private static final String ADMIN = "Administrador";
-  private static final String SUPER = "SuperUser";
   
   @Override
   public Optional<BigDecimal> valorTotalEmVendasPorUsuario() {
@@ -85,48 +74,6 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     return Optional.of(BigDecimal.ZERO);
   }
 
-//  @Override
-//  public DataTableWrapper<MovimentacaoCaixa> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
-//    DataTableWrapper<MovimentacaoCaixa> dataTableWrapper = new DataTableWrapper<>();
-//    CriteriaBuilder builder = manager.getCriteriaBuilder();
-//    CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
-//    Root<MovimentacaoCaixa> movimentacaoCaixa = query.from(MovimentacaoCaixa.class);
-//    Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");
-//    Join<MovimentacaoCaixa, Usuario> usuario = movimentacaoCaixa.join("usuario");
-//    List<Selection<?>> selections = new ArrayList<>();
-//    List<Predicate> predicates = new ArrayList<>();
-//    
-//    selections.add(builder.coalesce(builder.sum(movimentacaoCaixa.get("valorRecebido")),BigDecimal.ZERO));
-//    selections.add(builder.coalesce(builder.sum(movimentacaoCaixa.get("valorTroco")),BigDecimal.ZERO));
-//    selections.add(usuario.get("id"));
-//    selections.add(caixa.get("aberto"));
-//    
-//    if(movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
-//      predicates.add(builder.isTrue(caixa.get("aberto")));
-//    } else {
-//      predicates.add(builder.isFalse(caixa.get("aberto")));
-//    }
-//    
-//    query.multiselect(selections);
-//    query.where(predicates.toArray(Predicate[]::new));
-//    
-//    TypedQuery<Tuple> typedQuery = manager.createQuery(query);
-//    typedQuery.setFirstResult(start);
-//    typedQuery.setMaxResults(10);
-//    
-//    CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-//    Root<MovimentacaoCaixa> tagCountRoot = countQuery.from(MovimentacaoCaixa.class);
-//    countQuery.select(builder.count(tagCountRoot)).where(predicates.toArray(Predicate[]::new));
-//    Long count = manager.createQuery(countQuery).getResultList().get(0);
-//    
-//    dataTableWrapper.setData(null);
-//    dataTableWrapper.setRecordsTotal(count);
-//    dataTableWrapper.setDraw(draw);
-//    dataTableWrapper.setStart(start);
-//    
-//    return dataTableWrapper;
-//  }
-  
   @SuppressWarnings("unchecked")
   @Override
   public List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa() {
