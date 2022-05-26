@@ -16,6 +16,7 @@ import com.store.drinks.service.UsuarioService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -126,6 +127,15 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       predicates.add(builder.isFalse(caixa.get("aberto")));
     }
     
+    if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
+      predicates.add(builder.equal(usuario.get("id"),movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
+    }
+    
+    if(Objects.nonNull(movimentacoesCaixaFilters.getDataInicio())) {
+      predicates.add(builder.lessThanOrEqualTo(caixa.get("dataHoraAbertura"), movimentacoesCaixaFilters.getDataInicio()));
+      predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraFechamento"), movimentacoesCaixaFilters.getDataInicio()));
+    }
+    
     query.where(predicates.toArray(Predicate[]::new));
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
 	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
@@ -157,6 +167,11 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       } else {
         predicates.add(criteriaBuilder.isFalse(caixa.get("aberto")));
       }
+      
+      if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2())) {
+        predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
+      }
+      
       return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
     };
   }

@@ -1,9 +1,12 @@
 /* global CONTEXT, formatter */
 
-let usuarios = [];
 let somaValorTotal = 0;
 let somaValorTotalSaida = 0;
+let usuarioSelect2 = {};
 let isCaixaFechado = false;
+let movimentacoesCaixaFilters = {};
+let dataAbertura;
+let dataFechamento;
 
 $(document).ready(function () {
 
@@ -29,52 +32,25 @@ $(document).ready(function () {
     });
   }
   
+  const filtros = filtroUrl();
+  let recursiveEncoded = $.param(filtros);
   
-  $("#isCaixaFechado").change(function () {
-    isCaixaFechado = this.checked;
-    $("#spanTipoCaixa").text("");
-    if (this.checked) {
-      $("#spanTipoCaixa").removeClass("bg-danger");
-      $("#spanTipoCaixa").addClass("bg-primary");
-      $("#spanTipoCaixa").text("SIM");
-    } else {
-      $("#spanTipoCaixa").removeClass("bg-primary");
-      $("#spanTipoCaixa").addClass("bg-danger");
-      $("#spanTipoCaixa").text("NÃO");
-    }
-  });
-  
-  var movimentacoesCaixaFilters = {
-    usuarioSelect2: {
-      usuarioId:1,
-      nome:"Nome"
-    },
-    somenteCaixaAberto: false
-  };
-  
-  let tbMovimentacao = $("#tbMovimentacao").DataTable({
-    ajax: {
-      url: `${CONTEXT}movimentacao-caixa/movimentacoes`,
-      data: {
-        isCaixaFechado: function () {
-          return isCaixaFechado;
-        },
-        movimentacoesCaixaFilters: JSON.stringify(movimentacoesCaixaFilters)
-      }
-    },
-    drawCallback: function (settings) {
-      var response = settings.json;
-      //console.log(response);
-    }
+  $("#tbMovimentacao").DataTable({
+    ajax: `${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`
   });
   
   $("#btnPesquisar").click(function () {
-    tbMovimentacao.ajax.load();
+    let filtros = filtroUrl();
+    let recursiveEncoded = $.param(filtros);
+    $("#tbMovimentacao").DataTable().ajax.url(`${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`).load();
   });
   
   $("#btnLimpar").click(function () {
     $("form").trigger("reset");
     $("#usuarios").val("").trigger("change");
+    $("#spanTipoCaixa").removeClass("bg-primary");
+    $("#spanTipoCaixa").addClass("bg-danger");
+    $("#spanTipoCaixa").text("NÃO");
   });
   
   $(document).on("click", "#formaPagamento", function () {
@@ -91,9 +67,49 @@ $(document).ready(function () {
     });
     modalDetalhes.modal('show');
   });
-  
 });
 
+function filtroUrl() {
+  isCaixaFechado = changeFiltroSituacaoCaixa();
+  usuarioSelect2 = filtroUsuario();
+  movimentacoesCaixaFilters = {
+    "somenteCaixaAberto": isCaixaFechado,
+    "usuarioSelect2": usuarioSelect2
+  };
+  let montagemFiltro = {
+    "movimentacoesCaixaFilters": JSON.stringify(movimentacoesCaixaFilters)
+  };
+  return montagemFiltro;
+}
+
+function changeFiltroSituacaoCaixa() {
+  $("#isCaixaFechado").change(function () {
+    isCaixaFechado = this.checked;
+    if (isCaixaFechado) {
+      $("#spanTipoCaixa").removeClass("bg-danger");
+      $("#spanTipoCaixa").addClass("bg-primary");
+      $("#spanTipoCaixa").text("SIM");
+    } else {
+      $("#spanTipoCaixa").removeClass("bg-primary");
+      $("#spanTipoCaixa").addClass("bg-danger");
+      $("#spanTipoCaixa").text("NÃO");
+    }
+  });
+  if(isCaixaFechado === undefined) {
+    return false;
+  }
+  return isCaixaFechado;
+}
+
+function filtroUsuario() {
+  $("#usuarios").on("select2:select", function (e) {
+    usuarioSelect2 = {
+      usuarioId: e.params.data.id,
+      nome: e.params.data.text
+    };
+  });
+  return usuarioSelect2;
+}
 
 function parametrosConfigDataTable() {
   var parametros = {
@@ -142,12 +158,14 @@ function parametrosConfigDataTable() {
         }
       },
 
-      {"data": "dataMovimentacao", render: function (data, type, row, meta) {
+      {
+        "data": "dataMovimentacao", render: function (data, type, row, meta) {
           return formatDataHora(data);
         }
       },
 
-      {"data": "recolhimento", render: function (data, type, row, meta) {
+      {
+        "data": "recolhimento", render: function (data, type, row, meta) {
           if (data) {
             return `<span class="badge bg-warning text-black">Recolhimento</span>`;
           }

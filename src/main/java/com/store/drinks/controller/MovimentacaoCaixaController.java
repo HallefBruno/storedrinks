@@ -33,13 +33,11 @@ public class MovimentacaoCaixaController {
     @RequestParam(name = "draw", required = false) Integer draw,
     @RequestParam(name = "start", required = false) Integer start,
     @RequestParam(name = "length", required = false) Integer length,
-    @RequestParam(name = "isCaixaFechado", required = true) Boolean isCaixaFechado,
     @RequestParam(name = "movimentacoesCaixaFilters", required = false) String movimentacoesCaixaFilters)
   {
     System.out.println(draw);
     System.out.println(start);
     System.out.println(length);
-    System.out.println(isCaixaFechado);
     System.out.println(movimentacoesCaixaFilters);
     var data = movimentacaoCaixaService.movimentacoesCaixa(movimentacoesCaixaFilters,draw,start);
     return ResponseEntity.ok(data);
