@@ -36,7 +36,7 @@ function setDefaultsDataTable(parametros) {
 }
 
 function setDefaultsDataTableUsingChange(parametros) {
-
+  
   $.extend(true, $.fn.dataTable.defaults, {
     searching: false,
     scrollY: "400px",
@@ -47,7 +47,7 @@ function setDefaultsDataTableUsingChange(parametros) {
     pageLength: 10,
     responsive: true,
     info: true,
-    lengthChange: false,
+    lengthChange: true,
     language: {
       url: $("#context").val()+"vendor/internationalisation/pt_br.json"
     },

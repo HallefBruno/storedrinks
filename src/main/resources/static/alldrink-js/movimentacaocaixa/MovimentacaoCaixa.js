@@ -1,19 +1,19 @@
-/* global CONTEXT, formatter */
+/* global CONTEXT, formatter, StoreDrink */
 
-let somaValorTotal = 0;
-let somaValorTotalSaida = 0;
 let usuarioSelect2 = {};
 let isCaixaFechado = false;
 let movimentacoesCaixaFilters = {};
 let dataAbertura;
 let dataFechamento;
+let toast = new StoreDrink.Toast();
+var dataTableMensagens;
 
 $(document).ready(function () {
-
+  
   parametrosConfigDataTable();
   
-  if($("#usuarios").length) {
-    $.get(`${CONTEXT}movimentacao-caixa/usuarios`,function (response) {
+  if ($("#usuarios").length) {
+    $.get(`${CONTEXT}movimentacao-caixa/usuarios`, function (response) {
       $("#usuarios").select2({
         theme: "bootstrap-5",
         allowClear: true,
@@ -35,14 +35,23 @@ $(document).ready(function () {
   const filtros = filtroUrl();
   let recursiveEncoded = $.param(filtros);
   
-  $("#tbMovimentacao").DataTable({
-    ajax: `${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`
+  dataTableMensagens = $("#tbMovimentacao").DataTable({
+    ajax: {
+      url: `${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`
+    }
   });
   
   $("#btnPesquisar").click(function () {
+    if($("#dataAbertura").val() && !$("#dataFechamento").val()) {
+      $("#dataFechamento").focus();
+      toast.show("warning","Atenção","A data de fechamento é obrigatória!","top-right");
+      return;
+    }
     let filtros = filtroUrl();
     let recursiveEncoded = $.param(filtros);
-    $("#tbMovimentacao").DataTable().ajax.url(`${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`).load();
+
+    dataTableMensagens.ajax.url(`${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`).load();
+
   });
   
   $("#btnLimpar").click(function () {
@@ -70,15 +79,21 @@ $(document).ready(function () {
 });
 
 function filtroUrl() {
+  
   isCaixaFechado = changeFiltroSituacaoCaixa();
   usuarioSelect2 = filtroUsuario();
+  
   movimentacoesCaixaFilters = {
     "somenteCaixaAberto": isCaixaFechado,
-    "usuarioSelect2": usuarioSelect2
+    "usuarioSelect2": usuarioSelect2,
+    "dataAbertura": $("#dataAbertura").val(),
+    "dataFechamento": $("#dataFechamento").val()
   };
+  
   let montagemFiltro = {
     "movimentacoesCaixaFilters": JSON.stringify(movimentacoesCaixaFilters)
   };
+  
   return montagemFiltro;
 }
 
@@ -112,7 +127,8 @@ function filtroUsuario() {
 }
 
 function parametrosConfigDataTable() {
-  var parametros = {
+  
+  let parametros = {
     "columns": [
       {
         "data": "valorRecebido", render: function (data, type, row, meta) {
@@ -146,15 +162,13 @@ function parametrosConfigDataTable() {
 
       {
         "defaultContent": "", render: function (data, type, row, meta) {
-          somaValorTotalSaida = somaValorTotalSaida + (row.valorTroco);
-          return `<span class='text-danger'>${formatter.format(somaValorTotalSaida)}</span>`;
+          return `<span class='text-danger'>${formatter.format(row.somaValorTotalSaida)}</span>`;
         }
       },
 
       {
         "defaultContent": "", render: function (data, type, row, meta) {
-          somaValorTotal = somaValorTotal + (row.valorRecebido - row.valorTroco);
-          return `<span class='text-success'>${formatter.format(somaValorTotal)}</span>`;
+          return `<span class='text-success'>${formatter.format(row.somaValorTotal)}</span>`;
         }
       },
 
@@ -172,18 +186,11 @@ function parametrosConfigDataTable() {
           return `<span class="badge bg-primary">Normal</span>`;
         }
       }
-    ],
-
-    columnDefs: [
-      {
-        targets: 1,
-        className: ""
-      }
-    ],
-
-    btnActions: false
+    ]
   };
-  setDefaultsDataTableUsingChange(parametros);
+  
+  setDefaultsDataTable(parametros);
+  
 }
 
 function templateResultProduto(usuario) {
@@ -192,3 +199,7 @@ function templateResultProduto(usuario) {
   }
   return $("<span class='badge bg-light text-dark fw-bold' style='font-size:12px;'>" + usuario.text + "</span>");
 }
+
+$(window).resize(function () {
+  dataTableMensagens.columns.adjust().draw();
+});

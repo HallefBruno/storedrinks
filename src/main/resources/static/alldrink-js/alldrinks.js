@@ -1,5 +1,8 @@
 /* global Swal, numeral, Intl, bootstrap */
 //setInterval(function() {element.innerHTML += "Hello"}, 1000);
+//this.divLoading.removeClass("loading");
+//setTimeout(() => {$(".setblockUI").unblock();}, 550);
+
 var CONTEXT = $("#context").val();
 var StoreDrink = StoreDrink || {};
 
@@ -173,10 +176,12 @@ StoreDrink.LoadGif = (function () {
       this.divLoading.addClass("loading");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
-      this.divLoading.removeClass("loading");
       this.gifLoadingAutocomplete.css("display", "none");
       $(".setblockUI").unblock();
-      //setTimeout(() => {$(".setblockUI").unblock();}, 550);
+      console.log(event);
+      console.log(jqxhr);
+      console.log(settings);
+      setTimeout(() => {this.divLoading.removeClass("loading");}, 550);
     }.bind(this));
   };
   
@@ -195,7 +200,7 @@ StoreDrink.LoadGif = (function () {
       return false;
     } else if(url.includes("/update-quantidade/")) {
       return false;
-    } else if(url.includes("/movimentacao-caixa/usuarios")) {
+    } else if(url === `${CONTEXT}movimentacao-caixa/usuarios`) {
       return false;
     } else if (url.includes("/movimentacao-caixa/formas-pagamento")) {
       return false;

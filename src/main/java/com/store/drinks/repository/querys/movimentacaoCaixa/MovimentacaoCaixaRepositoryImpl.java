@@ -140,6 +140,16 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
 	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
     
+    BigDecimal somaValorTotal = BigDecimal.ZERO;
+    BigDecimal somaValorTotalSaida = BigDecimal.ZERO;
+    
+    for(MovimentacaoCaixadto mov : usuariosMovimentacaoCaixa) {
+      somaValorTotalSaida = somaValorTotalSaida.add(mov.getValorTroco());
+      somaValorTotal = somaValorTotal.add(mov.getValorRecebido().subtract(mov.getValorTroco()));
+      mov.setSomaValorTotalSaida(somaValorTotalSaida);
+      mov.setSomaValorTotal(somaValorTotal);
+    }
+
     CriteriaQuery<Long> countQuery = cbCount.createQuery(Long.class);
     Root<MovimentacaoCaixa> tagCountRoot = countQuery.from(MovimentacaoCaixa.class);
     
@@ -168,12 +178,16 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
         predicates.add(criteriaBuilder.isFalse(caixa.get("aberto")));
       }
       
-      if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2())) {
+      if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
         predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
+      }
+
+      if (Objects.nonNull(movimentacoesCaixaFilters.getDataInicio())) {
+        predicates.add(criteriaBuilder.lessThanOrEqualTo(caixa.get("dataHoraAbertura"), movimentacoesCaixaFilters.getDataInicio()));
+        predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraFechamento"), movimentacoesCaixaFilters.getDataInicio()));
       }
       
       return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
     };
   }
-  
 }
