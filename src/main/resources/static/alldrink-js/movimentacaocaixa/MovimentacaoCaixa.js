@@ -46,6 +46,10 @@ $(document).ready(function () {
       $("#dataFechamento").focus();
       toast.show("warning","Atenção","A data de fechamento é obrigatória!","top-right");
       return;
+    } else if($("#dataAbertura").val() === "" && $("#dataFechamento").val()) {
+      $("#dataAbertura").focus();
+      toast.show("warning","Atenção","A data de abertura é obrigatória quando a data fechamento é preenchida!","top-right");
+      return;
     }
     let filtros = filtroUrl();
     let recursiveEncoded = $.param(filtros);
@@ -60,6 +64,8 @@ $(document).ready(function () {
     $("#spanTipoCaixa").removeClass("bg-primary");
     $("#spanTipoCaixa").addClass("bg-danger");
     $("#spanTipoCaixa").text("NÃO");
+    $("input:checkbox").removeAttr("checked");
+    //$("input[type=checkbox]").prop("checked",false);
   });
   
   $(document).on("click", "#formaPagamento", function () {
@@ -76,6 +82,11 @@ $(document).ready(function () {
     });
     modalDetalhes.modal('show');
   });
+  
+  $("#usuarios").on("select2:clear", function () {
+    usuarioSelect2 = {};
+  });
+  
 });
 
 function filtroUrl() {

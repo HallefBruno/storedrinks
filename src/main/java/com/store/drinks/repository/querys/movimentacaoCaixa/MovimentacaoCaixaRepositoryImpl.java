@@ -14,8 +14,11 @@ import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.service.UsuarioService;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -28,6 +31,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
@@ -95,7 +99,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   @Override
   public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
     DataTableWrapper<MovimentacaoCaixadto> dataTableWrapper = new DataTableWrapper<>();
-    
+
     CriteriaBuilder builder = manager.getCriteriaBuilder();
     CriteriaBuilder cbCount = manager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
@@ -131,9 +135,14 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       predicates.add(builder.equal(usuario.get("id"),movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
     }
     
-    if(Objects.nonNull(movimentacoesCaixaFilters.getDataInicio())) {
-      predicates.add(builder.lessThanOrEqualTo(caixa.get("dataHoraAbertura"), movimentacoesCaixaFilters.getDataInicio()));
-      predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraFechamento"), movimentacoesCaixaFilters.getDataInicio()));
+    if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
+      
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+      LocalDate dataAbertura = LocalDate.parse(movimentacoesCaixaFilters.getDataAbertura(), formatter);
+      LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
+      
+      predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+      predicates.add(builder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
     }
     
     query.where(predicates.toArray(Predicate[]::new));
@@ -154,7 +163,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     Root<MovimentacaoCaixa> tagCountRoot = countQuery.from(MovimentacaoCaixa.class);
     
     countQuery.select(cbCount.count(tagCountRoot));
-    countQuery.where(specificationForCount(movimentacoesCaixaFilters, draw, start).toPredicate(tagCountRoot, countQuery, cbCount));
+    countQuery.where(specificationForCount(movimentacoesCaixaFilters).toPredicate(tagCountRoot, countQuery, cbCount));
     Long count = manager.createQuery(countQuery).getResultList().get(0);
     
     dataTableWrapper.setData(usuariosMovimentacaoCaixa);
@@ -165,7 +174,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     return dataTableWrapper;
   }
 
-  private Specification<MovimentacaoCaixa> specificationForCount(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
+  private Specification<MovimentacaoCaixa> specificationForCount(MovimentacoesCaixaFilters movimentacoesCaixaFilters) {
     return (Root<MovimentacaoCaixa> movimentacaoCaixa, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
       List<Predicate> predicates = new ArrayList<>();
       Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");
@@ -182,9 +191,12 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
         predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
       }
 
-      if (Objects.nonNull(movimentacoesCaixaFilters.getDataInicio())) {
-        predicates.add(criteriaBuilder.lessThanOrEqualTo(caixa.get("dataHoraAbertura"), movimentacoesCaixaFilters.getDataInicio()));
-        predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraFechamento"), movimentacoesCaixaFilters.getDataInicio()));
+      if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+        LocalDate dataAbertura = LocalDate.parse(movimentacoesCaixaFilters.getDataAbertura(), formatter);
+        LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
+        predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+        predicates.add(criteriaBuilder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
       }
       
       return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
