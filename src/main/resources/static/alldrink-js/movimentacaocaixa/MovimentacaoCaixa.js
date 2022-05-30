@@ -209,7 +209,7 @@ function parametrosConfigDataTable() {
     ordering: false
   };
   
-  setDefaultsDataTable(parametros);
+  //setDefaultsDataTable(parametros);
   
 }
 

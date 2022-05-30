@@ -95,7 +95,7 @@ StoreDrink.Mask = (function () {
     this.number = $('.js-number');
   }
   Mask.prototype.enable = function () {
-    this.decimal.mask({decimal: ',', thousands: '.'});
+    this.decimal.mask('#.##0,00', {reverse: true});
     this.plain.mask({integer: true, thousands: '.'});
     this.number.mask("0000", {reverse: true });
   };
@@ -105,7 +105,7 @@ StoreDrink.Mask = (function () {
 StoreDrink.MascaraMoneteria = (function () {
   function MascaraMoneteria() {}
   MascaraMoneteria.prototype.enable = function () {
-    $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false});;
+    $(".monetaria").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false, allowZero:true, defaultZero:true});;
   };
   return MascaraMoneteria;
 }());

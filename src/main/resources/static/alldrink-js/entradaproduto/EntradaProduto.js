@@ -20,7 +20,10 @@ $(function () {
       $.each($("form").serializeArray(), function (i, field) {
         entradaProduto[field.name] = field.value === "" ? null : field.value;
       });
-
+      
+      entradaProduto.valorCusto = entradaProduto.valorCusto.replace(",",".");
+      entradaProduto.valorVenda = entradaProduto.valorVenda.replace(",",".");
+      
       let produto = {id:Number(entradaProduto.produto)};
       let fornecedor = {id:Number(entradaProduto.fornecedor)};
 
@@ -29,14 +32,18 @@ $(function () {
       entradaProduto["dataEmissao"] = moment($("#dataEmissao").val()).format('YYYY-MM-DD');
       
       if(!isEmpaty(entradaProduto.novoValorCusto)) {
-        let novoValorCusto = entradaProduto.novoValorCusto.replace(",","");
+        let novoValorCusto = entradaProduto.novoValorCusto.replace(".","");
+        novoValorCusto = novoValorCusto.replace(",",".");
         entradaProduto["novoValorCusto"] = novoValorCusto;
       }
       
       if(!isEmpaty(entradaProduto.novoValorVenda)) {
-        let novoValorVenda = entradaProduto.novoValorVenda.replace(",","");
+        let novoValorVenda = entradaProduto.novoValorVenda.replace(".","").replace(",",".");
+        novoValorVenda = novoValorVenda.replace(",",".");
         entradaProduto["novoValorVenda"] = novoValorVenda;
       }
+      
+      console.log(entradaProduto);
       
       $.ajax({
         url: URI.concat("entradas"),
@@ -195,12 +202,13 @@ function produtoSelectionado(URI) {
   $("#produto").on("select2:select", function (e) {
     $.get(URI.concat("entradas/buscar/").concat(e.params.data.id), function (data) {
       if (data !== undefined && data !== null) {
+        console.log(data);
         $("#descricaoProdutoAtual").val(data.descricaoProduto);
         $("#codigoBarra").val(data.codigoBarra);
         $("#codigoProdutoAtual").val(data.codProduto);
         $("#quantidade").val(data.quantidade);
-        $("#valorCusto").val(data.valorCusto);
-        $("#valorVenda").val(data.valorVenda);
+        $("#valorCusto").val(data.valorCusto.toString());
+        $("#valorVenda").val(data.valorVenda.toString());
         $("#valorCusto").focus();
         $("#valorVenda").focus();
         $("#quantidade").focus();
