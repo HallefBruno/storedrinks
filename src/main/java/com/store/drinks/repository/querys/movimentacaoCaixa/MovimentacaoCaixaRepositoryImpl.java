@@ -117,6 +117,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     selections.add(usuario.get("id").alias("usuarioId"));
     selections.add(venda.get("id").alias("vendaId"));
     selections.add(caixa.get("id").alias("caixaId"));
+    selections.add(usuario.get("nome").alias("nomeVendedor"));
     selections.add(movimentacaoCaixa.get("valorRecebido").alias("valorRecebido"));
     selections.add(movimentacaoCaixa.get("valorTroco").alias("valorTroco"));
     selections.add(movimentacaoCaixa.get("dataMovimentacao").alias("dataMovimentacao"));
@@ -133,18 +134,22 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
       predicates.add(builder.equal(usuario.get("id"),movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
+    } else {
+      predicates.add(builder.equal(usuario.get("id"),usuarioService.usuarioLogado().getId()));
     }
     
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
-      
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
       LocalDate dataAbertura = LocalDate.parse(movimentacoesCaixaFilters.getDataAbertura(), formatter);
-      LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
-      
-      predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
-      predicates.add(builder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
+      if(movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
+        predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+      } else {
+        LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
+        predicates.add(builder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+        predicates.add(builder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
+      }
     }
-    
+
     query.where(predicates.toArray(Predicate[]::new));
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
 	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
@@ -189,14 +194,20 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
         predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
+      } else {
+        predicates.add(criteriaBuilder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId()));
       }
 
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
         LocalDate dataAbertura = LocalDate.parse(movimentacoesCaixaFilters.getDataAbertura(), formatter);
-        LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
-        predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
-        predicates.add(criteriaBuilder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
+        if (movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
+          predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+        } else {
+          LocalDate dataHoraFechamento = LocalDate.parse(movimentacoesCaixaFilters.getDataFechamento(), formatter);
+          predicates.add(criteriaBuilder.greaterThanOrEqualTo(caixa.get("dataHoraAbertura"), dataAbertura.atStartOfDay()));
+          predicates.add(criteriaBuilder.lessThanOrEqualTo(caixa.get("dataHoraFechamento"), dataHoraFechamento.atStartOfDay().plusDays(1)));
+        }
       }
       
       return criteriaBuilder.and(predicates.toArray(Predicate[]::new));

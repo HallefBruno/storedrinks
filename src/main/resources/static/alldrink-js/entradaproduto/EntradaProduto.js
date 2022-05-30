@@ -66,7 +66,7 @@ function validarCampos() {
   let descricaoProdutoAtual = $("#descricaoProdutoAtual").val();
   
   if(isEmpaty(descricaoProdutoAtual)) {
-    toast.show('error','Atenção','É necessário selecionar um produto!','top-right');
+    toast.show('warning','Atenção','É necessário selecionar um produto!','top-right');
     isCamposValidos = false;
     return;
   }
@@ -80,7 +80,7 @@ function validarCampos() {
   
   if(isEmpaty(numeroNota.val())) {
     numeroNota.addClass("is-invalid");
-    toast.show('error','Atenção','Número da nota é obritória!','top-right');
+    toast.show('warning','Atenção','Número da nota é obritória!','top-right');
     isCamposValidos = false;
   } else {
     numeroNota.removeClass("is-invalid");
@@ -88,7 +88,7 @@ function validarCampos() {
   
   if(isEmpaty(fornecedor.val())) {
     fornecedor.addClass("is-invalid");
-    toast.show('error','Atenção','Fornecedor é obrigatório!','top-right');
+    toast.show('warning','Atenção','Fornecedor é obrigatório!','top-right');
     isCamposValidos = false;
   } else {
     fornecedor.removeClass("is-invalid");
@@ -96,7 +96,7 @@ function validarCampos() {
   
   if(isEmpaty(dataEmissao.val())) {
     dataEmissao.addClass("is-invalid");
-    toast.show('error','Atenção','Data de emissão é obrigatória!','top-right');
+    toast.show('warning','Atenção','Data de emissão é obrigatória!','top-right');
     isCamposValidos = false;
   } else {
     dataEmissao.removeClass("is-invalid");
@@ -104,7 +104,7 @@ function validarCampos() {
   
   if(isEmpaty(formaPagamento.val())) {
     formaPagamento.addClass("is-invalid");
-    toast.show('error','Atenção','Forma de pagamento é obrigatória!','top-right');
+    toast.show('warning','Atenção','Forma de pagamento é obrigatória!','top-right');
     isCamposValidos = false;
   } else {
     formaPagamento.removeClass("is-invalid");
@@ -112,7 +112,7 @@ function validarCampos() {
   
   if(isEmpaty(situacaoCompra.val())) {
     situacaoCompra.addClass("is-invalid");
-    toast.show('error','Atenção','Situação da compra é obrigatória!','top-right');
+    toast.show('warning','Atenção','Situação da compra é obrigatória!','top-right');
     isCamposValidos = false;
   } else {
     situacaoCompra.removeClass("is-invalid");
@@ -121,17 +121,16 @@ function validarCampos() {
   if(!isEmpaty(formaPagamento.val()) && formaPagamento.val() === EnumEntradaProduto.CARTAO_CREDITO) {
     if(isEmpaty(qtdParcelas.val())) {
       qtdParcelas.addClass("is-invalid");
-      toast.show('error','Atenção','Quantidade de parcelas é obrigatória!','top-right');
+      toast.show('warning','Atenção','Quantidade de parcelas é obrigatória!','top-right');
       isCamposValidos = false;
     } else if (Number(qtdParcelas.val()) <= 0) {
       qtdParcelas.addClass("is-invalid");
-      toast.show('error','Atenção','Quantidade de parcelas é inválida!','top-right');
+      toast.show('warning','Atenção','Quantidade de parcelas é inválida!','top-right');
       isCamposValidos = false;
     } else {
       qtdParcelas.removeClass("is-invalid");
     }
   }
-
   return isCamposValidos;
 }
 
@@ -206,8 +205,6 @@ function produtoSelectionado(URI) {
         $("#valorVenda").focus();
         $("#quantidade").focus();
         $("#produto").focus();
-      } else {
-        //clearFormShowMessage(toast);
       }
     });
   });
@@ -305,32 +302,5 @@ function iniciarSelectFornecedorSituacaoCompraFormaPagamento() {
       $("#qtdParcelas").val("");
       $("#qtdParcelas").prop("readonly",true);
     }
-  });
-  
+  }); 
 }
-
-//function validarCampos() {
-//  $.each($("form")[0], function(){
-//    getValue = $(this)[0];
-//    component = $(this);
-//    console.log(getValue);
-//    if(getValue.value === undefined || getValue.value === "") {
-//      component.addClass("is-invalid");
-//    }
-//  });
-//}
-
-//  idProduto = $("#produto").select2("data")[0].id;
-//  if(idProduto === undefined || idProduto === "") {
-//    $("#produto").addClass("is-invalid");
-//    toast.show('error','Atenção','Produto é obrigatório!','top-right');
-//  } else {
-//    $("#produto").removeClass("is-invalid");
-//  }
-
-
-//else if ($("#codigoBarra").val() === "") {
-//  $("form").trigger("reset");
-//  $("#produtos").val(null).trigger("change");
-//  $("#situacaoCompra").val(null).trigger("change");
-//}

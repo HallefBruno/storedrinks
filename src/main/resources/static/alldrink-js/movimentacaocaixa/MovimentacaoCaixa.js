@@ -12,6 +12,8 @@ $(document).ready(function () {
   
   parametrosConfigDataTable();
   
+  $("input[type=checkbox]").prop("checked",false);
+  
   if ($("#usuarios").length) {
     $.get(`${CONTEXT}movimentacao-caixa/usuarios`, function (response) {
       $("#usuarios").select2({
@@ -42,7 +44,7 @@ $(document).ready(function () {
   });
   
   $("#btnPesquisar").click(function () {
-    if($("#dataAbertura").val() && !$("#dataFechamento").val()) {
+    if($("#dataAbertura").val() && !$("#dataFechamento").val() && !isCaixaFechado) {
       $("#dataFechamento").focus();
       toast.show("warning","Atenção","A data de fechamento é obrigatória!","top-right");
       return;
@@ -64,8 +66,8 @@ $(document).ready(function () {
     $("#spanTipoCaixa").removeClass("bg-primary");
     $("#spanTipoCaixa").addClass("bg-danger");
     $("#spanTipoCaixa").text("NÃO");
-    $("input:checkbox").removeAttr("checked");
-    //$("input[type=checkbox]").prop("checked",false);
+    $("input[type=checkbox]").prop("checked",false);
+    isCaixaFechado = false;
   });
   
   $(document).on("click", "#formaPagamento", function () {
@@ -185,7 +187,13 @@ function parametrosConfigDataTable() {
 
       {
         "data": "dataMovimentacao", render: function (data, type, row, meta) {
-          return formatDataHora(data);
+          return `<span class='text-muted'>${formatDataHora(data)}</span>`;
+        }
+      },
+      
+      {
+        "data": "nomeVendedor", render: function (data, type, row, meta) {
+          return `<span class='text-muted'>${row.nomeVendedor}</span>`;
         }
       },
 
@@ -197,7 +205,8 @@ function parametrosConfigDataTable() {
           return `<span class="badge bg-primary">Normal</span>`;
         }
       }
-    ]
+    ],
+    ordering: false
   };
   
   setDefaultsDataTable(parametros);

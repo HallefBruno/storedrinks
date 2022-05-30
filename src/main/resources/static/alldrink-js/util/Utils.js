@@ -2,6 +2,12 @@
 
 function setDefaultsDataTable(parametros) {
   
+  let order = parametros.ordering;
+  
+  if(order === undefined || order === "" || order === null) {
+    order = true;
+  }
+  
   if(parametros.btnActions)  {
     var buttons =
     {
@@ -15,6 +21,8 @@ function setDefaultsDataTable(parametros) {
     };
     parametros.columns.push(buttons);
   }
+  
+  
 
   $.extend(true, $.fn.dataTable.defaults, {
     searching: false,
@@ -26,6 +34,7 @@ function setDefaultsDataTable(parametros) {
     pageLength: 10,
     responsive: true,
     info: true,
+    ordering: order,
     lengthChange: false,
     language: {
       url: $("#context").val()+"vendor/internationalisation/pt_br.json"

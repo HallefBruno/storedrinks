@@ -170,17 +170,17 @@ StoreDrink.LoadGif = (function () {
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
       if(!naoInvocarGifLoading(settings.url,this.gifLoadingAutocomplete.bind(this))) {
+        this.gifLoadingAutocomplete.css("display", "block");
+        $(".setblockUI").block({message:null});
         return;
       }
       $(".setblockUI").block({message:null});
       this.divLoading.addClass("loading");
+      this.gifLoadingAutocomplete.css("display", "block");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
       this.gifLoadingAutocomplete.css("display", "none");
       $(".setblockUI").unblock();
-      console.log(event);
-      console.log(jqxhr);
-      console.log(settings);
       setTimeout(() => {this.divLoading.removeClass("loading");}, 550);
     }.bind(this));
   };
@@ -204,10 +204,15 @@ StoreDrink.LoadGif = (function () {
       return false;
     } else if (url.includes("/movimentacao-caixa/formas-pagamento")) {
       return false;
+    } else if (url.includes(`${CONTEXT}vendas/itens-vendas/`)) {
+      return false;
     } else if (url.includes("mensagens/destinatario")) {
       element.css("display", "block");
       return false;
     } else if(url.includes("entradas/produtos")) {
+      element.css("display", "block");
+      return false;
+    } else if(url.includes("movimentacao-caixa/formas-pagamento/")) {
       element.css("display", "block");
       return false;
     }
