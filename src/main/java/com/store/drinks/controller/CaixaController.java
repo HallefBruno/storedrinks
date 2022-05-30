@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/pdv")
+@RequestMapping("/caixa")
 @PreAuthorize("hasRole('MANTER_PDV')")
 public class CaixaController {
 
@@ -28,7 +28,7 @@ public class CaixaController {
   @GetMapping
   public ModelAndView pageIndex() {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
-      return new ModelAndView("redirect:/pdv/abrirCaixa");
+      return new ModelAndView("redirect:/caixa/abrirCaixa");
     }
     return new ModelAndView("venda/RealizarVenda");
   }
@@ -41,7 +41,7 @@ public class CaixaController {
   @GetMapping("/vendas")
   public ModelAndView vendas(Venda venda) {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
-      return new ModelAndView("redirect:/pdv/abrirCaixa");
+      return new ModelAndView("redirect:/caixa/abrirCaixa");
     }
     return new ModelAndView("venda/RealizarVenda");
   }
@@ -50,7 +50,7 @@ public class CaixaController {
   public ModelAndView salvar(@Valid Caixa caixa, BindingResult result, Model model, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
-        return new ModelAndView("rediredct:/pdv/abrirCaixa");
+        return new ModelAndView("rediredct:/caixa/abrirCaixa");
       }
       abrirCaixaService.salvar(caixa);
     } catch (NegocioException ex) {
@@ -58,6 +58,11 @@ public class CaixaController {
       result.addError(error);
     }
     attributes.addFlashAttribute("mensagem", "Caixa aberto com sucesso!");
-    return new ModelAndView("redirect:/pdv/vendas");
+    return new ModelAndView("redirect:/caixa/vendas");
+  }
+  
+  @GetMapping("/fechar")
+  public ModelAndView pageFecharCaixa() {
+    return new ModelAndView("caixa/FecharCaixa");
   }
 }
