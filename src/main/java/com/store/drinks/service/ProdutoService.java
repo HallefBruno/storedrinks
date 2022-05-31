@@ -55,7 +55,7 @@ public class ProdutoService {
   
   @Transactional
   public void updateQuantidadeProdutoEstoque(final String codBarra, final Integer quantidade) {
-    produtoRepository.findByProdutoForVenda(codBarra, multitenancy.getTenantValue())
+    produtoRepository.findByProdutoForUpdate(codBarra, multitenancy.getTenantValue())
     .ifPresent(produto -> {
       int quantidadeAtual = produto.getQuantidade();
       if(quantidadeAtual >= quantidade) {

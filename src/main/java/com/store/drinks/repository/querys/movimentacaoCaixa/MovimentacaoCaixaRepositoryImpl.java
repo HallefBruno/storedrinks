@@ -24,6 +24,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -151,7 +152,10 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     }
 
     query.where(predicates.toArray(Predicate[]::new));
-    List<Tuple> listTuple = manager.createQuery(query).getResultList();
+    TypedQuery<Tuple> typedQuery = manager.createQuery(query);
+    typedQuery.setFirstResult(start);
+    typedQuery.setMaxResults(10);
+    List<Tuple> listTuple = typedQuery.getResultList();
 	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
     
     BigDecimal somaValorTotal = BigDecimal.ZERO;
@@ -173,6 +177,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     
     dataTableWrapper.setData(usuariosMovimentacaoCaixa);
     dataTableWrapper.setRecordsTotal(count);
+    dataTableWrapper.setRecordsFiltered(count);
     dataTableWrapper.setDraw(draw);
     dataTableWrapper.setStart(start);
     

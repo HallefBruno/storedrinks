@@ -96,23 +96,3 @@ public class EntradaProdutoController {
   }
 
 }
-
-//@PreAuthorize("#username == authentication.principal.username")
-//@Secured("ADMIN")
-//ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedObjectId).toUri()
-//@PreAuthorize("hasRole('MANTER_ENTRADA')")
-//  @PostMapping
-//  public ModelAndView salvar(@Valid EntradaProduto entradaProduto, BindingResult result, RedirectAttributes attributes) {
-//    try {
-//      if (result.hasErrors()) {
-//        return pageNova(entradaProduto);
-//      }
-//      entradaProdutoService.salvar(entradaProduto);
-//    } catch (NegocioException ex) {
-//      ObjectError error = new ObjectError("erro", ex.getMessage());
-//      result.addError(error);
-//      return pageNova(entradaProduto);
-//    }
-//    attributes.addFlashAttribute("mensagem", "Entrada salvo com sucesso!");
-//    return new ModelAndView("redirect:/entradas/nova");
-//  }

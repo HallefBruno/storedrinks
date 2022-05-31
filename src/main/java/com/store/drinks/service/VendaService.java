@@ -63,7 +63,7 @@ public class VendaService {
     MovimentacaoCaixa movimentacaoCaixa = new MovimentacaoCaixa();
     
     vendadto.getItensVenda().forEach(item -> {
-      produtoRepository.findByProdutoForVenda(item.getCodigoBarra(), tenant())
+      produtoRepository.findByProdutoForUpdate(item.getCodigoBarra(), tenant())
       .ifPresent(produto -> {
         if(item.getQuantidade() > produto.getQuantidade()) {
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, produto.getDescricaoProduto().concat(" está com estoque zerado, remover da lista"));
@@ -89,7 +89,7 @@ public class VendaService {
     }
     
     itensVendaRepository.findAllByVendaId(vendaId).forEach(itens -> {
-      produtoRepository.findByProdutoForVenda(itens.getProduto().getCodigoBarra(), tenant())
+      produtoRepository.findByProdutoForUpdate(itens.getProduto().getCodigoBarra(), tenant())
       .ifPresent(produto -> {
         int quantidadeAutal = produto.getQuantidade();
         produto.setQuantidade(quantidadeAutal + itens.getQuantidade());

@@ -77,8 +77,8 @@
         <div class="shadow-sm">
           <div class="card">
             <div class="card-body">
-              <div class="table-responsive">
-                <table id="entradas" class="table table-hover caption-top">
+              <div class="">
+                <table id="entradas" style="width:100%" class="table table-hover display nowrap">
                   <caption>Registro de entradas no estoque</caption>
                   <thead>
                     <tr>
@@ -91,7 +91,7 @@
                       <th style="text-align: center;">Quantidade</th>
                       <th style="text-align: center;">Qtd entrada</th>
                       <th style="text-align: center;">Nova quantidade</th>
-                      <th style="text-align: center;">Valor custo</th>
+                      <th>Valor custo</th>
                       <th style="text-align: center;">Valor venda</th>
                       <th style="text-align: center;">Novo valor custo</th>
                       <th style="text-align: center;">Novo valor venda</th>
@@ -112,7 +112,7 @@
                       <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
                       <td style="text-align: center;" th:text="${entrada.novaQuantidade - entrada.quantidade}"></td>
                       <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
-                      <td style="text-align: center;" th:text="${{entrada.valorCusto}}"></td>
+                      <td th:text="${{entrada.valorCusto}}"></td>
                       <td style="text-align: center;" th:text="${{entrada.valorVenda}}"></td>
                       <td style="text-align: center;" th:text="${{entrada.novoValorCusto}}"></td>
                       <td style="text-align: center;" th:text="${{entrada.novoValorVenda}}"></td>
@@ -138,7 +138,9 @@
           </div>
         </div>
       </div>
-      <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
+      <span class="mt-2">
+        <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
+      </span>
     </div>
   </main>
   <div id="divLoading"></div>

@@ -6,12 +6,10 @@ let movimentacoesCaixaFilters = {};
 let dataAbertura;
 let dataFechamento;
 let toast = new StoreDrink.Toast();
-var dataTableMensagens;
+let dataTableMensagens;
 
 $(document).ready(function () {
-  
-  parametrosConfigDataTable();
-  
+
   $("input[type=checkbox]").prop("checked",false);
   
   if ($("#usuarios").length) {
@@ -36,11 +34,86 @@ $(document).ready(function () {
   
   const filtros = filtroUrl();
   let recursiveEncoded = $.param(filtros);
-  
+
   dataTableMensagens = $("#tbMovimentacao").DataTable({
     ajax: {
       url: `${CONTEXT}movimentacao-caixa/movimentacoes?${recursiveEncoded}`
-    }
+    },
+    serverSide: true,
+    destroy: true,
+    info: true,
+    responsive: true,
+    pageLength: 10,
+    lengthChange: false,
+    searching: false,
+    language: {
+      url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
+    },
+    columns: [
+      {
+        "data": "valorRecebido", render: function (data, type, row, meta) {
+          return `<span class='text-primary'>${formatter.format(data)}</span>`;
+        }
+      },
+
+      {
+        "defaultContent": "", render: function (data, type, row, meta) {
+          if (row.recolhimento) {
+            return "-";
+          }
+          return `<a id="formaPagamento" data-value=${row.movimentacaoId} style="text-decoration: none;" href="javascript:void(0)">Ver</a>`;
+        }
+      },
+
+      {
+        "data": "valorTroco", render: function (data, type, row, meta) {
+          return `<span class='text-danger'>-${formatter.format(data)}</span>`;
+        }
+      },
+
+      {
+        "defaultContent": "", render: function (data, type, row, meta) {
+          if (row.recolhimento) {
+            return "-";
+          }
+          return `<span class='text-success'>${formatter.format(row.valorRecebido - row.valorTroco)}</span>`;
+        }
+      },
+
+      {
+        "defaultContent": "", render: function (data, type, row, meta) {
+          return `<span class='text-danger'>${formatter.format(row.somaValorTotalSaida)}</span>`;
+        }
+      },
+
+      {
+        "defaultContent": "", render: function (data, type, row, meta) {
+          return `<span class='text-success'>${formatter.format(row.somaValorTotal)}</span>`;
+        }
+      },
+
+      {
+        "data": "dataMovimentacao", render: function (data, type, row, meta) {
+          return `<span class='text-muted'>${formatDataHora(data)}</span>`;
+        }
+      },
+      
+      {
+        "data": "nomeVendedor", render: function (data, type, row, meta) {
+          return `<span class='text-muted'>${row.nomeVendedor}</span>`;
+        }
+      },
+
+      {
+        "data": "recolhimento", render: function (data, type, row, meta) {
+          if (data) {
+            return `<span class="badge bg-warning text-black">Recolhimento</span>`;
+          }
+          return `<span class="badge bg-primary">Normal</span>`;
+        }
+      }
+    ],
+    ordering: false
   });
   
   $("#btnPesquisar").click(function () {
@@ -137,80 +210,6 @@ function filtroUsuario() {
     };
   });
   return usuarioSelect2;
-}
-
-function parametrosConfigDataTable() {
-  
-  let parametros = {
-    "columns": [
-      {
-        "data": "valorRecebido", render: function (data, type, row, meta) {
-          return `<span class='text-primary'>${formatter.format(data)}</span>`;
-        }
-      },
-
-      {
-        "defaultContent": "", render: function (data, type, row, meta) {
-          if (row.recolhimento) {
-            return "-";
-          }
-          return `<a id="formaPagamento" data-value=${row.movimentacaoId} style="text-decoration: none;" href="javascript:void(0)">Ver</a>`;
-        }
-      },
-
-      {
-        "data": "valorTroco", render: function (data, type, row, meta) {
-          return `<span class='text-danger'>-${formatter.format(data)}</span>`;
-        }
-      },
-
-      {
-        "defaultContent": "", render: function (data, type, row, meta) {
-          if (row.recolhimento) {
-            return "-";
-          }
-          return `<span class='text-success'>${formatter.format(row.valorRecebido - row.valorTroco)}</span>`;
-        }
-      },
-
-      {
-        "defaultContent": "", render: function (data, type, row, meta) {
-          return `<span class='text-danger'>${formatter.format(row.somaValorTotalSaida)}</span>`;
-        }
-      },
-
-      {
-        "defaultContent": "", render: function (data, type, row, meta) {
-          return `<span class='text-success'>${formatter.format(row.somaValorTotal)}</span>`;
-        }
-      },
-
-      {
-        "data": "dataMovimentacao", render: function (data, type, row, meta) {
-          return `<span class='text-muted'>${formatDataHora(data)}</span>`;
-        }
-      },
-      
-      {
-        "data": "nomeVendedor", render: function (data, type, row, meta) {
-          return `<span class='text-muted'>${row.nomeVendedor}</span>`;
-        }
-      },
-
-      {
-        "data": "recolhimento", render: function (data, type, row, meta) {
-          if (data) {
-            return `<span class="badge bg-warning text-black">Recolhimento</span>`;
-          }
-          return `<span class="badge bg-primary">Normal</span>`;
-        }
-      }
-    ],
-    ordering: false
-  };
-  
-  //setDefaultsDataTable(parametros);
-  
 }
 
 function templateResultProduto(usuario) {

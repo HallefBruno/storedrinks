@@ -6,6 +6,9 @@ $(function () {
   let URI = $("#context").val();
   $("#codigoBarra").focus();
   
+  $("#valorCusto").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: ',', decimal: '.', affixesStay: false});
+  $("#valorVenda").maskMoney({prefix: 'R$ ', allowNegative: false, thousands: ',', decimal: '.', affixesStay: false});
+  
   popularSelectProdutos(URI);
   eventOpenAndClearSelectProdutos();
   produtoSelectionado(URI);
@@ -21,8 +24,8 @@ $(function () {
         entradaProduto[field.name] = field.value === "" ? null : field.value;
       });
       
-      entradaProduto.valorCusto = entradaProduto.valorCusto.replace(",",".");
-      entradaProduto.valorVenda = entradaProduto.valorVenda.replace(",",".");
+      entradaProduto.valorCusto = entradaProduto.valorCusto.replace(",","");
+      entradaProduto.valorVenda = entradaProduto.valorVenda.replace(",","");
       
       let produto = {id:Number(entradaProduto.produto)};
       let fornecedor = {id:Number(entradaProduto.fornecedor)};
@@ -38,7 +41,7 @@ $(function () {
       }
       
       if(!isEmpaty(entradaProduto.novoValorVenda)) {
-        let novoValorVenda = entradaProduto.novoValorVenda.replace(".","").replace(",",".");
+        let novoValorVenda = entradaProduto.novoValorVenda.replace(".","");
         novoValorVenda = novoValorVenda.replace(",",".");
         entradaProduto["novoValorVenda"] = novoValorVenda;
       }
@@ -207,8 +210,8 @@ function produtoSelectionado(URI) {
         $("#codigoBarra").val(data.codigoBarra);
         $("#codigoProdutoAtual").val(data.codProduto);
         $("#quantidade").val(data.quantidade);
-        $("#valorCusto").val(data.valorCusto.toString());
-        $("#valorVenda").val(data.valorVenda.toString());
+        $("#valorCusto").val(data.valorCusto);
+        $("#valorVenda").val(data.valorVenda);
         $("#valorCusto").focus();
         $("#valorVenda").focus();
         $("#quantidade").focus();

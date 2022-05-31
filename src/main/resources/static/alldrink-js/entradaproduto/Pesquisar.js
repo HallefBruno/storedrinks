@@ -13,12 +13,13 @@ $(function () {
   }, 0);
 
   $("#entradas").DataTable({
-    searching: false,
+    searching: true,
     destroy: true,
     paging: false,
-    info: false,
+    info: true,
     responsive: true,
-    lengthChange: false,
+    lengthChange: true,
+    scrollX: true,
     language: {
       url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
     }

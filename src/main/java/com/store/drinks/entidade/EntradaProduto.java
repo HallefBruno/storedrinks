@@ -121,12 +121,3 @@ public class EntradaProduto implements Serializable {
   }
 
 }
-//@JoinColumn(name = "tenant", referencedColumnName = "tenant", nullable = false, unique = true)
-//@ManyToOne
-//private ClienteSistema clienteSistema;
-//@JoinColumn(table = "cliente_sistema", referencedColumnName = "tenant")
-//@NotBlank(message = "Cnpj ou cpf não pode ter espaços em branco!")
-//@NotEmpty(message = "Cnpj ou cpf não pode ser vazio!")
-//@NotNull(message = "Cnpj ou cpf não pode ser null!")
-//@Column(length = 20,name = "cnpjcpf", nullable = false)
-//private String cnpjCpf;

@@ -16,6 +16,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>, Produto
   
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("from Produto p where p.codigoBarra = ?1 and p.ativo = true and p.tenant = ?2 ")
-  Optional<Produto> findByProdutoForVenda(String codigoBarra, String tenant);
+  Optional<Produto> findByProdutoForUpdate(String codigoBarra, String tenant);
   
 }

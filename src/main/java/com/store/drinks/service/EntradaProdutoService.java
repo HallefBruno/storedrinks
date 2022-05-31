@@ -6,7 +6,6 @@ import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.SituacaoCompra;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.EntradaProdutoRepository;
 import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.ProdutoRepository;
@@ -38,9 +37,7 @@ public class EntradaProdutoService {
 
   @Transactional
   public void salvar(EntradaProduto entradaProduto) {
-    
     entradaProdutoRepository.findByNumeroNota(entradaProduto.getNumeroNota()).ifPresent(e->{numeroNotaInvalidoException();});
-    
     Produto produto = buscarProdutoPorCodBarra(entradaProduto.getCodigoBarra());
     Fornecedor fornecedor = fornecedorRepository.getById(entradaProduto.getFornecedor().getId());
     setarNovosValores(entradaProduto, produto);
@@ -65,9 +62,9 @@ public class EntradaProdutoService {
         entradaProdutoRepository.save(entradaProduto);
         return;
       }
-      throw new NegocioException("Nenhuma entrada encontrada!");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nenhuma entrada encontrada!");
     }
-    throw new NegocioException("Identificador inválido!");
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Identificador inválido!");
   }
 
   private void setarNovosValores(EntradaProduto entradaProduto, Produto produto) {
@@ -175,18 +172,18 @@ public class EntradaProdutoService {
     if (opProduto.isPresent()) {
       return opProduto.get();
     }
-    throw new NegocioException("Produto não encontrado!");
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Produto não encontrado!");
   }
 
   public Produto buscarProdutoPorCodBarra(String codBarra) {
     if (!StringUtils.isEmpty(codBarra)) {
-      Optional<Produto> produtoOptional = produtoRepository.findByCodigoBarraAndAtivoTrueAndTenant(codBarra, multitenancy.getTenantValue());
+      Optional<Produto> produtoOptional = produtoRepository.findByProdutoForUpdate(codBarra, multitenancy.getTenantValue());
       if (produtoOptional.isPresent()) {
         return produtoOptional.get();
       }
-      throw new NegocioException("Nenhum produto encontrado!");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nenhum produto encontrado!");
     }
-    throw new NegocioException("Código produto inválido!");
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Código produto inválido!");
   }
 
   public ResultSelectProdutos pesquisarProdutosAutoComplete(String descricao, String pagina) {
