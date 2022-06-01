@@ -2,10 +2,15 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.CaixaService;
+import com.store.drinks.service.MovimentacaoCaixaService;
+import java.util.List;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/caixa")
 @PreAuthorize("hasRole('MANTER_PDV')")
+@RequiredArgsConstructor
 public class CaixaController {
 
-  @Autowired
-  private CaixaService abrirCaixaService;
+  private final CaixaService abrirCaixaService;
+  private final MovimentacaoCaixaService movimentacaoCaixaService;
 
   @GetMapping
   public ModelAndView pageIndex() {
@@ -62,7 +68,18 @@ public class CaixaController {
   }
   
   @GetMapping("/fechar")
-  public ModelAndView pageFecharCaixa() {
-    return new ModelAndView("caixa/FecharCaixa");
+  public ModelAndView pageFecharCaixa(Caixa caixa) {
+    ModelAndView andView = new ModelAndView("caixa/FecharCaixa");
+    andView.addObject("caixaAberto", abrirCaixaService.getCaixa());
+    return andView;
+  }
+  
+  
+  
+  @GetMapping("/usuarios")
+  @PreAuthorize("hasRole('FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA')")
+  public ResponseEntity<List<UsuarioMovimentacaoCaixadto>> getUsuarios() {
+    var list = movimentacaoCaixaService.getUsuarios();
+    return ResponseEntity.ok(list);
   }
 }

@@ -8,7 +8,7 @@
 <body class="bg-light">
   <main class="container mt-5">
     <div class="row">
-      <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" method="post" th:object="${fornecedor}">
+      <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" th:method="post" th:object="${fornecedor}">
         <th:block th:include="fragments/MensagemSucesso"></th:block>
         <th:block th:include="fragments/MensagensErroValidacao"></th:block>
         <div class="shadow-sm mb-5">
