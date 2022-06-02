@@ -31,7 +31,7 @@ public class MovimentacaoCaixaService {
   @Transactional
   public void salvar(BigDecimal valorRetirada) {
     if(Objects.nonNull(valorRetirada) && valorRetirada.signum() > 0) {
-      var caixa = caixaService.getCaixa();
+      var caixa = caixaService.getCaixa(null);
       var valorTotalEmCaixa = movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario()
         .get()
         .add(caixa.getValorInicialTroco());

@@ -128,7 +128,7 @@ public class VendaService {
   
   private void setMovimentacaoCaixa(MovimentacaoCaixa movimentacaoCaixa, Venda venda, Set<FormaPagamento> formasPagamento) {
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
-    movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa());
+    movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa(null));
     movimentacaoCaixa.setVenda(venda);
     movimentacaoCaixa.setUsuario(usuarioService.usuarioLogado());
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));

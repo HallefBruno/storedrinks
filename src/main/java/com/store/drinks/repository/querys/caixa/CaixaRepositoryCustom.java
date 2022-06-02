@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface CaixaRepositoryCustom {
   
   Optional<Caixadto> findByAbertoTrueAndUsuario(Usuario usuario);
+  Optional<Caixadto> findByAbertoTrueAndUsuarioId(Long id);
 }

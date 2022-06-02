@@ -1,15 +1,17 @@
 /* global CONTEXT */
 
+let ENDPOINT = "caixa";
+
 $(function () {
   
   popularSelectUsuarios();
-  
+  eventSelectUsuario();
   
 });
 
 function popularSelectUsuarios() {
   if ($("#usuarios").length) {
-    $.get(`${CONTEXT}movimentacao-caixa/usuarios`, function (response) {
+    $.get(`${CONTEXT}${ENDPOINT}/usuarios`, function (response) {
       $("#usuarios").select2({
         theme: "bootstrap-5",
         allowClear: true,
@@ -27,6 +29,12 @@ function popularSelectUsuarios() {
       });
     });
   }
+}
+
+function eventSelectUsuario() {
+  $("#usuarios").on("select2:select", function (e) {
+    window.location.href = `${CONTEXT}${ENDPOINT}/fechar-por-usuario/${e.params.data.id}`;
+  });
 }
 
 function templateResultProduto(usuario) {

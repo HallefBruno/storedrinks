@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,13 @@ public class UsuarioService {
   public Optional<Usuario> findByEmailAndAtivoTrue(String email) {
     return usuarioRepository.findByEmailAndAtivoTrue(email);
   }
-
+  
+  public Optional<Usuario> findByClienteSistemaTenantAndId(String tenant, Long id) {
+    return usuarioRepository.findByClienteSistemaTenantAndId(tenant, id).map(user -> {
+      return Optional.of(user);
+    }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum usuário encontrado!"));
+  }
+  
   public List<UsuarioMensagemdto> buscarUsuariosPorTenant() {
     var usuarioLogado = usuarioLogado();
     var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());

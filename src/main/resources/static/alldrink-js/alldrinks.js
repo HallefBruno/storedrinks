@@ -1,7 +1,4 @@
 /* global Swal, numeral, Intl, bootstrap */
-//setInterval(function() {element.innerHTML += "Hello"}, 1000);
-//this.divLoading.removeClass("loading");
-//setTimeout(() => {$(".setblockUI").unblock();}, 550);
 
 var CONTEXT = $("#context").val();
 var StoreDrink = StoreDrink || {};
@@ -201,6 +198,8 @@ StoreDrink.LoadGif = (function () {
     } else if(url.includes("/update-quantidade/")) {
       return false;
     } else if(url === `${CONTEXT}movimentacao-caixa/usuarios`) {
+      return false;
+    } else if (url === `${CONTEXT}caixa/usuarios`) {
       return false;
     } else if (url.includes("/movimentacao-caixa/formas-pagamento")) {
       return false;
