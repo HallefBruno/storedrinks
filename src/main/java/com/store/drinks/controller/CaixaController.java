@@ -68,24 +68,24 @@ public class CaixaController {
     return new ModelAndView("redirect:/caixa/vendas");
   }
   
-  @GetMapping("/fechar")
+  @GetMapping("/detalhes")
   public ModelAndView pageFecharCaixa(Caixa caixa, Long id, BindingResult result) {
     ModelAndView andView = new ModelAndView("caixa/FecharCaixa");
     try {
-      andView.addObject("caixaAberto", abrirCaixaService.getCaixa(id));
-      andView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario());
+      setModewAndViewForPageFecharCaixa(andView, id);
       return andView;
     } catch (ResponseStatusException ex) {
       ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
-      andView.addObject("caixaAberto", abrirCaixaService.getCaixa(null));
-      andView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario());
+      try {
+        setModewAndViewForPageFecharCaixa(andView, null);
+      } catch (ResponseStatusException e) {}
       return andView;
     }
   }
   
-  @GetMapping("/fechar-por-usuario/{id}")
-  public ModelAndView teste(@PathVariable Long id, Caixa caixa, BindingResult result) {
+  @GetMapping("/por-usuario/{id}")
+  public ModelAndView porUsuario(@PathVariable Long id, Caixa caixa, BindingResult result) {
     ModelAndView andView = pageFecharCaixa(caixa, id, result);
     return andView;
   }
@@ -95,5 +95,10 @@ public class CaixaController {
   public ResponseEntity<List<UsuarioMovimentacaoCaixadto>> getUsuarios() {
     var list = movimentacaoCaixaService.getUsuarios();
     return ResponseEntity.ok(list);
+  }
+  
+  private void setModewAndViewForPageFecharCaixa(ModelAndView modelAndView, Long id) {
+    modelAndView.addObject("caixaAberto", abrirCaixaService.getCaixa(id));
+    modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario());
   }
 }

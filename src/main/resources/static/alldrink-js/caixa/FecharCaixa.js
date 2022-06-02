@@ -6,6 +6,7 @@ $(function () {
   
   popularSelectUsuarios();
   eventSelectUsuario();
+  fecharCaixa();
   
 });
 
@@ -31,9 +32,16 @@ function popularSelectUsuarios() {
   }
 }
 
+function fecharCaixa() {
+  $("form").submit(function (event) {
+    alert("Handler for .submit() called.");
+    event.preventDefault();
+  });
+}
+
 function eventSelectUsuario() {
   $("#usuarios").on("select2:select", function (e) {
-    window.location.href = `${CONTEXT}${ENDPOINT}/fechar-por-usuario/${e.params.data.id}`;
+    window.location.href = `${CONTEXT}${ENDPOINT}/por-usuario/${e.params.data.id}`;
   });
 }
 
