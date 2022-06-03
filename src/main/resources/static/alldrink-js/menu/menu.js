@@ -11,6 +11,8 @@ $(document).ready(function () {
   $("button[type='submit']").click(function (e) {
     if (!$("form").get(0).checkValidity()) {
       $("#divLoading").removeClass("loading");
+    } else if($(this).hasClass("not-invock-gif")) {  
+      $("#divLoading").removeClass("loading");
     } else {
       $("#divLoading").addClass("loading");
     }

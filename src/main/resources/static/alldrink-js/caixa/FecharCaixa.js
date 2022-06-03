@@ -1,4 +1,4 @@
-/* global CONTEXT */
+/* global CONTEXT, Swal */
 
 let ENDPOINT = "caixa";
 
@@ -33,15 +33,26 @@ function popularSelectUsuarios() {
 }
 
 function fecharCaixa() {
-  $("form").submit(function (event) {
-    alert("Handler for .submit() called.");
-    event.preventDefault();
+  $("#btnFecharCaixa").click(function () {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não será capaz de reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, feche o caixa agora!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        location.href=`${CONTEXT}${ENDPOINT}/fechar/${$("#id").val()}`;
+      }
+    });
   });
 }
 
 function eventSelectUsuario() {
   $("#usuarios").on("select2:select", function (e) {
-    window.location.href = `${CONTEXT}${ENDPOINT}/por-usuario/${e.params.data.id}`;
+    location.href = `${CONTEXT}${ENDPOINT}/por-usuario/${e.params.data.id}`;
   });
 }
 

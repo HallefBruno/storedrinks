@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 public interface MovimentacaoCaixaRepositoryCustom {
   
-  Optional<BigDecimal> valorTotalEmVendasPorUsuario();
+  Optional<BigDecimal> valorTotalEmVendasPorUsuario(Long caixaId);
   DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start);
   
   @Cacheable("usuariosMovimentacaoCaixa")

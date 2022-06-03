@@ -52,21 +52,22 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   private JpaUtils jpaUtils;
   
   @Override
-  public Optional<BigDecimal> valorTotalEmVendasPorUsuario() {
+  public Optional<BigDecimal> valorTotalEmVendasPorUsuario(Long caixaId) {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
     Root<MovimentacaoCaixa> root = query.from(MovimentacaoCaixa.class);
     Join<MovimentacaoCaixa, Usuario> usuario = root.join("usuario");
+    Join<MovimentacaoCaixa, Caixa> caixa = root.join("caixa");
     List<Selection<?>> selections = new ArrayList<>();
     selections.add(builder.coalesce(builder.sum(root.get("valorRecebido")),BigDecimal.ZERO));
     selections.add(builder.coalesce(builder.sum(root.get("valorTroco")),BigDecimal.ZERO));
-    selections.add(usuario.get("id"));
     
     query.multiselect(selections);
     
     query.where(
       builder.equal(root.get("tenant"), multitenancy.getTenantValue()),
-      builder.and(builder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId()))
+      builder.and(builder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId())),
+      builder.and(builder.equal(caixa.get("id"), caixaId))
     );
     
     query.groupBy(usuario.get("id"));

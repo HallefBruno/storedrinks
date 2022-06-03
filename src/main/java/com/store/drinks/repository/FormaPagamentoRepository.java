@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
-    List<FormaPagamento> findAllByMovimentacaoCaixaId(Long id);
+  List<FormaPagamento> findAllByMovimentacaoCaixaId(Long id);
 }

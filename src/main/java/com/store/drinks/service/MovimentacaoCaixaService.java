@@ -32,7 +32,7 @@ public class MovimentacaoCaixaService {
   public void salvar(BigDecimal valorRetirada) {
     if(Objects.nonNull(valorRetirada) && valorRetirada.signum() > 0) {
       var caixa = caixaService.getCaixa(null);
-      var valorTotalEmCaixa = movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario()
+      var valorTotalEmCaixa = movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixa.getId())
         .get()
         .add(caixa.getValorInicialTroco());
       if(valorRetirada.compareTo(valorTotalEmCaixa) <= 0) {

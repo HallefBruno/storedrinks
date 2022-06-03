@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Permissões usadas no front</title>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+  </head>
+  <body class="bg-light">
+    <main class="container pt-4 mb-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
+      <div class="shadow-sm">
+        <div class="card">
+          <h5 class="card-header">Nova permissão usada no front</h5>
+          <div class="card-body">
+            <form th:object="${permissaoUsadaFront}">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-12 col-xxl-12 sd-required">
+                  <label for="permissões" class="form-label">Permissões</label>
+                  <select required="true" th:field="*{permissao}" id="permissões" name="permissões" class="form-select mb-3" data-placeholder="Permissões">
+                    <option value=""></option>
+                    <option th:each="permissao : ${todasPermissoes}" th:value="${permissao.nome}" th:text="${permissao.nome}"></option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 sd-required mt-2">
+                  <label for="estado" class="form-label">Diretório html</label>
+                  <div class="input-group">
+                    <input required="true" type="text" th:field="*{diretorio}" class="form-control" id="diretorio" name="diretorio"/>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 sd-required mt-2">
+                  <label for="estado" class="form-label">URL</label>
+                  <div class="input-group">
+                    <input required="true" type="url" th:field="*{url}" class="form-control" id="url" name="url"/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-12 sd-required mt-2">
+                  <label for="estado" class="form-label">Descrição</label>
+                  <div class="input-group">
+                    <textarea rows="4" required="true" th:field="*{descricao}" class="form-control" id="descricao" name="descricao"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group mt-3">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  Salvar
+                </button>
+                <a type="button" th:href="@{/entradas/pesquisar}" class="btn btn-sm btn-outline-secondary invock-gif">
+                  Pesquisar
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script th:src="@{/alldrink-js/permissoesfront/Nova.js}" type="text/javascript"></script>
+  </body>
+  <div id="divLoading"></div>
+</html>

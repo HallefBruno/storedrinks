@@ -39,6 +39,16 @@ public class CaixaService {
     acx.setValorInicialTroco(caixa.getValorInicialTroco());
     abrirCaixaRepository.save(acx);
   }
+  
+  @Transactional
+  public void fecharCaixa(Long id) {
+    if (Objects.nonNull(id)) {
+      Caixa caixa = getCaixa(id);
+      caixa.setAberto(Boolean.FALSE);
+      caixa.setDataHoraFechamento(LocalDateTime.now());
+      abrirCaixaRepository.save(caixa);
+    }
+  }
 
   public boolean abrirCaixaPorUsuarioLogado() {
     try {
@@ -55,7 +65,9 @@ public class CaixaService {
   }
 
   public BigDecimal valorTotalEmVendasPorUsuario() {
-    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario().get();
+    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(
+      abrirCaixaRepository.findByAbertoTrueAndUsuarioId(
+      usuarioService.usuarioLogado().getId()).get().getId()).get();
   }
 
   public Caixa getCaixa(Long id) {
@@ -87,5 +99,4 @@ public class CaixaService {
       return Optional.of(op);
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
   }
-
 }

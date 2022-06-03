@@ -68,6 +68,18 @@ public class CaixaController {
     return new ModelAndView("redirect:/caixa/vendas");
   }
   
+  @GetMapping("/fechar/{id}")
+  public ModelAndView fechar(@PathVariable Long id,Caixa caixa, BindingResult result, RedirectAttributes attributes) {
+    try {
+      abrirCaixaService.fecharCaixa(id);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+    }
+    attributes.addFlashAttribute("mensagem", "Caixa fechado com sucesso!");
+    return new ModelAndView("redirect:/caixa/detalhes");
+  }
+  
   @GetMapping("/detalhes")
   public ModelAndView pageFecharCaixa(Caixa caixa, Long id, BindingResult result) {
     ModelAndView andView = new ModelAndView("caixa/FecharCaixa");
@@ -79,7 +91,8 @@ public class CaixaController {
       result.addError(error);
       try {
         setModewAndViewForPageFecharCaixa(andView, null);
-      } catch (ResponseStatusException e) {}
+      } catch (ResponseStatusException e) {
+      }
       return andView;
     }
   }
@@ -98,7 +111,7 @@ public class CaixaController {
   }
   
   private void setModewAndViewForPageFecharCaixa(ModelAndView modelAndView, Long id) {
-    modelAndView.addObject("caixaAberto", abrirCaixaService.getCaixa(id));
+    modelAndView.addObject("cxAbertoPorUsuario", abrirCaixaService.getCaixa(id));
     modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario());
   }
 }
