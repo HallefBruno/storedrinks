@@ -57,7 +57,7 @@ public class CaixaController {
   public ModelAndView salvar(@Valid Caixa caixa, BindingResult result, Model model, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
-        return new ModelAndView("redirect:/caixa/abrirCaixa");
+        return abrirCaixa(caixa);
       }
       abrirCaixaService.salvar(caixa);
     } catch (NegocioException ex) {
@@ -65,7 +65,7 @@ public class CaixaController {
       result.addError(error);
     }
     attributes.addFlashAttribute("mensagem", "Caixa aberto com sucesso!");
-    return new ModelAndView("redirect:/caixa/vendas");
+    return new ModelAndView("redirect:/caixa/abrirCaixa");
   }
   
   @GetMapping("/fechar/{id}")

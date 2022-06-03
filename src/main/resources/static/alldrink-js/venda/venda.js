@@ -198,9 +198,9 @@ function popularTable(listProdutos) {
   $.each(listProdutos, function (index, produto) {
     var htmlbtnGroup = `
       <div class='btn-group btn-group-sm' role='group' aria-label='grupo vendas'> 
-        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Diminuir quantidade' class='${CLASS_BTN_DIMINUIR} btn btn-outline-secondary'><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
-        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Aumentar quantidade' class='${CLASS_BTN_AUMENTAR} btn btn-outline-secondary'><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Remover item' class='${CLASS_BTN_REMOVER} btn btn-outline-secondary'><i class="fa fa-trash" aria-hidden="true"></i></button>
+        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Diminuir quantidade' class='${CLASS_BTN_DIMINUIR} btn btn-outline-secondary'><i class="bi bi-dash-circle"></i></button>
+        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Aumentar quantidade' class='${CLASS_BTN_AUMENTAR} btn btn-outline-secondary'><i class="bi bi-plus-circle"></i></button>
+        <button data-key='${produto.codigoBarra}' data-index='${index}' type='button' data-bs-toggle='tooltip' data-bs-placement='top' title='Remover item' class='${CLASS_BTN_REMOVER} btn btn-outline-secondary'><i class="bi bi-trash"></i></button>
       </div>`;
     $("#itensVenda").DataTable().row.add([
       produto.descricaoProduto,

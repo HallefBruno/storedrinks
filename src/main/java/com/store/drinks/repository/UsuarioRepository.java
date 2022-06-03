@@ -18,6 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, Usuario
   @EntityGraph(attributePaths = {"clienteSistema"})
   List<Usuario> findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(String tenant, String email);
   
+  @EntityGraph(attributePaths = {"clienteSistema"})
   Optional<Usuario> findByClienteSistemaTenantAndId(String tenant, Long id);
   
 }

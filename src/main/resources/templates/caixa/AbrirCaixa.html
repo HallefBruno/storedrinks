@@ -12,32 +12,37 @@
   </head>
 
 <body class="bg-light">
-  <main class="container pt-4 col-md-6 offset-md-3">
-    <div class="row">
-      <th:block th:include="fragments/MensagemSucesso"></th:block>
-      <form th:object="${caixa}" method="post" th:action="@{/caixa/salvar}">
-        <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-        <div class="shadow-sm">
-          <div class="card">
-            <h5 class="card-header">Abertura do caixa</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 sd-required">
-                  <label for="valorInicialTroco" class="form-label">Valor para troco</label>
-                  <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="bi bi-cash"></i></span>
-                    <input required="true" type="text" autocomplete="off" min="0" class="form-control" th:field="*{valorInicialTroco}" id="valorInicialTroco" name="valorInicialTroco"/>
-                  </div>
+  <main class="container pt-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
+    <div th:if="${mensagem != null}" class="card">
+      <div class="card-body">
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <div class="callout callout-success">
+          <a th:href="@{/caixa/vendas}">Ir para vendas</a>
+        </div>
+      </div>
+    </div>
+    <form th:if="${mensagem == null}" th:object="${caixa}" method="post" th:action="@{/caixa/salvar}">
+      <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+      <div class="shadow-sm">
+        <div class="card">
+          <h5 class="card-header">Abertura do caixa</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 sd-required">
+                <label for="valorInicialTroco" class="form-label">Valor para troco</label>
+                <div class="input-group mb-3">
+                  <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                  <input required="true" type="text" autocomplete="off" min="0" class="form-control monetaria" th:field="*{valorInicialTroco}" id="valorInicialTroco" name="valorInicialTroco"/>
                 </div>
               </div>
-              <button type="submit" class="btn btn-sm btn-outline-secondary">
-                Salvar
-              </button>
             </div>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+              Salvar
+            </button>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </main>
 </div>
 </div>
@@ -46,7 +51,9 @@
 <script type="text/javascript">
   $(function () {
     $("#valorInicialTroco").focus();
-    $("#valorInicialTroco").mask("#,##0.00", {reverse: true});
+    $("form").submit(function () {
+      $("#valorInicialTroco").val($("#valorInicialTroco").val().replace(".","").replace(",","."));
+    });
   });
 </script>
 </body>

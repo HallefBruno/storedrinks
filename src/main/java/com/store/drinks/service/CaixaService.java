@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class CaixaService {
 
-  private final CaixaRepository abrirCaixaRepository;
+  private final CaixaRepository caixaRepository;
   private final UsuarioService usuarioService;
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final Multitenancy multitenancy;
@@ -37,7 +37,7 @@ public class CaixaService {
     acx.setDataHoraAbertura(LocalDateTime.now());
     acx.setUsuario(usuarioService.usuarioLogado());
     acx.setValorInicialTroco(caixa.getValorInicialTroco());
-    abrirCaixaRepository.save(acx);
+    caixaRepository.save(acx);
   }
   
   @Transactional
@@ -46,7 +46,7 @@ public class CaixaService {
       Caixa caixa = getCaixa(id);
       caixa.setAberto(Boolean.FALSE);
       caixa.setDataHoraFechamento(LocalDateTime.now());
-      abrirCaixaRepository.save(caixa);
+      caixaRepository.save(caixa);
     }
   }
 
@@ -66,7 +66,7 @@ public class CaixaService {
 
   public BigDecimal valorTotalEmVendasPorUsuario() {
     return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(
-      abrirCaixaRepository.findByAbertoTrueAndUsuarioId(
+      caixaRepository.findByAbertoTrueAndUsuarioId(
       usuarioService.usuarioLogado().getId()).get().getId()).get();
   }
 
@@ -89,12 +89,12 @@ public class CaixaService {
   public Optional<Caixadto> caixaAberto(Long id) {
     Optional<Caixadto> optionalCaixa;
     if(Objects.nonNull(id)) {
-      optionalCaixa = abrirCaixaRepository.findByAbertoTrueAndUsuarioId(id);
+      optionalCaixa = caixaRepository.findByAbertoTrueAndUsuarioId(id);
       return optionalCaixa.map(op -> {
         return Optional.of(op); 
       }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
     }
-    optionalCaixa = abrirCaixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+    optionalCaixa = caixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
     return optionalCaixa.map(op -> {
       return Optional.of(op);
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));

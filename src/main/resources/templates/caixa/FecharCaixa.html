@@ -31,9 +31,9 @@
   <body class="bg-light">
     <main class="container pt-4 mb-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
       <form th:object="${caixa}">
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <th:block th:include="fragments/MensagensErroValidacao"></th:block>
         <div class="shadow-sm">
-          <th:block th:include="fragments/MensagemSucesso"></th:block>
-          <th:block th:include="fragments/MensagensErroValidacao"></th:block>
           <div class="card">
             <h5 class="card-header">Fechamento do caixa</h5>
             <div class="card-body">
