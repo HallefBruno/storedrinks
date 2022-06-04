@@ -42,7 +42,10 @@ public class CaixaController {
 
   @GetMapping("/abrirCaixa")
   public ModelAndView abrirCaixa(Caixa caixa) {
-    return new ModelAndView("caixa/AbrirCaixa");
+    if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
+      return new ModelAndView("caixa/AbrirCaixa");
+    }
+    return new ModelAndView("venda/RealizarVenda");
   }
 
   @GetMapping("/vendas")
@@ -60,9 +63,10 @@ public class CaixaController {
         return abrirCaixa(caixa);
       }
       abrirCaixaService.salvar(caixa);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
+      return abrirCaixa(caixa);
     }
     attributes.addFlashAttribute("mensagem", "Caixa aberto com sucesso!");
     return new ModelAndView("redirect:/caixa/abrirCaixa");
@@ -91,8 +95,7 @@ public class CaixaController {
       result.addError(error);
       try {
         setModewAndViewForPageFecharCaixa(andView, null);
-      } catch (ResponseStatusException e) {
-      }
+      } catch (ResponseStatusException e) {}
       return andView;
     }
   }

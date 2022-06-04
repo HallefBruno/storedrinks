@@ -30,7 +30,7 @@ public class CaixaService {
   @Transactional
   public void salvar(Caixa caixa) {
     if (abrirCaixaPorUsuarioLogado()) {
-      throw new NegocioException("O caixa já foi aberto para esse usuário!");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O caixa já foi aberto para esse usuário!");
     }
     Caixa acx = new Caixa();
     acx.setAberto(Boolean.TRUE);
