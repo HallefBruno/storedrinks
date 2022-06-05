@@ -115,6 +115,6 @@ public class CaixaController {
   
   private void setModewAndViewForPageFecharCaixa(ModelAndView modelAndView, Long id) {
     modelAndView.addObject("cxAbertoPorUsuario", abrirCaixaService.getCaixa(id));
-    modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario());
+    modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario(id));
   }
 }

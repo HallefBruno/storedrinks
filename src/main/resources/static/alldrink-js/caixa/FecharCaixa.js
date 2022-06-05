@@ -52,6 +52,7 @@ function fecharCaixa() {
 
 function eventSelectUsuario() {
   $("#usuarios").on("select2:select", function (e) {
+    $("#divLoading").addClass("loading");
     location.href = `${CONTEXT}${ENDPOINT}/por-usuario/${e.params.data.id}`;
   });
 }

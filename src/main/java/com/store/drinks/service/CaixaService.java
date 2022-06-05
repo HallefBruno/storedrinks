@@ -64,10 +64,11 @@ public class CaixaService {
     return false;
   }
 
-  public BigDecimal valorTotalEmVendasPorUsuario() {
-    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(
-      caixaRepository.findByAbertoTrueAndUsuarioId(
-      usuarioService.usuarioLogado().getId()).get().getId()).get();
+  public BigDecimal valorTotalEmVendasPorUsuario(Long id) {
+    if (Objects.nonNull(id)) {
+      return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(id).get().getId()).get();
+    }
+    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(usuarioService.usuarioLogado().getId()).get().getId()).get();
   }
 
   public Caixa getCaixa(Long id) {

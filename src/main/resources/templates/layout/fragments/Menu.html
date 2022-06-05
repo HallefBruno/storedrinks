@@ -4,7 +4,7 @@
       <div class="d-flex align-items-center">
         <div class="flex-shrink-0 dropdown">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+            <img data-bs-toggle="tooltip" data-bs-placement="top" th:title="${#authentication.getPrincipal().getUsuario().getNome()}" src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
           <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="font-size: 90%;">
             <li>

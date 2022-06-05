@@ -148,9 +148,6 @@ $(document).ready(function () {
     let tBadyFormasPagamento = modalDetalhes.find("tbody");
     tBadyFormasPagamento.empty();
     $.get(`${CONTEXT}movimentacao-caixa/formas-pagamento/${$(this).data("value")}`, function (response) {
-      if(response.length <= 2) {
-        tBadyFormasPagamento.prop("style","height:80px;");
-      }
       $.each(response, function (i,item) {
         tBadyFormasPagamento.append(`<tr><td class="">${item.tipoPagamento}</td> <td class="text-success">${formatter.format(item.valor)}</td></tr>`);
       });

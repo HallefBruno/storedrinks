@@ -166,14 +166,13 @@ StoreDrink.LoadGif = (function () {
   }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
+      console.log(settings);
+      $(".setblockUI").block({message:null});
+      this.gifLoadingAutocomplete.css("display", "block");
       if(!naoInvocarGifLoading(settings.url,this.gifLoadingAutocomplete.bind(this))) {
-        this.gifLoadingAutocomplete.css("display", "block");
-        $(".setblockUI").block({message:null});
         return;
       }
-      $(".setblockUI").block({message:null});
       this.divLoading.addClass("loading");
-      this.gifLoadingAutocomplete.css("display", "block");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
       this.gifLoadingAutocomplete.css("display", "none");
@@ -183,6 +182,7 @@ StoreDrink.LoadGif = (function () {
   };
   
   function naoInvocarGifLoading(url,element) {
+    console.log(url);
     if(url.includes("mensagens/notificado")) {
       return false;
     } else if (url.includes("mensagens/nao-lidas")) {

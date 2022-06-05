@@ -48,7 +48,9 @@ public class VendaRepositoryImpl implements VendaRepositoryCustom {
     sqlQuery.append("from movimentacao_caixa mc ");
     sqlQuery.append("inner join venda v on v.id  = mc.venda_id ");
     sqlQuery.append("inner join usuario u on u.id  = v.usuario_id ");
+    sqlQuery.append("inner join caixa cx on mc.caixa_id  = cx.id ");
     sqlQuery.append("where u.id = ").append(usuarioService.usuarioLogado().getId()).append(" ");
+    sqlQuery.append("and cx.aberto = true ");
     sqlQuery.append("and u.tenant = '").append(multitenancy.getTenantValue()).append("' ");
     if(isUsuarioProprietario) {
       sqlQuery.append("union ");
@@ -67,7 +69,9 @@ public class VendaRepositoryImpl implements VendaRepositoryCustom {
       sqlQuery.append("from movimentacao_caixa mc ");
       sqlQuery.append("inner join venda v on v.id  = mc.venda_id ");
       sqlQuery.append("inner join usuario u on u.id  = v.usuario_id ");
+      sqlQuery.append("inner join caixa cx on mc.caixa_id  = cx.id ");
       sqlQuery.append("where u.tenant = '").append(multitenancy.getTenantValue()).append("' ");
+      sqlQuery.append("and cx.aberto = true ");
     }
     sqlCount.append(sqlQuery);
     sqlCount.append(")count ");

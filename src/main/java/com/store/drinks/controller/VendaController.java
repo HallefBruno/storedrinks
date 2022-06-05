@@ -38,7 +38,7 @@ public class VendaController {
   @GetMapping
   public ModelAndView pageIndex() {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
-      return new ModelAndView("redirect:/pdv/abrirCaixa");
+      return new ModelAndView("redirect:/caixa");
     }
     return new ModelAndView("venda/RealizarVenda");
   }
