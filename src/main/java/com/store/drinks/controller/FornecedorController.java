@@ -3,7 +3,6 @@ package com.store.drinks.controller;
 import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.FornecedorService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -49,8 +49,8 @@ public class FornecedorController {
         return pageIndex(fornecedor);
       }
       fornecedorService.salvar(fornecedor);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
       return pageIndex(fornecedor);
     }
@@ -65,8 +65,8 @@ public class FornecedorController {
         return pageNovo(fornecedor);
       }
       fornecedorService.update(fornecedor, codigo);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
       return pageNovo(fornecedor);
     }
@@ -86,8 +86,8 @@ public class FornecedorController {
   public ResponseEntity<?> excluir(@PathVariable("codigo") Fornecedor fornecedor) {
     try {
       fornecedorService.excluir(fornecedor);
-    } catch (NegocioException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (ResponseStatusException e) {
+      return ResponseEntity.badRequest().body(e.getReason());
     }
     return ResponseEntity.ok().build();
   }

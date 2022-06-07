@@ -2,64 +2,60 @@
   <head>
     <title>Cadastro de fornecedor</title>
     <meta name="description" content="Cadastro de fornecedor">
-  <th:block th:replace="fragments/CssFragment :: css"></th:block>
-  <div th:replace="layout/fragments/Menu :: menu"></div>
-</head>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+  </head>
 <body class="bg-light">
-  <main class="container mt-5">
-    <div class="row">
-      <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" th:method="post" th:object="${fornecedor}">
-        <th:block th:include="fragments/MensagemSucesso"></th:block>
-        <th:block th:include="fragments/MensagensErroValidacao"></th:block>
-        <div class="shadow-sm mb-5">
-          <div class="card">
-            <h5 class="card-header">Cadastro de fornecedor</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="mb-3 col-sm-4">
-                  <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                  <div class="input-group">
-                    <input th:field="*{cpfCnpj}" required="true" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
-                  </div>
-                </div>
-                <div class="mb-3 col-sm-4">
-                  <label for="nome" class="form-label">Nome</label>
-                  <input th:field="*{nome}" required="true" autocomplete="off" type="text" class="form-control" id="nome" name="nome">
-                </div>
-                <div class="mb-3 col-sm-4">
-                  <label for="telefone" class="form-label">Telefone</label>
-                  <input required="true" th:field="*{telefone}" autocomplete="off" type="text" class="form-control js-phone-number" id="telefone" name="telefone">
+  <main class="container pt-4 mb-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
+    <form th:action="${fornecedor.id} == null ? @{/fornecedor/salvar} : @{/fornecedor/update/{codigo}(codigo=${fornecedor.id})}" th:method="post" th:object="${fornecedor}">
+      <th:block th:include="fragments/MensagemSucesso"></th:block>
+      <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+      <div class="shadow-sm">
+        <div class="card">
+          <h5 class="card-header">Cadastro de fornecedor</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="mb-3 col-sm-12 sd-required">
+                <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                <div class="input-group">
+                  <input th:field="*{cpfCnpj}" required="true" autocomplete="off" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-2 mb-1">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
-                    <label class="form-check-label" for="ativo">Ativo?</label>
-                  </div>
+              <div class="mb-3 col-sm-12 sd-required">
+                <label for="nome" class="form-label">Nome</label>
+                <input th:field="*{nome}" required="true" autocomplete="off" type="text" class="form-control" id="nome" name="nome">
+              </div>
+              <div class="mb-3 col-sm-12 sd-required">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input required="true" th:field="*{telefone}" autocomplete="off" type="text" class="form-control js-phone-number" id="telefone" name="telefone">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2 mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
+                  <label class="form-check-label" for="ativo">Ativo?</label>
                 </div>
               </div>
+            </div>
 
-              <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
-              <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
+            <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
+            <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
 
-              <div class="btn-group mt-2" role="group">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                  Salvar
-                </button>
-                <a type="button" th:href="@{/fornecedor/pesquisar}" class="btn btn-sm btn-outline-secondary invock-gif">
-                  Pesquisar
-                </a>
-              </div>
+            <div class="btn-group mt-2" role="group">
+              <button type="submit" class="btn btn-sm btn-outline-secondary">
+                Salvar
+              </button>
+              <a type="button" th:href="@{/fornecedor/pesquisar}" class="btn btn-sm btn-outline-secondary invock-gif">
+                Pesquisar
+              </a>
             </div>
           </div>
         </div>
-      </form>
-    </div>
-  </div>
-</main>
-<div id="divLoading"></div>
-<th:block th:replace="fragments/JsFragment :: script"></th:block>
-<script th:src="@{/alldrink-js/fornecedor/Novo.js}"></script>
+      </div>
+    </form>
+  </main>
+  <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  <script th:src="@{/alldrink-js/fornecedor/Novo.js}"></script>
 </body>
 </html>

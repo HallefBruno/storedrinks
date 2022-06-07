@@ -7,13 +7,14 @@ import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,22 +28,18 @@ public class FornecedorService {
     fornecedorRepository.verificarExistenciaFornecedor(fornecedor);
     fornecedorRepository.save(fornecedor);
   }
-
+  
   @Transactional
   public void update(Fornecedor update, Long codigo) {
-    if (Objects.isNull(codigo)) {
-      throw new NegocioException("Identificador inválido!");
-    }
-    update.setId(codigo);
-    fornecedorRepository.verificarExistenciaFornecedor(update);
-    Optional<Fornecedor> opFornecedor = fornecedorRepository.findById(codigo);
-    if (opFornecedor.isPresent()) {
-      Fornecedor atual = opFornecedor.get();
-      if (!Objects.equals(atual.getVersaoObjeto(), update.getVersaoObjeto())) {
-        throw new NegocioException("Houve uma alteração neste fornecedor, faça uma nova busca");
+    try {
+      if (Objects.isNull(codigo)) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
       }
-      BeanUtils.copyProperties(update, atual, "id");
-      fornecedorRepository.save(atual);
+      update.setId(codigo);
+      fornecedorRepository.verificarExistenciaFornecedor(update);
+      fornecedorRepository.save(update);
+    } catch (ObjectOptimisticLockingFailureException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Houve uma alteração neste fornecesor, faça uma nova busca!");
     }
   }
 

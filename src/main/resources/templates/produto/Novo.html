@@ -65,12 +65,15 @@
                   <a class="link-calculadora" href="https://www.shopify.com.br/ferramentas/calculadora-margem-de-lucro" target="_blank">Calculadora de lucro</a>
                 </div>
               </div>
-
+              
+              <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
+              <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
+              
               <div class="btn-group mt-2" role="group">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                <button type="submit" class="btn btn-sm btn-outline-secondary invock-gif">
                   Salvar
                 </button>
-                <a type="button" th:href="@{/produtos/pesquisar}" class="btn btn-sm btn-outline-secondary">
+                <a type="button" th:href="@{/produtos/pesquisar}" class="btn btn-sm btn-outline-secondary invock-gif">
                   Pesquisar
                 </a>
               </div>
@@ -80,7 +83,6 @@
       </form>
     </div>
   </main>
-  <div id="divLoading"></div>
 <th:block th:replace="fragments/JsFragment :: script"></th:block>
 <script th:src="@{/alldrink-js/produto/Novo.js}" type="text/javascript"></script>
 </body>

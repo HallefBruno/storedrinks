@@ -12,5 +12,4 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long>, F
   
   @Cacheable("fornecedor")
   List<Fornecedor> findByTenantAndAtivoTrue(String tenant);
-  //List<Fornecedor> findAllByTenantAndAtivoTrue(String tenant);
 }

@@ -3,20 +3,17 @@ package com.store.drinks.service;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import javax.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,18 +35,13 @@ public class ProdutoService {
   public void update(Produto update, Long codigo) {
     try {
       if (Objects.isNull(codigo)) {
-        throw new NegocioException("Identificador inválido!");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
       }
       update.setId(codigo);
       produtoRepository.verificarExistenciaProduto(update);
-      Optional<Produto> optionalProdutoAtual = produtoRepository.findById(codigo);
-      if (optionalProdutoAtual.isPresent()) {
-        Produto atual = optionalProdutoAtual.get();
-        BeanUtils.copyProperties(update, atual, "id");
-        produtoRepository.save(atual);
-      }
-    } catch (OptimisticLockException ex) {
-      throw new NegocioException("Houve uma alteração neste produto, faça uma nova busca");
+      produtoRepository.save(update);
+    } catch (ObjectOptimisticLockingFailureException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Houve uma alteração neste produto, faça uma nova busca!");
     }
   }
   
@@ -74,7 +66,7 @@ public class ProdutoService {
       produtoRepository.delete(produto);
       produtoRepository.flush();
     } catch (Exception e) {
-      throw new NegocioException("Não foi possível excluir o produto!");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi possível excluir o produto!");
     }
   }
 

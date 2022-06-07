@@ -81,8 +81,8 @@
                       <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
                       <td class="text-center">
                         <div class="btn-group" role="group">
-                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary invock-gif" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}">Editar</a>
-                          <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}">Excluir</a>
+                          <a href="#" role="button" class="btn btn-outline-secondary invock-gif" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}"><i class="bi bi-pen"></i></a>
+                          <a href="#" role="button" class="btn btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}"><i class="bi bi-trash"></i></a>
                         </div>
                       </td>
                     </tr>
@@ -96,7 +96,6 @@
       </div>
     </div>
   </main>
-  <div id="divLoading"></div>
 <th:block th:replace="fragments/JsFragment :: script"></th:block>
 <script type="text/javascript">
   $(function () {

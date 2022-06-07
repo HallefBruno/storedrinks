@@ -64,7 +64,6 @@ public class Fornecedor implements Serializable {
     this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
     this.telefone = StringUtils.getDigits(this.telefone);//phoneNumberstr.replaceAll("[^0-9]", "");
     this.nome = StringUtils.strip(this.nome);
-    this.nome = this.nome.toLowerCase();
     if (Objects.isNull(this.ativo)) {
       this.ativo = Boolean.FALSE;
     }

@@ -49,8 +49,8 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="btn-group">
-                      <a th:href="@{/produtos/novo}" type="button" class="btn btn-outline-secondary btn-sm">Novo</a>
-                      <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
+                      <a th:href="@{/produtos/novo}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
+                      <button type="submit" class="btn btn-outline-secondary btn-sm invock-gif">Pesquisar</button>
                     </div>
                   </div>
                 </div>
@@ -140,7 +140,7 @@
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="#" type="button" class="btn btn-sm btn-outline-secondary" th:href="@{/produtos/{codigo}(codigo=${produto.id})}">Editar</a>
+                  <a href="#" type="button" class="btn btn-sm btn-outline-secondary invock-gif" th:href="@{/produtos/{codigo}(codigo=${produto.id})}">Editar</a>
                   <a href="#" type="button" class="btn btn-sm btn-outline-secondary  js-exclusao-btn" data:url="@{/produtos/{codigo}(codigo=${produto.id})}" data:objeto="${produto.descricaoProduto}">Excluir</a>
                 </div>
               </div>
@@ -151,7 +151,6 @@
     </div>
     <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>
   </main>
-  <div id="divLoading"></div>
 <th:block th:replace="fragments/JsFragment :: script"></th:block>
 <script type="text/javascript">
   $(function () {

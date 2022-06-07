@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -70,6 +71,12 @@ public class Produto implements Serializable {
 
   @Column(columnDefinition = "boolean default false")
   private Boolean ativo;
+  
+  @Version
+  @Min(value = 0, message = "Versão mínima inválida!")
+  @NotNull(message = "Versão não pode ser null!")
+  @Column(name = "versao_objeto", nullable = false)
+  private Integer versaoObjeto;
 
   @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
