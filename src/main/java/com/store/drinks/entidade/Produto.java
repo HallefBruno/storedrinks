@@ -73,8 +73,6 @@ public class Produto implements Serializable {
   private Boolean ativo;
   
   @Version
-  @Min(value = 0, message = "Versão mínima inválida!")
-  @NotNull(message = "Versão não pode ser null!")
   @Column(name = "versao_objeto", nullable = false)
   private Integer versaoObjeto;
 

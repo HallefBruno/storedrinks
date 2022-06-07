@@ -2,7 +2,6 @@ package com.store.drinks.repository.querys.produto;
 
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.Tenant;
-import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
@@ -22,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
@@ -113,15 +114,15 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     query.setParameter(1, produto.getDescricaoProduto());
     query.setParameter(2, produto.getCodigoBarra());
     query.setParameter(3, produto.getCodProduto());
-    query.setParameter(4, produto.getTenant());
+    query.setParameter(4, multitenancy.getTenantValue());
     List<Produto> resultado = query.getResultList();
     if (!resultado.isEmpty()) {
       if (resultado.size() == 1 && Objects.isNull(produto.getId())) {
         String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(), produto.getCodigoBarra(), produto.getCodProduto());
-        throw new NegocioException(msg);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
       } else if (resultado.size() > 1) {
         String msg = String.format("Encontra-se no sistema caracteristica desse produto: %s, %s, %s", produto.getDescricaoProduto(), produto.getCodigoBarra(), produto.getCodProduto());
-        throw new NegocioException(msg);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
       }
     }
   }
