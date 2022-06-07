@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -57,8 +58,8 @@ public class ProdutoController {
         return pageNovo(produto);
       }
       produtoService.salvar(produto);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
       return pageNovo(produto);
     }
@@ -74,8 +75,8 @@ public class ProdutoController {
         return pageNovo(produto);
       }
       produtoService.update(produto, codigo);
-    } catch (NegocioException ex) {
-      ObjectError error = new ObjectError("erro", ex.getMessage());
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
       return pageNovo(produto);
     }
