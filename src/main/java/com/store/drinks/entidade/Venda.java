@@ -11,9 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
-import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,27 +29,6 @@ import javax.persistence.ColumnResult;
 
 @Entity
 @DynamicUpdate
-//@SqlResultSetMapping(
-//  name = "CancelarVendadto",
-//  entities = {
-//    @EntityResult(
-//      entityClass = com.store.drinks.entidade.dto.venda.CancelarVendadto.class,
-//      fields = {
-//        @FieldResult(name = "movimentacaoCaixaId", column = "movimentacao_caixa_id"),
-//        @FieldResult(name = "tenant", column = "tenant"),
-//        @FieldResult(name = "valorRecebido", column = "valor_recebido"),
-//        @FieldResult(name = "valorTroco", column = "valor_troco"),
-//        @FieldResult(name = "caixaId", column = "caixa_id"),
-//        @FieldResult(name = "vendaId", column = "venda_id"),
-//        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda"),
-//        @FieldResult(name = "dataHoraVenda", column = "data_hora_venda"),
-//        @FieldResult(name = "usuarioId", column = "usuario_id"),
-//        @FieldResult(name = "nome", column = "nome"),
-//        @FieldResult(name = "email", column = "email")
-//      }
-//    ),
-//  }
-//)
 @SqlResultSetMapping(
   name="CancelarVendadto",
   classes={ 
@@ -71,7 +48,6 @@ import javax.persistence.ColumnResult;
     })
   }
 )
-
 public class Venda implements Serializable {
 
   @Id
@@ -93,7 +69,7 @@ public class Venda implements Serializable {
   @JoinColumn(nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private Usuario usuario;
-
+  
   @Column(nullable = false, updatable = false, length = 50)
   private String tenant;
 
