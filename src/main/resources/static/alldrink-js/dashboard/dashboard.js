@@ -1,50 +1,74 @@
 /* globals Chart:false, feather:false */
+/* global Utils, CONTEXT, StoreDrink, Morris */
 
-(function () {
-  'use strict';
-  // Graphs
-  var ctx = document.getElementById('myChart');
-  // eslint-disable-next-line no-unused-vars
-  var myChart = new Chart(ctx, {
-    type: 'line',
+
+$(function () {
+  
+  let toast = new StoreDrink.Toast();
+  $("#myfirstchart").empty();
+  
+  let filters = {
+    dataInicial: $("#dataInicial").val(),
+    dataFinal: $("#dataFinal").val()
+  };
+  
+  montarGraficoProdutosMaisVendidos(filters);
+  
+  $("#btnPesquisar").click(function () {
+    
+    filters = {
+      dataInicial: $("#dataInicial").val(),
+      dataFinal: $("#dataFinal").val()
+    };
+    
+    if(filters.dataInicial && !filters.dataFinal) {
+      toast.show("warning","Atenção","A data final é obrigatória!","top-right");
+      return;
+    }
+    montarGraficoProdutosMaisVendidos(filters);
+  });
+
+});
+
+function montarGraficoProdutosMaisVendidos(filters) {
+  
+//  let ctx = $("#myChart").get(0).getContext('2d');
+//  new Chart(ctx).destroy();
+  
+  $.ajax({
+    url: `${CONTEXT}dashBoard/pesquisar`,
+    type: "GET",
+    dataType: "json",
+    contentType: "application/json",
     data: {
-      labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ],
-      datasets: [{
-          data: [
-            15339,
-            21345,
-            18483,
-            24003,
-            23489,
-            24092,
-            12034
-          ],
-          lineTension: 0,
-          backgroundColor: 'transparent',
-          borderColor: '#007bff',
-          borderWidth: 4,
-          pointBackgroundColor: '#007bff'
-        }]
+      "filters":JSON.stringify(filters)
     },
-    options: {
-      scales: {
-        yAxes: [{
-            ticks: {
-              beginAtZero: false
-            }
-          }]
-      },
-      legend: {
-        display: false
+    success: function (response, textStatus, jqXHR) {
+      console.log(response);
+      $("#myfirstchart").empty();
+      if(response.length > 0) {
+        new Morris.Bar({
+          element: 'myfirstchart',
+          data: response,
+          xkey: 'descricaoProduto',
+          ykeys: ['quantidade'],
+          labels: ['Quantidade']
+        });
       }
+      
+      let tBadyProdutosMaisVendidos = $("#tbProdutosMaisVendidos").find("tbody");
+      tBadyProdutosMaisVendidos.empty();
+      
+      for(let i = 0; i < response.length; i++) {
+        tBadyProdutosMaisVendidos.append(`<tr><td class="">${response[i].quantidade}</td> <td class="text-success">${response[i].descricaoProduto}</td></tr>`);
+      }
+      
+      if(response.length === 0) {
+        tBadyProdutosMaisVendidos.append(`<tr><td colspan="2" class="text-center">Nenhum produto encontrado</td></tr>`);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("error");
     }
   });
-})();
+}

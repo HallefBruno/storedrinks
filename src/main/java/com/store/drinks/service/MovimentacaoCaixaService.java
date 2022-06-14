@@ -1,5 +1,3 @@
-
-
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.MovimentacaoCaixa;

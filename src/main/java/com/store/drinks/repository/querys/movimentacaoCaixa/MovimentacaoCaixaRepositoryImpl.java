@@ -1,5 +1,3 @@
-
-
 package com.store.drinks.repository.querys.movimentacaoCaixa;
 
 import com.store.drinks.entidade.Caixa;

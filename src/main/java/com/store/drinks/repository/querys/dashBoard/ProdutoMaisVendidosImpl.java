@@ -6,19 +6,23 @@ import com.store.drinks.entidade.Venda;
 import com.store.drinks.entidade.dto.produtosMaisVendidos.ProdutosMaisVendidosdto;
 import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.repository.util.Multitenancy;
-import com.store.drinks.repository.util.RowsUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,34 +33,48 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   private EntityManager manager;
 
   @Autowired
-  private RowsUtil rowsUtil;
-  
-  @Autowired
   private JpaUtils jpaUtils;
 
   @Autowired
   private Multitenancy multitenancy;
 
   @Override
-  public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(LocalDate dataInicial, LocalDate dataFinal) {
+  public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFilters filters) {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
     CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
     Root<ItensVenda> root = criteria.from(ItensVenda.class);
     Join<ItensVenda, Produto> produto = root.join("produto");
     Join<ItensVenda, Venda> venda = root.join("venda");
+
+    Predicate predicates;
     List<Selection<?>> selections = new ArrayList<>();
-    selections.add(builder.sum(root.get("quantidade")));
-    selections.add(produto.get("descricaoProduto"));
+
+    selections.add(builder.sum(root.get("quantidade")).alias("quantidade"));
+    selections.add(produto.get("descricaoProduto").alias("descricaoProduto"));
     criteria.multiselect(selections);
+    
+    if(Objects.nonNull(filters) && StringUtils.isNotBlank(filters.getDataInicial()) && StringUtils.isNotBlank(filters.getDataFinal())) {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+      LocalDate dataInicial = LocalDate.parse(filters.getDataInicial(), formatter);
+      LocalDate dataFinal = LocalDate.parse(filters.getDataFinal(), formatter);
+      predicates = builder.between(venda.get("dataHoraVenda"), dataInicial.atStartOfDay(), dataFinal.atStartOfDay().plusDays(1));
+    } else {
+      LocalDateTime dateInicio = LocalDateTime.now().withDayOfMonth(1);
+      LocalDateTime dateFim = LocalDateTime.now().withMonth(dateInicio.getMonthValue()+1).withDayOfMonth(1);
+      predicates = builder.between(venda.get("dataHoraVenda"), dateInicio, dateFim);
+    }
+    
     criteria.where(
-      builder.between(venda.get("dataHoraVenda"), LocalDateTime.now(), LocalDateTime.now()),
+      predicates,
       builder.and(builder.equal(root.get("tenant"),multitenancy.getTenantValue()))
     );
+    
     criteria.groupBy(produto.get("descricaoProduto"));
     criteria.orderBy(builder.desc(builder.sum(root.get("quantidade"))));
     
     List<Tuple> listTuple = manager.createQuery(criteria).getResultList();
     List<ProdutosMaisVendidosdto> list = jpaUtils.converterTupleInDataTransferObject(listTuple,ProdutosMaisVendidosdto.class);
+    
     return list;
   }
 }

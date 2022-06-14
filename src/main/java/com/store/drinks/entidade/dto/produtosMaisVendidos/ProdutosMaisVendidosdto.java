@@ -14,6 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProdutosMaisVendidosdto implements Serializable {
 
-  private Long quantidade;
   private String descricaoProduto;
+  private Long quantidade;
 }
