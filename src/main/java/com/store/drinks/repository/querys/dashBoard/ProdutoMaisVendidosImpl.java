@@ -16,6 +16,7 @@ import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -41,8 +42,8 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   @Override
   public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFilters filters) {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
-    CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
-    Root<ItensVenda> root = criteria.from(ItensVenda.class);
+    CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
+    Root<ItensVenda> root = query.from(ItensVenda.class);
     Join<ItensVenda, Produto> produto = root.join("produto");
     Join<ItensVenda, Venda> venda = root.join("venda");
 
@@ -51,7 +52,7 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
 
     selections.add(builder.sum(root.get("quantidade")).alias("quantidade"));
     selections.add(produto.get("descricaoProduto").alias("descricaoProduto"));
-    criteria.multiselect(selections);
+    query.multiselect(selections);
     
     if(Objects.nonNull(filters) && StringUtils.isNotBlank(filters.getDataInicial()) && StringUtils.isNotBlank(filters.getDataFinal())) {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
@@ -64,15 +65,18 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
       predicates = builder.between(venda.get("dataHoraVenda"), dateInicio, dateFim);
     }
     
-    criteria.where(
+    query.where(
       predicates,
       builder.and(builder.equal(root.get("tenant"),multitenancy.getTenantValue()))
     );
     
-    criteria.groupBy(produto.get("descricaoProduto"));
-    criteria.orderBy(builder.desc(builder.sum(root.get("quantidade"))));
+    query.groupBy(produto.get("descricaoProduto"));
+    query.orderBy(builder.desc(builder.sum(root.get("quantidade"))));
     
-    List<Tuple> listTuple = manager.createQuery(criteria).getResultList();
+    TypedQuery<Tuple> typedQuery = manager.createQuery(query);
+    typedQuery.setMaxResults(25);
+    
+    List<Tuple> listTuple = typedQuery.getResultList();
     List<ProdutosMaisVendidosdto> list = jpaUtils.converterTupleInDataTransferObject(listTuple,ProdutosMaisVendidosdto.class);
     
     return list;

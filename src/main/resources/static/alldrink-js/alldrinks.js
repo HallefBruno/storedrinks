@@ -166,7 +166,6 @@ StoreDrink.LoadGif = (function () {
   }
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      console.log(settings);
       $(".setblockUI").block({message:null});
       this.gifLoadingAutocomplete.css("display", "block");
       if(!naoInvocarGifLoading(settings.url,this.gifLoadingAutocomplete.bind(this))) {
@@ -182,7 +181,6 @@ StoreDrink.LoadGif = (function () {
   };
   
   function naoInvocarGifLoading(url,element) {
-    console.log(url);
     if(url.includes("mensagens/notificado")) {
       return false;
     } else if (url.includes("mensagens/nao-lidas")) {

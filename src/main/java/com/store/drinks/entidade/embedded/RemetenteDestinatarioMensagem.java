@@ -1,4 +1,3 @@
-
 package com.store.drinks.entidade.embedded;
 
 import java.io.Serializable;

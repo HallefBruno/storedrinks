@@ -1,5 +1,3 @@
-
-
 package com.store.drinks.entidade.dto;
 
 import java.io.Serializable;

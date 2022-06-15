@@ -29,7 +29,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
   @Autowired
   private RowsUtil rowsUtil;
 
-
   @Override
   public Optional<Usuario> findByUserLogin(String email) {
     return manager
@@ -43,7 +42,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
       .setParameter("usuario", usuario)
       .getResultList();
   }
-
   
   public Page<Usuario> pesquisarComercioAutoComplete1(String comercio, Pageable pageable) {
     CriteriaBuilder cb = manager.getCriteriaBuilder();

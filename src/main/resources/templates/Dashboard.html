@@ -14,15 +14,15 @@
     </div>
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link" id="nav-acompanhar-vendas-tab" data-bs-toggle="tab" data-bs-target="#nav-acompanhar-vendas" type="button" role="tab" aria-controls="nav-acompanhar-vendas" aria-selected="false">Acompanhar vendas</button>
+        <button class="nav-link" id="nav-vendas-por-caixa-tab" data-bs-toggle="tab" data-bs-target="#nav-vendas-por-caixa" type="button" role="tab" aria-controls="nav-vendas-por-caixa" aria-selected="false">Vendas por caixa</button>
         <button class="nav-link active" id="nav-produtos-mais-vendidos-tab" data-bs-toggle="tab" data-bs-target="#nav-produtos-mais-vendidos" type="button" role="tab" aria-controls="nav-produtos-mais-vendidos" aria-selected="true">Produtos mais vendidos</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
-        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
       </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-produtos-mais-vendidos" role="tabpanel" aria-labelledby="nav-produtos-mais-vendidos-tab">
-        <div class="p-3">
-          <div class="shadow-sm">
+        <div class="p-2">
+          <div class="shadow-sm mb-4">
             <div class="card">
               <h5 class="card-header">Produtos mais vendidos</h5>
               <div class="card-body">
@@ -56,16 +56,15 @@
                       </table>
                     </div>
                   </div>
-                  <div id="myfirstchart"></div>
-                  <!--<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+                  <div id="donutChart"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">2</div>
-      <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">3</div>
+      <div class="tab-pane fade" id="nav-acompanhar-vendas" role="tabpanel" aria-labelledby="nav-acompanhar-vendas-tab">3</div>
+      <div class="tab-pane fade" id="nav-vendas-por-caixa" role="tabpanel" aria-labelledby="nav-vendas-por-caixa-tab">2</div>
     </div>
   </main>
   <th:block th:replace="fragments/JsFragment :: script"></th:block>

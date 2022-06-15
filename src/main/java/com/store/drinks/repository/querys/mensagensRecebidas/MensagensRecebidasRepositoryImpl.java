@@ -1,5 +1,3 @@
-
-
 package com.store.drinks.repository.querys.mensagensRecebidas;
 
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
-
 
 public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepositoryCustom {
   
