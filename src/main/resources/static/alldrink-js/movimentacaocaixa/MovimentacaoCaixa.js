@@ -47,7 +47,7 @@ $(document).ready(function () {
     lengthChange: false,
     searching: false,
     language: {
-      url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
+      url: `${CONTEXT}vendor/internationalisation/pt_br.json`
     },
     columns: [
       {
@@ -141,6 +141,7 @@ $(document).ready(function () {
     $("#spanTipoCaixa").text("NÃO");
     $("input[type=checkbox]").prop("checked",false);
     isCaixaFechado = false;
+    usuarioSelect2 = {};
   });
   
   $(document).on("click", "#formaPagamento", function () {
@@ -154,9 +155,15 @@ $(document).ready(function () {
     });
     modalDetalhes.modal('show');
   });
-  
+    
   $("#usuarios").on("select2:clear", function () {
     usuarioSelect2 = {};
+    $("#usuarios").val("").trigger("change");
+  });
+  
+  $("#tbMovimentacao tbody").on("click", "tr", function () {
+    dataTableMensagens.$("tr.selected").removeClass("selected");
+    $(this).addClass("selected");
   });
   
 });

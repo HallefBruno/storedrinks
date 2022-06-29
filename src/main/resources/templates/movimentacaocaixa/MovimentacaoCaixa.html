@@ -4,7 +4,13 @@
     <title>Movimentação de caixa</title>
     <meta name="description" content="Movimentação de caixa">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    <div th:replace="layout/fragments/Menu :: menu"></div>
+    <th:block th:replace="layout/fragments/Menu :: menu"></th:block>
+    <style>
+      .selected {
+        background-color:rgba(13, 110, 253, 0.3);
+        color:white;
+      }
+    </style>
   </head>
 <body class="bg-light">
   <main class="container-fluid pt-4 mb-3">
@@ -19,7 +25,7 @@
                   <div class="col-sm-4">
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" role="switch" checked="false" id="isCaixaFechado">
-                      <label class="form-check-label" for="isCaixaFechado">Por caixa fechado<span id="spanTipoCaixa" style="margin-left: 2px;" class="badge bg-danger">NÃO</span></label>
+                      <label class="form-check-label" for="isCaixaFechado">Por caixa aberto<span id="spanTipoCaixa" style="margin-left: 2px;" class="badge bg-danger">NÃO</span></label>
                     </div>
                   </div>
                 </div>
