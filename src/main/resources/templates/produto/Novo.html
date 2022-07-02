@@ -3,9 +3,9 @@
   <head>
     <title>Cadastro de produto</title>
     <meta name="description" content="Cadastro de produto">
-  <th:block th:replace="fragments/CssFragment :: css"></th:block>
-  <div th:replace="layout/fragments/Menu :: menu"></div>
-</head>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <th:block th:replace="layout/fragments/Menu :: menu"></th:block>
+  </head>
 <body class="bg-light">
   <main class="container pt-4 mb-3">
     <div class="row">
@@ -65,10 +65,10 @@
                   <a class="link-calculadora" href="https://www.shopify.com.br/ferramentas/calculadora-margem-de-lucro" target="_blank">Calculadora de lucro</a>
                 </div>
               </div>
-              
+
               <input type="hidden" th:field="*{versaoObjeto}" id="versaoObjeto" name="versaoObjeto"/>
               <input type="hidden" th:field="*{tenant}" id="tenant" name="tenant"/>
-              
+
               <div class="btn-group mt-2" role="group">
                 <button type="submit" class="btn btn-sm btn-outline-secondary invock-gif">
                   Salvar

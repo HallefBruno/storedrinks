@@ -7,6 +7,7 @@ import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.MovimentacaoCaixaService;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

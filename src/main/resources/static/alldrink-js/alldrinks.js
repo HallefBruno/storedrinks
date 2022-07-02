@@ -31,9 +31,9 @@ StoreDrink.DialogoExcluir = (function () {
       confirmButtonText: 'Sim, exclua agora!'
     }).then((result) => {
       if (result.isConfirmed) {
+        $("#divLoading").addClass("loading");
         onExcluirConfirmado(url);
       }
-      $("#divLoading").removeClass("loading");
     });
   }
 
@@ -56,7 +56,11 @@ StoreDrink.DialogoExcluir = (function () {
 
   function onErroExcluir(e) {
     console.log(e.responseText);
-    Swal.fire('Oops!', e.responseText, 'error');
+    if(e.responseJSON && e.responseJSON.message) {
+      Swal.fire('Oops!', e.responseJSON.message, 'error');
+    } else {
+     Swal.fire('Oops!', e.responseText, 'error');
+    }
     $("#divLoading").removeClass("loading");
   }
 

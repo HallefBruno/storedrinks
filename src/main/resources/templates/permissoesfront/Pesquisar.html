@@ -1,11 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TODO supply a title</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de permissões usadas</title>
+    <meta name="description" content="Pesquisa de permissões usadas no front">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <th:block th:replace="layout/fragments/Menu :: menu"></th:block>
   </head>
-  <body>
-    <div>TODO write content</div>
+  <body class="bg-light">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="permissoesFront" class="table table-hover caption-top">
+          <caption>Permissões usadas</caption>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Permissão</th>
+              <th>Diretorio</th>
+              <th>URL</th>
+              <th>Descrição</th>
+              <th class="text-center">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="permissao : ${listaPermissoes}">
+              <td th:text="${permissao.id}"></td>
+              <td th:text="${permissao.permissao}"></td>
+              <td th:text="${permissao.diretorio}"></td>
+              <td th:text="${permissao.url}"></td>
+              <td th:text="${permissao.descricao}"></td>
+              <td class="text-center">
+                <div class="btn-group" role="group">
+                  <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" th:href="@{/permissoes-usadas-front/{codigo}(codigo=${permissao.id})}"><i class="bi bi-pen"></i></a>
+                  <a href="#" role="button" class="btn btn-outline-secondary btn-sm js-exclusao-btn" data:url="@{/permissoes-usadas-front/{codigo}(codigo=${permissao.id})}" data:objeto="${permissao.permissao}"><i class="bi bi-trash"></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
   </body>
 </html>

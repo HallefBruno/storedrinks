@@ -3,7 +3,7 @@
     <title>Pesquisa de fornecedor</title>
     <meta name="description" content="Pesquisa de fornecedor">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    <div th:replace="layout/fragments/Menu :: menu"></div>
+    <th:block th:replace="layout/fragments/Menu :: menu"></th:block>
 </head>
 <body class="bg-light">
   <main class="container mt-5">
@@ -64,12 +64,12 @@
                   <caption>Fornecedores</caption>
                   <thead>
                     <tr>
-                      <td>#</td>
-                      <td>CPF/CNPJ</td>
-                      <td>Fornecedor</td>
-                      <td>Telefone</td>
-                      <td>Situação</td>
-                      <td class="text-center">Ação</td>
+                      <th>ID</th>
+                      <th>CPF/CNPJ</th>
+                      <th>Fornecedor</th>
+                      <th>Telefone</th>
+                      <th>Situação</th>
+                      <th class="text-center">Ação</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,8 +81,8 @@
                       <td ><span th:class="${fornecedor.ativo ? 'badge bg-success':'badge bg-danger'}" th:text="${fornecedor.ativo ? 'Ativo':'Inativo'}"></span></td>
                       <td class="text-center">
                         <div class="btn-group" role="group">
-                          <a href="#" role="button" class="btn btn-outline-secondary invock-gif" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}"><i class="bi bi-pen"></i></a>
-                          <a href="#" role="button" class="btn btn-outline-secondary  js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}"><i class="bi bi-trash"></i></a>
+                          <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}"><i class="bi bi-pen"></i></a>
+                          <a href="#" role="button" class="btn btn-outline-secondary btn-sm js-exclusao-btn" data:url="@{/fornecedor/{codigo}(codigo=${fornecedor.id})}" data:objeto="${fornecedor.nome}"><i class="bi bi-trash"></i></a>
                         </div>
                       </td>
                     </tr>

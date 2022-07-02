@@ -44,6 +44,7 @@ function fecharCaixa() {
       confirmButtonText: 'Sim, feche o caixa agora!'
     }).then((result) => {
       if (result.isConfirmed) {
+        $("#divLoading").addClass("loading");
         location.href=`${CONTEXT}${ENDPOINT}/fechar/${$("#id").val()}`;
       }
     });
