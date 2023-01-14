@@ -5,7 +5,7 @@
     <link rel="icon" th:href="@{/imagens/primavera.jpg}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div th:replace="fragments/CssFragment :: css"></div>
-    <div th:replace="layout/fragments/Menu :: menu"></div>
+    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
   </head>
   <body class="bg-light">
     <main class="container pt-4 pb-2 mb-3">

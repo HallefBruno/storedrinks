@@ -5,7 +5,7 @@
     <meta name="description" content="Enviar Mensagem">
     <meta name="_flag" th:content="${#authentication.getPrincipal().getUsuario().getId()}"/>
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    <div th:replace="layout/fragments/Menu :: menu"></div>
+    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
   </head>
 <body class="bg-light">
   <main class="container" style="margin-top: 46px;">
