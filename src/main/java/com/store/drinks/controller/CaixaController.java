@@ -7,7 +7,6 @@ import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.MovimentacaoCaixaService;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class CaixaController {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
       return new ModelAndView("redirect:/caixa/abrirCaixa");
     }
-    return new ModelAndView("venda/RealizarVenda");
+    return new ModelAndView("redirect:/vendas");
   }
 
   @GetMapping("/abrirCaixa")
@@ -46,7 +45,7 @@ public class CaixaController {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
       return new ModelAndView("caixa/AbrirCaixa");
     }
-    return new ModelAndView("venda/RealizarVenda");
+    return new ModelAndView("redirect:/vendas");
   }
 
   @GetMapping("/vendas")
@@ -88,16 +87,17 @@ public class CaixaController {
   @GetMapping("/detalhes")
   public ModelAndView pageFecharCaixa(Caixa caixa, Long id, BindingResult result) {
     ModelAndView andView = new ModelAndView("caixa/FecharCaixa");
+    andView.addObject("getListdetalheSangria", abrirCaixaService.getListdetalheSangria());
     try {
       setModewAndViewForPageFecharCaixa(andView, id);
       return andView;
     } catch (ResponseStatusException ex) {
       ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
-      try {
-        setModewAndViewForPageFecharCaixa(andView, null);
-      } catch (ResponseStatusException e) {}
       return andView;
+      //try {
+        //setModewAndViewForPageFecharCaixa(andView, null);
+      //} catch (ResponseStatusException e) {}
     }
   }
   

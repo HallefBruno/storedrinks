@@ -48,7 +48,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
     Query longQuery = manager.createNativeQuery(sqlCount.toString());
     Object singleResult = longQuery.getSingleResult();
     if (!ObjectUtils.isEmpty(singleResult)) {
-      count = Long.parseLong(singleResult.toString());
+      count = Long.valueOf(singleResult.toString());
     }
     Query query = manager.createNativeQuery(sqlUnion.toString(), "UsuarioMensagemdto");
     int paginaAtual = pageable.getPageNumber();
@@ -92,7 +92,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
     Query longQuery = manager.createNativeQuery(sqlCount.toString());
     Object singleResult = longQuery.getSingleResult();
     if (!ObjectUtils.isEmpty(singleResult)) {
-      count = Long.parseLong(singleResult.toString());
+      count = Long.valueOf(singleResult.toString());
     }
     Query query = manager.createNativeQuery(sql.toString(), "Mensagemdto");
     int paginaAtual = pageable.getPageNumber();

@@ -3,7 +3,7 @@
   <head>
     <title>Fechar caixa</title>
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
-    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
     <style>
       .separator {
         display: flex;
@@ -94,8 +94,8 @@
                             </svg>
                             <span th:text="${{valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor total em vendas"></span> 
                             + 
-                            <span th:text="${{cxAbertoPorUsuario.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial para troco"></span> 
-                            = 
+                                  <span th:text="${{cxAbertoPorUsuario.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial para troco"></span> 
+                                  =
                             <span th:text="${{cxAbertoPorUsuario.valorInicialTroco + valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Total em caixa"></span>
                           </span>
                         </div>

@@ -1,6 +1,6 @@
 package com.store.drinks.entidade;
 
-import com.store.drinks.entidade.dto.Caixadto;
+import com.store.drinks.entidade.dto.caixa.Caixadto;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;

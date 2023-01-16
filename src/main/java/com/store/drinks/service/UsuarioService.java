@@ -20,7 +20,7 @@ public class UsuarioService {
 
   private final UsuarioRepository usuarioRepository;
 
-  public Usuario usuarioLogado() {
+  public static Usuario usuarioLogado() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
     return usuario;

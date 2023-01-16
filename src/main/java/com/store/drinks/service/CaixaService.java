@@ -1,9 +1,9 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Caixa;
-import com.store.drinks.entidade.dto.Caixadto;
+import com.store.drinks.entidade.dto.caixa.Caixadto;
+import com.store.drinks.entidade.dto.caixa.DetalheSangriadto;
 import com.store.drinks.execption.CaixaAbertoPorUsuarioException;
-import com.store.drinks.execption.NegocioException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import com.store.drinks.repository.CaixaRepository;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,7 +36,7 @@ public class CaixaService {
     Caixa acx = new Caixa();
     acx.setAberto(Boolean.TRUE);
     acx.setDataHoraAbertura(LocalDateTime.now());
-    acx.setUsuario(usuarioService.usuarioLogado());
+    acx.setUsuario(UsuarioService.usuarioLogado());
     acx.setValorInicialTroco(caixa.getValorInicialTroco());
     caixaRepository.save(acx);
   }
@@ -68,7 +69,7 @@ public class CaixaService {
     if (Objects.nonNull(id)) {
       return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(id).get().getId()).get();
     }
-    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(usuarioService.usuarioLogado().getId()).get().getId()).get();
+    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(UsuarioService.usuarioLogado().getId()).get().getId()).get();
   }
 
   public Caixa getCaixa(Long id) {
@@ -83,7 +84,7 @@ public class CaixaService {
       caixa.setUsuario(usuarioService.findByClienteSistemaTenantAndId(multitenancy.getTenantValue(), id).get());
       return caixa;
     }
-    caixa.setUsuario(usuarioService.usuarioLogado());
+    caixa.setUsuario(UsuarioService.usuarioLogado());
     return caixa;
   }
 
@@ -95,9 +96,15 @@ public class CaixaService {
         return Optional.of(op); 
       }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
     }
-    optionalCaixa = caixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+    optionalCaixa = caixaRepository.findByAbertoTrueAndUsuario(UsuarioService.usuarioLogado());
     return optionalCaixa.map(op -> {
       return Optional.of(op);
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
   }
+  
+  public List<DetalheSangriadto> getListdetalheSangria() {
+    List<DetalheSangriadto> detalhesSangria = caixaRepository.getListdetalheSangria(null);
+    return detalhesSangria;
+  }
+  
 }

@@ -110,7 +110,15 @@
                       <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Fornecedor" th:attr="data-bs-content=${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
                       <td style="text-align: center;" th:text="${#temporals.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
                       <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
-                      <td style="text-align: center;" th:text="${entrada.novaQuantidade - entrada.quantidade}"></td>
+                      <td style="text-align: center;">
+                        <div th:switch="${entrada.situacaoCompra}">
+                          <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}" title="Não confirmado" class="badge bg-secondary text-white position-relative">
+                            [[${entrada.quantidadeIncrementar}]]
+                            <span title="Não confirmado" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                          </span>
+                          <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" th:text="${entrada.novaQuantidade - entrada.quantidade}"></span>
+                        </div>
+                      </td>
                       <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
                       <td th:text="${{entrada.valorCusto}}"></td>
                       <td style="text-align: center;" th:text="${{entrada.valorVenda}}"></td>

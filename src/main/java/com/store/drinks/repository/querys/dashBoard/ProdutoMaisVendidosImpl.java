@@ -77,7 +77,7 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
     typedQuery.setMaxResults(25);
     
     List<Tuple> listTuple = typedQuery.getResultList();
-    List<ProdutosMaisVendidosdto> list = jpaUtils.converterTupleInDataTransferObject(listTuple,ProdutosMaisVendidosdto.class);
+    List<ProdutosMaisVendidosdto> list = jpaUtils.parseTuple(listTuple,ProdutosMaisVendidosdto.class);
     
     return list;
   }

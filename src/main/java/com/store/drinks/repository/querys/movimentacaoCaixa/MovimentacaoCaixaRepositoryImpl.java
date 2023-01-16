@@ -79,7 +79,6 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     return Optional.of(BigDecimal.ZERO);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa() {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -91,11 +90,10 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       builder.equal(clienteSistema.get("tenant"), multitenancy.getTenantValue())
     );
     List<Tuple> listTuple = manager.createQuery(query).getResultList();
-	List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,UsuarioMovimentacaoCaixadto.class);
+	List<UsuarioMovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.parseTuple(listTuple,UsuarioMovimentacaoCaixadto.class);
     return usuariosMovimentacaoCaixa;
   }
   
-  @SuppressWarnings("unchecked")
   @Override
   public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
     DataTableWrapper<MovimentacaoCaixadto> dataTableWrapper = new DataTableWrapper<>();
@@ -155,7 +153,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     typedQuery.setFirstResult(start);
     typedQuery.setMaxResults(10);
     List<Tuple> listTuple = typedQuery.getResultList();
-	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.converterTupleInDataTransferObject(listTuple,MovimentacaoCaixadto.class);
+	List<MovimentacaoCaixadto> usuariosMovimentacaoCaixa = jpaUtils.parseTuple(listTuple,MovimentacaoCaixadto.class);
     
     BigDecimal somaValorTotal = BigDecimal.ZERO;
     BigDecimal somaValorTotalSaida = BigDecimal.ZERO;
