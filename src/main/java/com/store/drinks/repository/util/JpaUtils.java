@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JpaUtils<E> {
   
-  public List<E> converterTupleInDataTransferObject(List<Tuple> tuple, Class o) {
+  public List<E> parseTuple(List<Tuple> tuple, Class o) {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
     List<E> list = (List<E>) tuple.stream()

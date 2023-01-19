@@ -1,4 +1,4 @@
-package com.store.drinks.entidade.dto;
+package com.store.drinks.entidade.dto.caixa;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

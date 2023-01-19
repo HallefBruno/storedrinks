@@ -48,7 +48,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
     Query longQuery = manager.createNativeQuery(sqlCount.toString());
     Object singleResult = longQuery.getSingleResult();
     if (!ObjectUtils.isEmpty(singleResult)) {
-      count = Long.parseLong(singleResult.toString());
+      count = Long.valueOf(singleResult.toString());
     }
     Query query = manager.createNativeQuery(sqlUnion.toString(), "UsuarioMensagemdto");
     int paginaAtual = pageable.getPageNumber();
@@ -62,7 +62,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
   @Override
   public Boolean existemMensagensNaoLidas(String destinatario) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" select men.notificado from mensagens_recebidas men ");
+    sql.append(" select men.notificado from mensagen_recebida men ");
     sql.append(" where men.destinatario = '").append(destinatario).append("' ");
     sql.append(" and men.lida = false ");
     sql.append(" and men.notificado = false; ");
@@ -92,7 +92,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
     Query longQuery = manager.createNativeQuery(sqlCount.toString());
     Object singleResult = longQuery.getSingleResult();
     if (!ObjectUtils.isEmpty(singleResult)) {
-      count = Long.parseLong(singleResult.toString());
+      count = Long.valueOf(singleResult.toString());
     }
     Query query = manager.createNativeQuery(sql.toString(), "Mensagemdto");
     int paginaAtual = pageable.getPageNumber();

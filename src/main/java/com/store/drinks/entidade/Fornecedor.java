@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -26,7 +27,8 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Fornecedor implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fornecedor_generator")
+  @SequenceGenerator(name="fornecedor_generator", sequenceName = "fornecedor_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

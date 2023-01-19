@@ -78,7 +78,6 @@ function popularSelectProdutos() {
     ajax: {
       url: `${CONTEXT}${ENDPOINT}/produtos`,
       dataType: "json",
-      delay: 1000,
       data: function (params) {
         return {
           q: params.term,
@@ -147,7 +146,7 @@ function eventKeyEnter() {
 function qtdAtualMaiorQtdVenda() {
   let quantidade = Number($("#quantidade").val());
   if (quantidade > Number(quantidadeEstoqueAtual)) {
-    mensagemToast("Você não possui essa quantidade em estoque!","#000000","#ffffff","info");
+    mensagemToast("Você não possui essa quantidade em estoque!","#8a6d3b","#ffffff","info");
     $("#quantidade").val("");
     return false;
   }
@@ -177,13 +176,13 @@ function addProduto() {
       somaValorTotalVenda(listProdutos);
       clearFormFocusSelect();
     } else {
-      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff","info");
+      mensagemToast("Quantidade em estoque excedida!", "#8a6d3b", "#ffffff","info");
     }
   } else if ($("#descricaoProduto").val().length === 0) {
     clearFormFocusSelect();
-    mensagemToast("Por favor, selecione um produto!", "#000000", "#ffffff","info");
+    mensagemToast("Por favor, selecione um produto!", "#8a6d3b", "#ffffff","info");
   } else {
-    mensagemToast("A quantidade de produto precisa ser maior que zero!", "#000000", "#ffffff","info");
+    mensagemToast("A quantidade de produto precisa ser maior que zero!", "#8a6d3b", "#ffffff","info");
   }
 }
 
@@ -237,7 +236,7 @@ function eventClickRowDataTable() {
         somaValorTotalVenda(listProdutos);
         return;
       }
-      mensagemToast("Quantidade em estoque excedida!", "#000000", "#ffffff","info");
+      mensagemToast("Quantidade em estoque excedida!", "#8a6d3b", "#ffffff","info");
     } else {
       listProdutos.splice(index, 1);
       popularTable(listProdutos);
@@ -284,7 +283,7 @@ function funcQtdProdutosPorItem(prod) {
 function formaPagamento() {
   $("#formaPagamento").click(function () {
     if(listProdutos.length <= 0) {
-      mensagemToast("Selecione os itens para venda!", "#000000", "#ffffff","info");
+      mensagemToast("Selecione os itens para venda!", "#8a6d3b", "#ffffff","info");
       $("#codigoBarra").focus();
     } else {
       modalFormaPagamento();

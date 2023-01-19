@@ -8,7 +8,6 @@ import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.embedded.RemetenteDestinatarioMensagem;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
-import com.store.drinks.repository.MensagensEnviadasRepository;
 import com.store.drinks.repository.MensagensRecebidasRepository;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,13 +25,12 @@ import org.springframework.web.server.ResponseStatusException;
 public class MensagensRecebidasService {
   private final UsuarioService usuarioService;
   
-  private final MensagensEnviadasRepository mensagensEnviadasRepository;
+  private final MensagensEnviadasService mensagensEnviadasService;
   private final MensagensRecebidasRepository mensagensRecebidasRepository;
   
   @Transactional
   public void salvarMensagemEnviadaRecebida(Mensagemdto mensagem) {
-    
-    Usuario usuario = usuarioService.usuarioLogado();
+    Usuario usuario = UsuarioService.usuarioLogado();
     Usuario usuarioDestino = usuarioService.findByEmailAndAtivoTrue(mensagem.getDestinatario()).get();
     MensagensEnviadas mensagensEnviadas = new MensagensEnviadas();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
@@ -50,17 +48,22 @@ public class MensagensRecebidasService {
     mensagensRecebidas.setRemetenteDestinatarioMensagem(remetenteDestinatarioMensagem);
     mensagensRecebidas.setUsuario(usuario);
     
-    mensagensEnviadasRepository.save(mensagensEnviadas);
+    mensagensEnviadasService.salvar(mensagensEnviadas);
+    salvar(mensagensRecebidas);
+  }
+  
+  @Transactional
+  public void salvar(MensagensRecebidas mensagensRecebidas) {
     mensagensRecebidasRepository.save(mensagensRecebidas);
   }
 
   public int marcarComoNotificado() {
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     return mensagensRecebidasRepository.updateNotificarMensagem(destinatario);
   }
   
   public Boolean existemMensagensNaoLidas() {
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     return mensagensRecebidasRepository.existemMensagensNaoLidas(destinatario);
   }
   
@@ -69,7 +72,7 @@ public class MensagensRecebidasService {
     if(Objects.isNull(id) || id <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifacador inválido!");
     }
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     mensagensRecebidasRepository.findByIdAndRemetenteDestinatarioMensagemDestinatario(id, destinatario).map(mensagensRecebidas -> {
       mensagensRecebidas.setLida(Boolean.TRUE);
       mensagensRecebidas.setNotificado(Boolean.TRUE);
@@ -79,7 +82,7 @@ public class MensagensRecebidasService {
   }
   
   public DataTableWrapper<MensagensRecebidas> findAllByLida(Boolean lida, int draw, int start, int length) {
-    String email = usuarioService.usuarioLogado().getEmail();
+    String email = UsuarioService.usuarioLogado().getEmail();
     int page = start/length;
     Pageable pageable = PageRequest.of(page,length);
     DataTableWrapper<MensagensRecebidas> dataTable = new DataTableWrapper<>();
@@ -93,7 +96,7 @@ public class MensagensRecebidasService {
   }
   
   public Select2Wrapper<UsuarioMensagemdto> pesquisarComercioAutoComplete(String descricao, String pagina) {
-    Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
+    Pageable pageable = PageRequest.of(Integer.parseInt(pagina), 10);
     var pagePesquisarComercio = mensagensRecebidasRepository.pesquisarComercioAutoComplete(descricao, pageable);
     var select2Wrapper = new Select2Wrapper<UsuarioMensagemdto>();
     select2Wrapper.setTotalItens(pagePesquisarComercio.getTotalElements());

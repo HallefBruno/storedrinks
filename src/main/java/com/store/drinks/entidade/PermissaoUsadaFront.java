@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
@@ -22,7 +23,8 @@ import org.hibernate.annotations.DynamicUpdate;
 public class PermissaoUsadaFront implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permissao_usada_front_generator")
+  @SequenceGenerator(name="permissao_usada_front_generator", sequenceName = "permissao_usada_front_seq", allocationSize = 1, initialValue = 1)
   private Long id;
   @NotBlank(message = "Permissão obrigatória!")
   private String permissao;

@@ -2,10 +2,13 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.caixa.DetalheSangriadto;
+import com.store.drinks.entidade.dto.caixa.DetalhesFechamentoCaixadto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.MovimentacaoCaixaService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +40,7 @@ public class CaixaController {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
       return new ModelAndView("redirect:/caixa/abrirCaixa");
     }
-    return new ModelAndView("venda/RealizarVenda");
+    return new ModelAndView("redirect:/vendas");
   }
 
   @GetMapping("/abrirCaixa")
@@ -45,7 +48,7 @@ public class CaixaController {
     if (!abrirCaixaService.abrirCaixaPorUsuarioLogado()) {
       return new ModelAndView("caixa/AbrirCaixa");
     }
-    return new ModelAndView("venda/RealizarVenda");
+    return new ModelAndView("redirect:/vendas");
   }
 
   @GetMapping("/vendas")
@@ -93,10 +96,10 @@ public class CaixaController {
     } catch (ResponseStatusException ex) {
       ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
-      try {
-        setModewAndViewForPageFecharCaixa(andView, null);
-      } catch (ResponseStatusException e) {}
       return andView;
+      //try {
+        //setModewAndViewForPageFecharCaixa(andView, null);
+      //} catch (ResponseStatusException e) {}
     }
   }
   
@@ -114,7 +117,29 @@ public class CaixaController {
   }
   
   private void setModewAndViewForPageFecharCaixa(ModelAndView modelAndView, Long id) {
-    modelAndView.addObject("cxAbertoPorUsuario", abrirCaixaService.getCaixa(id));
-    modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario(id));
+    var caixa = abrirCaixaService.getCaixa(id);
+    var valorTotalEmVendas = abrirCaixaService.valorTotalEmVendasPorUsuario(id);
+    var listDetalheSangria = abrirCaixaService.getListdetalheSangria();
+    
+    modelAndView.addObject("houveSangria", false);
+    
+    if(!listDetalheSangria.isEmpty()) {
+      BigDecimal sum = BigDecimal.ZERO;
+      for (DetalheSangriadto amt : listDetalheSangria) {
+        sum = sum.add(amt.getValor());
+      }
+      var detalhesFechamentoCaixadto = DetalhesFechamentoCaixadto
+        .builder()
+        .valorInicialTroco(caixa.getValorInicialTroco())
+        .valorTotalEmVendasPorUsuario(valorTotalEmVendas)
+        .valorTotalSangria(sum)
+        .build();
+      modelAndView.addObject("detalhesFechamentoCaixa", detalhesFechamentoCaixadto);
+      modelAndView.addObject("getListdetalheSangria", listDetalheSangria);
+      modelAndView.addObject("houveSangria", true);
+    }
+    
+    modelAndView.addObject("cxAbertoPorUsuario", caixa);
+    modelAndView.addObject("valorTotalEmVendasPorUsuario", valorTotalEmVendas);
   }
 }

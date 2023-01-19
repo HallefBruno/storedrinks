@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
 import javax.persistence.ColumnResult;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @DynamicUpdate
@@ -51,7 +52,8 @@ import javax.persistence.ColumnResult;
 public class Venda implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "venda_generator")
+  @SequenceGenerator(name="venda_generator", sequenceName = "venda_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

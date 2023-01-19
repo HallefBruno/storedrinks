@@ -27,7 +27,6 @@
       }
     </style>
   </head>
-
   <body class="bg-light">
     <main class="container pt-4 mb-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
       <form th:object="${caixa}">
@@ -38,7 +37,6 @@
             <h5 class="card-header">Fechamento do caixa</h5>
             <div class="card-body">
               <div th:if="${cxAbertoPorUsuario != null}">
-                <input type="hidden" id="id" name="id" th:value="${cxAbertoPorUsuario.usuario.id}">
                 <div class="alert alert-primary d-flex align-items-center" role="alert">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -47,16 +45,19 @@
                     Confira as informações e no final, feche o caixa!
                   </div>
                 </div>
-                <div sec:authorize="hasRole('ROLE_FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA')">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-12 col-12 col-lg-12 col-xxl-12">
-                      <label for="usuarios" class="form-label">Por usuário</label>
-                      <select id="usuarios" name="usuarios" class="form-select mb-3" data-placeholder="Usuários">
-                        <option value=""></option>
-                      </select>
-                    </div>
+              </div>
+              <div sec:authorize="hasRole('ROLE_FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA')">
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-12 col-xxl-12">
+                    <label for="usuarios" class="form-label">Por usuário</label>
+                    <select id="usuarios" name="usuarios" class="form-select mb-3" data-placeholder="Usuários">
+                      <option value=""></option>
+                    </select>
                   </div>
                 </div>
+              </div>
+              <div th:if="${cxAbertoPorUsuario != null}">
+                <input type="hidden" id="id" name="id" th:value="${cxAbertoPorUsuario.usuario.id}">
                 <div class="row mt-3 fs-6">
                   <div class="col-sm-12 col-md-12 col-12 col-lg-12 col-xxl-12">
                     <div class="card callout-md callout-danger">
@@ -83,7 +84,7 @@
                           <span th:text="${{cxAbertoPorUsuario.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial para troco"></span>
                           <hr>
                         </div>
-                        <div class="mt-2 ">
+                        <div class="mt-2 text-muted">
                           <span style="background-color: #f2f2f0;" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                               <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
@@ -91,11 +92,22 @@
                               <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
                               <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
                             </svg>
-                            <span th:text="${{valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor total em vendas"></span> 
-                            + 
-                            <span th:text="${{cxAbertoPorUsuario.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial para troco"></span> 
-                            = 
-                            <span th:text="${{cxAbertoPorUsuario.valorInicialTroco + valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Total em caixa"></span>
+                            <span th:if="${houveSangria}">
+                              <span th:text="${{detalhesFechamentoCaixa.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial troco"></span>
+                              -
+                              <span th:text="${{detalhesFechamentoCaixa.valorTotalSangria}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor total sangria"></span>
+                              +
+                              <span th:text="${{detalhesFechamentoCaixa.valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Total em vendas"></span>
+                              =
+                              <span th:text="${{detalhesFechamentoCaixa.valorInicialTroco - detalhesFechamentoCaixa.valorTotalSangria + detalhesFechamentoCaixa.valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Total em caixa"></span>
+                            </span>
+                            <span th:if="${!houveSangria}">
+                              <span th:text="${{cxAbertoPorUsuario.valorInicialTroco}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor inicial para troco"></span> 
+                                +
+                              <span th:text="${{valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Valor total em vendas"></span> 
+                                =
+                              <span th:text="${{cxAbertoPorUsuario.valorInicialTroco + valorTotalEmVendasPorUsuario}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Total em caixa"></span>
+                            </span>
                           </span>
                         </div>
                       </div>

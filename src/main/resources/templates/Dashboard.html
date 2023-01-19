@@ -5,7 +5,7 @@
     <meta name="description" content="Dashboard">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
     <link th:href="@{/vendor/css/morris.css}" rel="stylesheet" type="text/css"/>
-    <div th:replace="layout/fragments/Menu :: menu"></div>
+    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
   </head>
 <body>
   <main class="container-fluid">

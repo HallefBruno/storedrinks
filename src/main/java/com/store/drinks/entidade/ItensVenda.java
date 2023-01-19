@@ -2,14 +2,16 @@ package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import java.io.Serializable;
 import java.util.Objects;
+import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
 import javax.persistence.FetchType;
-import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -27,18 +30,16 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "itens_venda")
 @DynamicUpdate
-
 @SqlResultSetMapping(
   name = "ItensVendaCancelardto",
-  entities = {
-    @EntityResult(
-      entityClass = com.store.drinks.entidade.dto.venda.ItensVendaCancelardto.class,
-      fields = {
-        @FieldResult(name = "id", column = "id"),
-        @FieldResult(name = "quantidade", column = "quantidade"),
-        @FieldResult(name = "descricaoProduto", column = "descricao_produto"),
-        @FieldResult(name = "valorVenda", column = "valor_venda"),
-        @FieldResult(name = "valorTotalVenda", column = "valor_total_venda")
+  classes = {
+    @ConstructorResult(targetClass = ItensVendaCancelardto.class,
+      columns = {
+        @ColumnResult(name = "id", type=Long.class),
+        @ColumnResult(name = "quantidade", type=Integer.class),
+        @ColumnResult(name = "descricao_produto", type=String.class),
+        @ColumnResult(name = "valor_venda", type=BigDecimal.class),
+        @ColumnResult(name = "valor_total_venda", type=BigDecimal.class)
       }
     ),
   }
@@ -46,7 +47,8 @@ import org.hibernate.annotations.DynamicUpdate;
 public class ItensVenda implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "itens_venda_generator")
+  @SequenceGenerator(name="itens_venda_generator", sequenceName = "itens_venda_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
       .authorizeRequests()
         .antMatchers("/validar/**").permitAll()
-        .antMatchers("/novaConta/**").permitAll()
+        .antMatchers("/nova-conta/**").permitAll()
         .antMatchers("/userteste/**").permitAll()
     .and()
       .authorizeRequests()

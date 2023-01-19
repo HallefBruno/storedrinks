@@ -32,6 +32,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
@@ -52,7 +53,8 @@ import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 public class Usuario implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_generator")
+  @SequenceGenerator(name="usuario_generator", sequenceName = "usuario_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
   

@@ -1,6 +1,6 @@
 package com.store.drinks.entidade;
 
-import com.store.drinks.entidade.dto.Caixadto;
+import com.store.drinks.entidade.dto.caixa.Caixadto;
 import com.store.drinks.repository.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -46,7 +47,8 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Caixa implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "caixa_generator")
+  @SequenceGenerator(name="caixa_generator", sequenceName = "caixa_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

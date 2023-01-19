@@ -45,9 +45,7 @@ $(function () {
         novoValorVenda = novoValorVenda.replace(",",".");
         entradaProduto["novoValorVenda"] = novoValorVenda;
       }
-      
-      console.log(entradaProduto);
-      
+
       $.ajax({
         url: URI.concat("entradas"),
         type: "POST",
@@ -77,6 +75,7 @@ function validarCampos() {
   
   if(isEmpaty(descricaoProdutoAtual)) {
     toast.show('warning','Atenção','É necessário selecionar um produto!','top-right');
+    $("#produto").focus();
     isCamposValidos = false;
     return;
   }
@@ -205,7 +204,6 @@ function produtoSelectionado(URI) {
   $("#produto").on("select2:select", function (e) {
     $.get(URI.concat("entradas/buscar/").concat(e.params.data.id), function (data) {
       if (data !== undefined && data !== null) {
-        console.log(data);
         $("#descricaoProdutoAtual").val(data.descricaoProduto);
         $("#codigoBarra").val(data.codigoBarra);
         $("#codigoProdutoAtual").val(data.codProduto);

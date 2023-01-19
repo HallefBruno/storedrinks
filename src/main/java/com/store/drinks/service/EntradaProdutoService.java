@@ -39,7 +39,7 @@ public class EntradaProdutoService {
   public void salvar(EntradaProduto entradaProduto) {
     entradaProdutoRepository.findByNumeroNota(entradaProduto.getNumeroNota()).ifPresent(e->{numeroNotaInvalidoException();});
     Produto produto = buscarProdutoPorCodBarra(entradaProduto.getCodigoBarra());
-    Fornecedor fornecedor = fornecedorRepository.getById(entradaProduto.getFornecedor().getId());
+    Fornecedor fornecedor = fornecedorRepository.getReferenceById(entradaProduto.getFornecedor().getId());
     setarNovosValores(entradaProduto, produto);
     var produtoSalvo = produtoRepository.save(produto);
     entradaProduto.setProduto(produtoSalvo);
@@ -161,8 +161,8 @@ public class EntradaProdutoService {
       }
       produto.setValorCusto(entradaProduto.getNovoValorCusto());
       produto.setValorVenda(entradaProduto.getNovoValorVenda());
-      entradaProduto.setNovaQuantidade(produto.getQuantidade());
       BigDecimal somaTotal = BigDecimal.valueOf(entradaProduto.getNovaQuantidade() * entradaProduto.getNovoValorCusto().doubleValue());
+      entradaProduto.setNovaQuantidade(produto.getQuantidade());
       entradaProduto.setValorTotal(somaTotal);
     }
   }
@@ -190,7 +190,7 @@ public class EntradaProdutoService {
     ProdutoSelect2 produtoDTO = new ProdutoSelect2();
     ResultSelectProdutos resultSelectAutomoveis = new ResultSelectProdutos();
     List<ProdutoSelect2> produtosDTO = new ArrayList<>();
-    Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
+    Pageable pageable = PageRequest.of(Integer.parseInt(pagina), 10);
     Page<Produto> page = entradaProdutoRepository.filtrarProdutosSelect(descricao, pageable);
     if (page.hasContent()) {
       List<Produto> produtos = page.getContent();
