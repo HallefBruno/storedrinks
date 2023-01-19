@@ -16,14 +16,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mensagens_enviadas")
+@Table(name = "mensagen_enviada")
 public class MensagensEnviadas implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagen_enviada_generator")
+  @SequenceGenerator(name="mensagen_enviada_generator", sequenceName = "mensagen_enviada_seq", allocationSize = 1, initialValue = 1)
   private Long id;
   
   @Embedded

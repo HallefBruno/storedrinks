@@ -25,6 +25,7 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -39,9 +40,6 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   
   @PersistenceContext
   private EntityManager manager;
-  
-  @Autowired
-  private UsuarioService usuarioService;
   
   @Autowired
   private Multitenancy multitenancy;
@@ -63,9 +61,10 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     query.multiselect(selections);
     
     query.where(
-      builder.equal(root.get("tenant"), multitenancy.getTenantValue()),
-      builder.and(builder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId())),
-      builder.and(builder.equal(caixa.get("id"), caixaId))
+builder.equal(root.get("tenant"), multitenancy.getTenantValue()),
+builder.and(builder.equal(usuario.get("id"), UsuarioService.usuarioLogado().getId())),
+builder.and(builder.equal(caixa.get("id"), caixaId)),
+builder.and(builder.equal(root.get("recolhimento"), false))
     );
     
     query.groupBy(usuario.get("id"));
@@ -133,7 +132,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
       predicates.add(builder.equal(usuario.get("id"),movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
     } else {
-      predicates.add(builder.equal(usuario.get("id"),usuarioService.usuarioLogado().getId()));
+      predicates.add(builder.equal(usuario.get("id"),UsuarioService.usuarioLogado().getId()));
     }
     
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
@@ -197,7 +196,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
         predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
       } else {
-        predicates.add(criteriaBuilder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId()));
+        predicates.add(criteriaBuilder.equal(usuario.get("id"), UsuarioService.usuarioLogado().getId()));
       }
 
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {

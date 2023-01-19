@@ -62,7 +62,7 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
   @Override
   public Boolean existemMensagensNaoLidas(String destinatario) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" select men.notificado from mensagens_recebidas men ");
+    sql.append(" select men.notificado from mensagen_recebida men ");
     sql.append(" where men.destinatario = '").append(destinatario).append("' ");
     sql.append(" and men.lida = false ");
     sql.append(" and men.notificado = false; ");

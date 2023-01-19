@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -19,6 +20,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class UsuarioService {
 
   private final UsuarioRepository usuarioRepository;
+  
+//  @Transactional
+//  public void salvar(Usuario usuario) {
+//    usuarioRepository.save(usuario);
+//  }
+  
+  @Transactional
+  public Usuario salvar(Usuario usuario) {
+    return usuarioRepository.save(usuario);
+  }
 
   public static Usuario usuarioLogado() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

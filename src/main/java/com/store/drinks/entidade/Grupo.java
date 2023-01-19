@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Data
@@ -16,7 +17,8 @@ import lombok.Data;
 public class Grupo implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grupo_generator")
+  @SequenceGenerator(name="grupo_generator", sequenceName = "grupo_seq", allocationSize = 1, initialValue = 1)
   private Long id;
   private String nome;
 

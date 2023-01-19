@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 public class ValidarCliente implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "validar_cliente_generator")
+  @SequenceGenerator(name="validar_cliente_generator", sequenceName = "validar_cliente_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

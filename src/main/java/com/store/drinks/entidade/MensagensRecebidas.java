@@ -22,12 +22,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = "mensagens_recebidas")
+@Table(name = "mensagen_recebida")
 @DynamicUpdate
 @NamedEntityGraph(
   name = "graph.Mensagem", 
@@ -58,7 +59,8 @@ import org.hibernate.annotations.DynamicUpdate;
 public class MensagensRecebidas implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagen_recebida_generator")
+  @SequenceGenerator(name="mensagen_recebida_generator", sequenceName = "mensagen_recebida_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
   

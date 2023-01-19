@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -25,7 +26,9 @@ import lombok.Data;
 public class FormaPagamento implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "forma_pagamento_generator")
+  @SequenceGenerator(name="forma_pagamento_generator", sequenceName = "forma_pagamento_seq", allocationSize = 1, initialValue = 1)
+  @Column(updatable = false, unique = true, nullable = false)
   private Long id;
   
   @NotNull(message = "Tipo de pagamento é obrigatório!")

@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.store.drinks.entidade.enuns.FormaPagamento;
+import javax.persistence.SequenceGenerator;
 
 @Data
 @Entity
@@ -36,7 +37,8 @@ import com.store.drinks.entidade.enuns.FormaPagamento;
 public class EntradaProduto implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entrada_produto_generator")
+  @SequenceGenerator(name="entrada_produto_generator", sequenceName = "entrada_produto_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
 

@@ -2,10 +2,13 @@ package com.store.drinks.controller;
 
 import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.caixa.DetalheSangriadto;
+import com.store.drinks.entidade.dto.caixa.DetalhesFechamentoCaixadto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.CaixaService;
 import com.store.drinks.service.MovimentacaoCaixaService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +90,6 @@ public class CaixaController {
   @GetMapping("/detalhes")
   public ModelAndView pageFecharCaixa(Caixa caixa, Long id, BindingResult result) {
     ModelAndView andView = new ModelAndView("caixa/FecharCaixa");
-    andView.addObject("getListdetalheSangria", abrirCaixaService.getListdetalheSangria());
     try {
       setModewAndViewForPageFecharCaixa(andView, id);
       return andView;
@@ -115,7 +117,29 @@ public class CaixaController {
   }
   
   private void setModewAndViewForPageFecharCaixa(ModelAndView modelAndView, Long id) {
-    modelAndView.addObject("cxAbertoPorUsuario", abrirCaixaService.getCaixa(id));
-    modelAndView.addObject("valorTotalEmVendasPorUsuario", abrirCaixaService.valorTotalEmVendasPorUsuario(id));
+    var caixa = abrirCaixaService.getCaixa(id);
+    var valorTotalEmVendas = abrirCaixaService.valorTotalEmVendasPorUsuario(id);
+    var listDetalheSangria = abrirCaixaService.getListdetalheSangria();
+    
+    modelAndView.addObject("houveSangria", false);
+    
+    if(!listDetalheSangria.isEmpty()) {
+      BigDecimal sum = BigDecimal.ZERO;
+      for (DetalheSangriadto amt : listDetalheSangria) {
+        sum = sum.add(amt.getValor());
+      }
+      var detalhesFechamentoCaixadto = DetalhesFechamentoCaixadto
+        .builder()
+        .valorInicialTroco(caixa.getValorInicialTroco())
+        .valorTotalEmVendasPorUsuario(valorTotalEmVendas)
+        .valorTotalSangria(sum)
+        .build();
+      modelAndView.addObject("detalhesFechamentoCaixa", detalhesFechamentoCaixadto);
+      modelAndView.addObject("getListdetalheSangria", listDetalheSangria);
+      modelAndView.addObject("houveSangria", true);
+    }
+    
+    modelAndView.addObject("cxAbertoPorUsuario", caixa);
+    modelAndView.addObject("valorTotalEmVendasPorUsuario", valorTotalEmVendas);
   }
 }

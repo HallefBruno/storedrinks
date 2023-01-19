@@ -1,0 +1,50 @@
+# Create Procedure
+
+CREATE OR REPLACE FUNCTION get_reviews(bookid bigint)
+  RETURNS refcursor AS
+$BODY$
+  DECLARE
+    reviews refcursor;           – Declare cursor variables                         
+  BEGIN
+    OPEN reviews FOR SELECT id, comment, rating, version, book_id FROM review WHERE book_id = bookId;
+    RETURN reviews;
+  END;
+$BODY$
+LANGUAGE plpgsql
+
+@NamedStoredProcedureQuery(
+  name = "getReviews", 
+  procedureName = "get_reviews", 
+  resultClasses = Review.class, 
+  parameters = {
+    @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = void.class), 
+    @StoredProcedureParameter(mode = ParameterMode.IN, type = Long.class)
+  }
+)
+
+StoredProcedureQuery q = this.em.createNamedStoredProcedureQuery("getReviews");
+q.setParameter(2, b.getId());
+List<Review> reviews = q.getResultList();
+
+StoredProcedureQuery query = this.em.createStoredProcedureQuery("get_reviews", Review.class);
+query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
+query.registerStoredProcedureParameter(2, Long.class, ParameterMode.IN);
+ 
+query.setParameter(2, b.getId());
+List<Review> reviews = query.getResultList();
+
+
+
+#Delete tables
+SELECT
+  'DROP TABLE IF EXISTS "' || tablename || '" CASCADE;' 
+from
+  pg_tables WHERE schemaname = 'public';
+  
+DO $$ DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
+    EXECUTE 'DROP TABLE ' || quote_ident(r.tablename) || ' CASCADE';
+  END LOOP;
+END $$;

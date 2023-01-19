@@ -10,6 +10,7 @@
     <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
+    <link rel="icon" th:href="@{/imagens/whiskey.png}">
     <style>
       #footer{
         position: fixed;
@@ -20,6 +21,28 @@
       }
       #top {
         background-image: linear-gradient(180deg, #eee, #fff 100px, #fff);
+      }
+      
+      #password-strength-status {
+        padding: 5px 10px;
+        color: #FFFFFF;
+        border-radius: 4px;
+        margin-top: 5px;
+      }
+
+      .medium-password {
+        background-color: #b7d60a;
+        border: #BBB418 1px solid;
+      }
+
+      .weak-password {
+        background-color: #ce1d14;
+        border: #AA4502 1px solid;
+      }
+
+      .strong-password {
+        background-color: #12CC1A;
+        border: #0FA015 1px solid;
       }
     </style>
   </head>
@@ -32,7 +55,6 @@
         </div>
       </header>
     </div>
-
     <input type="hidden" id="contextApp" th:value="@{/}" />
     <div class="container">
       <div class="row">
@@ -42,7 +64,7 @@
               <div class="card-header">
                 Criar conta
               </div>
-              <div class="card-body">
+              <div class="card-body setblockUI">
                 <div class="row">
                   <div class="mb-3">
                     <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
@@ -52,8 +74,24 @@
                 <div class="row">
                   <div class="mb-3">
                     <div class="input-group">
+                      <span class="input-group-text"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+                      <input placeholder="Nome" minlength="3" maxlength="50" type="text" required="true" class="form-control" id="nome" name="nome" data-bs-toggle="tooltip" data-bs-placement="top" title="Nome">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="mb-3">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                      <input placeholder="Data nascimento" type="date" required="true" class="form-control" id="dataNascimento" name="dataNascimento" data-bs-toggle="tooltip" data-bs-placement="top" title="Data nascimento">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="mb-3">
+                    <div class="input-group">
                       <span class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                      <input type="email" class="form-control" id="email" name="email">
+                      <input placeholder="Email" autocomplete="true" minlength="15" maxlength="50" type="email" required="true" class="form-control" id="email" name="email" data-bs-toggle="tooltip" data-bs-placement="top" title="Email">
                     </div>
                   </div>
                 </div>
@@ -62,18 +100,28 @@
                     <div class="flex-grow-1 mb-3">
                       <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input placeholder="Senha" required="true" type="password" class="form-control" id="password" name="password" minlength="11" maxlength="11" data-bs-toggle="tooltip" data-bs-placement="top" title="Senha">
+                        <div id="invalid-feedback-senha" class="invalid-feedback"></div>
                       </div>
                     </div>
                     <div class="p-2">
-                      <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 5 digitos '00000', uma letra, 'A' outro digito '0' e outra letra 'A' ex: '00000S0S' "><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                      <span style="color: #0dcaf0;" data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter pelo menos 11 digitos ex: 12345678SU* "><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
                     </div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <button type="button" class="btn btn-sm btn-outline-secondary btnCriarConta">
-                    Salvar
-                  </button>
+                <div class="row">
+                  <div class="d-flex">
+                    <div class="flex-grow-1 mb-3">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                        <input required="true" placeholder="Confirmar Senha" type="password" minlength="11" maxlength="11" class="form-control" id="confirmPassword" name="confirmPassword" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirmar Senha">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-sm btn-secondary btnCriarConta">Fim</button>
+                  <button type="button" class="btn btn-sm btn-light btnVerSenha" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver senha"><i class="fa fa-eye-slash" id="iconBtnVerSenha" aria-hidden="true"></i></button>
                 </div>
               </div>
             </div>
@@ -91,7 +139,10 @@
     <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
-    <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/jquery.blockUI.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/sweetalert.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/bcript.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/moment.min.js}" type="text/javascript"></script>
     <script th:src="@{/novaconta/nova.conta.cliente.js}" type="text/javascript"></script>
   </body>
 </html>
