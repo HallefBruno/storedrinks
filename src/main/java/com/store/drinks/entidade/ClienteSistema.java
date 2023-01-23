@@ -3,8 +3,8 @@ package com.store.drinks.entidade;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -100,7 +100,7 @@ public class ClienteSistema implements Serializable {
   
   @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "clienteSistema", orphanRemoval = true)
   @JsonManagedReference
-  private Set<Usuario> usuarios;
+  private List<Usuario> usuarios;
 
   public Long getId() {
     return id;
@@ -214,28 +214,22 @@ public class ClienteSistema implements Serializable {
     this.primeiroAcesso = primeiroAcesso;
   }
 
-  public Set<Usuario> getUsuarios() {
+  public List<Usuario> getUsuarios() {
     return usuarios;
   }
 
-  public void setUsuarios(Set<Usuario> usuarios) {
-    this.usuarios.clear();
-    this.usuarios.addAll(usuarios);
+  public void setUsuarios(List<Usuario> usuarios) {
+    this.usuarios = usuarios;
   }
   
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {
     this.bairro = StringUtils.strip(this.bairro);
-    this.bairro = this.bairro.toLowerCase();
     this.cidade = StringUtils.strip(this.cidade);
-    this.cidade = this.cidade.toLowerCase();
     this.estado = StringUtils.strip(this.estado);
-    this.estado = this.estado.toLowerCase();
     this.nomeComercio = StringUtils.strip(this.nomeComercio);
-    this.nomeComercio = this.nomeComercio.toLowerCase();
     this.logradouro = StringUtils.strip(this.logradouro);
-    this.logradouro = this.logradouro.toLowerCase();
     this.cep = StringUtils.getDigits(this.cep);
     this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
 

@@ -2,18 +2,20 @@ package com.store.drinks.service;
 
 import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.repository.ClienteSistemaRepository;
+import com.store.drinks.storage.StorageCloudnary;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteSistemaService {
 
-  @Autowired
-  private ClienteSistemaRepository clienteSistemaRepository;
+  private final ClienteSistemaRepository clienteSistemaRepository;
+  private final StorageCloudnary storageCloudnary;
 
   @PreAuthorize("hasRole('SUPER_USER')")
   @Transactional
@@ -21,6 +23,7 @@ public class ClienteSistemaService {
     clienteSistema.setDataCadastro(LocalDateTime.now());
     clienteSistema.setDataAtualizacao(clienteSistema.getDataCadastro());
     clienteSistemaRepository.save(clienteSistema);
+    storageCloudnary.createFolder(clienteSistema.getTenant());
   }
 
   public Optional<ClienteSistema> buscarPorCpfCnpj(String cpfCnpj) {

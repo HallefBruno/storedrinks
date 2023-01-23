@@ -1,8 +1,8 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.ClienteSistema;
-import com.store.drinks.entidade.MensagensEnviadas;
-import com.store.drinks.entidade.MensagensRecebidas;
+import com.store.drinks.entidade.MensagemEnviada;
+import com.store.drinks.entidade.MensagemRecebida;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.ValidarCliente;
 import com.store.drinks.entidade.embedded.RemetenteDestinatarioMensagem;
@@ -27,8 +27,8 @@ public class NovaContaClienteSistema {
   private final ClienteSistemaService clienteSistemaService;
   private final GrupoService grupoService;
   private final UsuarioService usuarioService;
-  private final MensagensEnviadasService mensagensEnviadasService;
-  private final MensagensRecebidasService mensagensRecebidasService;
+  private final MensagemEnviadaService mensagensEnviadasService;
+  private final MensagemRecebidaService mensagensRecebidasService;
 
   @Transactional
   public void salvaValidarCliente(String cpfCnpj) {
@@ -95,7 +95,7 @@ public class NovaContaClienteSistema {
     String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap :) ", nome);
     Usuario usuarioSistema = usuarioService.findByEmailAndAtivoTrue(emailSistema).get();
     
-    MensagensEnviadas mensagensEnviadas = new MensagensEnviadas();
+    MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
     remetenteDestinatarioMensagem.setDestinatario(emailDistinatario);
     remetenteDestinatarioMensagem.setMensagem(mensagem);
@@ -104,7 +104,7 @@ public class NovaContaClienteSistema {
     mensagensEnviadas.setRemetenteDestinatarioMensagem(remetenteDestinatarioMensagem);
     mensagensEnviadas.setUsuario(usuarioDestino);
     
-    MensagensRecebidas mensagensRecebidas = new MensagensRecebidas();
+    MensagemRecebida mensagensRecebidas = new MensagemRecebida();
     RemetenteDestinatarioMensagem destinatarioMensagem = new RemetenteDestinatarioMensagem();
     destinatarioMensagem.setDestinatario(emailDistinatario);
     destinatarioMensagem.setMensagem(mensagem);

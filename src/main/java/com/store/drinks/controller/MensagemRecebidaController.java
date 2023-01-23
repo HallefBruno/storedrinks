@@ -1,10 +1,10 @@
 package com.store.drinks.controller;
 
-import com.store.drinks.entidade.MensagensRecebidas;
+import com.store.drinks.entidade.MensagemRecebida;
 import com.store.drinks.entidade.dto.Mensagemdto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
-import com.store.drinks.service.MensagensRecebidasService;
+import com.store.drinks.service.MensagemRecebidaService;
 import com.store.drinks.service.UsuarioService;
 import java.util.List;
 import javax.validation.Valid;
@@ -27,9 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/mensagens")
 @RequiredArgsConstructor
-public class MensagensRecebidasController {
+public class MensagemRecebidaController {
   
-  private final MensagensRecebidasService mensagensRecebidasService;
+  private final MensagemRecebidaService mensagensRecebidasService;
   private final UsuarioService usuarioService;
   
   @PreAuthorize("hasRole('LER_MENSAGEM')")
@@ -64,7 +64,7 @@ public class MensagensRecebidasController {
   
   @PreAuthorize("hasRole('LER_MENSAGEM')")
   @GetMapping("/pesquisar/{lida}")
-  public ResponseEntity<DataTableWrapper<MensagensRecebidas>> pesquisar(@PathVariable(required = true) Boolean lida, 
+  public ResponseEntity<DataTableWrapper<MensagemRecebida>> pesquisar(@PathVariable(required = true) Boolean lida, 
     @RequestParam(name = "draw", required = false) Integer draw, 
     @RequestParam(name = "start", required = false) Integer start,  
     @RequestParam(name = "length", required = false) Integer length) {
@@ -73,8 +73,8 @@ public class MensagensRecebidasController {
   
   @PreAuthorize("hasRole('LER_MENSAGEM')")
   @GetMapping("/nao-lidas")
-  public ResponseEntity<Void> existemMensagensNaoLidas() {
-    Boolean isMensagensNaoLidas = mensagensRecebidasService.existemMensagensNaoLidas();
+  public ResponseEntity<Void> existeMensagemNaoLida() {
+    Boolean isMensagensNaoLidas = mensagensRecebidasService.existeMensagemNaoLida();
     return isMensagensNaoLidas ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
   }
   

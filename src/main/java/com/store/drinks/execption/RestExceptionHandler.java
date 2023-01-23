@@ -1,22 +1,19 @@
 package com.store.drinks.execption;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-import lombok.Data;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -58,21 +55,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
   
-  @ExceptionHandler(CaixaAbertoPorUsuarioException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public String incorrectResultSizeDataAccessException(Exception ex, Model model, HttpServletRequest request) {
-    String location = request.getRequestURL().toString();
-    model.addAttribute("title","Se estiver vendo esse erro, entre em contato com o Admin do sistema!");
-    model.addAttribute("timestamp",LocalDateTime.now());
-    model.addAttribute("message", ex.getMessage());
-    model.addAttribute("location", location);
-    model.addAttribute("path", "/");
-    model.addAttribute("exception", ex);
-    model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-    return "Error";
-  }
+//  @ExceptionHandler(DataIntegrityViolationException.class)
+//  public ResponseEntity<Object> dataIntegrityViolationException(Exception ex, WebRequest request) {
+//    ApiError apiError = new ApiError();
+//    apiError.setMessage(ex.getMessage());
+//    apiError.setStatus(HttpStatus.CONFLICT);
+//    return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
+//  }
+//  
+//  @ExceptionHandler(ConstraintViolationException.class)
+//  public ResponseEntity<Object> constraintViolationException(Exception ex, WebRequest request) {
+//    ApiError apiError = new ApiError();
+//    apiError.setMessage(ex.getMessage());
+//    apiError.setStatus(HttpStatus.CONFLICT);
+//    return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
+//  }
   
-  @Data
+  @Getter
+  @Setter
+  @ToString
   public class ApiError {
 
     private HttpStatus status;
@@ -93,7 +94,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
   }
   
-  @Data
+  @Getter
+  @Setter
+  @ToString
   public class FieldMessage {
 
     private String field;

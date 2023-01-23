@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/movimentacao-caixa")
+@PreAuthorize("hasRole('MOVIMENTACAO_CAIXA')")
 @RequiredArgsConstructor
 public class MovimentacaoCaixaController {
   

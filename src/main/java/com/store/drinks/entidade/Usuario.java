@@ -33,6 +33,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import javax.persistence.SequenceGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
@@ -72,11 +73,21 @@ public class Usuario implements Serializable {
   @NotNull(message = "Senha não pode ser null!")
   @NotBlank(message = "Senha é obrigatório")
   private String senha;
+  
+  @NotEmpty(message = "Telefone não pode ser vazio!")
+  @NotNull(message = "Telefone não pode ser null!")
+  @NotBlank(message = "Telefone é obrigatório")
+  @Column(unique = true, length = 15)
+  private String telefone;
 
   @Transient
   private String confirmacaoSenha;
   
+  @Column
   private Boolean ativo;
+  
+  @Column
+  private String imagem;
 
   @Size(min = 1, message = "Selecione pelo menos um grupo")
   @ManyToMany(fetch = FetchType.EAGER)
@@ -85,12 +96,13 @@ public class Usuario implements Serializable {
   
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
   @JsonManagedReference
-  private Set<MensagensEnviadas> mensagensEnviadas;
+  private Set<MensagemEnviada> mensagensEnviadas;
   
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
   @JsonManagedReference
-  private Set<MensagensRecebidas> mensagensRecebidas;
+  private Set<MensagemRecebida> mensagensRecebidas;
   
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   @Column(name = "data_nascimento")
   private LocalDate dataNascimento;
 
@@ -134,6 +146,14 @@ public class Usuario implements Serializable {
     this.senha = senha;
   }
 
+  public String getTelefone() {
+    return telefone;
+  }
+
+  public void setTelefone(String telefone) {
+    this.telefone = telefone;
+  }
+
   public String getConfirmacaoSenha() {
     return confirmacaoSenha;
   }
@@ -150,12 +170,36 @@ public class Usuario implements Serializable {
     this.ativo = ativo;
   }
 
+  public String getImagem() {
+    return imagem;
+  }
+
+  public void setImagem(String imagem) {
+    this.imagem = imagem;
+  }
+
   public Set<Grupo> getGrupos() {
     return grupos;
   }
 
   public void setGrupos(Set<Grupo> grupos) {
     this.grupos = grupos;
+  }
+
+  public Set<MensagemEnviada> getMensagensEnviadas() {
+    return mensagensEnviadas;
+  }
+
+  public void setMensagensEnviadas(Set<MensagemEnviada> mensagensEnviadas) {
+    this.mensagensEnviadas = mensagensEnviadas;
+  }
+
+  public Set<MensagemRecebida> getMensagensRecebidas() {
+    return mensagensRecebidas;
+  }
+
+  public void setMensagensRecebidas(Set<MensagemRecebida> mensagensRecebidas) {
+    this.mensagensRecebidas = mensagensRecebidas;
   }
 
   public LocalDate getDataNascimento() {
@@ -174,22 +218,6 @@ public class Usuario implements Serializable {
     this.proprietario = proprietario;
   }
 
-  public Set<MensagensEnviadas> getMensagensEnviadas() {
-    return mensagensEnviadas;
-  }
-
-  public void setMensagensEnviadas(Set<MensagensEnviadas> mensagensEnviadas) {
-    this.mensagensEnviadas = mensagensEnviadas;
-  }
-
-  public Set<MensagensRecebidas> getMensagensRecebidas() {
-    return mensagensRecebidas;
-  }
-
-  public void setMensagensRecebidas(Set<MensagensRecebidas> mensagensRecebidas) {
-    this.mensagensRecebidas = mensagensRecebidas;
-  }
-
   public ClienteSistema getClienteSistema() {
     return clienteSistema;
   }
@@ -198,22 +226,23 @@ public class Usuario implements Serializable {
     this.clienteSistema = clienteSistema;
   }
 
-  @PreUpdate
-  @PrePersist
-  private void prePersistPreUpdate() {
-    this.confirmacaoSenha = senha;
-    this.email = StringUtils.strip(this.email);
-    if (Objects.isNull(this.ativo)) {
-      this.ativo = Boolean.FALSE;
-    }
-    this.nome = this.nome.toLowerCase();
-    this.email = this.email.toLowerCase();
-  }
-
   @Override
   public int hashCode() {
-    int hash = 3;
-    hash = 67 * hash + Objects.hashCode(this.id);
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.id);
+    hash = 97 * hash + Objects.hashCode(this.nome);
+    hash = 97 * hash + Objects.hashCode(this.email);
+    hash = 97 * hash + Objects.hashCode(this.senha);
+    hash = 97 * hash + Objects.hashCode(this.telefone);
+    hash = 97 * hash + Objects.hashCode(this.confirmacaoSenha);
+    hash = 97 * hash + Objects.hashCode(this.ativo);
+    hash = 97 * hash + Objects.hashCode(this.imagem);
+    hash = 97 * hash + Objects.hashCode(this.grupos);
+    hash = 97 * hash + Objects.hashCode(this.mensagensEnviadas);
+    hash = 97 * hash + Objects.hashCode(this.mensagensRecebidas);
+    hash = 97 * hash + Objects.hashCode(this.dataNascimento);
+    hash = 97 * hash + Objects.hashCode(this.proprietario);
+    hash = 97 * hash + Objects.hashCode(this.clienteSistema);
     return hash;
   }
 
@@ -229,6 +258,67 @@ public class Usuario implements Serializable {
       return false;
     }
     final Usuario other = (Usuario) obj;
-    return Objects.equals(this.id, other.id);
+    if (!Objects.equals(this.nome, other.nome)) {
+      return false;
+    }
+    if (!Objects.equals(this.email, other.email)) {
+      return false;
+    }
+    if (!Objects.equals(this.senha, other.senha)) {
+      return false;
+    }
+    if (!Objects.equals(this.telefone, other.telefone)) {
+      return false;
+    }
+    if (!Objects.equals(this.confirmacaoSenha, other.confirmacaoSenha)) {
+      return false;
+    }
+    if (!Objects.equals(this.imagem, other.imagem)) {
+      return false;
+    }
+    if (!Objects.equals(this.id, other.id)) {
+      return false;
+    }
+    if (!Objects.equals(this.ativo, other.ativo)) {
+      return false;
+    }
+    if (!Objects.equals(this.grupos, other.grupos)) {
+      return false;
+    }
+    if (!Objects.equals(this.mensagensEnviadas, other.mensagensEnviadas)) {
+      return false;
+    }
+    if (!Objects.equals(this.mensagensRecebidas, other.mensagensRecebidas)) {
+      return false;
+    }
+    if (!Objects.equals(this.dataNascimento, other.dataNascimento)) {
+      return false;
+    }
+    if (!Objects.equals(this.proprietario, other.proprietario)) {
+      return false;
+    }
+    return Objects.equals(this.clienteSistema, other.clienteSistema);
   }
+
+  @Override
+  public String toString() {
+    return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", confirmacaoSenha=" + confirmacaoSenha + ", ativo=" + ativo + ", imagem=" + imagem + ", grupos=" + grupos + ", mensagensEnviadas=" + mensagensEnviadas + ", mensagensRecebidas=" + mensagensRecebidas + ", dataNascimento=" + dataNascimento + ", proprietario=" + proprietario + ", clienteSistema=" + clienteSistema + '}';
+  }
+  
+  @PreUpdate
+  @PrePersist
+  private void prePersistPreUpdate() {
+    this.confirmacaoSenha = senha;
+    this.email = StringUtils.strip(this.email);
+    this.imagem = StringUtils.strip(this.imagem);
+    this.nome = StringUtils.strip(this.nome);
+    this.telefone = StringUtils.getDigits(this.telefone);
+    if (Objects.isNull(this.ativo)) {
+      this.ativo = Boolean.FALSE;
+    }
+    if(Objects.isNull(this.proprietario)) {
+      this.proprietario = Boolean.FALSE;
+    }
+  }
+  
 }

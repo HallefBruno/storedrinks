@@ -6,11 +6,11 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface MensagensRecebidasRepositoryCustom {
+public interface MensagemRecebidaRepositoryCustom {
   
   @Cacheable("comercio")
   Page<UsuarioMensagemdto> pesquisarComercioAutoComplete(String comercio, Pageable pageable);
-  Boolean existemMensagensNaoLidas(String destinatario);
+  Boolean existeMensagemNaoLida(String destinatario);
   Page<Mensagemdto> findAllByLida(Boolean lida,String remetente, Pageable pageable);
   
 }

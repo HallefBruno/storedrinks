@@ -20,12 +20,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mensagen_enviada")
-public class MensagensEnviadas implements Serializable {
+@Table(name = "mensagem_enviada")
+public class MensagemEnviada implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagen_enviada_generator")
-  @SequenceGenerator(name="mensagen_enviada_generator", sequenceName = "mensagen_enviada_seq", allocationSize = 1, initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagem_enviada_generator")
+  @SequenceGenerator(name="mensagem_enviada_generator", sequenceName = "mensagen_enviada_seq", allocationSize = 1, initialValue = 1)
   private Long id;
   
   @Embedded

@@ -180,7 +180,7 @@ StoreDrink.LoadGif = (function () {
     $(document).ajaxComplete(function (event, jqxhr, settings) {
       this.gifLoadingAutocomplete.css("display", "none");
       $(".setblockUI").unblock();
-      setTimeout(() => {this.divLoading.removeClass("loading");}, 550);
+      setTimeout(() => {this.divLoading.removeClass("loading");}, 500);
     }.bind(this));
   };
   
@@ -204,6 +204,8 @@ StoreDrink.LoadGif = (function () {
     } else if (url === `${CONTEXT}caixa/usuarios`) {
       return false;
     } else if (url.includes("/movimentacao-caixa/formas-pagamento")) {
+      return false;
+    } else if (url.includes("email/validate")) {
       return false;
     } else if (url.includes(`${CONTEXT}vendas/itens-vendas/`)) {
       return false;

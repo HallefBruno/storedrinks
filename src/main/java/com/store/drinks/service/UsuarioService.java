@@ -1,34 +1,61 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Usuario;
+import com.store.drinks.entidade.dto.EmailValido;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
+import com.store.drinks.storage.StorageCloudnary;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
 
   private final UsuarioRepository usuarioRepository;
-  
-//  @Transactional
-//  public void salvar(Usuario usuario) {
-//    usuarioRepository.save(usuario);
-//  }
-  
+  private final StorageCloudnary storageCloudnary;
+  private final RestTemplate restTemplate = new RestTemplateBuilder().build();
+  private final PasswordEncoder passwordEncoder;
+
   @Transactional
   public Usuario salvar(Usuario usuario) {
+    usuario.setClienteSistema(usuarioLogado().getClienteSistema());
     return usuarioRepository.save(usuario);
+  }
+  
+  @Transactional
+  public void salvar(Usuario usuario, MultipartFile image) {
+    String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+    usuario.setImagem(fileName);
+    validarDadosUsuario(usuario.getImagem(), usuario.getEmail());
+    usuario.setClienteSistema(usuarioLogado().getClienteSistema());
+    usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+    usuarioRepository.save(usuario);
+    salvarImagemStorage(image, fileName);
   }
 
   public static Usuario usuarioLogado() {
@@ -50,7 +77,7 @@ public class UsuarioService {
   public List<UsuarioMensagemdto> buscarUsuariosPorTenant() {
     var usuarioLogado = usuarioLogado();
     var filtroUsuariosPorTenant = usuarioRepository.findAllByAtivoTrueAndClienteSistemaTenantAndEmailNotLike(usuarioLogado.getClienteSistema().getTenant(), usuarioLogado.getEmail());
-    var usuariodtos = new ArrayList<UsuarioMensagemdto>();
+    List<UsuarioMensagemdto> usuariodtos = new ArrayList<>();
     filtroUsuariosPorTenant.forEach(usuario -> {
       var usuariodto = new UsuarioMensagemdto();
       usuariodto.setId(usuario.getId());
@@ -60,4 +87,33 @@ public class UsuarioService {
     });
     return usuariodtos;
   }
+  
+  private void validarEmail(String email) {
+    log.info("Validando emial!");
+    String url = "https://isitarealemail.com/api/email/validate?email=".concat(email);
+    EmailValido emailValido = restTemplate.getForObject(url, EmailValido.class);
+    if(Objects.nonNull(emailValido)) {
+      if(!"valid".equalsIgnoreCase(emailValido.getStatus())) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email inválido!");
+      }
+    }
+  }
+  
+  private void validarDadosUsuario(String nomeImagem, String email) {
+    validarEmail(email);
+    if(usuarioRepository.findByImagemAndClienteSistemaTenant(nomeImagem, usuarioLogado().getClienteSistema().getTenant()).isPresent()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Por favor altere o nome da imagem!");
+    } else if (usuarioRepository.findByEmail(email).isPresent()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar uma conta de usuário com esse email!");
+    }
+  }
+  
+  private void salvarImagemStorage(MultipartFile image, String fileName) {
+    try {
+      storageCloudnary.uploadFotoPerfil(image.getBytes(), fileName);
+    } catch (IOException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+    }
+  }
+  
 }

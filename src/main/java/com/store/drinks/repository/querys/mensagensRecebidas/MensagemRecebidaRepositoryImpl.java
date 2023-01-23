@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
-public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepositoryCustom {
+public class MensagemRecebidaRepositoryImpl implements MensagemRecebidaRepositoryCustom {
   
   @PersistenceContext
   private EntityManager manager;
@@ -60,9 +60,9 @@ public class MensagensRecebidasRepositoryImpl implements MensagensRecebidasRepos
   }
   
   @Override
-  public Boolean existemMensagensNaoLidas(String destinatario) {
+  public Boolean existeMensagemNaoLida(String destinatario) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" select men.notificado from mensagen_recebida men ");
+    sql.append(" select men.notificado from mensagem_recebida men ");
     sql.append(" where men.destinatario = '").append(destinatario).append("' ");
     sql.append(" and men.lida = false ");
     sql.append(" and men.notificado = false; ");

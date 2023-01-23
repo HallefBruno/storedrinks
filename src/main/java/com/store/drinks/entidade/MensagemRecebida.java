@@ -28,7 +28,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = "mensagen_recebida")
+@Table(name = "mensagem_recebida")
 @DynamicUpdate
 @NamedEntityGraph(
   name = "graph.Mensagem", 
@@ -56,11 +56,11 @@ import org.hibernate.annotations.DynamicUpdate;
   }
 )
 
-public class MensagensRecebidas implements Serializable {
+public class MensagemRecebida implements Serializable {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagen_recebida_generator")
-  @SequenceGenerator(name="mensagen_recebida_generator", sequenceName = "mensagen_recebida_seq", allocationSize = 1, initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mensagem_recebida_generator")
+  @SequenceGenerator(name="mensagem_recebida_generator", sequenceName = "mensagem_recebida_seq", allocationSize = 1, initialValue = 1)
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
   

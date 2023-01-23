@@ -1,14 +1,13 @@
 package com.store.drinks.service;
 
-import com.store.drinks.entidade.MensagensEnviadas;
-import com.store.drinks.entidade.MensagensRecebidas;
+import com.store.drinks.entidade.MensagemEnviada;
+import com.store.drinks.entidade.MensagemRecebida;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.Mensagemdto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.embedded.RemetenteDestinatarioMensagem;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.entidade.wrapper.Select2Wrapper;
-import com.store.drinks.repository.MensagensRecebidasRepository;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +18,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import com.store.drinks.repository.MensagemRecebidaRepository;
 
 @Service
 @RequiredArgsConstructor
-public class MensagensRecebidasService {
+public class MensagemRecebidaService {
   private final UsuarioService usuarioService;
   
-  private final MensagensEnviadasService mensagensEnviadasService;
-  private final MensagensRecebidasRepository mensagensRecebidasRepository;
+  private final MensagemEnviadaService mensagensEnviadasService;
+  private final MensagemRecebidaRepository mensagensRecebidasRepository;
   
   @Transactional
   public void salvarMensagemEnviadaRecebida(Mensagemdto mensagem) {
     Usuario usuario = UsuarioService.usuarioLogado();
     Usuario usuarioDestino = usuarioService.findByEmailAndAtivoTrue(mensagem.getDestinatario()).get();
-    MensagensEnviadas mensagensEnviadas = new MensagensEnviadas();
+    MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
     remetenteDestinatarioMensagem.setDestinatario(mensagem.getDestinatario());
     remetenteDestinatarioMensagem.setMensagem(mensagem.getMensagem());
@@ -41,7 +41,7 @@ public class MensagensRecebidasService {
     mensagensEnviadas.setRemetenteDestinatarioMensagem(remetenteDestinatarioMensagem);
     mensagensEnviadas.setUsuario(usuarioDestino);
     
-    MensagensRecebidas mensagensRecebidas = new MensagensRecebidas();
+    MensagemRecebida mensagensRecebidas = new MensagemRecebida();
     mensagensRecebidas.setDataHoraMensagemRecebida(mensagensEnviadas.getDataHoraMensagemEnviada());
     mensagensRecebidas.setLida(Boolean.FALSE);
     mensagensRecebidas.setNotificado(Boolean.FALSE);
@@ -53,7 +53,7 @@ public class MensagensRecebidasService {
   }
   
   @Transactional
-  public void salvar(MensagensRecebidas mensagensRecebidas) {
+  public void salvar(MensagemRecebida mensagensRecebidas) {
     mensagensRecebidasRepository.save(mensagensRecebidas);
   }
 
@@ -62,9 +62,9 @@ public class MensagensRecebidasService {
     return mensagensRecebidasRepository.updateNotificarMensagem(destinatario);
   }
   
-  public Boolean existemMensagensNaoLidas() {
+  public Boolean existeMensagemNaoLida() {
     String destinatario = UsuarioService.usuarioLogado().getEmail();
-    return mensagensRecebidasRepository.existemMensagensNaoLidas(destinatario);
+    return mensagensRecebidasRepository.existeMensagemNaoLida(destinatario);
   }
   
   @Transactional
@@ -81,12 +81,12 @@ public class MensagensRecebidasService {
     });
   }
   
-  public DataTableWrapper<MensagensRecebidas> findAllByLida(Boolean lida, int draw, int start, int length) {
+  public DataTableWrapper<MensagemRecebida> findAllByLida(Boolean lida, int draw, int start, int length) {
     String email = UsuarioService.usuarioLogado().getEmail();
     int page = start/length;
     Pageable pageable = PageRequest.of(page,length);
-    DataTableWrapper<MensagensRecebidas> dataTable = new DataTableWrapper<>();
-    Page<MensagensRecebidas> pageMensagens = mensagensRecebidasRepository.findByLidaAndRemetenteDestinatarioMensagemDestinatario(lida, email, pageable);
+    DataTableWrapper<MensagemRecebida> dataTable = new DataTableWrapper<>();
+    Page<MensagemRecebida> pageMensagens = mensagensRecebidasRepository.findByLidaAndRemetenteDestinatarioMensagemDestinatario(lida, email, pageable);
     dataTable.setData(pageMensagens.getContent());
     dataTable.setDraw(draw);
     dataTable.setStart(start);
