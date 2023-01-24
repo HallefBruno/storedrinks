@@ -6,19 +6,13 @@ import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
 import com.store.drinks.storage.StorageCloudnary;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -50,8 +44,11 @@ public class UsuarioService {
   @Transactional
   public void salvar(Usuario usuario, MultipartFile image) {
     String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+    String extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
+    fileName = fileName.substring(0, fileName.lastIndexOf("."));
     usuario.setImagem(fileName);
-    validarDadosUsuario(usuario.getImagem(), usuario.getEmail());
+    usuario.setExtensao(extenssao);
+    validarDadosUsuario(usuario.getImagem(), usuario);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());
     usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuarioRepository.save(usuario);
@@ -88,6 +85,39 @@ public class UsuarioService {
     return usuariodtos;
   }
   
+  
+  private void validarDadosUsuario(String nomeImagem, Usuario usuario) {
+    existeTelefone(usuario.getTelefone());
+    existeEmail(usuario.getEmail());
+    existeNomeImagem(nomeImagem);
+    permiteCriarUsuario();
+    validarEmail(usuario.getEmail());
+  }
+  
+  private void existeTelefone(String telefone) {
+    if(usuarioRepository.existeTelefone(org.apache.commons.lang3.StringUtils.getDigits(telefone))) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar uma conta de usuário com esse telefone!");
+    }
+  }
+  
+  private void permiteCriarUsuario() {
+    if(!usuarioRepository.permiteCriarUsuario()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Limite de usuário excedido, atualmente você pode ter: "+usuarioLogado().getClienteSistema().getQtdUsuario());
+    }
+  }
+  
+  private void existeNomeImagem(String nomeImagem) {
+    if(usuarioRepository.findByImagemAndClienteSistemaTenant(nomeImagem, usuarioLogado().getClienteSistema().getTenant()).isPresent()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Por favor altere o nome da imagem!");
+    }
+  }
+  
+  private void existeEmail(String email) {
+    if (usuarioRepository.existeEmail(email)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar uma conta de usuário com esse email!");
+    }
+  }
+  
   private void validarEmail(String email) {
     log.info("Validando emial!");
     String url = "https://isitarealemail.com/api/email/validate?email=".concat(email);
@@ -96,15 +126,6 @@ public class UsuarioService {
       if(!"valid".equalsIgnoreCase(emailValido.getStatus())) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email inválido!");
       }
-    }
-  }
-  
-  private void validarDadosUsuario(String nomeImagem, String email) {
-    validarEmail(email);
-    if(usuarioRepository.findByImagemAndClienteSistemaTenant(nomeImagem, usuarioLogado().getClienteSistema().getTenant()).isPresent()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Por favor altere o nome da imagem!");
-    } else if (usuarioRepository.findByEmail(email).isPresent()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar uma conta de usuário com esse email!");
     }
   }
   

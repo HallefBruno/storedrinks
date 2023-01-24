@@ -6,14 +6,15 @@ import com.cloudinary.utils.ObjectUtils;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.service.UsuarioService;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @Component
 public class StorageCloudnary {
 
@@ -42,8 +43,9 @@ public class StorageCloudnary {
   public void uploadFotoPerfil(byte[] dataImage, String nome) {
     try {
       if (!StringUtils.isBlank(nome)) {
-        Map conf = ObjectUtils.asMap(PUBLIC_ID, urlParaFotoPerfil(nome), "transformation", new Transformation().gravity("face").height(110).width(110).crop("crop").chain().radius("max").chain().width(200).crop("scale"));
+        Map conf = ObjectUtils.asMap(PUBLIC_ID, urlParaFotoPerfil(nome),"quality_analysis", true, "transformation", new Transformation().gravity("face").height(110).width(110).crop("crop"));
         SingletonCloudinary.getCloudinary().uploader().upload(dataImage, conf);
+        log.info("Upload da imagem completo!");
       } else {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome da imagem é obrigatório!");
       }
@@ -57,6 +59,7 @@ public class StorageCloudnary {
       if (!StringUtils.isBlank(nome)) {
         Map confCandidato = ObjectUtils.asMap(RESOURCE_TYPE, IMAGE, INVALIDATE, TRUE);
         SingletonCloudinary.getCloudinary().uploader().destroy(urlParaFotoPerfil(nome), confCandidato);
+        log.info("Imagem deletada!");
       } else {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome da imagem é obrigatório!");
       }
@@ -68,6 +71,7 @@ public class StorageCloudnary {
   public void createFolder(String nome) {
     try {
       SingletonCloudinary.getCloudinary().api().createFolder(folderFotoPerfil.concat(nome), ObjectUtils.emptyMap());
+      log.info("Pasta criada!");
     } catch (Exception ex) {
       throw new RuntimeException(ex.getLocalizedMessage());
     }

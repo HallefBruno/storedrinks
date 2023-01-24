@@ -153,19 +153,19 @@
           }
         });
         
-        $("#email").focusout(function() {
-          if($("#email").val()) {
-            toast.show('info','Atenção','Validando email!','mid-center');
-            response = $.get("https://isitarealemail.com/api/email/validate?email=" + $("#email").val(), function() {});
-            response.always(function (data) {
-              if (data.status !== 'valid') {
-                toast.show('warning','Atenção','Email inválido!','mid-center');
-              } else {
-                toast.show('success','Atenção','Email válido!','mid-center');
-              }
-            });
-          }
-        });
+//        $("#email").focusout(function() {
+//          if($("#email").val()) {
+//            toast.show('info','Atenção','Validando email!','mid-center');
+//            response = $.get("https://isitarealemail.com/api/email/validate?email=" + $("#email").val(), function() {});
+//            response.always(function (data) {
+//              if (data.status !== 'valid') {
+//                toast.show('warning','Atenção','Email inválido!','mid-center');
+//              } else {
+//                toast.show('success','Atenção','Email válido!','mid-center');
+//              }
+//            });
+//          }
+//        });
         
         $('#senha').password();
       });

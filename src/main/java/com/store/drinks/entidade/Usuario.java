@@ -86,8 +86,11 @@ public class Usuario implements Serializable {
   @Column
   private Boolean ativo;
   
-  @Column
+  @Column(length = 100)
   private String imagem;
+  
+  @Column(length = 5)
+  private String extensao;
 
   @Size(min = 1, message = "Selecione pelo menos um grupo")
   @ManyToMany(fetch = FetchType.EAGER)
@@ -226,23 +229,32 @@ public class Usuario implements Serializable {
     this.clienteSistema = clienteSistema;
   }
 
+  public String getExtensao() {
+    return extensao;
+  }
+
+  public void setExtensao(String extensao) {
+    this.extensao = extensao;
+  }
+
   @Override
   public int hashCode() {
-    int hash = 7;
-    hash = 97 * hash + Objects.hashCode(this.id);
-    hash = 97 * hash + Objects.hashCode(this.nome);
-    hash = 97 * hash + Objects.hashCode(this.email);
-    hash = 97 * hash + Objects.hashCode(this.senha);
-    hash = 97 * hash + Objects.hashCode(this.telefone);
-    hash = 97 * hash + Objects.hashCode(this.confirmacaoSenha);
-    hash = 97 * hash + Objects.hashCode(this.ativo);
-    hash = 97 * hash + Objects.hashCode(this.imagem);
-    hash = 97 * hash + Objects.hashCode(this.grupos);
-    hash = 97 * hash + Objects.hashCode(this.mensagensEnviadas);
-    hash = 97 * hash + Objects.hashCode(this.mensagensRecebidas);
-    hash = 97 * hash + Objects.hashCode(this.dataNascimento);
-    hash = 97 * hash + Objects.hashCode(this.proprietario);
-    hash = 97 * hash + Objects.hashCode(this.clienteSistema);
+    int hash = 5;
+    hash = 53 * hash + Objects.hashCode(this.id);
+    hash = 53 * hash + Objects.hashCode(this.nome);
+    hash = 53 * hash + Objects.hashCode(this.email);
+    hash = 53 * hash + Objects.hashCode(this.senha);
+    hash = 53 * hash + Objects.hashCode(this.telefone);
+    hash = 53 * hash + Objects.hashCode(this.confirmacaoSenha);
+    hash = 53 * hash + Objects.hashCode(this.ativo);
+    hash = 53 * hash + Objects.hashCode(this.imagem);
+    hash = 53 * hash + Objects.hashCode(this.extensao);
+    hash = 53 * hash + Objects.hashCode(this.grupos);
+    hash = 53 * hash + Objects.hashCode(this.mensagensEnviadas);
+    hash = 53 * hash + Objects.hashCode(this.mensagensRecebidas);
+    hash = 53 * hash + Objects.hashCode(this.dataNascimento);
+    hash = 53 * hash + Objects.hashCode(this.proprietario);
+    hash = 53 * hash + Objects.hashCode(this.clienteSistema);
     return hash;
   }
 
@@ -276,6 +288,9 @@ public class Usuario implements Serializable {
     if (!Objects.equals(this.imagem, other.imagem)) {
       return false;
     }
+    if (!Objects.equals(this.extensao, other.extensao)) {
+      return false;
+    }
     if (!Objects.equals(this.id, other.id)) {
       return false;
     }
@@ -302,7 +317,7 @@ public class Usuario implements Serializable {
 
   @Override
   public String toString() {
-    return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", confirmacaoSenha=" + confirmacaoSenha + ", ativo=" + ativo + ", imagem=" + imagem + ", grupos=" + grupos + ", mensagensEnviadas=" + mensagensEnviadas + ", mensagensRecebidas=" + mensagensRecebidas + ", dataNascimento=" + dataNascimento + ", proprietario=" + proprietario + ", clienteSistema=" + clienteSistema + '}';
+    return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", confirmacaoSenha=" + confirmacaoSenha + ", ativo=" + ativo + ", imagem=" + imagem + ", extensao=" + extensao + ", grupos=" + grupos + ", mensagensEnviadas=" + mensagensEnviadas + ", mensagensRecebidas=" + mensagensRecebidas + ", dataNascimento=" + dataNascimento + ", proprietario=" + proprietario + ", clienteSistema=" + clienteSistema + '}';
   }
   
   @PreUpdate
