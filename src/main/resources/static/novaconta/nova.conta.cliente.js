@@ -4,6 +4,7 @@ let bcrypt = dcodeIO.bcrypt;
 $(function () {
   
   const cpfCnpj = localStorage.getItem("cpfCnpj");
+  maskPhoneNumber();
   
   $.get($("#contextApp").val() + "validar/cpfcnpj/" + cpfCnpj, function (data, status) {
     if (data) {
@@ -52,10 +53,38 @@ $(function () {
               "password": btoa(bcrypt.hashSync($("#password").val(), 12)),
               "email": $("#email").val(),
               "nome": $("#nome").val(),
+              "telefone": $("#telefone").val(),
               "dataNascimento": $("#dataNascimento").val()
             },
-            statusCode: {
-              200: function(xhr) {
+            success: function () {
+              window.localStorage.removeItem('cpfCnpj');
+              Swal.fire({
+                title: 'Parabéns, sua conta foi criada com sucesso!',
+                confirmButtonText: 'Ok'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = $("#contextApp").val() + "login";
+                }
+              });
+            },
+            error: function (jqXHR, textStatus) {
+              if(jqXHR.responseJSON && jqXHR.responseJSON.errors) {
+                let mensagem = [];
+                let fieldAtual = "";
+                let fielAnterior = "";
+                $.each(jqXHR.responseJSON.errors, function (index, error) {
+                  fieldAtual = jqXHR.responseJSON.errors[index].field;
+                  if(index === 0 || fieldAtual !== fielAnterior) {
+                    fielAnterior = fieldAtual;
+                    mensagem.push(error.message);
+                  }
+                });
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  html: `${mensagem.join("<br />")}`
+                });
+              } else if(jqXHR && jqXHR.status && (jqXHR.status === 200 || jqXHR.status === 201)) {
                 window.localStorage.removeItem('cpfCnpj');
                 Swal.fire({
                   title: 'Parabéns, sua conta foi criada com sucesso!',
@@ -65,14 +94,18 @@ $(function () {
                     window.location.href = $("#contextApp").val() + "login";
                   }
                 });
-              },
-              400: function(xhr) {
-                Swal.fire('Atenção!',`Um erro 400 ocorreu, favor entrar em contato com Administrador do sistema`,'warning');
-                window.console.log(xhr);
-              },
-              500: function(xhr) {
-                Swal.fire('Atenção!',`Um erro 500 ocorreu, favor entrar em contato com Administrador do sistema`,'warning');
-                window.console.log(xhr);
+                setInterval(function () {
+                  window.location.href = $("#contextApp").val() + "login";
+                }, 5000);
+                $(".btnCriarConta").attr("disabled", true);
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: "Um erro ocorreu, entre em contato com o Administrador!"
+                });
+                console.log(jqXHR);
+                console.log(textStatus);
               }
             },
             beforeSend: function () {
@@ -145,9 +178,25 @@ function validarCampos() {
   } else if ($("#password").val() !== $("#confirmPassword").val()) {
     alertWarning("Senha e Confirmar senha precisam ser iguais!");
     isCamposValido = false;
+  } else if($("#telefone").val() && $("#telefone").val().length < 14) {
+    alertWarning("Número de telefone inválido!");
+    isCamposValido = false;
   }
   return isCamposValido;
 }
+
+function maskPhoneNumber() {
+    let inputPhoneNumber = $('.js-phone-number');
+    let maskBehavior = function (val) {
+      return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    };
+    let options = {
+      onKeyPress: function (val, e, field, options) {
+        field.mask(maskBehavior.apply({}, arguments), options);
+      }
+    };
+    inputPhoneNumber.mask(maskBehavior, options);
+  };
 
 function alertWarning(message) {
   Swal.fire('Atenção!',`${message}`,'warning');

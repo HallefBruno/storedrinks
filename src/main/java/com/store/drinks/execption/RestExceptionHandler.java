@@ -3,6 +3,8 @@ package com.store.drinks.execption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -55,6 +57,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
   
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<Object> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+   List<FieldMessage> errors = new ArrayList<>();
+    for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+      FieldMessage fieldMessage = new FieldMessage(violation.getPropertyPath().toString(),violation.getMessage());
+      errors.add(fieldMessage);
+    }
+    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+  
 //  @ExceptionHandler(DataIntegrityViolationException.class)
 //  public ResponseEntity<Object> dataIntegrityViolationException(Exception ex, WebRequest request) {
 //    ApiError apiError = new ApiError();
@@ -63,13 +76,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 //    return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
 //  }
 //  
-//  @ExceptionHandler(ConstraintViolationException.class)
-//  public ResponseEntity<Object> constraintViolationException(Exception ex, WebRequest request) {
-//    ApiError apiError = new ApiError();
-//    apiError.setMessage(ex.getMessage());
-//    apiError.setStatus(HttpStatus.CONFLICT);
-//    return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
-//  }
   
   @Getter
   @Setter

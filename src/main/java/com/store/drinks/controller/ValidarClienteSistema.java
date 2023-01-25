@@ -5,7 +5,6 @@ import com.store.drinks.service.NovaContaClienteSistema;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping("/validar")
@@ -49,16 +47,17 @@ public class ValidarClienteSistema {
   }
   
   @GetMapping("/finalizar")
-  @ResponseStatus(HttpStatus.OK)
-  public void criarNovaConta(
+  public ResponseEntity<?> criarNovaConta(
     @RequestHeader(required = true, value="cpfcnpj") String cpfcnpj,
     @RequestHeader(required = true, value="nome") String nome,
     @RequestHeader(required = true, value="dataNascimento") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataNascimento,
     @RequestHeader(required = true, value="email") String email,
+    @RequestHeader(required = true, value="telefone") String telefone,
     @RequestHeader(required = true, value="password") String password
     ) 
   {
-    validarClienteService.criarNovaContaCliente(cpfcnpj, nome, dataNascimento, email, password);
+    validarClienteService.criarNovaContaCliente(cpfcnpj, nome, dataNascimento, email, telefone, password);
+    return ResponseEntity.ok().build();
   }
 
 }

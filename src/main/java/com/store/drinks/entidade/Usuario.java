@@ -59,8 +59,8 @@ public class Usuario implements Serializable {
   @Column(updatable = false, unique = true, nullable = false)
   private Long id;
   
-  @NotEmpty(message = "Nome não pode ser vazio!")
-  @NotNull(message = "Nome não pode ser null!")
+  @NotEmpty(message = "Nome não pode ser vazio")
+  @NotNull(message = "Nome não pode ser null")
   @NotBlank(message = "Nome é obrigatório")
   private String nome;
 
@@ -69,13 +69,13 @@ public class Usuario implements Serializable {
   @Column(unique = true)
   private String email;
   
-  @NotEmpty(message = "Senha não pode ser vazio!")
-  @NotNull(message = "Senha não pode ser null!")
+  @NotEmpty(message = "Senha não pode ser vazio")
+  @NotNull(message = "Senha não pode ser null")
   @NotBlank(message = "Senha é obrigatório")
   private String senha;
   
-  @NotEmpty(message = "Telefone não pode ser vazio!")
-  @NotNull(message = "Telefone não pode ser null!")
+  @NotEmpty(message = "Telefone não pode ser vazio")
+  @NotNull(message = "Telefone não pode ser null")
   @NotBlank(message = "Telefone é obrigatório")
   @Column(unique = true, length = 15)
   private String telefone;

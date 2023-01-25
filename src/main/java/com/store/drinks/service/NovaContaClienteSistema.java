@@ -63,7 +63,7 @@ public class NovaContaClienteSistema {
   }
   
   @Transactional
-  public void criarNovaContaCliente(String cpfcnpj, String nome, LocalDate dataNascimento, String email, String senha) {
+  public void criarNovaContaCliente(String cpfcnpj, String nome, LocalDate dataNascimento, String email,String telefone, String senha) {
     String cpfCnpjDecod = StringUtils.getDigits(decodeBase64(cpfcnpj));
     if (verificarCpfCnpj(cpfcnpj)) {
       Optional<ValidarCliente> oPvalidarCliente = validarClienteService.findByCpfCnpj(cpfCnpjDecod);
@@ -74,6 +74,7 @@ public class NovaContaClienteSistema {
         usuario.setAtivo(Boolean.TRUE);
         usuario.setProprietario(Boolean.TRUE);
         usuario.setNome(nome);
+        usuario.setTelefone(telefone);
         usuario.setEmail(email);
         usuario.setDataNascimento(dataNascimento);
         usuario.setSenha(decodeBase64(senha));
@@ -91,9 +92,9 @@ public class NovaContaClienteSistema {
   
   @Transactional
   private void salvarMensagemEnviadaRecebida(String emailDistinatario, String nome, Usuario usuarioDestino) {
-    String emailSistema = "sud@storedrinks.com";
-    String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap :) ", nome);
-    Usuario usuarioSistema = usuarioService.findByEmailAndAtivoTrue(emailSistema).get();
+    String emailSistema = UsuarioService.usuarioLogado().getEmail();
+    String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap, mais uma coisa você também pode editar seu perfil e adicionar uma imagem :) ", nome);
+    Usuario usuarioSistema = UsuarioService.usuarioLogado();
     
     MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
