@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,6 +24,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, Usuario
   
   @EntityGraph(attributePaths = {"clienteSistema"})
   Optional<Usuario> findByImagemAndClienteSistemaTenant(String imagem, String tenant);
+  
+  @Query(
+   "select u from Usuario u join fetch u.clienteSistema " +
+   "where 1=1 " +
+   "and (?1 is null or (upper(u.nome) like concat(?1, '%'))) " +
+   "and (?2 is null or (upper(u.email) like concat(?2, '%'))) "
+  )
+  List<Usuario> filtrar(String nome, String email);
   
   @Override
   Boolean existeEmail(String email);

@@ -1,4 +1,4 @@
-package com.store.drinks.repository.querys.dashBoard;
+package com.store.drinks.repository.filtros;
 
 import java.io.Serializable;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProdutosMaisVendidosFilters implements Serializable {
+public class ProdutosMaisVendidosFiltro implements Serializable {
 
   private String dataInicial;
   private String dataFinal;

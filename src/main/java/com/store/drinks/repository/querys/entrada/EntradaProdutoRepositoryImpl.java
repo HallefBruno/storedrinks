@@ -1,5 +1,6 @@
 package com.store.drinks.repository.querys.entrada;
 
+import com.store.drinks.repository.filtros.EntradasFiltro;
 import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
@@ -68,7 +69,7 @@ public class EntradaProdutoRepositoryImpl implements EntradaProdutoRepositoryCus
   }
 
   @Override
-  public Page<EntradaProduto> filtrar(EntradasFilter filtro, Pageable pageable) {
+  public Page<EntradaProduto> filtrar(EntradasFiltro filtro, Pageable pageable) {
 
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();

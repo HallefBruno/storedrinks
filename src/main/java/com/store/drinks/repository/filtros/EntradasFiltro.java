@@ -1,5 +1,6 @@
-package com.store.drinks.repository.querys.entrada;
+package com.store.drinks.repository.filtros;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 @Builder
 @AllArgsConstructor
-public class EntradasFilter {
+public class EntradasFiltro implements Serializable  {
 
   private String numeroNota;
   private String fornecedor;

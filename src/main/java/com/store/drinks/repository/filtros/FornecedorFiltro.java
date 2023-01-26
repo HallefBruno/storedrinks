@@ -1,5 +1,6 @@
-package com.store.drinks.repository.querys.fornecedor;
+package com.store.drinks.repository.filtros;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class FornecedorFilter {
+public class FornecedorFiltro implements Serializable {
 
   private String nomeFornecedor;
   private String cpfCnpj;

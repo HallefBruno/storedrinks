@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Pesquisar usuário</title>
+    <meta name="description" content="Pesquisar usuário"/>
+    <div th:replace="fragments/CssFragment :: css"></div>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+  </head>
+  
+  <body class="bg-light">
+    <main class="container-fluid mt-5">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div th:if="${#lists.isEmpty(usuarios)}">
+              <div style="height: 44px; width: 100%;" class="toast align-items-center text-white bg-warning border-0 mt-1 mb-1" data-animation="true" data-autohide="true" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <p class="">Nenhum usuário encontrado!</p>
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
+            </div>
+            <form method="GET" th:object="${usuarioFiltro}">
+              <div class="accordion shadow-sm mb-2 rounded" id="accordionPesquisar">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Pesquisar
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
+                    <div class="accordion-body">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                              <label for="nome" class="form-label">Nome</label>
+                              <input th:value="${nome}" autocomplete="off" type="text" class="form-control" id="nome" name="nome"/>
+                            </div>
+                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                              <label for="email" class="form-label">Email</label>
+                              <input type="email" autocomplete="off" th:value="${email}" class="form-control" id="email" name="email"/>
+                            </div>
+                          </div>
+                          <div class="btn-group mt-2" role="group">
+                            <a th:href="@{/usuario/novo}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="card shadow-sm" style="margin-top: 8px; margin-bottom: 8px;">
+              <div class="card-body">
+                <div class="">
+                  <table id="usuarios" style="width:100%" class="table table-hover caption-top display nowrap">
+                    <caption>Usuários</caption>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Data Nascimento</th>
+                        <th>Telefone</th>
+                        <th>Ativo</th>
+                        <th>Proprietário</th>
+                        <th>Imagem</th>
+                        <th>Extensão</th>
+                        <th>Grupo</th>
+                        <th class="text-center">Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}"></td>
+                        <td th:text="${usuario.nome}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td th:text="${#temporals.format(usuario.dataNascimento, 'dd/MM/yyyy')}"></td>
+                        <td class="js-phone-number" th:text="${usuario.telefone}"></td>
+                        <td><span th:class="${usuario.ativo ? 'badge bg-primary':'badge bg-danger'}" th:text="${usuario.ativo ? 'Ativo':'Inativo'}"></span></td>
+                        <td><span th:class="${usuario.proprietario ? 'badge bg-primary':'badge bg-secundary'}" th:text="${usuario.proprietario ? 'Sim':'Não'}"></span></td>
+                        <td th:text="${usuario.imagem}"></td>
+                        <td th:text="${usuario.extensao}"></td>
+                        <td th:text="${#strings.listJoin(usuario.grupos.![nome], ',')}"></td>
+                        <td class="text-center">
+                          <div class="btn-group" role="group">
+                            <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" ><i class="bi bi-pen"></i></a>
+                            <a href="#" role="button" class="btn btn-outline-secondary btn-sm js-exclusao-btn" ><i class="bi bi-trash"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script type="text/javascript">
+      $(function () {
+        $("#nome").focus();
+        setTimeout(() => {
+          $(".toast").toast('show');
+        }, 0);
+        $("#usuarios").DataTable({
+          searching: true,
+          destroy: true,
+          paging: false,
+          info: true,
+          responsive: true,
+          lengthChange: true,
+          scrollX: true,
+          language: {
+            url: `${$("#context").val()}vendor/internationalisation/pt_br.json`
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

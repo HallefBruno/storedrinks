@@ -1,5 +1,6 @@
 package com.store.drinks.repository.querys.movimentacaoCaixa;
 
+import com.store.drinks.repository.filtros.MovimentacoesCaixaFiltro;
 import com.store.drinks.entidade.Caixa;
 import com.store.drinks.entidade.ClienteSistema;
 import com.store.drinks.entidade.MovimentacaoCaixa;
@@ -94,7 +95,7 @@ builder.and(builder.equal(root.get("recolhimento"), false))
   }
   
   @Override
-  public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFilters movimentacoesCaixaFilters, int draw, int start) {
+  public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(MovimentacoesCaixaFiltro movimentacoesCaixaFilters, int draw, int start) {
     DataTableWrapper<MovimentacaoCaixadto> dataTableWrapper = new DataTableWrapper<>();
 
     CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -180,7 +181,7 @@ builder.and(builder.equal(root.get("recolhimento"), false))
     return dataTableWrapper;
   }
 
-  private Specification<MovimentacaoCaixa> specificationForCount(MovimentacoesCaixaFilters movimentacoesCaixaFilters) {
+  private Specification<MovimentacaoCaixa> specificationForCount(MovimentacoesCaixaFiltro movimentacoesCaixaFilters) {
     return (Root<MovimentacaoCaixa> movimentacaoCaixa, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
       List<Predicate> predicates = new ArrayList<>();
       Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");

@@ -2,7 +2,7 @@ package com.store.drinks.controller;
 
 import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.Fornecedor;
-import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
+import com.store.drinks.repository.filtros.FornecedorFiltro;
 import com.store.drinks.service.FornecedorService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,9 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@PreAuthorize("hasRole('MANTER_FORNECEDOR')")
 @RequestMapping("fornecedor")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('MANTER_FORNECEDOR')")
 public class FornecedorController {
 
   private final FornecedorService fornecedorService;
@@ -75,7 +75,7 @@ public class FornecedorController {
   }
 
   @GetMapping("pesquisar")
-  public ModelAndView pesqisar(FornecedorFilter fornecedorFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+  public ModelAndView pesqisar(FornecedorFiltro fornecedorFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("fornecedor/Pesquisar");
     PageWrapper<Fornecedor> paginaWrapper = new PageWrapper<>(fornecedorService.filtrar(fornecedorFilter, pageable), httpServletRequest);
     mv.addObject("pagina", paginaWrapper);

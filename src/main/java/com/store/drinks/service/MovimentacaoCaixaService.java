@@ -5,7 +5,7 @@ import com.store.drinks.entidade.dto.movimentacaoCaixa.MovimentacaoCaixadto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
-import com.store.drinks.repository.querys.movimentacaoCaixa.MovimentacoesCaixaFilters;
+import com.store.drinks.repository.filtros.MovimentacoesCaixaFiltro;
 import com.store.drinks.repository.util.ObjectMapperUtil;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class MovimentacaoCaixaService {
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final UsuarioService usuarioService;
   private final CaixaService caixaService;
-  private final ObjectMapperUtil<MovimentacoesCaixaFilters> objectMapperUtil;
+  private final ObjectMapperUtil<MovimentacoesCaixaFiltro> objectMapperUtil;
   
   @Transactional
   public void salvar(BigDecimal valorRetirada) {
@@ -55,7 +55,7 @@ public class MovimentacaoCaixaService {
   }
   
   public DataTableWrapper<MovimentacaoCaixadto> movimentacoesCaixa(String movimentacoesCaixaFiltersString, int draw, int start) {
-    MovimentacoesCaixaFilters movimentacoesCaixaFilters = objectMapperUtil.converterStringInEntity(MovimentacoesCaixaFilters.class, movimentacoesCaixaFiltersString);
+    MovimentacoesCaixaFiltro movimentacoesCaixaFilters = objectMapperUtil.converterStringInEntity(MovimentacoesCaixaFiltro.class, movimentacoesCaixaFiltersString);
     return movimentacaoCaixaRepository.movimentacoesCaixa(movimentacoesCaixaFilters, draw, start);
   }
 }

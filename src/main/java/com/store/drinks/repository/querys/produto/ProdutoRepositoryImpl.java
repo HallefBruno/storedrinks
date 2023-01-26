@@ -1,5 +1,6 @@
 package com.store.drinks.repository.querys.produto;
 
+import com.store.drinks.repository.filtros.ProdutoFiltro;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.repository.util.Multitenancy;
@@ -36,7 +37,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
   private Multitenancy multitenancy;
 
   @Override
-  public Page<Produto> filtrar(ProdutoFilter filtro, Pageable pageable) {
+  public Page<Produto> filtrar(ProdutoFiltro filtro, Pageable pageable) {
 
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();

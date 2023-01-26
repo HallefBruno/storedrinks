@@ -3,7 +3,7 @@ package com.store.drinks.service;
 import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.FornecedorRepository;
-import com.store.drinks.repository.querys.fornecedor.FornecedorFilter;
+import com.store.drinks.repository.filtros.FornecedorFiltro;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class FornecedorService {
     }
   }
 
-  public Page<Fornecedor> filtrar(FornecedorFilter fornecedorFilter, Pageable pageable) {
+  public Page<Fornecedor> filtrar(FornecedorFiltro fornecedorFilter, Pageable pageable) {
     return fornecedorRepository.filtrar(fornecedorFilter, pageable);
   }
 

@@ -1,4 +1,4 @@
-package com.store.drinks.repository.querys.movimentacaoCaixa;
+package com.store.drinks.repository.filtros;
 
 import com.store.drinks.entidade.dto.UsuarioSelect2;
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovimentacoesCaixaFilters implements Serializable {
+public class MovimentacoesCaixaFiltro implements Serializable {
 
   private UsuarioSelect2 usuarioSelect2;
   private String dataAbertura;

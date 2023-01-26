@@ -4,7 +4,7 @@ import com.store.drinks.controller.page.PageWrapper;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.ProdutoRepository;
-import com.store.drinks.repository.querys.produto.ProdutoFilter;
+import com.store.drinks.repository.filtros.ProdutoFiltro;
 import com.store.drinks.service.ProdutoService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -85,9 +85,9 @@ public class ProdutoController {
   }
 
   @GetMapping("pesquisar")
-  public ModelAndView pesqisar(ProdutoFilter produtoFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+  public ModelAndView pesqisar(ProdutoFiltro produtoFiltro, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("produto/Pesquisar");
-    PageWrapper<Produto> paginaWrapper = new PageWrapper<>(produtoRepository.filtrar(produtoFilter, pageable), httpServletRequest);
+    PageWrapper<Produto> paginaWrapper = new PageWrapper<>(produtoRepository.filtrar(produtoFiltro, pageable), httpServletRequest);
     mv.addObject("pagina", paginaWrapper);
     return mv;
   }

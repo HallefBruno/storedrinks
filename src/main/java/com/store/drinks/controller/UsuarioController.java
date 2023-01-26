@@ -1,11 +1,18 @@
 package com.store.drinks.controller;
 
+import com.store.drinks.controller.page.PageWrapper;
+import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Usuario;
+import com.store.drinks.repository.filtros.EntradasFiltro;
+import com.store.drinks.repository.filtros.UsuarioFiltro;
 import com.store.drinks.service.GrupoService;
 import com.store.drinks.service.UsuarioService;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -49,6 +56,13 @@ public class UsuarioController {
     }
     attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
     return new ModelAndView("redirect:/usuario");
+  }
+  
+  @GetMapping("/pesquisar")
+  public ModelAndView pesqisar(UsuarioFiltro usuarioFiltro, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+    ModelAndView mv = new ModelAndView("usuario/Pesquisar");
+    mv.addObject("usuarios", usuarioService.filtrar(usuarioFiltro));
+    return mv;
   }
   
 }

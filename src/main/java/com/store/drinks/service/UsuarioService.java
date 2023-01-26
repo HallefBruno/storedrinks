@@ -4,6 +4,7 @@ import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.EmailValido;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.repository.UsuarioRepository;
+import com.store.drinks.repository.filtros.UsuarioFiltro;
 import com.store.drinks.security.UsuarioSistema;
 import com.store.drinks.storage.StorageCloudnary;
 import java.io.IOException;
@@ -85,6 +86,9 @@ public class UsuarioService {
     return usuariodtos;
   }
   
+  public List<Usuario> filtrar(UsuarioFiltro usuarioFiltro) {
+    return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail());
+  }
   
   private void validarDadosUsuario(String nomeImagem, Usuario usuario) {
     existeTelefone(usuario.getTelefone());

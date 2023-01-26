@@ -1,5 +1,6 @@
 package com.store.drinks.repository.querys.dashBoard;
 
+import com.store.drinks.repository.filtros.ProdutosMaisVendidosFiltro;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Venda;
@@ -40,7 +41,7 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   private Multitenancy multitenancy;
 
   @Override
-  public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFilters filters) {
+  public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFiltro filters) {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
     Root<ItensVenda> root = query.from(ItensVenda.class);

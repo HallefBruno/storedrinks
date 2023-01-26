@@ -1,5 +1,6 @@
 package com.store.drinks.repository.querys.fornecedor;
 
+import com.store.drinks.repository.filtros.FornecedorFiltro;
 import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.execption.NegocioException;
@@ -51,7 +52,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
   }
 
   @Override
-  public Page<Fornecedor> filtrar(FornecedorFilter fornecedorFilter, Pageable pageable) {
+  public Page<Fornecedor> filtrar(FornecedorFiltro fornecedorFilter, Pageable pageable) {
 
     int paginaAtual = pageable.getPageNumber();
     int totalRegistrosPorPagina = pageable.getPageSize();
