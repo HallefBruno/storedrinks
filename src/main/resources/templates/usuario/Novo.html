@@ -11,7 +11,7 @@
     <main class="container pt-4 pb-2 mb-3">
       <div class="row">
         <div class="col-md-8 offset-md-2 mt-2">
-          <form th:action="@{/usuario/salvar}" method="post" th:object="${usuario}" enctype="multipart/form-data">
+          <form th:action="${usuario.id} == null ? @{/usuario/salvar} : @{/usuario/update/{codigo}(codigo=${usuario.id})}" method="post" th:object="${usuario}" enctype="multipart/form-data">
             <th:block th:include="fragments/MensagemSucesso"></th:block>
             <th:block th:include="fragments/MensagensErroValidacao"></th:block>
             <div class="shadow-sm mb-3">
@@ -119,6 +119,7 @@
     <script th:src="@{/vendor/js/password.min.js}" type="text/javascript"></script>
     <script>
       $(function () {
+        $('#senha').password();
         let toast = new StoreDrink.Toast();
         $("#nome").focus();
         $("input[name=image]").change(function () {
@@ -152,22 +153,10 @@
             }
           }
         });
-        
-//        $("#email").focusout(function() {
-//          if($("#email").val()) {
-//            toast.show('info','Atenção','Validando email!','mid-center');
-//            response = $.get("https://isitarealemail.com/api/email/validate?email=" + $("#email").val(), function() {});
-//            response.always(function (data) {
-//              if (data.status !== 'valid') {
-//                toast.show('warning','Atenção','Email inválido!','mid-center');
-//              } else {
-//                toast.show('success','Atenção','Email válido!','mid-center');
-//              }
-//            });
-//          }
-//        });
-        
-        $('#senha').password();
+        const url = $("form").attr('action'); 
+        if(url.includes("update")) {
+          $("#senha").attr('required',false);
+        }
       });
     </script>
     

@@ -5,6 +5,19 @@
     <meta name="description" content="Pesquisar usuário"/>
     <div th:replace="fragments/CssFragment :: css"></div>
     <div th:replace="layout/fragments/Menu :: menu"></div>
+    <style>
+      .circular_image {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        overflow: hidden;
+        display:inline-block;
+        vertical-align:middle;
+      }
+      .circular_image img {
+        width:100%;
+      }
+    </style>
   </head>
   
   <body class="bg-light">
@@ -35,17 +48,17 @@
                       <div class="card">
                         <div class="card-body">
                           <div class="row">
-                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                            <div class="mb-3 col-12 col-md-4 col-lg-3">
                               <label for="nome" class="form-label">Nome</label>
                               <input th:value="${nome}" autocomplete="off" type="text" class="form-control" id="nome" name="nome"/>
                             </div>
-                            <div class="mb-3 col-12 col-md-4 col-lg-4">
+                            <div class="mb-3 col-12 col-md-4 col-lg-3">
                               <label for="email" class="form-label">Email</label>
                               <input type="email" autocomplete="off" th:value="${email}" class="form-control" id="email" name="email"/>
                             </div>
                           </div>
                           <div class="btn-group mt-2" role="group">
-                            <a th:href="@{/usuario/novo}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
+                            <a th:href="@{/usuario}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
                             <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
                           </div>
                         </div>
@@ -62,6 +75,7 @@
                     <caption>Usuários</caption>
                     <thead>
                       <tr>
+                        <th>Imagem</th>
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Email</th>
@@ -77,6 +91,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="usuario : ${usuarios}">
+                        <td th:title="${usuario.nome}"><img draggable="false" class="circular_image" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/sud/{nomeFoto}.{extensao} (nomeFoto=${usuario.imagem},extensao=${usuario.extensao})}" /></td>
                         <td th:text="${usuario.id}"></td>
                         <td th:text="${usuario.nome}"></td>
                         <td th:text="${usuario.email}"></td>
@@ -86,10 +101,10 @@
                         <td><span th:class="${usuario.proprietario ? 'badge bg-primary':'badge bg-secundary'}" th:text="${usuario.proprietario ? 'Sim':'Não'}"></span></td>
                         <td th:text="${usuario.imagem}"></td>
                         <td th:text="${usuario.extensao}"></td>
-                        <td th:text="${#strings.listJoin(usuario.grupos.![nome], ',')}"></td>
+                        <td><mark>[[${#strings.listJoin(usuario.grupos.![nome], ', ')}]]</mark></td>
                         <td class="text-center">
                           <div class="btn-group" role="group">
-                            <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" ><i class="bi bi-pen"></i></a>
+                            <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" th:href="@{/usuario/{codigo}(codigo=${usuario.id})}"><i class="bi bi-pen"></i></a>
                             <a href="#" role="button" class="btn btn-outline-secondary btn-sm js-exclusao-btn" ><i class="bi bi-trash"></i></a>
                           </div>
                         </td>

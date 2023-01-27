@@ -26,12 +26,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, Usuario
   Optional<Usuario> findByImagemAndClienteSistemaTenant(String imagem, String tenant);
   
   @Query(
-   "select u from Usuario u join fetch u.clienteSistema " +
+   "select u from Usuario u join fetch u.clienteSistema cs " +
    "where 1=1 " +
    "and (?1 is null or (upper(u.nome) like concat(?1, '%'))) " +
-   "and (?2 is null or (upper(u.email) like concat(?2, '%'))) "
+   "and (?2 is null or (upper(u.email) like concat(?2, '%'))) " +
+   "and (?3 is null or (cs.tenant = ?3)) "
   )
-  List<Usuario> filtrar(String nome, String email);
+  List<Usuario> filtrar(String nome, String email, String tenant);
   
   @Override
   Boolean existeEmail(String email);

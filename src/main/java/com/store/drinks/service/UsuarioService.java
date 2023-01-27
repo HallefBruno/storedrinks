@@ -3,6 +3,7 @@ package com.store.drinks.service;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.EmailValido;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
+import com.store.drinks.entidade.enuns.SuperUser;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.repository.filtros.UsuarioFiltro;
 import com.store.drinks.security.UsuarioSistema;
@@ -38,7 +39,6 @@ public class UsuarioService {
 
   @Transactional
   public Usuario salvar(Usuario usuario) {
-    usuario.setClienteSistema(usuarioLogado().getClienteSistema());
     return usuarioRepository.save(usuario);
   }
   
@@ -54,6 +54,21 @@ public class UsuarioService {
     usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuarioRepository.save(usuario);
     salvarImagemStorage(image, fileName);
+  }
+  
+  @Transactional
+  public void update(Usuario usuario, Long codigo) {
+    if(Objects.isNull(codigo)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+    }
+    if(Objects.isNull(usuario.getSenha())) {
+      usuario.setSenha(usuarioRepository.findById(codigo).get().getSenha());
+    } else {
+      usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+    }
+    usuario.setId(codigo);
+    validarDadosUsuario(usuario.getImagem(), usuario);
+    usuarioRepository.save(usuario);
   }
 
   public static Usuario usuarioLogado() {
@@ -87,7 +102,11 @@ public class UsuarioService {
   }
   
   public List<Usuario> filtrar(UsuarioFiltro usuarioFiltro) {
-    return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail());
+    String tenant = usuarioLogado().getClienteSistema().getTenant();
+    if(tenant.equalsIgnoreCase(SuperUser.TENANT.get())) {
+      return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), null);
+    }
+    return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), tenant);
   }
   
   private void validarDadosUsuario(String nomeImagem, Usuario usuario) {

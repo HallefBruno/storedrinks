@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +24,15 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class NovaContaClienteSistema {
   
+  @Value("${email.superuser}")
+  private String emailSuperUser;
   private final ValidarClienteService validarClienteService;
   private final ClienteSistemaService clienteSistemaService;
   private final GrupoService grupoService;
   private final UsuarioService usuarioService;
   private final MensagemEnviadaService mensagensEnviadasService;
   private final MensagemRecebidaService mensagensRecebidasService;
+  
 
   @Transactional
   public void salvaValidarCliente(String cpfCnpj) {
@@ -69,7 +73,7 @@ public class NovaContaClienteSistema {
       Optional<ValidarCliente> oPvalidarCliente = validarClienteService.findByCpfCnpj(cpfCnpjDecod);
       ValidarCliente validarCliente = oPvalidarCliente.get();
       if(!validarCliente.getContaCriada()) {
-        Optional<ClienteSistema> opClienteSistema = clienteSistemaService.buscarPorCpfCnpj(cpfCnpjDecod);
+        Optional<ClienteSistema> opClienteSistema = clienteSistemaService.buscarPorCpfCnpj(validarCliente.getCpfCnpj());
         Usuario usuario = new Usuario();
         usuario.setAtivo(Boolean.TRUE);
         usuario.setProprietario(Boolean.TRUE);
@@ -92,15 +96,13 @@ public class NovaContaClienteSistema {
   
   @Transactional
   private void salvarMensagemEnviadaRecebida(String emailDistinatario, String nome, Usuario usuarioDestino) {
-    String emailSistema = UsuarioService.usuarioLogado().getEmail();
     String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap, mais uma coisa você também pode editar seu perfil e adicionar uma imagem :) ", nome);
-    Usuario usuarioSistema = UsuarioService.usuarioLogado();
     
     MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
     remetenteDestinatarioMensagem.setDestinatario(emailDistinatario);
     remetenteDestinatarioMensagem.setMensagem(mensagem);
-    remetenteDestinatarioMensagem.setRemetente(usuarioSistema.getEmail());
+    remetenteDestinatarioMensagem.setRemetente(emailSuperUser);
     mensagensEnviadas.setDataHoraMensagemEnviada(LocalDateTime.now());
     mensagensEnviadas.setRemetenteDestinatarioMensagem(remetenteDestinatarioMensagem);
     mensagensEnviadas.setUsuario(usuarioDestino);
@@ -109,12 +111,12 @@ public class NovaContaClienteSistema {
     RemetenteDestinatarioMensagem destinatarioMensagem = new RemetenteDestinatarioMensagem();
     destinatarioMensagem.setDestinatario(emailDistinatario);
     destinatarioMensagem.setMensagem(mensagem);
-    destinatarioMensagem.setRemetente(emailSistema);
+    destinatarioMensagem.setRemetente(emailSuperUser);
     mensagensRecebidas.setRemetenteDestinatarioMensagem(destinatarioMensagem);
     mensagensRecebidas.setLida(Boolean.FALSE);
     mensagensRecebidas.setNotificado(Boolean.FALSE);
     mensagensRecebidas.setDataHoraMensagemRecebida(LocalDateTime.now());
-    mensagensRecebidas.setUsuario(usuarioService.findByEmailAndAtivoTrue(emailSistema).get());
+    mensagensRecebidas.setUsuario(usuarioService.findByEmailAndAtivoTrue(emailSuperUser).get());
     
     mensagensEnviadasService.salvar(mensagensEnviadas);
     mensagensRecebidasService.salvar(mensagensRecebidas);

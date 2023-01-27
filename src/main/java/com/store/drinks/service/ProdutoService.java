@@ -73,7 +73,7 @@ public class ProdutoService {
   public ResultSelectProdutos pesquisarProdutosAutoComplete(String descricao, String pagina) {
     ResultSelectProdutos resultSelectProdutos = new ResultSelectProdutos();
     List<ProdutoSelect2> produtosDTO = new ArrayList<>();
-    Pageable pageable = PageRequest.of(Integer.valueOf(pagina), 10);
+    Pageable pageable = PageRequest.of(Integer.parseInt(pagina), 10);
     Page<Produto> page = produtoRepository.filtrarProdutosSelect(descricao, pageable);
     if (page.hasContent()) {
       List<Produto> automovels = page.getContent();

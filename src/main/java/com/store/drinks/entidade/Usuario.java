@@ -33,6 +33,8 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -72,6 +74,9 @@ public class Usuario implements Serializable {
   @NotEmpty(message = "Senha não pode ser vazio")
   @NotNull(message = "Senha não pode ser null")
   @NotBlank(message = "Senha é obrigatório")
+  @Min(value = 11, message = "Senha precisa ter no mínino 11 caracteres")
+  @Max(value = 11, message = "Senha precisa ter no máximo 11 caracteres")
+  @Column(length = 80, nullable = false, unique = true)
   private String senha;
   
   @NotEmpty(message = "Telefone não pode ser vazio")

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,10 +59,33 @@ public class UsuarioController {
     return new ModelAndView("redirect:/usuario");
   }
   
+  @PostMapping("/update/{codigo}")
+  public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageIndex(usuario);
+      }
+      usuarioService.update(usuario, codigo);
+    } catch (ResponseStatusException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
+      result.addError(error);
+      return pageIndex(usuario);
+    }
+    attributes.addFlashAttribute("mensagem", "Usuário alterado com sucesso!");
+    return new ModelAndView("redirect:/usuario/novo");
+  }
+  
   @GetMapping("/pesquisar")
   public ModelAndView pesqisar(UsuarioFiltro usuarioFiltro, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("usuario/Pesquisar");
     mv.addObject("usuarios", usuarioService.filtrar(usuarioFiltro));
+    return mv;
+  }
+  
+  @GetMapping("{codigo}")
+  public ModelAndView editar(@PathVariable("codigo") Usuario usuario) {
+    ModelAndView mv = pageIndex(usuario);
+    mv.addObject(usuario);
     return mv;
   }
   
