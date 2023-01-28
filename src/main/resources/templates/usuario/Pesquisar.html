@@ -91,7 +91,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="usuario : ${usuarios}">
-                        <td th:title="${usuario.nome}"><img draggable="false" class="circular_image" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/sud/{nomeFoto}.{extensao} (nomeFoto=${usuario.imagem},extensao=${usuario.extensao})}" /></td>
+                        <td><img data-bs-toggle="tooltip" th:title="${usuario.nome}" data-bs-placement="top" draggable="false" class="circular_image" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${usuario.clienteSistema.tenant},nomeFoto=${usuario.imagem},extensao=${usuario.extensao})}" /></td>
                         <td th:text="${usuario.id}"></td>
                         <td th:text="${usuario.nome}"></td>
                         <td th:text="${usuario.email}"></td>

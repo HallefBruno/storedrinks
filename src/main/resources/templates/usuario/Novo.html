@@ -20,7 +20,7 @@
                 <div class="card-body setblockUI">
                   
                   <div class="text-center mb-2 mt-2">
-                    <img th:src="@{/imagens/icon-perfil.jpg}" draggable="false" id="image-viewer" width="110px" height="110px" style="border-radius: 50%;" alt="Cliente"/>
+                    <img th:src="${usuario.id} == null ? @{/imagens/icon-perfil.jpg} : @{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${usuario.clienteSistema.tenant},nomeFoto=${usuario.imagem},extensao=${usuario.extensao})}" draggable="false" id="image-viewer" width="110px" height="110px" style="border-radius: 50%;" alt="Cliente"/>
                   </div>
                   
                   <div class="text-center mb-3">
@@ -156,9 +156,11 @@
         const url = $("form").attr('action'); 
         if(url.includes("update")) {
           $("#senha").attr('required',false);
+          if($("#image-viewer").attr("src").includes("cloudinary")) {
+            $("#image").attr('required',false);
+          }
         }
       });
     </script>
-    
   </body>
 </html>

@@ -32,9 +32,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
+import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -71,11 +71,6 @@ public class Usuario implements Serializable {
   @Column(unique = true)
   private String email;
   
-  @NotEmpty(message = "Senha não pode ser vazio")
-  @NotNull(message = "Senha não pode ser null")
-  @NotBlank(message = "Senha é obrigatório")
-  @Min(value = 11, message = "Senha precisa ter no mínino 11 caracteres")
-  @Max(value = 11, message = "Senha precisa ter no máximo 11 caracteres")
   @Column(length = 80, nullable = false, unique = true)
   private String senha;
   
@@ -98,15 +93,15 @@ public class Usuario implements Serializable {
   private String extensao;
 
   @Size(min = 1, message = "Selecione pelo menos um grupo")
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
   private Set<Grupo> grupos;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
   @JsonManagedReference
   private Set<MensagemEnviada> mensagensEnviadas;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
   @JsonManagedReference
   private Set<MensagemRecebida> mensagensRecebidas;
   
@@ -121,6 +116,11 @@ public class Usuario implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JsonBackReference
   private ClienteSistema clienteSistema;
+  
+  public Usuario() {
+    this.mensagensEnviadas = new HashSet<>();
+    this.mensagensRecebidas = new HashSet<>();
+  }
 
   public Long getId() {
     return id;
@@ -199,7 +199,8 @@ public class Usuario implements Serializable {
   }
 
   public void setMensagensEnviadas(Set<MensagemEnviada> mensagensEnviadas) {
-    this.mensagensEnviadas = mensagensEnviadas;
+    this.mensagensEnviadas.clear();
+    this.mensagensEnviadas.addAll(mensagensEnviadas);
   }
 
   public Set<MensagemRecebida> getMensagensRecebidas() {
@@ -207,7 +208,8 @@ public class Usuario implements Serializable {
   }
 
   public void setMensagensRecebidas(Set<MensagemRecebida> mensagensRecebidas) {
-    this.mensagensRecebidas = mensagensRecebidas;
+    this.mensagensRecebidas.clear();
+    this.mensagensRecebidas.addAll(mensagensRecebidas);
   }
 
   public LocalDate getDataNascimento() {
@@ -245,21 +247,21 @@ public class Usuario implements Serializable {
   @Override
   public int hashCode() {
     int hash = 5;
-    hash = 53 * hash + Objects.hashCode(this.id);
-    hash = 53 * hash + Objects.hashCode(this.nome);
-    hash = 53 * hash + Objects.hashCode(this.email);
-    hash = 53 * hash + Objects.hashCode(this.senha);
-    hash = 53 * hash + Objects.hashCode(this.telefone);
-    hash = 53 * hash + Objects.hashCode(this.confirmacaoSenha);
-    hash = 53 * hash + Objects.hashCode(this.ativo);
-    hash = 53 * hash + Objects.hashCode(this.imagem);
-    hash = 53 * hash + Objects.hashCode(this.extensao);
-    hash = 53 * hash + Objects.hashCode(this.grupos);
-    hash = 53 * hash + Objects.hashCode(this.mensagensEnviadas);
-    hash = 53 * hash + Objects.hashCode(this.mensagensRecebidas);
-    hash = 53 * hash + Objects.hashCode(this.dataNascimento);
-    hash = 53 * hash + Objects.hashCode(this.proprietario);
-    hash = 53 * hash + Objects.hashCode(this.clienteSistema);
+    hash = 79 * hash + Objects.hashCode(this.id);
+    hash = 79 * hash + Objects.hashCode(this.nome);
+    hash = 79 * hash + Objects.hashCode(this.email);
+    hash = 79 * hash + Objects.hashCode(this.senha);
+    hash = 79 * hash + Objects.hashCode(this.telefone);
+    hash = 79 * hash + Objects.hashCode(this.confirmacaoSenha);
+    hash = 79 * hash + Objects.hashCode(this.ativo);
+    hash = 79 * hash + Objects.hashCode(this.imagem);
+    hash = 79 * hash + Objects.hashCode(this.extensao);
+    hash = 79 * hash + Objects.hashCode(this.grupos);
+    hash = 79 * hash + Objects.hashCode(this.mensagensEnviadas);
+    hash = 79 * hash + Objects.hashCode(this.mensagensRecebidas);
+    hash = 79 * hash + Objects.hashCode(this.dataNascimento);
+    hash = 79 * hash + Objects.hashCode(this.proprietario);
+    hash = 79 * hash + Objects.hashCode(this.clienteSistema);
     return hash;
   }
 

@@ -60,19 +60,19 @@ public class UsuarioController {
   }
   
   @PostMapping("/update/{codigo}")
-  public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+  public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, @RequestParam("image") MultipartFile image) {
     try {
       if (result.hasErrors()) {
         return pageIndex(usuario);
       }
-      usuarioService.update(usuario, codigo);
+      usuarioService.update(usuario, codigo, image);
     } catch (ResponseStatusException ex) {
       ObjectError error = new ObjectError("erro", ex.getReason());
       result.addError(error);
       return pageIndex(usuario);
     }
     attributes.addFlashAttribute("mensagem", "Usuário alterado com sucesso!");
-    return new ModelAndView("redirect:/usuario/novo");
+    return new ModelAndView("redirect:/usuario");
   }
   
   @GetMapping("/pesquisar")

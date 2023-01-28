@@ -43,7 +43,7 @@ public class StorageCloudnary {
   public void uploadFotoPerfil(byte[] dataImage, String nome) {
     try {
       if (!StringUtils.isBlank(nome)) {
-        Map conf = ObjectUtils.asMap(PUBLIC_ID, urlParaFotoPerfil(nome),"quality_analysis", true, "transformation", new Transformation().gravity("face").height(110).width(110).crop("crop"));
+        Map conf = ObjectUtils.asMap(PUBLIC_ID, urlParaFotoPerfil(nome),"quality_analysis", true, "transformation", new Transformation().height(110).width(110).gravity("auto").crop("fill").radius("max"));
         SingletonCloudinary.getCloudinary().uploader().upload(dataImage, conf);
         log.info("Upload da imagem completo!");
       } else {

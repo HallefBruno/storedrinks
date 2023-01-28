@@ -8,6 +8,7 @@ import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.repository.filtros.UsuarioFiltro;
 import com.store.drinks.security.UsuarioSistema;
 import com.store.drinks.storage.StorageCloudnary;
+import com.store.drinks.util.CopyProperties;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,12 +47,17 @@ public class UsuarioService {
   
   @Transactional
   public void salvar(Usuario usuario, MultipartFile image) {
+    if (Objects.isNull(usuario.getSenha())) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha é obrigatória");
+    } else if (usuario.getSenha().length() < 11) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha precisa ter no mínimo 11 caracteres");
+    }
     String fileName = StringUtils.cleanPath(image.getOriginalFilename());
     String extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
     fileName = fileName.substring(0, fileName.lastIndexOf("."));
     usuario.setImagem(fileName);
     usuario.setExtensao(extenssao);
-    validarDadosUsuario(usuario.getImagem(), usuario);
+    validarDadosUsuarioSalvar(usuario);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());
     usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuarioRepository.save(usuario);
@@ -57,18 +65,46 @@ public class UsuarioService {
   }
   
   @Transactional
-  public void update(Usuario usuario, Long codigo) {
-    if(Objects.isNull(codigo)) {
+  public void update(Usuario usuarioUpdate, Long codigo, MultipartFile image) {
+    if (Objects.isNull(codigo)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
     }
-    if(Objects.isNull(usuario.getSenha())) {
-      usuario.setSenha(usuarioRepository.findById(codigo).get().getSenha());
-    } else {
-      usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-    }
-    usuario.setId(codigo);
-    validarDadosUsuario(usuario.getImagem(), usuario);
-    usuarioRepository.save(usuario);
+    
+    usuarioRepository.findById(codigo).map(usuarioAtual -> {
+      
+      String fileName = "";
+      String extenssao = "";
+      
+      if(image.isEmpty() && org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Selecione uma imagem!");
+      } else if (!image.isEmpty()) {
+        fileName = StringUtils.cleanPath(image.getOriginalFilename());
+        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
+      } else if (image.isEmpty() && !org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
+        fileName = usuarioAtual.getImagem();
+        extenssao = usuarioAtual.getExtensao();
+      }
+      
+      usuarioUpdate.setId(codigo);
+
+      CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha");
+
+      if (!org.apache.commons.lang3.StringUtils.isBlank(usuarioUpdate.getSenha())) {
+        usuarioAtual.setSenha(passwordEncoder.encode(usuarioUpdate.getSenha()));
+      }
+
+      validarDadosUsuarioUpdate(usuarioUpdate, usuarioAtual);
+      usuarioAtual.setTelefone(usuarioUpdate.getTelefone());
+      usuarioAtual.setImagem(fileName);
+      usuarioAtual.setExtensao(extenssao);
+      
+      usuarioRepository.save(usuarioAtual);
+      if(!image.isEmpty()) {
+        salvarImagemStorage(image, fileName);
+      }
+      return Void.TYPE;
+    }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
   }
 
   public static Usuario usuarioLogado() {
@@ -109,16 +145,33 @@ public class UsuarioService {
     return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), tenant);
   }
   
-  private void validarDadosUsuario(String nomeImagem, Usuario usuario) {
+  private void validarDadosUsuarioSalvar(Usuario usuario) {
     existeTelefone(usuario.getTelefone());
     existeEmail(usuario.getEmail());
-    existeNomeImagem(nomeImagem);
+    existeNomeImagem(usuario.getImagem());
     permiteCriarUsuario();
     validarEmail(usuario.getEmail());
   }
   
+  private void validarDadosUsuarioUpdate(Usuario usuarioUpdate, Usuario usuarioAtual) {
+    String telefoneUpdate = org.apache.commons.lang3.StringUtils.getDigits(usuarioUpdate.getTelefone());
+    String telefoneAtual = org.apache.commons.lang3.StringUtils.getDigits(usuarioAtual.getTelefone());
+    if (!telefoneUpdate.equals(telefoneAtual)) {
+      existeTelefone(usuarioUpdate.getTelefone());
+    }
+    if (!usuarioUpdate.getEmail().equalsIgnoreCase(usuarioAtual.getEmail())) {
+      existeEmail(usuarioUpdate.getEmail());
+    }
+    if (!org.apache.commons.lang3.StringUtils.isBlank(usuarioUpdate.getImagem()) && !org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
+      if (!usuarioUpdate.getImagem().equalsIgnoreCase(usuarioAtual.getImagem())) {
+        existeNomeImagem(usuarioUpdate.getImagem());
+      }
+    }
+    validarEmail(usuarioUpdate.getEmail());
+  }
+  
   private void existeTelefone(String telefone) {
-    if(usuarioRepository.existeTelefone(org.apache.commons.lang3.StringUtils.getDigits(telefone))) {
+    if (usuarioRepository.existeTelefone(org.apache.commons.lang3.StringUtils.getDigits(telefone))) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é permitido criar uma conta de usuário com esse telefone!");
     }
   }
