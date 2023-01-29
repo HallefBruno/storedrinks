@@ -22,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class MovimentacaoCaixaService {
   
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
-  private final UsuarioService usuarioService;
   private final CaixaService caixaService;
   private final ObjectMapperUtil<MovimentacoesCaixaFiltro> objectMapperUtil;
   
@@ -39,7 +38,7 @@ public class MovimentacaoCaixaService {
           .dataMovimentacao(LocalDateTime.now())
           .valorRecebido(BigDecimal.ZERO)
           .valorTroco(valorRetirada)
-          .usuario(usuarioService.usuarioLogado())
+          .usuario(UsuarioService.usuarioLogado())
           .caixa(caixa)
           .build();
         movimentacaoCaixaRepository.save(movimentacao);

@@ -86,7 +86,6 @@ public class Produto implements Serializable {
   private void prePersistPreUpdate() {
     this.codigoBarra = StringUtils.strip(this.codigoBarra);
     this.descricaoProduto = StringUtils.strip(this.descricaoProduto);
-    this.descricaoProduto = this.descricaoProduto.toLowerCase();
     this.codProduto = StringUtils.strip(this.codProduto);
     this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);

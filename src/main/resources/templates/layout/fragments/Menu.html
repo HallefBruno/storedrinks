@@ -1,8 +1,8 @@
-<header class="py-3 mb-3 border-bottom " th:fragment="menu">
+<header class="py-3 mb-3 border-bottom " th:fragment="menu" th:with="auth=${#authentication.getPrincipal().getUsuario()}">
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
       <div class="d-flex align-items-center">
-        <div class="flex-shrink-0 dropdown" th:with="auth=${#authentication.getPrincipal().getUsuario()}">
+        <div class="flex-shrink-0 dropdown">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
             <img data-bs-toggle="tooltip" data-bs-placement="top"  th:title="${auth.getNome()}" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${auth.clienteSistema.tenant},nomeFoto=${auth.getImagem()},extensao=${auth.getExtensao()})}" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
@@ -112,8 +112,8 @@
                   Fornecedores
                 </a>
               </li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
+              <li sec:authorize="hasRole('ROLE_SUPER_USER')"><hr class="dropdown-divider"></li>
+              <li sec:authorize="hasRole('ROLE_SUPER_USER')">
                 <a class="dropdown-item" th:href="@{/clienteSistema/novo}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-fingerprint" viewBox="0 0 16 16">
                     <path d="M8.06 6.5a.5.5 0 0 1 .5.5v.776a11.5 11.5 0 0 1-.552 3.519l-1.331 4.14a.5.5 0 0 1-.952-.305l1.33-4.141a10.5 10.5 0 0 0 .504-3.213V7a.5.5 0 0 1 .5-.5Z"/>
@@ -154,7 +154,7 @@
             </ul>
           </li>
           
-          <li class="nav-item dropdown">
+          <li sec:authorize="hasRole('ROLE_SUPER_USER')" class="nav-item dropdown">
             <a class="nav-link dropdown" href="#" id="navbarDropdownAdminSistema" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-wrench"></i> Administração do sistema
             </a>

@@ -186,7 +186,7 @@ builder.and(builder.equal(root.get("recolhimento"), false))
       List<Predicate> predicates = new ArrayList<>();
       Join<MovimentacaoCaixa, Caixa> caixa = movimentacaoCaixa.join("caixa");
       Join<MovimentacaoCaixa, Usuario> usuario = movimentacaoCaixa.join("usuario");
-      Join<MovimentacaoCaixa, Venda> venda = movimentacaoCaixa.join("venda",JoinType.LEFT);
+      movimentacaoCaixa.join("venda",JoinType.LEFT);
       
       if (movimentacoesCaixaFilters.getSomenteCaixaAberto()) {
         predicates.add(criteriaBuilder.isTrue(caixa.get("aberto")));

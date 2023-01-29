@@ -16,7 +16,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,38 +69,27 @@ public class UsuarioService {
     }
     
     usuarioRepository.findById(codigo).map(usuarioAtual -> {
-      
       String fileName = "";
-      String extenssao = "";
-      
-      if(image.isEmpty() && org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
+      String extensao = "";
+      if (image.isEmpty() && org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Selecione uma imagem!");
       } else if (!image.isEmpty()) {
         fileName = StringUtils.cleanPath(image.getOriginalFilename());
         fileName = fileName.substring(0, fileName.lastIndexOf("."));
-        extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
+        extensao = StringUtils.getFilenameExtension(image.getOriginalFilename());
       } else if (image.isEmpty() && !org.apache.commons.lang3.StringUtils.isBlank(usuarioAtual.getImagem())) {
         fileName = usuarioAtual.getImagem();
-        extenssao = usuarioAtual.getExtensao();
+        extensao = usuarioAtual.getExtensao();
       }
-      
-      usuarioUpdate.setId(codigo);
-
       CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha");
-
-      if (!org.apache.commons.lang3.StringUtils.isBlank(usuarioUpdate.getSenha())) {
-        usuarioAtual.setSenha(passwordEncoder.encode(usuarioUpdate.getSenha()));
-      }
-
+      casoAltereSenha(usuarioUpdate, usuarioAtual);
+      verificaAtributoNull(usuarioUpdate, usuarioAtual);
       validarDadosUsuarioUpdate(usuarioUpdate, usuarioAtual);
       usuarioAtual.setTelefone(usuarioUpdate.getTelefone());
       usuarioAtual.setImagem(fileName);
-      usuarioAtual.setExtensao(extenssao);
-      
+      usuarioAtual.setExtensao(extensao);
       usuarioRepository.save(usuarioAtual);
-      if(!image.isEmpty()) {
-        salvarImagemStorage(image, fileName);
-      }
+      salvarImagemStorage(image, fileName);
       return Void.TYPE;
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
   }
@@ -205,12 +192,28 @@ public class UsuarioService {
     }
   }
   
+  private void verificaAtributoNull(Usuario usuarioUpdate, Usuario usuarioAtual) {
+    if (Objects.isNull(usuarioUpdate.getAtivo())) {
+      usuarioAtual.setAtivo(Boolean.FALSE);
+    }
+    if (Objects.isNull(usuarioUpdate.getProprietario())) {
+      usuarioAtual.setProprietario(Boolean.FALSE);
+    }
+  }
+  
+  private void casoAltereSenha(Usuario usuarioUpdate, Usuario usuarioAtual) {
+    if (!org.apache.commons.lang3.StringUtils.isBlank(usuarioUpdate.getSenha())) {
+      usuarioAtual.setSenha(passwordEncoder.encode(usuarioUpdate.getSenha()));
+    }
+  }
+  
   private void salvarImagemStorage(MultipartFile image, String fileName) {
     try {
-      storageCloudnary.uploadFotoPerfil(image.getBytes(), fileName);
+      if(!image.isEmpty()) {
+        storageCloudnary.uploadFotoPerfil(image.getBytes(), fileName);
+      }
     } catch (IOException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
     }
   }
-  
 }
