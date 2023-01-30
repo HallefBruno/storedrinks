@@ -3,10 +3,11 @@ package com.store.drinks.repository.querys.dashBoard;
 import com.store.drinks.repository.filtros.ProdutosMaisVendidosFiltro;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.Venda;
 import com.store.drinks.entidade.dto.produtosMaisVendidos.ProdutosMaisVendidosdto;
 import com.store.drinks.repository.util.JpaUtils;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.service.UsuarioService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,23 +33,23 @@ import org.springframework.stereotype.Component;
 public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCustom {
   
   @PersistenceContext
-  private EntityManager manager;
+  private EntityManager entityManager;
 
   @Autowired
   private JpaUtils jpaUtils;
 
-  @Autowired
-  private Multitenancy multitenancy;
-
   @Override
   public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFiltro filters) {
-    CriteriaBuilder builder = manager.getCriteriaBuilder();
+    Usuario usuarioLogado = UsuarioService.usuarioLogado();
+    
+    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
     Root<ItensVenda> root = query.from(ItensVenda.class);
     Join<ItensVenda, Produto> produto = root.join("produto");
     Join<ItensVenda, Venda> venda = root.join("venda");
+    Join<Venda, Usuario> usuario = venda.join("usuario");
 
-    Predicate predicates;
+    Predicate predicate;
     List<Selection<?>> selections = new ArrayList<>();
 
     selections.add(builder.sum(root.get("quantidade")).alias("quantidade"));
@@ -59,23 +60,22 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
       LocalDate dataInicial = LocalDate.parse(filters.getDataInicial(), formatter);
       LocalDate dataFinal = LocalDate.parse(filters.getDataFinal(), formatter);
-      predicates = builder.between(venda.get("dataHoraVenda"), dataInicial.atStartOfDay(), dataFinal.atStartOfDay().plusDays(1));
+      predicate = builder.between(venda.get("dataVenda"), dataInicial, dataFinal);
     } else {
-      LocalDateTime dateInicio = LocalDateTime.now().withDayOfMonth(1);
-      LocalDateTime dateFim = LocalDateTime.now().withMonth(dateInicio.getMonthValue()+1).withDayOfMonth(1);
-      predicates = builder.between(venda.get("dataHoraVenda"), dateInicio, dateFim);
+      predicate = builder.greaterThanOrEqualTo(venda.get("dataVenda"), LocalDate.now());
     }
     
     query.where(
-      predicates,
-      builder.and(builder.equal(root.get("tenant"),multitenancy.getTenantValue()))
+predicate,
+builder.and(builder.equal(usuario.get("id"),usuarioLogado.getId())),
+builder.and(builder.equal(root.get("tenant"),usuarioLogado.getClienteSistema().getTenant()))
     );
     
     query.groupBy(produto.get("descricaoProduto"));
     query.orderBy(builder.desc(builder.sum(root.get("quantidade"))));
     
-    TypedQuery<Tuple> typedQuery = manager.createQuery(query);
-    typedQuery.setMaxResults(25);
+    TypedQuery<Tuple> typedQuery = entityManager.createQuery(query);
+    typedQuery.setMaxResults(50);
     
     List<Tuple> listTuple = typedQuery.getResultList();
     List<ProdutosMaisVendidosdto> list = jpaUtils.parseTuple(listTuple,ProdutosMaisVendidosdto.class);

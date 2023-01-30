@@ -160,7 +160,9 @@ builder.and(builder.equal(root.get("recolhimento"), false))
     
     for(MovimentacaoCaixadto mov : usuariosMovimentacaoCaixa) {
       somaValorTotalSaida = somaValorTotalSaida.add(mov.getValorTroco());
-      somaValorTotal = somaValorTotal.add(mov.getValorRecebido().subtract(mov.getValorTroco()));
+      if(mov.getValorRecebido().signum() > 0) {
+        somaValorTotal = somaValorTotal.add(mov.getValorRecebido().subtract(mov.getValorTroco()));
+      }
       mov.setSomaValorTotalSaida(somaValorTotalSaida);
       mov.setSomaValorTotal(somaValorTotal);
     }

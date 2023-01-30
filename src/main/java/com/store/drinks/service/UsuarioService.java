@@ -1,9 +1,11 @@
 package com.store.drinks.service;
 
+import com.store.drinks.entidade.Grupo;
+import com.store.drinks.entidade.Permissao;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.EmailValido;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
-import com.store.drinks.entidade.enuns.SuperUser;
+import com.store.drinks.entidade.enuns.PermissaoSu;
 import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.repository.filtros.UsuarioFiltro;
 import com.store.drinks.security.UsuarioSistema;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -126,8 +129,12 @@ public class UsuarioService {
   
   public List<Usuario> filtrar(UsuarioFiltro usuarioFiltro) {
     String tenant = usuarioLogado().getClienteSistema().getTenant();
-    if(tenant.equalsIgnoreCase(SuperUser.TENANT.get())) {
-      return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), null);
+    for(Grupo g : usuarioLogado().getGrupos()) {
+      for (Permissao p : g.getPermissoes()) {
+        if(PermissaoSu.SUPER_USER.get().equalsIgnoreCase(p.getNome())) {
+          return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), null);
+        }
+      }
     }
     return usuarioRepository.filtrar(usuarioFiltro.getNome(), usuarioFiltro.getEmail(), tenant);
   }

@@ -52,6 +52,9 @@ $(document).ready(function () {
     columns: [
       {
         "data": "valorRecebido", render: function (data, type, row, meta) {
+          if (row.recolhimento) {
+            return "-";
+          }
           return `<span class='text-primary'>${formatter.format(data)}</span>`;
         }
       },
@@ -88,6 +91,9 @@ $(document).ready(function () {
 
       {
         "defaultContent": "", render: function (data, type, row, meta) {
+          if (row.recolhimento) {
+            return "-";
+          }
           return `<span class='text-success'>${formatter.format(row.somaValorTotal)}</span>`;
         }
       },

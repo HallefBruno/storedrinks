@@ -25,6 +25,7 @@ import javax.validation.constraints.Min;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
+import java.time.LocalDate;
 import javax.persistence.ColumnResult;
 import javax.persistence.SequenceGenerator;
 
@@ -63,6 +64,9 @@ public class Venda implements Serializable {
 
   @Column(name = "data_hora_venda", nullable = false)
   private LocalDateTime dataHoraVenda;
+  
+  @Column(name = "data_venda", nullable = false)
+  private LocalDate dataVenda;
 
   @Min(value = 0, message = "Valor mínimo")
   @Column(name = "valor_total_venda", nullable = false)
@@ -80,6 +84,7 @@ public class Venda implements Serializable {
   private void prePersistPreUpdate() {
     this.tenant = new Multitenancy().getTenantValue();
     this.tenant = StringUtils.strip(this.tenant);
+    this.dataVenda = this.dataHoraVenda.toLocalDate();
   }
 
   public Long getId() {
