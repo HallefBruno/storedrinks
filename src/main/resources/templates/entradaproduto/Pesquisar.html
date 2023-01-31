@@ -21,109 +21,112 @@
               </div>
             </div>
           </div>
-          <form method="GET" th:object="${entradasFiltro}">
-            <div class="accordion shadow-sm mb-2" id="accordionPesquisar">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Pesquisar
-                  </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
-                  <div class="accordion-body">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="mb-3 col-12 col-md-4  col-lg-3">
-                            <label for="numeroNota" class="form-label">Número da nota</label>
-                            <div class="input-group">
-                              <span class="input-group-text"><i class="bi bi-sticky"></i></span>
-                              <input th:field="*{numeroNota}" autocomplete="off" type="text" class="form-control" name="numeroNota"/>
+          <div class="card mb-2">
+            <h5 class="card-header">Pesquisa de produto</h5>
+            <div class="card-body">
+              <form method="GET" th:object="${entradasFiltro}">
+                <div class="accordion shadow-sm mb-2" id="accordionPesquisar">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Pesquisar
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPesquisar">
+                      <div class="accordion-body">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="mb-3 col-12 col-md-4  col-lg-3">
+                                <label for="numeroNota" class="form-label">Número da nota</label>
+                                <div class="input-group">
+                                  <span class="input-group-text"><i class="bi bi-sticky"></i></span>
+                                  <input th:field="*{numeroNota}" autocomplete="off" type="text" class="form-control" name="numeroNota"/>
+                                </div>
+                              </div>
+                              <div class="mb-3 col-12 col-md-4 col-lg-3">
+                                <label for="fornecedor" class="form-label">Fornecedor</label>
+                                <select data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
+                                  <option value=""></option>
+                                  <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
+                                </select>
+                              </div>
+                              <div class="mb-3 col-12 col-md-4 col-lg-3">
+                                <label for="codBarra" class="form-label">Cód Barra</label>
+                                <div class="input-group">
+                                  <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+                                  <input type="text" autocomplete="off" th:field="*{codBarra}" class="form-control" name="codBarra"/>
+                                </div>
+                              </div>
+                              <div class="mb-3 col-12 col-md-4 col-lg-3">
+                                <label for="dataEmissao" class="form-label">Data emissão</label>
+                                <input type="date" autocomplete="off" th:field="*{dataEmissao}" class="form-control" name="dataEmissao"/>
+                              </div>
                             </div>
-                          </div>
-                          <div class="mb-3 col-12 col-md-4 col-lg-3">
-                            <label for="fornecedor" class="form-label">Fornecedor</label>
-                            <select data-placeholder="Fornecedor..." th:field="*{fornecedor}" id="fornecedor" name="fornecedor" class="form-control">
-                              <option value=""></option>
-                              <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.nome}" th:text="${fornecedor.nome}"></option>
-                            </select>
-                          </div>
-                          <div class="mb-3 col-12 col-md-4 col-lg-3">
-                            <label for="codBarra" class="form-label">Cód Barra</label>
-                            <div class="input-group">
-                              <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
-                              <input type="text" autocomplete="off" th:field="*{codBarra}" class="form-control" name="codBarra"/>
+
+                            <div class="btn-group mt-2" role="group">
+                              <a th:href="@{/entradas}" class="btn btn-outline-secondary btn-sm invock-gif">Nova</a>
+                              <button type="submit" class="btn btn-sm btn-outline-secondary">Pesquisar</button>
                             </div>
-                          </div>
-                          <div class="mb-3 col-12 col-md-4 col-lg-3">
-                            <label for="dataEmissao" class="form-label">Data emissão</label>
-                            <input type="date" autocomplete="off" th:field="*{dataEmissao}" class="form-control" name="dataEmissao"/>
+
                           </div>
                         </div>
-
-                        <div class="btn-group mt-2" role="group">
-                          <a th:href="@{/entradas}" class="btn btn-outline-secondary btn-sm invock-gif">Nova</a>
-                          <button type="submit" class="btn btn-sm btn-outline-secondary">Pesquisar</button>
-                        </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </form>
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <div class="">
-                <table id="entradas" style="width:100%" class="table table-hover display nowrap caption-top">
-                  <caption>Registro de entradas no estoque</caption>
-                  <thead>
-                    <tr>
-                      <th>id</th>
-                      <th>Cód barra</th>
-                      <th>Produto</th>
-                      <th>Nº nota</th>
-                      <th>Fornecedor</th>
-                      <th style="text-align: center;">Emissão</th>
-                      <th style="text-align: center;">Quantidade</th>
-                      <th style="text-align: center;">Qtd entrada</th>
-                      <th style="text-align: center;">Nova quantidade</th>
-                      <th>Valor custo</th>
-                      <th style="text-align: center;">Valor venda</th>
-                      <th style="text-align: center;">Novo valor custo</th>
-                      <th style="text-align: center;">Novo valor venda</th>
-                      <th style="text-align: center;">Valor entrada</th>
-                      <th style="text-align: center;">Forma pagto</th>
-                      <th style="text-align: center;">Qtd parcela</th>
-                      <th style="text-align: center;">Situação compra</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="entrada : ${pagina.conteudo}">
-                      <td th:text="${entrada.id}"></td>
-                      <td th:text="${entrada.produto.codigoBarra}"></td>
-                      <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
-                      <td th:text="${entrada.numeroNota}"></td>
-                      <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Fornecedor" th:attr="data-bs-content=${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
-                      <td style="text-align: center;" th:text="${#temporals.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
-                      <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
-                      <td style="text-align: center;">
-                        <div th:switch="${entrada.situacaoCompra}">
-                          <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}" title="Não confirmado" class="badge bg-secondary text-white position-relative">
-                            [[${entrada.quantidadeIncrementar}]]
-                            <span title="Não confirmado" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                          </span>
-                          <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" th:text="${entrada.novaQuantidade - entrada.quantidade}"></span>
-                        </div>
-                      </td>
-                      <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
-                      <td th:text="${{entrada.valorCusto}}"></td>
-                      <td style="text-align: center;" th:text="${{entrada.valorVenda}}"></td>
-                      <td style="text-align: center;" th:text="${{entrada.novoValorCusto}}"></td>
-                      <td style="text-align: center;" th:text="${{entrada.novoValorVenda}}"></td>
-                      <td style="text-align: center;" th:text="${{entrada.valorTotal}}"></td>
-                      <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
+              </form>
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="">
+                    <table id="entradas" style="width:100%" class="table table-hover display nowrap caption-top">
+                      <caption>Registro de entradas no estoque</caption>
+                      <thead>
+                        <tr>
+                          <th>id</th>
+                          <th>Cód barra</th>
+                          <th>Produto</th>
+                          <th>Nº nota</th>
+                          <th>Fornecedor</th>
+                          <th style="text-align: center;">Emissão</th>
+                          <th style="text-align: center;">Quantidade</th>
+                          <th style="text-align: center;">Qtd entrada</th>
+                          <th style="text-align: center;">Nova quantidade</th>
+                          <th>Valor custo</th>
+                          <th style="text-align: center;">Valor venda</th>
+                          <th style="text-align: center;">Novo valor custo</th>
+                          <th style="text-align: center;">Novo valor venda</th>
+                          <th style="text-align: center;">Valor entrada</th>
+                          <th style="text-align: center;">Forma pagto</th>
+                          <th style="text-align: center;">Qtd parcela</th>
+                          <th style="text-align: center;">Situação compra</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="entrada : ${pagina.conteudo}">
+                          <td th:text="${entrada.id}"></td>
+                          <td th:text="${entrada.produto.codigoBarra}"></td>
+                          <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Descrição produto" th:attr="data-bs-content=${entrada.produto.descricaoProduto}" th:text="${entrada.produto.descricaoProduto}"></td>
+                          <td th:text="${entrada.numeroNota}"></td>
+                          <td class="limit-text" data-bs-toggle="popover" data-bs-trigger="hover" title="Fornecedor" th:attr="data-bs-content=${entrada.fornecedor.nome}" th:text="${entrada.fornecedor.nome}"></td>
+                          <td style="text-align: center;" th:text="${#temporals.format(entrada.dataEmissao,'dd/MM/yyyy')}"></td>
+                          <td style="text-align: center;" th:text="${entrada.quantidade}"></td>
+                          <td style="text-align: center;">
+                            <div th:switch="${entrada.situacaoCompra}">
+                              <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}" title="Não confirmado" class="badge bg-secondary text-white position-relative">
+                                [[${entrada.quantidadeIncrementar}]]
+                                <span title="Não confirmado" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                              </span>
+                              <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).CONFIRMADA}" th:text="${entrada.novaQuantidade - entrada.quantidade}"></span>
+                            </div>
+                          </td>
+                          <td style="text-align: center;" th:text="${entrada.novaQuantidade}"></td>
+                          <td th:text="${{entrada.valorCusto}}"></td>
+                          <td style="text-align: center;" th:text="${{entrada.valorVenda}}"></td>
+                          <td style="text-align: center;" th:text="${{entrada.novoValorCusto}}"></td>
+                          <td style="text-align: center;" th:text="${{entrada.novoValorVenda}}"></td>
+                          <td style="text-align: center;" th:text="${{entrada.valorTotal}}"></td>
+                          <td style="text-align: center;" th:text="${entrada.formaPagamento}"></td>
                       <div th:switch="${entrada.formaPagamento}">
                         <td style="text-align: center;">
                           <span th:case="${T(com.store.drinks.entidade.enuns.FormaPagamento).CARTAO_CREDITO}" class="badge bg-primary">[[${entrada.qtdParcelas}]]</span>
@@ -136,12 +139,15 @@
                           <span th:case="${T(com.store.drinks.entidade.enuns.SituacaoCompra).ABERTA}"><a title="Clique para alterar" th:href="@{/entradas/alterarSituacao/{id}(id=${entrada.id})}" class="btn btn-link">Aberta</a></span>
                         </td>
                       </div>
-                    </tr>
-                  </tbody>
-                </table>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          
         </div>
         <span class="mt-2">
           <th:block th:replace="fragments/Paginacao :: pagination(${pagina})"></th:block>

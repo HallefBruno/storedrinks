@@ -9,7 +9,6 @@ import com.store.drinks.entidade.dto.produtosMaisVendidos.ProdutosMaisVendidosdt
 import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.service.UsuarioService;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +41,10 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFiltro filters) {
     Usuario usuarioLogado = UsuarioService.usuarioLogado();
     
+    if(Objects.isNull(filters.getUsuarioId())) {
+      filters.setUsuarioId(usuarioLogado.getId());
+    }
+    
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
     Root<ItensVenda> root = query.from(ItensVenda.class);
@@ -49,27 +52,27 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
     Join<ItensVenda, Venda> venda = root.join("venda");
     Join<Venda, Usuario> usuario = venda.join("usuario");
 
-    Predicate predicate;
+    List<Predicate> predicates = new ArrayList<>();
     List<Selection<?>> selections = new ArrayList<>();
 
     selections.add(builder.sum(root.get("quantidade")).alias("quantidade"));
     selections.add(produto.get("descricaoProduto").alias("descricaoProduto"));
     query.multiselect(selections);
     
-    if(Objects.nonNull(filters) && StringUtils.isNotBlank(filters.getDataInicial()) && StringUtils.isNotBlank(filters.getDataFinal())) {
+    if(Objects.nonNull(filters) && StringUtils.isNotBlank(filters.getDataInicial()) && StringUtils.isNotBlank(filters.getDataFinal()) && Objects.nonNull(filters.getUsuarioId())) {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
       LocalDate dataInicial = LocalDate.parse(filters.getDataInicial(), formatter);
       LocalDate dataFinal = LocalDate.parse(filters.getDataFinal(), formatter);
-      predicate = builder.between(venda.get("dataVenda"), dataInicial, dataFinal);
-    } else {
-      predicate = builder.greaterThanOrEqualTo(venda.get("dataVenda"), LocalDate.now());
-    }
+      predicates.add(builder.between(venda.get("dataVenda"), dataInicial, dataFinal));
+      predicates.add(builder.and(builder.equal(usuario.get("id"), filters.getUsuarioId())));
+    } else if (Objects.nonNull(filters.getUsuarioId())) {
+      predicates.add(builder.and(builder.equal(usuario.get("id"), filters.getUsuarioId())));
+      predicates.add(builder.greaterThanOrEqualTo(venda.get("dataVenda"), LocalDate.now()));
+    } 
     
-    query.where(
-predicate,
-builder.and(builder.equal(usuario.get("id"),usuarioLogado.getId())),
-builder.and(builder.equal(root.get("tenant"),usuarioLogado.getClienteSistema().getTenant()))
-    );
+    predicates.add(builder.and(builder.equal(root.get("tenant"),usuarioLogado.getClienteSistema().getTenant())));
+    
+    query.where(predicates.toArray(Predicate[]::new));
     
     query.groupBy(produto.get("descricaoProduto"));
     query.orderBy(builder.desc(builder.sum(root.get("quantidade"))));

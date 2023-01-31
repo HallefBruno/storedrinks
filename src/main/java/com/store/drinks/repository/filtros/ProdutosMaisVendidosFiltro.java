@@ -10,5 +10,6 @@ public class ProdutosMaisVendidosFiltro implements Serializable {
 
   private String dataInicial;
   private String dataFinal;
+  private Long usuarioId;
 
 }

@@ -4,6 +4,7 @@ import com.store.drinks.service.MovimentacaoCaixaService;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/recolhimento")
+@PreAuthorize("hasRole('ROLE_MANTER_PDV')")
 @RequiredArgsConstructor
 public class RecolhimentoController {
   

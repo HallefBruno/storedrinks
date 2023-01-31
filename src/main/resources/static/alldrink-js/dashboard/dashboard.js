@@ -1,6 +1,7 @@
 /* globals Chart:false, feather:false */
 /* global Utils, CONTEXT, StoreDrink, Morris */
 
+let usuarioSelect2 = {};
 $(function () {
   
   let toast = new StoreDrink.Toast();
@@ -15,9 +16,12 @@ $(function () {
   
   $("#btnPesquisar").click(function () {
     
+    console.log(usuarioSelect2);
+    
     filters = {
       dataInicial: $("#dataInicial").val(),
-      dataFinal: $("#dataFinal").val()
+      dataFinal: $("#dataFinal").val(),
+      usuarioId: usuarioSelect2.usuarioId
     };
     
     if(filters.dataInicial && !filters.dataFinal) {
@@ -27,11 +31,42 @@ $(function () {
       toast.show("warning","Atenção","A data final não pode ser mesno que a data inicial!","top-right");
       return;
     }
-    
     responseData(filters);
     
   });
-
+  
+  if ($("#usuarios").length) {
+    $.get(`${CONTEXT}movimentacao-caixa/usuarios`, function (response) {
+      $("#usuarios").select2({
+        theme: "bootstrap-5",
+        allowClear: true,
+        language: "pt-BR",
+        multiple: false,
+        closeOnSelect: true,
+        data: response,
+        templateResult: templateResultProduto,
+        templateSelection: function (response) {
+          if (response && response.text !== "Usuários") {
+            return $("<span class='badge bg-light text-dark fw-bold' style='font-size:12px;'>" + response.text + "</span>");
+          }
+          return $("<span class=''>" + response.text + "</span>");
+        }
+      });
+    });
+  }
+  
+  $("#usuarios").on("select2:clear", function () {
+    usuarioSelect2 = {};
+    $("#usuarios").val("").trigger("change");
+  });
+  
+  $("#usuarios").on("select2:select", function (e) {
+    usuarioSelect2 = {
+      usuarioId: e.params.data.id,
+      nome: e.params.data.text
+    };
+  });
+  
 });
 
 function responseData(filters) {
@@ -69,6 +104,12 @@ function responseData(filters) {
   });
 }
 
+function templateResultProduto(usuario) {
+  if (usuario.loading) {
+    return $(`<span class='badge bg-light text-dark fw-bold' style='font-size:12px;'>${usuario.text}</span>`);
+  }
+  return $("<span class='badge bg-light text-dark fw-bold' style='font-size:12px;'>" + usuario.text + "</span>");
+}
 
 function donutChart(response) {
   

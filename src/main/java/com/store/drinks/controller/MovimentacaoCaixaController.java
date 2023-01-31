@@ -41,7 +41,7 @@ public class MovimentacaoCaixaController {
   }
   
   @GetMapping("/usuarios")
-  @PreAuthorize("hasRole('FILTRAR_POR_USUARIO_MOVIMENTACAO_CAIXA')")
+  @PreAuthorize("hasRole('FILTRAR_POR_USUARIO')")
   public ResponseEntity<List<UsuarioMovimentacaoCaixadto>> getUsuarios() {
     var list = movimentacaoCaixaService.getUsuarios();
     return ResponseEntity.ok(list);
