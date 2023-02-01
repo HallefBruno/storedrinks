@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping(path = {"/", "/dashboard"})
 @RequiredArgsConstructor
 public class DashBoardController {
   
@@ -21,9 +21,19 @@ public class DashBoardController {
     return new ModelAndView("Dashboard");
   }
   
-  @GetMapping("/dashBoard/pesquisar")
+  @GetMapping("/pesquisar")
   public ResponseEntity<?> pesqisar(@RequestParam String filters) {
     return ResponseEntity.ok(boardService.produtosMaisVendidos(filters));
+  }
+  
+  @GetMapping("/vendas-tempo-real")
+  public ResponseEntity<?> vendasTempoReal(
+    @RequestParam(name = "draw", required = false) Integer draw,
+    @RequestParam(name = "start", required = false) Integer start,
+    @RequestParam(name = "length", required = false) Integer length,
+    @RequestParam(name = "usuarioId", required = false) Long usuarioId) {
+    var list = boardService.listVendasTempoReal(usuarioId, draw, start, length);
+    return ResponseEntity.ok(list);
   }
  
 }

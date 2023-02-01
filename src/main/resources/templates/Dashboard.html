@@ -5,7 +5,7 @@
     <meta name="description" content="Dashboard">
     <th:block th:replace="fragments/CssFragment :: css"></th:block>
     <link th:href="@{/vendor/css/morris.css}" rel="stylesheet" type="text/css"/>
-    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
   </head>
 <body>
   <main class="container-fluid">
@@ -14,13 +14,12 @@
     </div>
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link" id="nav-acompanhar-vendas-tab" data-bs-toggle="tab" data-bs-target="#nav-acompanhar-vendas" type="button" role="tab" aria-controls="nav-acompanhar-vendas" aria-selected="false">Acompanhar vendas</button>
-        <button class="nav-link" id="nav-vendas-por-caixa-tab" data-bs-toggle="tab" data-bs-target="#nav-vendas-por-caixa" type="button" role="tab" aria-controls="nav-vendas-por-caixa" aria-selected="false">Vendas por caixa</button>
-        <button class="nav-link active" id="nav-produtos-mais-vendidos-tab" data-bs-toggle="tab" data-bs-target="#nav-produtos-mais-vendidos" type="button" role="tab" aria-controls="nav-produtos-mais-vendidos" aria-selected="true">Produtos mais vendidos</button>
+        <button class="nav-link active" id="nav-acompanhar-vendas-tab" data-bs-toggle="tab" data-bs-target="#nav-acompanhar-vendas" type="button" role="tab" aria-controls="nav-acompanhar-vendas">Acompanhar vendas</button>
+        <button class="nav-link" id="nav-produtos-mais-vendidos-tab" data-bs-toggle="tab" data-bs-target="#nav-produtos-mais-vendidos" type="button" role="tab" aria-controls="nav-produtos-mais-vendidos">Produtos mais vendidos</button>
       </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-produtos-mais-vendidos" role="tabpanel" aria-labelledby="nav-produtos-mais-vendidos-tab">
+      <div class="tab-pane" id="nav-produtos-mais-vendidos" role="tabpanel" aria-labelledby="nav-produtos-mais-vendidos-tab">
         <div class="p-2">
           <div class="shadow-sm mb-4">
             <div class="card">
@@ -69,6 +68,8 @@
                         </table>
                       </div>
                     </div>
+                  </div>
+                  <div class="row">
                     <div class="col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
                       <div id="donutChart"></div>
                     </div>
@@ -79,8 +80,49 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="nav-acompanhar-vendas" role="tabpanel" aria-labelledby="nav-acompanhar-vendas-tab">3</div>
-      <div class="tab-pane fade" id="nav-vendas-por-caixa" role="tabpanel" aria-labelledby="nav-vendas-por-caixa-tab">2</div>
+      <div class="tab-pane fade show active" id="nav-acompanhar-vendas" role="tabpanel" aria-labelledby="nav-acompanhar-vendas-tab">
+        <div class="p-2">
+          <div class="shadow-sm mb-4">
+            <div class="card">
+              <h5 class="card-header">Acompanhar vendas em tempo real</h5>
+              <div class="card-body">
+                <div class="col">
+<!--                  <div class="callout callout-info">
+                    <div sec:authorize="hasRole('ROLE_FILTRAR_POR_USUARIO')">
+                      <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-3 mb-3">
+                          <label for="usuario" class="form-label">Usuário</label>
+                          <select id="usuarios" name="usuarios" class="form-select" data-placeholder="Usuários">
+                            <option value=""></option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>-->
+                  <div class="row">
+                    <div class="col-sm-12 col-lg-12 col-xl-12 col-xxl-12">
+                      <table id="tbAcompanharVendas" style="width:100%" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor Total</th>
+                            <th>Vendedor</th>
+                            <th>Data</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="tab-pane fade" id="nav-vendas-por-caixa" role="tabpanel" aria-labelledby="nav-vendas-por-caixa-tab">2</div>-->
     </div>
   </main>
   <th:block th:replace="fragments/JsFragment :: script"></th:block>

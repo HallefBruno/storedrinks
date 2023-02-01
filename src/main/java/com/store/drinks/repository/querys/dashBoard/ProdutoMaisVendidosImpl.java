@@ -1,11 +1,13 @@
-package com.store.drinks.repository.querys.dashBoard;
+package com.store.drinks.repository.querys.dashboard;
 
 import com.store.drinks.repository.filtros.ProdutosMaisVendidosFiltro;
 import com.store.drinks.entidade.ItensVenda;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.Venda;
+import com.store.drinks.entidade.dto.dashboard.DetalheVendadto;
 import com.store.drinks.entidade.dto.produtosMaisVendidos.ProdutosMaisVendidosdto;
+import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.util.JpaUtils;
 import com.store.drinks.service.UsuarioService;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ import java.util.Locale;
 import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -85,4 +88,40 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
     
     return list;
   }
+
+  @Override
+  public DataTableWrapper<DetalheVendadto> listVendasTempoReal(Long idUsuario, Integer draw, Integer start, Integer length) {
+    DataTableWrapper<DetalheVendadto> dataTableWrapper = new DataTableWrapper<>();
+    Usuario usuarioLogado = UsuarioService.usuarioLogado();
+    
+    if(Objects.isNull(idUsuario)) {
+      idUsuario = usuarioLogado.getId();
+    }
+    
+    String sqlCount = "  select count (*) ";
+    String sqlSelect = " select venda.id as idvenda, produto.descricao_produto as nomeproduto, itens_venda.quantidade, venda.valor_total_venda as valortotal, usuario.nome as nomevendedor, venda.data_hora_venda as datahoravenda ";
+    String sqlFrom = "   from venda inner join itens_venda on venda.id = itens_venda.venda_id inner join produto on produto.id = itens_venda.produto_id inner join usuario on usuario.id = venda.usuario_id where venda.usuario_id = :idUsuario and venda.data_venda = :dataVenda and venda.tenant = :tenant ";
+    
+    Query query = entityManager.createNativeQuery(sqlSelect+sqlFrom, "DetalheVendadto");
+    Query queryCount = entityManager.createNativeQuery(sqlCount+sqlFrom);
+    
+    query.setParameter("idUsuario", idUsuario);
+    query.setParameter("dataVenda", LocalDate.now());
+    query.setParameter("tenant", usuarioLogado.getClienteSistema().getTenant());
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+    
+    query.getParameters().forEach(q -> queryCount.setParameter(q.getName(), query.getParameterValue(q.getName())));
+    
+    Long count = Long.valueOf(queryCount.getSingleResult().toString());
+    
+    dataTableWrapper.setData(query.getResultList());
+    dataTableWrapper.setRecordsTotal(count);
+    dataTableWrapper.setRecordsFiltered(count);
+    dataTableWrapper.setDraw(draw);
+    dataTableWrapper.setStart(start);
+    
+    return dataTableWrapper;
+  }
+  
 }

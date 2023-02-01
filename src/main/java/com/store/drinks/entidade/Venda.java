@@ -25,6 +25,7 @@ import javax.validation.constraints.Min;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
+import com.store.drinks.entidade.dto.dashboard.DetalheVendadto;
 import java.time.LocalDate;
 import javax.persistence.ColumnResult;
 import javax.persistence.SequenceGenerator;
@@ -47,6 +48,20 @@ import javax.persistence.SequenceGenerator;
       @ColumnResult(name = "usuario_id", type=Long.class),
       @ColumnResult(name = "nome", type=String.class),
       @ColumnResult(name = "email", type=String.class),
+    })
+  }
+)
+@SqlResultSetMapping(
+  name="DetalheVendadto",
+  classes={
+    @ConstructorResult(targetClass=DetalheVendadto.class,
+    columns={
+      @ColumnResult(name = "idVenda", type=Long.class),
+      @ColumnResult(name = "nomeproduto", type=String.class),
+      @ColumnResult(name = "quantidade", type=Integer.class),
+      @ColumnResult(name = "valortotal", type=BigDecimal.class),
+      @ColumnResult(name = "nomevendedor", type=String.class),
+      @ColumnResult(name = "datahoravenda", type=LocalDateTime.class)
     })
   }
 )
