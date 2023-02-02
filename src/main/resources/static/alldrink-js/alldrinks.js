@@ -218,6 +218,8 @@ StoreDrink.LoadGif = (function () {
     } else if(url.includes("movimentacao-caixa/formas-pagamento/")) {
       element.css("display", "block");
       return false;
+    } else if (url.includes("dashboard/vendas-tempo-real")) {
+      return false;
     }
     return true;
   }

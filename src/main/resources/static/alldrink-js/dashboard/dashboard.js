@@ -4,12 +4,28 @@
 let usuarioSelect2 = {};
 let dataTableAcompanharVendas;
 let nIntervId;
-let intervalo = 1000;
+let sessentaSegundos = 60;
+let tempoSelecionado = null;
+let arrayTempo = [];
+let chart = null;
+let intervalRelogio = null;
 
 $(function () {
   
   let toast = new StoreDrink.Toast();
   $("#donutChart").empty();
+  
+  let arrayStorageSelecionado = addStorageArray();
+  
+  if(arrayStorageSelecionado.length > 0) {
+    $("#ulTempos li > a").removeClass("disabled");
+    tempoSelecionado = arrayStorageSelecionado[0].value;
+    $(`#${arrayStorageSelecionado[0].id}`).addClass("disabled");
+  } else {
+    tempoSelecionado = sessentaSegundos;
+  }
+  
+  removerStorage();
   
   let filters = {
     dataInicial: $("#dataInicial").val(),
@@ -17,10 +33,12 @@ $(function () {
   };
   
   $("#nav-produtos-mais-vendidos-tab").click(function () {
+    $("#donutChart").empty();
     responseData(filters);
   });
   
-  nIntervId = setInterval(popularTable, intervalo * 30);
+  popularTable();
+  nIntervId = setInterval(popularTable, 1000 * tempoSelecionado);
 
   $("#btnPesquisar").click(function () {
     filters = {
@@ -60,22 +78,15 @@ $(function () {
     });
   }
   
-  $("#usuarios").on("select2:clear", function () {
-    usuarioSelect2 = {};
-    $("#usuarios").val("").trigger("change");
-  });
+  usuarioSelecionado();
   
-  $("#usuarios").on("select2:select", function (e) {
-    usuarioSelect2 = {
-      usuarioId: e.params.data.id,
-      nome: e.params.data.text
-    };
-  });
+  limparSelectUsuarioSelecionado();
+  
+  eventoTempoSelecionado();
   
 });
 
 function responseData(filters) {
-
   $.ajax({
     url: `${CONTEXT}dashboard/pesquisar`,
     type: "GET",
@@ -86,21 +97,16 @@ function responseData(filters) {
     },
     success: function (response, textStatus, jqXHR) {
       $("#donutChart").empty();
-      
       if(response.length > 0) {
         donutChart(response);
       }
-      
       let tBadyProdutosMaisVendidos = $("#tbProdutosMaisVendidos").find("tbody");
       tBadyProdutosMaisVendidos.empty();
-      
       for(let i = 0; i < response.length; i++) {
         tBadyProdutosMaisVendidos.append(`<tr><td class="">${response[i].value}</td> <td>${response[i].label}</td></tr>`);
       }
-      
       if(response.length === 0) {
         tBadyProdutosMaisVendidos.append(`<tr><td colspan="2" class="text-center"><span>Nenhum produto encontrado</span></td></tr>`);
-        $("#chartProdutosMaisVendidos").addClass("text-center").append("<span class='fs-6 badge bg-primary'>Nenhum gráfico</span>");
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -117,23 +123,25 @@ function templateResultProduto(usuario) {
 }
 
 function donutChart(response) {
-  
   for (let i = 0; i < response.length; i++) {
     response[i].label = response[i].descricaoProduto;
     response[i].value = response[i].quantidade;
     delete response[i].descricaoProduto;
     delete response[i].quantidade;
   }
-
-  new Morris.Donut(
-    {
-      element: 'donutChart',
-      data: response,
-      resize: true,
-      redraw: true,
-      formatter: function (y) { return " " + y; }
-    }
-  );
+  if (chart === null) {
+    new Morris.Donut(
+      {
+        element: 'donutChart',
+        data: response,
+        resize: true,
+        redraw: true
+        //formatter: function (y) { return " " + y; }
+      }
+    );
+  } else {
+    chart.setData(response);
+  }
 }
 
 function popularTable() {
@@ -180,9 +188,80 @@ function popularTable() {
     ],
     ordering: false
   });
+  
+  clearInterval(intervalRelogio);
+  intervalRelogio = null;
+  let time = (1000 * tempoSelecionado) / 1000;
+  intervalRelogio = setInterval(() => {
+    $("#spanTimer").html("");
+    $("#spanTimer").html(--time);
+  }, 1000);
+  
 }
 
 function stop() {
   clearInterval(nIntervId);
   nIntervId = null;
+}
+
+function removerStorage() {
+  localStorage.removeItem("sessentaSegundos");
+  localStorage.removeItem("cincoMinutos");
+  localStorage.removeItem("dezMinutos");
+  localStorage.removeItem("trintaMinutos");
+}
+
+function addStorageArray() {
+  for (var i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    if (key && key.includes("sessentaSegundos")) {
+      arrayTempo.push({"id":"linkUmMinuto", "value":Number(value)});
+    } else if (key && key.includes("cincoMinutos")) {
+      arrayTempo.push({"id":"linkCincoMinutos", "value":Number(value)});
+    } else if (key && key.includes("dezMinutos")) {
+      arrayTempo.push({"id":"linkDezMinutos", "value":Number(value)});
+    } else if (key && key.includes("trintaMinutos")) {
+      arrayTempo.push({"id":"linkTrintaMinutos", "value":Number(value)});
+    }
+  }
+  return arrayTempo;
+}
+
+function eventoTempoSelecionado() {
+  $("#linkUmMinuto").click(function () {
+    localStorage.setItem("sessentaSegundos", 60);
+    window.location.reload();
+  });
+  
+  $("#linkCincoMinutos").click(function () {
+    localStorage.setItem("cincoMinutos", 300);
+    window.location.reload();
+  });
+  
+  $("#linkDezMinutos").click(function () {
+    localStorage.setItem("dezMinutos", 600);
+    window.location.reload();
+  });
+  
+  $("#linkTrintaMinutos").click(function () {
+    localStorage.setItem("trintaMinutos", 1800);
+    window.location.reload();
+  });
+}
+
+function usuarioSelecionado() {
+  $("#usuarios").on("select2:select", function (e) {
+    usuarioSelect2 = {
+      usuarioId: e.params.data.id,
+      nome: e.params.data.text
+    };
+  });
+}
+
+function limparSelectUsuarioSelecionado() {
+  $("#usuarios").on("select2:clear", function () {
+    usuarioSelect2 = {};
+    $("#usuarios").val("").trigger("change");
+  });
 }

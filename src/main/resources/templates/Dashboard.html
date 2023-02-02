@@ -82,23 +82,23 @@
       </div>
       <div class="tab-pane fade show active" id="nav-acompanhar-vendas" role="tabpanel" aria-labelledby="nav-acompanhar-vendas-tab">
         <div class="p-2">
-          <div class="shadow-sm mb-4">
+          <div class="shadow-sm mt-2">
             <div class="card">
-              <h5 class="card-header">Acompanhar vendas em tempo real</h5>
               <div class="card-body">
                 <div class="col">
-<!--                  <div class="callout callout-info">
-                    <div sec:authorize="hasRole('ROLE_FILTRAR_POR_USUARIO')">
-                      <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-3 mb-3">
-                          <label for="usuario" class="form-label">Usuário</label>
-                          <select id="usuarios" name="usuarios" class="form-select" data-placeholder="Usuários">
-                            <option value=""></option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>-->
+                  <div class="btn-group mt-2 mb-2" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Pesquisar</button>
+                    <button id="btnGroupTemp" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      Timer
+                    </button>
+                    <ul id="ulTempos" class="dropdown-menu" aria-labelledby="btnGroupTemp">
+                      <li><a id="linkUmMinuto" class="dropdown-item disabled" href="#">1 Minuto</a></li>
+                      <li><a id="linkCincoMinutos" class="dropdown-item" href="#">5 Minutos</a></li>
+                      <li><a id="linkDezMinutos" class="dropdown-item" href="#">10 Minutos</a></li>
+                      <li><a id="linkTrintaMinutos" class="dropdown-item" href="#">30 Minutos</a></li>
+                    </ul>
+                  </div>
+                  <span class="badge rounded-pill bg-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Tempo restante"  id="spanTimer"></span>
                   <div class="row">
                     <div class="col-sm-12 col-lg-12 col-xl-12 col-xxl-12">
                       <table id="tbAcompanharVendas" style="width:100%" class="table table-hover">
