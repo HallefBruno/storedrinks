@@ -6,6 +6,11 @@ $(document).ready(function () {
     if($(this).hasClass("invock-gif")) {
       $("#divLoading").addClass("loading");
     }
+    
+    if($(this).is('.not-invock-gif')) {
+      $("#divLoading").removeClass("loading");
+    }
+    
   });
 
   $("button[type='submit']").click(function (e) {

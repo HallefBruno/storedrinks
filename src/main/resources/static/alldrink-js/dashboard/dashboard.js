@@ -1,5 +1,5 @@
 /* globals Chart:false, feather:false */
-/* global Utils, CONTEXT, StoreDrink, Morris */
+/* global Utils, CONTEXT, StoreDrink, Morris, moment */
 
 let usuarioSelect2 = {};
 let dataTableAcompanharVendas;
@@ -9,6 +9,7 @@ let tempoSelecionado = null;
 let arrayTempo = [];
 let chart = null;
 let intervalRelogio = null;
+let time = null;
 
 $(function () {
   
@@ -79,10 +80,11 @@ $(function () {
   }
   
   usuarioSelecionado();
-  
   limparSelectUsuarioSelecionado();
-  
   eventoTempoSelecionado();
+  linkVerDetalheVenda();
+  pesquisarVendasTempoReal();
+  setDateCardTotalVenda();
   
 });
 
@@ -153,20 +155,25 @@ function popularTable() {
     destroy: true,
     info: true,
     responsive: true,
-    pageLength: 10,
+    pageLength: 50,
     lengthChange: false,
     searching: false,
     language: {
       url: `${CONTEXT}vendor/internationalisation/pt_br.json`
     },
+    
+    columnDefs: [
+      { targets: [5,3], className: 'dt-center' }
+    ],
+    
     columns: [
       {
-        "data": "nomeProduto", render: function (data, type, row, meta) {
-          return `<span class='text-primary'>${data}</span>`;
+        "data": "dataHoraVenda", render: function (data, type, row, meta) {
+          return `<span class='text-muted'>${formatDataHora(data)}</span>`;
         }
       },
       {
-        "data": "quantidade", render: function (data, type, row, meta) {
+        "data": "nomeVendedor", render: function (data, type, row, meta) {
           return `<span class='text-muted'>${data}</span>`;
         }
       },
@@ -176,13 +183,18 @@ function popularTable() {
         }
       },
       {
-        "data": "nomeVendedor", render: function (data, type, row, meta) {
+        "data": "quantidade", render: function (data, type, row, meta) {
           return `<span class='text-muted'>${data}</span>`;
         }
       },
       {
-        "data": "dataHoraVenda", render: function (data, type, row, meta) {
-          return `<span class='text-muted'>${formatDataHora(data)}</span>`;
+        "data": "nomeProduto", render: function (data, type, row, meta) {
+          return `<span class='text-primary'>${data}</span>`;
+        }
+      },
+      {
+        "defaultContent": "", render: function (data, type, row, meta) {
+          return `<a class='text-secondary' data-value=${row.idVenda} title="Detalhes da venda" id='linkVerDetalheVenda' href='#'><i class='bi bi-eye-fill'></i></a>`;
         }
       }
     ],
@@ -191,7 +203,7 @@ function popularTable() {
   
   clearInterval(intervalRelogio);
   intervalRelogio = null;
-  let time = (1000 * tempoSelecionado) / 1000;
+  time = (1000 * tempoSelecionado) / 1000;
   intervalRelogio = setInterval(() => {
     $("#spanTimer").html("");
     $("#spanTimer").html(--time);
@@ -248,6 +260,41 @@ function eventoTempoSelecionado() {
     localStorage.setItem("trintaMinutos", 1800);
     window.location.reload();
   });
+  
+  $("#linkStopTimer").click(function () {
+    clearInterval(nIntervId);
+    clearInterval(intervalRelogio);
+    nIntervId = null;
+    intervalRelogio = null;
+    $("#ulTempos li > a").removeClass("disabled");
+  });
+}
+
+function linkVerDetalheVenda() {
+  $(document).on("click", "#linkVerDetalheVenda", function () {
+    let modalDetalhes = $("#detalhesProdutoVenda");
+    let tBadyFormasPagamento = modalDetalhes.find("tbody");
+    tBadyFormasPagamento.empty();
+    let valorTotal = 0;
+    modalDetalhes.find("#divLoading").addClass("loading");
+    $.get(`${CONTEXT}dashboard/detalhe-produto-vendido/${$(this).data("value")}`, function (response) {
+      $.each(response, function (i,item) {
+        tBadyFormasPagamento.append(`<tr><td class="">${item.descricaoProduto}</td> <td>${formatter.format(item.valorVenda)}</td> <td class='text-center'>${item.quantidade}</td> </tr>`);
+        valorTotal+=(item.valorVenda * item.quantidade);
+      });
+      modalDetalhes.find("#sapnValorTotalModalDetalhesProduto").empty();
+      modalDetalhes.find("#sapnValorTotalModalDetalhesProduto").append("Valor Total: ").append(`<mark><span style='color: #0FA015'>${formatter.format(valorTotal)}</span></mark>`);
+    }).done(function() {
+      modalDetalhes.find("#divLoading").removeClass("loading");
+    });
+    modalDetalhes.modal('show');
+  });
+}
+
+function pesquisarVendasTempoReal() {
+  $("#btnPesquisarVendaTempoReal").click(function () {
+    popularTable();
+  });
 }
 
 function usuarioSelecionado() {
@@ -264,4 +311,9 @@ function limparSelectUsuarioSelecionado() {
     usuarioSelect2 = {};
     $("#usuarios").val("").trigger("change");
   });
+}
+
+function setDateCardTotalVenda() {
+  $("#titleValorMes").html(`No mes atual ${moment().format('MMMM')}`);
+  $("#titleValorAno").html(`No atual ano ${moment().year()}`);
 }

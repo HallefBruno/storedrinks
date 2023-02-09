@@ -29,16 +29,16 @@ public class DetalheVendadto implements Serializable {
     this.nomeVendedor = nomeVendedor;
     this.dataHoraVenda = dataHoraVenda;
   }
-
+  
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 37 * hash + Objects.hashCode(this.idVenda);
-    hash = 37 * hash + Objects.hashCode(this.nomeProduto);
-    hash = 37 * hash + Objects.hashCode(this.quantidade);
-    hash = 37 * hash + Objects.hashCode(this.valorTotal);
-    hash = 37 * hash + Objects.hashCode(this.nomeVendedor);
-    hash = 37 * hash + Objects.hashCode(this.dataHoraVenda);
+    hash = 67 * hash + Objects.hashCode(this.idVenda);
+    hash = 67 * hash + Objects.hashCode(this.nomeProduto);
+    hash = 67 * hash + Objects.hashCode(this.quantidade);
+    hash = 67 * hash + Objects.hashCode(this.valorTotal);
+    hash = 67 * hash + Objects.hashCode(this.nomeVendedor);
+    hash = 67 * hash + Objects.hashCode(this.dataHoraVenda);
     return hash;
   }
 

@@ -1,4 +1,4 @@
-/* global Swal, numeral, Intl, bootstrap */
+/* global Swal, numeral, Intl, bootstrap, moment */
 
 var CONTEXT = $("#context").val();
 var StoreDrink = StoreDrink || {};
@@ -218,7 +218,8 @@ StoreDrink.LoadGif = (function () {
     } else if(url.includes("movimentacao-caixa/formas-pagamento/")) {
       element.css("display", "block");
       return false;
-    } else if (url.includes("dashboard/vendas-tempo-real")) {
+    } else if (url.includes("dashboard/detalhe-produto-vendido")) {
+      element.css("display", "block");
       return false;
     }
     return true;
@@ -425,7 +426,7 @@ $(function () {
   $('[data-bs-toggle="tooltip"]').tooltip();
   
   let url = $(location).attr("href");
-  if(!url.includes("localhost") && !url.includes("127.0.0.1") && $("#leftClick").val() === undefined) {
+  if(!url.includes("localhost") && !url.includes("127.0.0.1") && ($("#leftClick").val() === undefined || $("#leftClick").val() === null)) {
     $(document).bind("contextmenu", function (e) {
       return false;
     });
@@ -437,6 +438,8 @@ $(function () {
       }
     });
   }
+  
+  moment.locale('pt');
     
   var dialogo = new StoreDrink.DialogoExcluir();
   dialogo.iniciar();

@@ -17,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -31,6 +32,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     apiError.setStatus(status);
     return handleExceptionInternal(ex, apiError, headers, HttpStatus.BAD_REQUEST, request);
+  }
+  
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,WebRequest request) {
+    ApiError apiError = new ApiError();
+    apiError.setMessage(String.format("The parameter '%s' of value '%s' could not be converted to type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
+    return new ResponseEntity(apiError, HttpStatus.BAD_REQUEST);
   }
 
   @Override

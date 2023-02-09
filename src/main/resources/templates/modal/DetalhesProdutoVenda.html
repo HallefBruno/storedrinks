@@ -1,0 +1,35 @@
+<div class="modal fade" id="detalhesProdutoVenda" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" th:fragment="detalhesProdutoVenda" >
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content md-content" style="height:380px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Detalhes do produto desta venda</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg-light setblockUI">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Valor unitário</th>
+              <th class='text-center'>Quantidade</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-auto me-auto">
+              <span id="sapnValorTotalModalDetalhesProduto"></span>
+            </div>
+            <div class="col-auto">
+              <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

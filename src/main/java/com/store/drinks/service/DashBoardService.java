@@ -1,5 +1,6 @@
 package com.store.drinks.service;
 
+import com.store.drinks.entidade.dto.dashboard.DetalheProdutodto;
 import com.store.drinks.entidade.dto.dashboard.DetalheVendadto;
 import com.store.drinks.entidade.dto.produtosMaisVendidos.ProdutosMaisVendidosdto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
@@ -24,6 +25,10 @@ public class DashBoardService {
   
   public DataTableWrapper<DetalheVendadto> listVendasTempoReal(Long idUsuario, Integer draw, Integer start, Integer length) {
     return produtoMaisVendidosImpl.listVendasTempoReal(idUsuario, draw, start, length);
+  }
+  
+  public List<DetalheProdutodto> listDetalheProdutoVendido(Long idVenda) {
+    return produtoMaisVendidosImpl.listDetalheProdutoVendido(idVenda);
   }
   
 }
