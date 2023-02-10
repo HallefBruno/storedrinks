@@ -11,6 +11,13 @@ let chart = null;
 let intervalRelogio = null;
 let time = null;
 
+let vendaDia = 0;
+let vendaMes = 0;
+let vendaAno = 0;
+let custoDia = 0;
+let custoMes = 0;
+let custoAno = 0;
+
 $(function () {
   
   let toast = new StoreDrink.Toast();
@@ -84,8 +91,8 @@ $(function () {
   eventoTempoSelecionado();
   linkVerDetalheVenda();
   pesquisarVendasTempoReal();
-  setDateCardTotalVenda();
-  
+  setLabelCardTotalVenda();
+  setLabelCardTotalCusto();
 });
 
 function responseData(filters) {
@@ -209,6 +216,9 @@ function popularTable() {
     $("#spanTimer").html(--time);
   }, 1000);
   
+  getValorTotalVendas();
+  getCustorTotalVendas();
+  
 }
 
 function stop() {
@@ -313,7 +323,58 @@ function limparSelectUsuarioSelecionado() {
   });
 }
 
-function setDateCardTotalVenda() {
+function setLabelCardTotalVenda() {
+  $("#titleValorDia").html(`No dia de hoje ${moment().format('DD')}`);
   $("#titleValorMes").html(`No mes atual ${moment().format('MMMM')}`);
   $("#titleValorAno").html(`No atual ano ${moment().year()}`);
+  $("#labelValorDia").html("0");
+  $("#labelValorMes").html("0");
+  $("#labelValorAno").html("0");
+}
+
+function getValorTotalVendas() {
+  const data = {idUsuario: null};
+  const datatype = 'json';
+  $.get(`${CONTEXT}dashboard/total-vendas`, data, function (response) {
+    vendaDia = response.totalDia;
+    vendaMes = response.totalMes;
+    vendaAno = response.totalAno;
+    $("#labelValorDia").html(formatter.format(vendaDia));
+    $("#labelValorMes").html(formatter.format(vendaMes));
+    $("#labelValorAno").html(formatter.format(vendaAno));
+  }, datatype);
+}
+
+function setLabelCardTotalCusto() {
+  $("#titleCustoDia").html(`No dia de hoje ${moment().format('DD')}`);
+  $("#titleCustoMes").html(`No mes atual ${moment().format('MMMM')}`);
+  $("#titleCustoAno").html(`No atual ano ${moment().year()}`);
+  $("#labelCustoDia").html("0");
+  $("#labelCustoMes").html("0");
+  $("#labelCustoAno").html("0");
+}
+
+function getCustorTotalVendas() {
+  const data = {idUsuario: null};
+  const datatype = 'json';
+  $.get(`${CONTEXT}dashboard/total-custo`, data, function (response) {
+    custoDia = response.totalDia;
+    custoMes = response.totalMes;
+    custoAno = response.totalAno;
+    $("#labelCustoDia").html(formatter.format(custoDia));
+    $("#labelCustoMes").html(formatter.format(custoMes));
+    $("#labelCustoAno").html(formatter.format(custoAno));
+    setLabelCardTotalLucro();
+  }, datatype);
+  
+}
+
+function setLabelCardTotalLucro() {
+  window.console.log("ok");
+  $("#titleLucroDia").html(`No dia de hoje ${moment().format('DD')}`);
+  $("#titleLucroMes").html(`No mes atual ${moment().format('MMMM')}`);
+  $("#titleLucroAno").html(`No atual ano ${moment().year()}`);
+  $("#labelLucroDia").html(formatter.format(vendaDia - custoDia));
+  $("#labelLucroMes").html(formatter.format(vendaMes - custoMes));
+  $("#labelLucroAno").html(formatter.format(vendaAno - custoAno));
 }

@@ -42,4 +42,15 @@ public class DashBoardController {
     var list = boardService.listDetalheProdutoVendido(idVenda);
     return ResponseEntity.ok(list);
   }
+  
+  @GetMapping("/total-vendas")
+  public ResponseEntity<?> totalVenda(@RequestParam(name = "idUsuario", required = false) Long idUsuario) {
+    return ResponseEntity.ok(boardService.totalVenda(idUsuario));
+  }
+  
+  @GetMapping("/total-custo")
+  public ResponseEntity<?> totalCusto(@RequestParam(name = "idUsuario", required = false) Long idUsuario) {
+    return ResponseEntity.ok(boardService.totalCusto(idUsuario));
+  }
+  
 }
