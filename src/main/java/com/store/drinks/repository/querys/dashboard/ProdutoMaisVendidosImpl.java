@@ -220,7 +220,7 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
       
       totalCustodto = (TotalCustodto) query.getSingleResult();
       return totalCustodto;
-    } catch (NoResultException ex) {
+    } catch (NoResultException ex) { 
       return totalCustodto;
     }
   }
