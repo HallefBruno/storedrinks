@@ -14,5 +14,5 @@ public interface ProdutosMaisVendidosRepositoryCustom {
   DataTableWrapper<DetalheVendadto> listVendasTempoReal(Long idUsuario, Integer draw, Integer start, Integer length);
   List<DetalheProdutodto> listDetalheProdutoVendido(Long idVenda);
   TotalVendadto totalVenda(Long idUsuario);
-  TotalCustodto totalCusto(Long idUsuario);
+  TotalCustodto totalCusto(Long idUsuario); 
 }
