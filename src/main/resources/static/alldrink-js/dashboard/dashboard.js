@@ -217,8 +217,6 @@ function popularTable() {
   }, 1000);
   
   getValorTotalVendas();
-  getCustorTotalVendas();
-  
 }
 
 function stop() {
@@ -342,6 +340,7 @@ function getValorTotalVendas() {
     $("#labelValorDia").html(formatter.format(vendaDia));
     $("#labelValorMes").html(formatter.format(vendaMes));
     $("#labelValorAno").html(formatter.format(vendaAno));
+    getCustorTotalVendas();
   }, datatype);
 }
 
@@ -370,11 +369,10 @@ function getCustorTotalVendas() {
 }
 
 function setLabelCardTotalLucro() {
-  window.console.log("ok");
   $("#titleLucroDia").html(`No dia de hoje ${moment().format('DD')}`);
   $("#titleLucroMes").html(`No mes atual ${moment().format('MMMM')}`);
   $("#titleLucroAno").html(`No atual ano ${moment().year()}`);
-  $("#labelLucroDia").html(formatter.format(vendaDia - custoDia));
-  $("#labelLucroMes").html(formatter.format(vendaMes - custoMes));
-  $("#labelLucroAno").html(formatter.format(vendaAno - custoAno));
+  $("#labelLucroDia").html(formatter.format((vendaDia - custoDia)));
+  $("#labelLucroMes").html(formatter.format((vendaMes - custoMes)));
+  $("#labelLucroAno").html(formatter.format((vendaAno - custoAno)));
 }
