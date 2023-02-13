@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,11 +35,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
-
-  private final UsuarioRepository usuarioRepository;
-  private final StorageCloudnary storageCloudnary;
-  private final RestTemplate restTemplate = new RestTemplateBuilder().build();
-  private final PasswordEncoder passwordEncoder;
+  
+  private RestTemplate restTemplate = new RestTemplateBuilder().build();
+  private UsuarioRepository usuarioRepository;
+  private StorageCloudnary storageCloudnary;
+  private PasswordEncoder passwordEncoder;
 
   @Transactional
   public Usuario salvar(Usuario usuario) {
@@ -92,14 +92,18 @@ public class UsuarioService {
       usuarioAtual.setImagem(fileName);
       usuarioAtual.setExtensao(extensao);
       usuarioRepository.save(usuarioAtual);
+      usuarioLogado().setImagem(usuarioAtual.getImagem());
       salvarImagemStorage(image, fileName);
       return Void.TYPE;
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
   }
 
-  public static Usuario usuarioLogado() {
+  public Usuario usuarioLogado() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
+    usuario.setAtivo(usuarioAtivo());
+    Authentication newAuth = new UsernamePasswordAuthenticationToken(usuario, authentication.getCredentials(), authentication.getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(newAuth);
     return usuario;
   }
   
@@ -222,5 +226,9 @@ public class UsuarioService {
     } catch (IOException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
     }
+  }
+  
+  private Boolean usuarioAtivo() {
+    return usuarioRepository.usuarioAtivo(usuarioLogado().getId());
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.User;
 
 @Slf4j
 public class UsuarioSistema extends User {
-
+  
   private final Usuario usuario;
 
   public UsuarioSistema(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {

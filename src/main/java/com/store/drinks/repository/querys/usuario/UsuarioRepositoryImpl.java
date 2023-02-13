@@ -33,6 +33,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
   @Autowired
   private RowsUtil rowsUtil;
+  
+  @Autowired
+  private UsuarioService usuarioService;
 
   @Override
   public Optional<Usuario> findByUserLogin(String email) {
@@ -76,7 +79,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
   
   @Override
   public Boolean permiteCriarUsuario() {
-    ClienteSistema clienteSistema = UsuarioService.usuarioLogado().getClienteSistema();
+    ClienteSistema clienteSistema = usuarioService.usuarioLogado().getClienteSistema();
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
     Root<Usuario> root = criteriaQuery.from(Usuario.class);

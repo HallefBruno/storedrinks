@@ -21,9 +21,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class AppUserDetailsService implements UserDetailsService {
 
   private final UsuarioRepository usuarioRepository;

@@ -24,6 +24,7 @@ public class MovimentacaoCaixaService {
   private final MovimentacaoCaixaRepository movimentacaoCaixaRepository;
   private final CaixaService caixaService;
   private final ObjectMapperUtil<MovimentacoesCaixaFiltro> objectMapperUtil;
+  private final UsuarioService usuarioService;
   
   @Transactional
   public void salvar(BigDecimal valorRetirada) {
@@ -38,7 +39,7 @@ public class MovimentacaoCaixaService {
           .dataMovimentacao(LocalDateTime.now())
           .valorRecebido(BigDecimal.ZERO)
           .valorTroco(valorRetirada)
-          .usuario(UsuarioService.usuarioLogado())
+          .usuario(usuarioService.usuarioLogado())
           .caixa(caixa)
           .build();
         movimentacaoCaixaRepository.save(movimentacao);

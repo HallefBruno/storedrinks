@@ -1,8 +1,10 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Produto;
+import com.store.drinks.entidade.dto.ProdutoConferirEstoquedto;
 import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
+import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.util.Multitenancy;
 import java.util.ArrayList;
@@ -93,5 +95,9 @@ public class ProdutoService {
       resultSelectProdutos.setItems(produtosDTO);
     }
     return resultSelectProdutos;
+  }
+  
+  public List<ProdutoConferirEstoquedto> listProdutosConferirEstoque() {
+    return produtoRepository.listProdutosConferirEstoque();
   }
 }

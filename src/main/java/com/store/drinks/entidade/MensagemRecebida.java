@@ -68,7 +68,7 @@ public class MensagemRecebida implements Serializable {
   @AttributeOverrides(value = {
     @AttributeOverride(name = "remetente", column = @Column(name = "remetente")),
     @AttributeOverride(name = "destinatario", column = @Column(name = "destinatario")),
-    @AttributeOverride(name = "mensagem", column = @Column(name = "mensagem"))
+    @AttributeOverride(name = "mensagem", column = @Column(name = "mensagem", length = 400, nullable = false))
   })
   private RemetenteDestinatarioMensagem remetenteDestinatarioMensagem;
 

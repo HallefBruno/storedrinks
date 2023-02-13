@@ -14,7 +14,6 @@ public class RemetenteDestinatarioMensagem implements Serializable {
   @NotBlank(message = "Remetente não pode ter espaços em branco!")
   @NotEmpty(message = "Remetente não pode ser vazio!")
   @NotNull(message = "Remetente não pode ser null!")
-  @Column(nullable = false, length = 255)
   private String remetente;
   
   @NotBlank(message = "Destinatário não pode ter espaços em branco!")
@@ -25,8 +24,7 @@ public class RemetenteDestinatarioMensagem implements Serializable {
   @NotBlank(message = "Mensagem não pode ter espaços em branco!")
   @NotEmpty(message = "Mensagem não pode ser vazio!")
   @NotNull(message = "Mensagem não pode ser null!")
-  @Size(min = 5, max = 400, message = "A mensagem deve estar entre 5 e 255 caracters")
-  @Column(length = 400)
+  @Size(min = 5, max = 400, message = "A mensagem deve estar entre 5 e 400 caracters")
   private String mensagem;
   
   public String getRemetente() {

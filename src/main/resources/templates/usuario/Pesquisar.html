@@ -62,7 +62,7 @@
                               </div>
                               <div class="btn-group mt-2" role="group">
                                 <a th:href="@{/usuario}" type="button" class="btn btn-outline-secondary btn-sm invock-gif">Novo</a>
-                                <button type="submit" class="btn btn-outline-secondary btn-sm">Pesquisar</button>
+                                <button type="submit"  class="btn btn-outline-secondary btn-sm">Pesquisar</button>
                               </div>
                             </div>
                           </div>
@@ -107,8 +107,8 @@
                             <td><mark>[[${#strings.listJoin(usuario.grupos.![nome], ', ')}]]</mark></td>
                             <td class="text-center">
                               <div class="btn-group" role="group">
-                                <a href="#" role="button" class="btn btn-outline-secondary btn-sm invock-gif" th:href="@{/usuario/{codigo}(codigo=${usuario.id})}"><i class="bi bi-pen"></i></a>
-                                <a href="#" role="button" class="btn btn-outline-secondary btn-sm js-exclusao-btn" ><i class="bi bi-trash"></i></a>
+                                <a href="#" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" class="btn btn-outline-secondary btn-sm invock-gif" th:href="@{/usuario/{codigo}(codigo=${usuario.id})}"><i class="bi bi-pen"></i></a>
+                                <a href="#" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir" class="btn btn-outline-secondary btn-sm js-exclusao-btn" ><i class="bi bi-trash"></i></a>
                               </div>
                             </td>
                           </tr>

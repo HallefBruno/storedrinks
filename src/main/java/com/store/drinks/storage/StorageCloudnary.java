@@ -20,7 +20,9 @@ public class StorageCloudnary {
 
   @Value("${folder.foto-perfil}")
   private String folderFotoPerfil;
-
+  
+  private UsuarioService usuarioService;
+  
   private final static String PUBLIC_ID = "public_id";
   private final static String RESOURCE_TYPE = "resource_type";
   private final static String IMAGE = "image";
@@ -82,7 +84,7 @@ public class StorageCloudnary {
   }
 
   private String tenant() {
-    return UsuarioService.usuarioLogado().getClienteSistema().getTenant().concat("/");
+    return usuarioService.usuarioLogado().getClienteSistema().getTenant().concat("/");
   }
 
 }

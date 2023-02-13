@@ -96,7 +96,7 @@ public class NovaContaClienteSistema {
   
   @Transactional
   private void salvarMensagemEnviadaRecebida(String emailDistinatario, String nome, Usuario usuarioDestino) {
-    String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap, mais uma coisa você também pode editar seu perfil e adicionar uma imagem :) ", nome);
+    String mensagem = String.format("Olá seja bem vindo %s!, Como está iniciando agora, você não possui nenhuma movimentação no sistema e isso já pode ser feito. Dúvidas sugestões? Me envie uma mensagem pelo sistema ou zap, mais uma coisa você também pode editar seu perfil e adicionar uma imagem :) 'Para isso vá no Menu do sistema, clique em Cadastros > Usuaurios > Pesquisar e por fim em Editar' ", nome);
     
     MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();

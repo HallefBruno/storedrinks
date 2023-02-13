@@ -49,10 +49,13 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
 
   @Autowired
   private JpaUtils jpaUtils;
+  
+  @Autowired
+  private UsuarioService usuarioService;
 
   @Override
   public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFiltro filters) {
-    Usuario usuarioLogado = UsuarioService.usuarioLogado();
+    Usuario usuarioLogado = usuarioService.usuarioLogado();
 
     if (Objects.isNull(filters.getUsuarioId())) {
       filters.setUsuarioId(usuarioLogado.getId());
@@ -95,14 +98,14 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
 
     List<Tuple> listTuple = typedQuery.getResultList();
     List<ProdutosMaisVendidosdto> list = jpaUtils.parseTuple(listTuple, ProdutosMaisVendidosdto.class);
-
+    
     return list;
   }
 
   @Override
   public DataTableWrapper<DetalheVendadto> listVendasTempoReal(Long idUsuario, Integer draw, Integer start, Integer length) {
     DataTableWrapper<DetalheVendadto> dataTableWrapper = new DataTableWrapper<>();
-    Usuario usuarioLogado = UsuarioService.usuarioLogado();
+    Usuario usuarioLogado = usuarioService.usuarioLogado();
 
     if (Objects.isNull(idUsuario)) {
       idUsuario = usuarioLogado.getId();
@@ -150,7 +153,7 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   @Override
   public List<DetalheProdutodto> listDetalheProdutoVendido(Long idVenda) {
 
-    Usuario usuarioLogado = UsuarioService.usuarioLogado();
+    Usuario usuarioLogado = usuarioService.usuarioLogado();
 
     if (Objects.isNull(idVenda) || idVenda <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "idVenda é obrigatório!");
@@ -189,10 +192,10 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   public TotalVendadto totalVenda(Long idUsuario) {
     TotalVendadto totalVendadto = new TotalVendadto(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
     try {
-      Usuario usuarioLogado = UsuarioService.usuarioLogado();
-      String jpql = " SELECT DISTINCT NEW com.store.drinks.entidade.dto.dashboard.TotalVendadto(COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE day(ven.dataVenda)=day(current_date())), 0) AS totaldia, COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE month(ven.dataVenda)=month(current_date())), 0) as totalMes, COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE year(ven.dataVenda)=year(current_date())), 0) as totalAno) FROM Venda v WHERE v.tenant = :tenent ";
+      Usuario usuarioLogado = usuarioService.usuarioLogado();
+      String jpql = " SELECT DISTINCT NEW com.store.drinks.entidade.dto.dashboard.TotalVendadto(COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE ven.tenant = :tenant AND day(ven.dataVenda)=day(current_date())), 0) AS totaldia, COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE ven.tenant = :tenant AND month(ven.dataVenda)=month(current_date())), 0) as totalMes, COALESCE((SELECT SUM(ven.valorTotalVenda) FROM Venda ven WHERE ven.tenant = :tenant AND year(ven.dataVenda)=year(current_date())), 0) as totalAno) FROM Venda v WHERE v.tenant = :tenant ";
       Map<String, Object> paramaterMap = new HashMap<>();
-      paramaterMap.put("tenent", usuarioLogado.getClienteSistema().getTenant());
+      paramaterMap.put("tenant", usuarioLogado.getClienteSistema().getTenant());
       if (Objects.nonNull(idUsuario) && idUsuario <= 0) {
         String andUsuario = " AND v.usuario.id = :idUsuario ";
         jpql = jpql.concat(andUsuario);
@@ -213,9 +216,9 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
   public TotalCustodto totalCusto(Long idUsuario) {
     TotalCustodto totalCustodto = new TotalCustodto(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
     try {
-      Usuario usuarioLogado = UsuarioService.usuarioLogado();
+      Usuario usuarioLogado = usuarioService.usuarioLogado();
       
-      Query query = entityManager.createQuery(" select distinct new com.store.drinks.entidade.dto.dashboard.TotalCustodto( coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where day(venda.dataVenda)=day(current_date())),0) as totalDia,  coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where month(venda.dataVenda)=month(current_date())),0) as totalMes, coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where year(venda.dataVenda)=year(current_date())),0) as totalAno) from ItensVenda iv where iv.tenant = :tenant ");
+      Query query = entityManager.createQuery(" select distinct new com.store.drinks.entidade.dto.dashboard.TotalCustodto( coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where itensVendas.tenant = :tenant and day(venda.dataVenda)=day(current_date())),0) as totalDia,  coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where itensVendas.tenant = :tenant and month(venda.dataVenda)=month(current_date())),0) as totalMes, coalesce((select sum(produto.valorCusto * itensVendas.quantidade) from ItensVenda itensVendas join itensVendas.venda venda join itensVendas.produto produto where itensVendas.tenant = :tenant and year(venda.dataVenda)=year(current_date())),0) as totalAno) from ItensVenda iv where iv.tenant = :tenant ");
       query.setParameter("tenant", usuarioLogado.getClienteSistema().getTenant());
       
       totalCustodto = (TotalCustodto) query.getSingleResult();

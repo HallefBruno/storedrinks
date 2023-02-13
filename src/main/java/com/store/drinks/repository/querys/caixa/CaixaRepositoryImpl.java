@@ -34,6 +34,9 @@ public class CaixaRepositoryImpl implements CaixaRepositoryCustom {
   
   @Autowired
   private JpaUtils jpaUtils;
+  
+  @Autowired
+  private UsuarioService usuarioService;
 
   @Override
   public Optional<Caixadto> findByAbertoTrueAndUsuario(Usuario usuario) {
@@ -83,7 +86,7 @@ usuario.get("nome").alias("nomeUsuario")
     predicates.add(builder.equal(root.get("tenant"), multitenancy.getTenantValue()));
     predicates.add(builder.and(builder.equal(root.get("recolhimento"), true)));
     predicates.add(builder.and(builder.equal(caixa.get("aberto"), true)));
-    Predicate predicateUsuario = builder.and(builder.equal(usuario.get("id"), UsuarioService.usuarioLogado().getId()));
+    Predicate predicateUsuario = builder.and(builder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId()));
     
     if(Objects.nonNull(usuarioId) && usuarioId > 0) {
       predicateUsuario = builder.and(builder.equal(usuario.get("id"), usuarioId));

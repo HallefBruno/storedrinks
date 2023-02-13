@@ -30,7 +30,7 @@ public class VendaRepositoryImpl implements VendaRepositoryCustom {
   public Page<CancelarVendadto> getVendasCancelar(Pageable pageable) {
     StringBuilder sqlCount = new StringBuilder();
     StringBuilder sqlQuery = new StringBuilder();
-    Boolean isUsuarioProprietario = UsuarioService.usuarioLogado().getProprietario();
+    Boolean isUsuarioProprietario = usuarioService.usuarioLogado().getProprietario();
     sqlCount.append("select count(*) as numero_registro ");
     sqlCount.append("from( ");
     sqlQuery.append("select ");
@@ -49,7 +49,7 @@ public class VendaRepositoryImpl implements VendaRepositoryCustom {
     sqlQuery.append("inner join venda v on v.id  = mc.venda_id ");
     sqlQuery.append("inner join usuario u on u.id  = v.usuario_id ");
     sqlQuery.append("inner join caixa cx on mc.caixa_id  = cx.id ");
-    sqlQuery.append("where u.id = ").append(UsuarioService.usuarioLogado().getId()).append(" ");
+    sqlQuery.append("where u.id = ").append(usuarioService.usuarioLogado().getId()).append(" ");
     sqlQuery.append("and cx.aberto = true ");
     sqlQuery.append("and u.tenant = '").append(multitenancy.getTenantValue()).append("' ");
     if(isUsuarioProprietario) {

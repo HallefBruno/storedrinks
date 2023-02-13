@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/mensagem/**").hasRole("LER_MENSAGENS")
         .antMatchers("/clienteSistema/**").hasRole("SUPER_USER")
         .antMatchers("/usuario/**").hasRole("MANTER_USUARIO")
+        .antMatchers("/estoque/**").hasRole("CONFERIR_ESTOQUE")
         .antMatchers("/loggedUsers/**").hasRole("SUPER_USER")
         .anyRequest().authenticated()
     .and()
