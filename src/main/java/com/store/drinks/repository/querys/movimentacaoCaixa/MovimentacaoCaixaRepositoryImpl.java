@@ -47,9 +47,6 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
   @Autowired
   private JpaUtils jpaUtils;
   
-  @Autowired
-  private UsuarioService usuarioService;
-  
   @Override
   public Optional<BigDecimal> valorTotalEmVendasPorUsuario(Long caixaId) {
     CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -65,7 +62,7 @@ public class MovimentacaoCaixaRepositoryImpl implements MovimentacaoCaixaReposit
     
     query.where(
 builder.equal(root.get("tenant"), multitenancy.getTenantValue()),
-builder.and(builder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId())),
+builder.and(builder.equal(usuario.get("id"), UsuarioService.usuarioLogado().getId())),
 builder.and(builder.equal(caixa.get("id"), caixaId)),
 builder.and(builder.equal(root.get("recolhimento"), false))
     );
@@ -135,7 +132,7 @@ builder.and(builder.equal(root.get("recolhimento"), false))
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
       predicates.add(builder.equal(usuario.get("id"),movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
     } else {
-      predicates.add(builder.equal(usuario.get("id"),usuarioService.usuarioLogado().getId()));
+      predicates.add(builder.equal(usuario.get("id"),UsuarioService.usuarioLogado().getId()));
     }
     
     if(Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {
@@ -201,7 +198,7 @@ builder.and(builder.equal(root.get("recolhimento"), false))
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId())) {
         predicates.add(criteriaBuilder.equal(usuario.get("id"), movimentacoesCaixaFilters.getUsuarioSelect2().getUsuarioId()));
       } else {
-        predicates.add(criteriaBuilder.equal(usuario.get("id"), usuarioService.usuarioLogado().getId()));
+        predicates.add(criteriaBuilder.equal(usuario.get("id"), UsuarioService.usuarioLogado().getId()));
       }
 
       if (Objects.nonNull(movimentacoesCaixaFilters.getUsuarioSelect2()) && !StringUtils.isBlank(movimentacoesCaixaFilters.getDataAbertura())) {

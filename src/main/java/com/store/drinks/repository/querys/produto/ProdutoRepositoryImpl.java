@@ -142,7 +142,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
   @Override
   public List<ProdutoConferirEstoquedto> listProdutosConferirEstoque() {
-    Usuario usuarioLogado = usuarioService.usuarioLogado();
+    Usuario usuarioLogado = UsuarioService.usuarioLogado();
     
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);

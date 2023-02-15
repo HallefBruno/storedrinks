@@ -23,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 @Slf4j
+@Component
 public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
   @PersistenceContext
@@ -33,9 +35,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
   @Autowired
   private RowsUtil rowsUtil;
-  
-  @Autowired
-  private UsuarioService usuarioService;
 
   @Override
   public Optional<Usuario> findByUserLogin(String email) {
@@ -79,7 +78,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
   
   @Override
   public Boolean permiteCriarUsuario() {
-    ClienteSistema clienteSistema = usuarioService.usuarioLogado().getClienteSistema();
+    ClienteSistema clienteSistema = UsuarioService.usuarioLogado().getClienteSistema();
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
     Root<Usuario> root = criteriaQuery.from(Usuario.class);

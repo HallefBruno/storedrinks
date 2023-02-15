@@ -4,25 +4,20 @@ var CONTEXT = $("#context").val();
 var StoreDrink = StoreDrink || {};
 
 StoreDrink.DialogoExcluir = (function () {
-
   function DialogoExcluir() {
     this.exclusaoBtn = $('.js-exclusao-btn');
   }
-
   DialogoExcluir.prototype.iniciar = function () {
     this.exclusaoBtn.on('click', onExcluirClicado.bind(this));
-
     if (window.location.search.indexOf('excluido') > -1) {
       Swal.fire('Pronto!', 'Excluído com sucesso!', 'success');
     }
   };
-
   function onExcluirClicado(evento) {
     event.preventDefault();
     var botaoClicado = $(evento.currentTarget);
     var url = botaoClicado.data('url');
     var objeto = botaoClicado.data('objeto');
-
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Excluir "' + objeto + '"? Você não poderá recuperar depois.',
@@ -36,16 +31,14 @@ StoreDrink.DialogoExcluir = (function () {
       }
     });
   }
-
   function onExcluirConfirmado(url) {
     $.ajax({
       url: url,
-      method: 'DELETE',
+      method: 'DEvarE',
       success: onExcluidoSucesso.bind(this),
       error: onErroExcluir.bind(this)
     });
   }
-
   function onExcluidoSucesso() {
     var urlAtual = window.location.href;
     var separador = urlAtual.indexOf('?') > -1 ? '&' : '?';
@@ -53,7 +46,6 @@ StoreDrink.DialogoExcluir = (function () {
     window.location = novaUrl;
     $("#divLoading").removeClass("loading");
   }
-
   function onErroExcluir(e) {
     console.log(e.responseText);
     if(e.responseJSON && e.responseJSON.message) {
@@ -63,31 +55,32 @@ StoreDrink.DialogoExcluir = (function () {
     }
     $("#divLoading").removeClass("loading");
   }
-
   return DialogoExcluir;
-
 }());
 
 
 StoreDrink.Security = (function () {
-
   function Security() {
     this.token = $("meta[name='_csrf']").attr("content");
     this.header = $("meta[name='_csrf_header']").attr("content");
   }
-
   Security.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
       jqxhr.setRequestHeader(this.header, this.token);
     }.bind(this));
   };
-
   return Security;
-
 }());
 
-let formatter = new Intl.NumberFormat('pt-BR', {style: 'currency',currency: 'BRL'});
+StoreDrink.CheckAccess = (function () {
+  function CheckAccess() {}
+  CheckAccess.prototype.check = function () {
+    $.get(`${CONTEXT}check-access`, function (response) {});
+  };
+  return CheckAccess;
+}());
 
+var formatter = new Intl.NumberFormat('pt-BR', {style: 'currency',currency: 'BRL'});
 
 StoreDrink.Mask = (function () {
   function Mask() {
@@ -122,13 +115,10 @@ StoreDrink.Cep = (function () {
 }());
 
 StoreDrink.MascaraCpfCnpj = (function () {
-    
   function MascaraCpfCnpj() {
     this.mascaraCpfCnpj = $(".mascara-cpf-cnpj");
   }
-    
   MascaraCpfCnpj.prototype.enable = function () {
-
     var CpfCnpjMaskBehavior = function (val) {
       return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
     },
@@ -139,12 +129,10 @@ StoreDrink.MascaraCpfCnpj = (function () {
     };
     this.mascaraCpfCnpj.mask(CpfCnpjMaskBehavior,cpfCnpjpOptions);
   };
-    
   return MascaraCpfCnpj;
 }());
 
 StoreDrink.MaskPhoneNumber = (function() {
-	
   function MaskPhoneNumber() {
     this.inputPhoneNumber = $('.js-phone-number');
   }
@@ -160,7 +148,6 @@ StoreDrink.MaskPhoneNumber = (function() {
     this.inputPhoneNumber.mask(maskBehavior, options);
   };
   return MaskPhoneNumber;
-	
 }());
 
 StoreDrink.LoadGif = (function () {
@@ -180,7 +167,8 @@ StoreDrink.LoadGif = (function () {
     $(document).ajaxComplete(function (event, jqxhr, settings) {
       this.gifLoadingAutocomplete.css("display", "none");
       $(".setblockUI").unblock();
-      setTimeout(() => {this.divLoading.removeClass("loading");}, 500);
+      this.divLoading.removeClass("loading");
+      //setTimeout(() => {this.divLoading.removeClass("loading");}, 700);
     }.bind(this));
   };
   
@@ -220,6 +208,8 @@ StoreDrink.LoadGif = (function () {
       return false;
     } else if (url.includes("dashboard/detalhe-produto-vendido")) {
       element.css("display", "block");
+      return false;
+    } else if (url.includes(`${CONTEXT}check-access`)) {
       return false;
     }
     return true;
@@ -404,9 +394,7 @@ StoreDrink.Toast = (function () {
 }());
 
 StoreDrink.RemoveMask = (function () {
-    
   function RemoveMask() {}
-
   RemoveMask.prototype.remover = function (value) {
     if (value.length >= 8) {
       value = value.replace(/[^0-9.-]+/g, "");
@@ -425,7 +413,7 @@ $(function () {
   $('[data-bs-toggle="popover"]').popover();
   $('[data-bs-toggle="tooltip"]').tooltip();
   
-  let url = $(location).attr("href");
+  var url = $(location).attr("href");
   if(!url.includes("localhost") && !url.includes("127.0.0.1") && ($("#leftClick").val() === undefined || $("#leftClick").val() === null)) {
     $(document).bind("contextmenu", function (e) {
       return false;
@@ -470,5 +458,8 @@ $(function () {
   
   var showToastContainsMessage = new StoreDrink.ShowToastContainsMessage();
   showToastContainsMessage.showToast();
+  
+  var checkAccess = new StoreDrink.CheckAccess();
+  checkAccess.check();
   
 });

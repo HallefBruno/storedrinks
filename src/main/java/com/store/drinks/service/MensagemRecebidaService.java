@@ -30,7 +30,7 @@ public class MensagemRecebidaService {
   
   @Transactional
   public void salvarMensagemEnviadaRecebida(Mensagemdto mensagem) {
-    Usuario usuario = usuarioService.usuarioLogado();
+    Usuario usuario = UsuarioService.usuarioLogado();
     Usuario usuarioDestino = usuarioService.findByEmailAndAtivoTrue(mensagem.getDestinatario()).get();
     MensagemEnviada mensagensEnviadas = new MensagemEnviada();
     RemetenteDestinatarioMensagem remetenteDestinatarioMensagem = new RemetenteDestinatarioMensagem();
@@ -58,12 +58,12 @@ public class MensagemRecebidaService {
   }
 
   public int marcarComoNotificado() {
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     return mensagensRecebidasRepository.updateNotificarMensagem(destinatario);
   }
   
   public Boolean existeMensagemNaoLida() {
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     return mensagensRecebidasRepository.existeMensagemNaoLida(destinatario);
   }
   
@@ -72,7 +72,7 @@ public class MensagemRecebidaService {
     if(Objects.isNull(id) || id <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identifacador inválido!");
     }
-    String destinatario = usuarioService.usuarioLogado().getEmail();
+    String destinatario = UsuarioService.usuarioLogado().getEmail();
     mensagensRecebidasRepository.findByIdAndRemetenteDestinatarioMensagemDestinatario(id, destinatario).map(mensagensRecebidas -> {
       mensagensRecebidas.setLida(Boolean.TRUE);
       mensagensRecebidas.setNotificado(Boolean.TRUE);
@@ -82,7 +82,7 @@ public class MensagemRecebidaService {
   }
   
   public DataTableWrapper<MensagemRecebida> findAllByLida(Boolean lida, int draw, int start, int length) {
-    String email = usuarioService.usuarioLogado().getEmail();
+    String email = UsuarioService.usuarioLogado().getEmail();
     int page = start/length;
     Pageable pageable = PageRequest.of(page,length);
     DataTableWrapper<MensagemRecebida> dataTable = new DataTableWrapper<>();

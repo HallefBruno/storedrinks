@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,10 +35,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class UsuarioService {
   
-  private RestTemplate restTemplate = new RestTemplateBuilder().build();
-  private UsuarioRepository usuarioRepository;
-  private StorageCloudnary storageCloudnary;
-  private PasswordEncoder passwordEncoder;
+  private final RestTemplate restTemplate = new RestTemplateBuilder().build();
+  private final UsuarioRepository usuarioRepository;
+  private final StorageCloudnary storageCloudnary;
+  private final PasswordEncoder passwordEncoder;
 
   @Transactional
   public Usuario salvar(Usuario usuario) {
@@ -98,12 +97,9 @@ public class UsuarioService {
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
   }
 
-  public Usuario usuarioLogado() {
+  public static Usuario usuarioLogado() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
-    usuario.setAtivo(usuarioAtivo());
-    Authentication newAuth = new UsernamePasswordAuthenticationToken(usuario, authentication.getCredentials(), authentication.getAuthorities());
-    SecurityContextHolder.getContext().setAuthentication(newAuth);
     return usuario;
   }
   
@@ -228,7 +224,7 @@ public class UsuarioService {
     }
   }
   
-  private Boolean usuarioAtivo() {
+  public Boolean usuarioAtivo() {
     return usuarioRepository.usuarioAtivo(usuarioLogado().getId());
   }
 }

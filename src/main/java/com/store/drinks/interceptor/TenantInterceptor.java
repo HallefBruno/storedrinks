@@ -2,14 +2,12 @@ package com.store.drinks.interceptor;
 
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.entidade.Usuario;
-import com.store.drinks.repository.UsuarioRepository;
 import com.store.drinks.security.UsuarioSistema;
 import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

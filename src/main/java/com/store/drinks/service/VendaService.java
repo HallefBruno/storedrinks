@@ -122,7 +122,7 @@ public class VendaService {
   private void setVenda(Venda venda, List<ItensVenda> itensVendas) {
     venda.setDataHoraVenda(LocalDateTime.now());
     venda.setItensVendas(itensVendas);
-    venda.setUsuario(usuarioService.usuarioLogado());
+    venda.setUsuario(UsuarioService.usuarioLogado());
     venda.setValorTotalVenda(valorTotalVenda(itensVendas).setScale(2, RoundingMode.HALF_UP));
   }
   
@@ -130,7 +130,7 @@ public class VendaService {
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
     movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa(null));
     movimentacaoCaixa.setVenda(venda);
-    movimentacaoCaixa.setUsuario(usuarioService.usuarioLogado());
+    movimentacaoCaixa.setUsuario(UsuarioService.usuarioLogado());
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));
     movimentacaoCaixa.setValorRecebido(somaValorFormaPagamento(formasPagamento));
     movimentacaoCaixa.setDataMovimentacao(venda.getDataHoraVenda());

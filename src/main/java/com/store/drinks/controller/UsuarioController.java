@@ -25,21 +25,22 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@PreAuthorize("hasRole('MANTER_USUARIO')")
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
 public class UsuarioController {
-  
+
   private final GrupoService grupoService;
   private final UsuarioService usuarioService;
-  
+
+  @PreAuthorize("hasAnyRole('MANTER_USUARIO', 'ALTERAR_PERFIL_USUARIO')")
   @GetMapping
   public ModelAndView pageIndex(Usuario usuario) {
     ModelAndView modelAndView = new ModelAndView("usuario/Novo");
     modelAndView.addObject("grupos", grupoService.gruposParaUsuarioNovaConta());
     return modelAndView;
   }
-  
+
+  @PreAuthorize("hasRole('MANTER_USUARIO')")
   @PostMapping("/salvar")
   public ModelAndView salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, @RequestParam("image") MultipartFile image) throws IOException {
     try {
@@ -55,7 +56,8 @@ public class UsuarioController {
     attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
     return new ModelAndView("redirect:/usuario");
   }
-  
+
+  @PreAuthorize("hasAnyRole('MANTER_USUARIO', 'ALTERAR_PERFIL_USUARIO')")
   @PostMapping("/update/{codigo}")
   public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, @RequestParam("image") MultipartFile image) {
     try {
@@ -71,19 +73,21 @@ public class UsuarioController {
     attributes.addFlashAttribute("mensagem", "Usuário alterado com sucesso!");
     return new ModelAndView("redirect:/usuario");
   }
-  
+
+  @PreAuthorize("hasRole('MANTER_USUARIO')")
   @GetMapping("/pesquisar")
   public ModelAndView pesqisar(UsuarioFiltro usuarioFiltro, BindingResult result, @PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
     ModelAndView mv = new ModelAndView("usuario/Pesquisar");
     mv.addObject("usuarios", usuarioService.filtrar(usuarioFiltro));
     return mv;
   }
-  
+
+  @PreAuthorize("hasAnyRole('MANTER_USUARIO', 'ALTERAR_PERFIL_USUARIO')")
   @GetMapping("{codigo}")
   public ModelAndView editar(@PathVariable("codigo") Usuario usuario) {
     ModelAndView mv = pageIndex(usuario);
     mv.addObject(usuario);
     return mv;
   }
-  
+
 }

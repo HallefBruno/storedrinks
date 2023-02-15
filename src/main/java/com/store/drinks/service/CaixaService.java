@@ -36,7 +36,7 @@ public class CaixaService {
     Caixa acx = new Caixa();
     acx.setAberto(Boolean.TRUE);
     acx.setDataHoraAbertura(LocalDateTime.now());
-    acx.setUsuario(usuarioService.usuarioLogado());
+    acx.setUsuario(UsuarioService.usuarioLogado());
     acx.setValorInicialTroco(caixa.getValorInicialTroco());
     caixaRepository.save(acx);
   }
@@ -69,7 +69,7 @@ public class CaixaService {
     if (Objects.nonNull(id)) {
       return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(id).get().getId()).get();
     }
-    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(usuarioService.usuarioLogado().getId()).get().getId()).get();
+    return movimentacaoCaixaRepository.valorTotalEmVendasPorUsuario(caixaRepository.findByAbertoTrueAndUsuarioId(UsuarioService.usuarioLogado().getId()).get().getId()).get();
   }
 
   public Caixa getCaixa(Long id) {
@@ -84,7 +84,7 @@ public class CaixaService {
       caixa.setUsuario(usuarioService.findByClienteSistemaTenantAndId(multitenancy.getTenantValue(), id).get());
       return caixa;
     }
-    caixa.setUsuario(usuarioService.usuarioLogado());
+    caixa.setUsuario(UsuarioService.usuarioLogado());
     return caixa;
   }
 
@@ -96,7 +96,7 @@ public class CaixaService {
         return Optional.of(op); 
       }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));
     }
-    optionalCaixa = caixaRepository.findByAbertoTrueAndUsuario(usuarioService.usuarioLogado());
+    optionalCaixa = caixaRepository.findByAbertoTrueAndUsuario(UsuarioService.usuarioLogado());
     return optionalCaixa.map(op -> {
       return Optional.of(op);
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhum caixa aberto para esse usuário!"));

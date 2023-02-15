@@ -53,4 +53,8 @@ public class DashBoardController {
     return ResponseEntity.ok(boardService.totalCusto(idUsuario));
   }
   
+  @GetMapping("/dash-2")
+  public ModelAndView dash2() {
+    return new ModelAndView("Dashboard2");
+  }
 }

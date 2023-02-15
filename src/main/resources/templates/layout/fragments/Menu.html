@@ -4,22 +4,29 @@
       <div class="d-flex align-items-center">
         <div class="flex-shrink-0 dropdown">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img data-bs-toggle="tooltip" data-bs-placement="top"  th:title="${auth.getNome()}" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${auth.clienteSistema.tenant},nomeFoto=${auth.getImagem()},extensao=${auth.getExtensao()})}" alt="mdo" width="32" height="32" class="rounded-circle">
+            <th:block th:if="${auth.getImagem()} == null">
+              <img th:src="@{/imagens/icon-perfil.jpg}" draggable="false" id="image-menu" width="32" height="32" style="border-radius: 50%;" alt="Cliente"/>
+            </th:block>
+            <th:block th:if="${auth.getImagem()} != null">
+              <img data-bs-toggle="tooltip" data-bs-placement="top"  th:title="${auth.getNome()}" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${auth.clienteSistema.tenant},nomeFoto=${auth.getImagem()},extensao=${auth.getExtensao()})}" alt="mdo" width="32" height="32" class="rounded-circle">
+            </th:block>
           </a>
           <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="font-size: 90%;">
-            <li sec:authorize="hasRole('ROLE_SUPER_USER')">
-              <a class="dropdown-item" th:href="@{/loggedUsers}">
-                <i class="bi bi-app-indicator"></i>
-                Online
-              </a>
-            </li>
-            <li><hr sec:authorize="hasRole('ROLE_SUPER_USER')" class="dropdown-divider"></li>
-            <li sec:authorize="hasRole('ROLE_SUPER_USER')">
-              <a class="dropdown-item" th:href="@{/about}">
-                <i class="bi bi-info-circle"></i> Sobre
-              </a>
-            </li>
-            <li><hr sec:authorize="hasRole('ROLE_SUPER_USER')" class="dropdown-divider"></li>
+            <th:block sec:authorize="hasRole('ROLE_SUPER_USER')">
+              <li>
+                <a class="dropdown-item" th:href="@{/loggedUsers}">
+                  <i class="bi bi-app-indicator"></i>
+                  Online
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/about}">
+                  <i class="bi bi-info-circle"></i> Sobre
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </th:block>
             <li>
               <a class="dropdown-item" th:href="@{'/usuario/' + ${auth.getId()}}">
                 <i class="bi bi-person-badge"></i>
@@ -42,7 +49,10 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link invock-gif" th:href="@{/}">
+            <a sec:authorize="hasRole('ROLE_DASHBOARD')" class="nav-link invock-gif" th:href="@{/}">
+              <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <a  class="nav-link invock-gif" th:if="${auth.getGrupos().size() == 1} ? ${auth.getGrupos()[0].getNome().equalsIgnoreCase('Operador caixa')}" th:href="@{/}">
               <i class="fa-solid fa-chart-pie"></i> Dashboard
             </a>
           </li>
@@ -127,17 +137,19 @@
                   Cliente sistema
                 </a>
               </li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <a class="dropdown-item" th:href="@{/usuario}">
-                  <i class="bi bi-person-badge"></i>
-                  Usuarios
-                </a>
-              </li>
+              <th:block sec:authorize="hasRole('ROLE_MANTER_USUARIO')" >
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/usuario}">
+                    <i class="bi bi-person-badge"></i>
+                    Usuarios
+                  </a>
+                </li>
+              </th:block>
             </ul>
           </li>
           
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_CONFERIR_ESTOQUE')" >
             <a class="nav-link dropdown" href="#" id="navbarDropdownEstoque" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa-solid fa-boxes-packing"></i>
               Estoque
@@ -191,3 +203,11 @@
     </div>
   </nav>
 </header>
+<!--<script th:inline="javascript" type="text/javascript">
+  function imgError(image) {
+    if(image) {
+      image.removeEventListener('error');
+      image.src = `[(@{/imagens/icon-perfil.jpg})]`;
+    }
+  }
+</script>-->
