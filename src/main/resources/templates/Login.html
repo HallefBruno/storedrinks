@@ -43,7 +43,7 @@
                     <label class="form-check-label" for="rememberMe">Lembrar me</label>
                   </div>
                 </div>
-                <div class="col-sm-12 col-12 col-md-7 col-lg-7">
+                <div th:if="${#strings.contains(#httpServletRequest.requestURL, '127.0.0.1')} or ${#strings.contains(#httpServletRequest.requestURL,'localhost')}" class="col-sm-12 col-12 col-md-7 col-lg-7">
                   <p class="float-end">Usuários <a th:href="@{/userteste}">Aqui</a></p>
                 </div>
               </div>
@@ -56,6 +56,7 @@
           </div>
         </div>
       </div>
+      <span>[[${#httpServletRequest.requestURL}]]</span>
     </div>
     <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>

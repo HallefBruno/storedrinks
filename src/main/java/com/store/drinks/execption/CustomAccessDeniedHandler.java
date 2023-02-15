@@ -23,11 +23,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException, ServletException {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth != null) {
+      LOG.log(Level.WARNING, "User: {0} attempted to access the protected URL: {1}", new Object[]{auth.getName(), request.getRequestURI()});
       if(context.concat("/").equalsIgnoreCase(request.getRequestURI())) {
         response.sendRedirect(request.getContextPath() + "/dash-2"); 
+        return;
       }
-      LOG.log(Level.WARNING, "User: {0} attempted to access the protected URL: {1}", new Object[]{auth.getName(), request.getRequestURI()});
-      return;
     }
     response.sendRedirect(request.getContextPath() + "/403");
   }
