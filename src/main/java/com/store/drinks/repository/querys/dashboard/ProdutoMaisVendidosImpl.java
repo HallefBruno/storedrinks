@@ -49,9 +49,6 @@ public class ProdutoMaisVendidosImpl implements ProdutosMaisVendidosRepositoryCu
 
   @Autowired
   private JpaUtils jpaUtils;
-  
-  @Autowired
-  private UsuarioService usuarioService;
 
   @Override
   public List<ProdutosMaisVendidosdto> listProdutosMaisVendidos(ProdutosMaisVendidosFiltro filters) {
