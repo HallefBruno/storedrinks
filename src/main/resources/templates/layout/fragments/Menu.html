@@ -1,0 +1,213 @@
+<header class="py-3 mb-3 border-bottom " th:fragment="menu" th:with="auth=${#authentication.getPrincipal().getUsuario()}">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 dropdown">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <th:block th:if="${auth.getImagem()} == null">
+              <img th:src="@{/imagens/icon-perfil.jpg}" draggable="false" id="image-menu" width="32" height="32" style="border-radius: 50%;" alt="Cliente"/>
+            </th:block>
+            <th:block th:if="${auth.getImagem()} != null">
+              <img data-bs-toggle="tooltip" data-bs-placement="top"  th:title="${auth.getNome()}" th:src="@{https://res.cloudinary.com/storedrinks/image/upload/storedrinks/foto-perfil/{pasta}/{nomeFoto}.{extensao} (pasta=${auth.clienteSistema.tenant},nomeFoto=${auth.getImagem()},extensao=${auth.getExtensao()})}" alt="mdo" width="32" height="32" class="rounded-circle">
+            </th:block>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="font-size: 90%;">
+            <th:block sec:authorize="hasRole('ROLE_SUPER_USER')">
+              <li>
+                <a class="dropdown-item" th:href="@{/loggedUsers}">
+                  <i class="bi bi-app-indicator"></i>
+                  Online
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/about}">
+                  <i class="bi bi-info-circle"></i> Sobre
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </th:block>
+            <li>
+              <a class="dropdown-item" th:href="@{'/usuario/' + ${auth.getId()}}">
+                <i class="bi bi-person-badge"></i>
+                Perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" th:href="@{/logout}">
+                <i class="bi bi-box-arrow-in-left"></i>
+                Sair
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a sec:authorize="hasRole('ROLE_DASHBOARD')" class="nav-link invock-gif" th:href="@{/}">
+              <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <a  class="nav-link invock-gif" th:if="${auth.getGrupos().size() == 1} ? ${auth.getGrupos()[0].getNome().equalsIgnoreCase('Operador caixa')}" th:href="@{/}">
+              <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-shop"></i> Pdv
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" th:href="@{/caixa}">
+                  <i class="fa-solid fa-cash-register"></i> Abrir caixa
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/caixa}">
+                  <i class="bi bi-shop-window"></i> PDV - Vendas
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/movimentacao-caixa}">
+                  <i class="bi bi-journal-richtext"></i> Movimentação caixa
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/vendas/page-cancelar-venda}">
+                  <i class="bi bi-x-square"></i> Cancelar venda
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recolhimento}">
+                  <i class="bi bi-file-earmark-arrow-down"></i> Recolhimento
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/caixa/detalhes}">
+                  <i class="bi bi-arrow-clockwise"></i> Fechar caixa
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown" href="#" id="navbarDropdownCadastros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-file-signature"></i> Cadastros
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownCadastros">
+              <li>
+                <a class="dropdown-item" th:href="@{/entradas/pesquisar}">
+                  <i class="bi bi-door-open"></i>
+                  Entradas
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/produtos/pesquisar}">
+                  <i class="bi bi-cart3"></i>
+                  Produtos
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/fornecedor/pesquisar}">
+                  <i class="bi bi-truck"></i>
+                  Fornecedores
+                </a>
+              </li>
+              <li sec:authorize="hasRole('ROLE_SUPER_USER')"><hr class="dropdown-divider"></li>
+              <li sec:authorize="hasRole('ROLE_SUPER_USER')">
+                <a class="dropdown-item" th:href="@{/clienteSistema/novo}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-fingerprint" viewBox="0 0 16 16">
+                    <path d="M8.06 6.5a.5.5 0 0 1 .5.5v.776a11.5 11.5 0 0 1-.552 3.519l-1.331 4.14a.5.5 0 0 1-.952-.305l1.33-4.141a10.5 10.5 0 0 0 .504-3.213V7a.5.5 0 0 1 .5-.5Z"/>
+                    <path d="M6.06 7a2 2 0 1 1 4 0 .5.5 0 1 1-1 0 1 1 0 1 0-2 0v.332c0 .409-.022.816-.066 1.221A.5.5 0 0 1 6 8.447c.04-.37.06-.742.06-1.115V7Zm3.509 1a.5.5 0 0 1 .487.513 11.5 11.5 0 0 1-.587 3.339l-1.266 3.8a.5.5 0 0 1-.949-.317l1.267-3.8a10.5 10.5 0 0 0 .535-3.048A.5.5 0 0 1 9.569 8Zm-3.356 2.115a.5.5 0 0 1 .33.626L5.24 14.939a.5.5 0 1 1-.955-.296l1.303-4.199a.5.5 0 0 1 .625-.329Z"/>
+                    <path d="M4.759 5.833A3.501 3.501 0 0 1 11.559 7a.5.5 0 0 1-1 0 2.5 2.5 0 0 0-4.857-.833.5.5 0 1 1-.943-.334Zm.3 1.67a.5.5 0 0 1 .449.546 10.72 10.72 0 0 1-.4 2.031l-1.222 4.072a.5.5 0 1 1-.958-.287L4.15 9.793a9.72 9.72 0 0 0 .363-1.842.5.5 0 0 1 .546-.449Zm6 .647a.5.5 0 0 1 .5.5c0 1.28-.213 2.552-.632 3.762l-1.09 3.145a.5.5 0 0 1-.944-.327l1.089-3.145c.382-1.105.578-2.266.578-3.435a.5.5 0 0 1 .5-.5Z"/>
+                    <path d="M3.902 4.222a4.996 4.996 0 0 1 5.202-2.113.5.5 0 0 1-.208.979 3.996 3.996 0 0 0-4.163 1.69.5.5 0 0 1-.831-.556Zm6.72-.955a.5.5 0 0 1 .705-.052A4.99 4.99 0 0 1 13.059 7v1.5a.5.5 0 1 1-1 0V7a3.99 3.99 0 0 0-1.386-3.028.5.5 0 0 1-.051-.705ZM3.68 5.842a.5.5 0 0 1 .422.568c-.029.192-.044.39-.044.59 0 .71-.1 1.417-.298 2.1l-1.14 3.923a.5.5 0 1 1-.96-.279L2.8 8.821A6.531 6.531 0 0 0 3.058 7c0-.25.019-.496.054-.736a.5.5 0 0 1 .568-.422Zm8.882 3.66a.5.5 0 0 1 .456.54c-.084 1-.298 1.986-.64 2.934l-.744 2.068a.5.5 0 0 1-.941-.338l.745-2.07a10.51 10.51 0 0 0 .584-2.678.5.5 0 0 1 .54-.456Z"/>
+                    <path d="M4.81 1.37A6.5 6.5 0 0 1 14.56 7a.5.5 0 1 1-1 0 5.5 5.5 0 0 0-8.25-4.765.5.5 0 0 1-.5-.865Zm-.89 1.257a.5.5 0 0 1 .04.706A5.478 5.478 0 0 0 2.56 7a.5.5 0 0 1-1 0c0-1.664.626-3.184 1.655-4.333a.5.5 0 0 1 .706-.04ZM1.915 8.02a.5.5 0 0 1 .346.616l-.779 2.767a.5.5 0 1 1-.962-.27l.778-2.767a.5.5 0 0 1 .617-.346Zm12.15.481a.5.5 0 0 1 .49.51c-.03 1.499-.161 3.025-.727 4.533l-.07.187a.5.5 0 0 1-.936-.351l.07-.187c.506-1.35.634-2.74.663-4.202a.5.5 0 0 1 .51-.49Z"/>
+                  </svg>
+                  Cliente sistema
+                </a>
+              </li>
+              <th:block sec:authorize="hasRole('ROLE_MANTER_USUARIO')" >
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/usuario}">
+                    <i class="bi bi-person-badge"></i>
+                    Usuarios
+                  </a>
+                </li>
+              </th:block>
+            </ul>
+          </li>
+          
+          <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_CONFERIR_ESTOQUE')" >
+            <a class="nav-link dropdown" href="#" id="navbarDropdownEstoque" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-boxes-packing"></i>
+              Estoque
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownEstoque">
+              <li>
+                <a class="dropdown-item" th:href="@{/estoque}">
+                  <i class="bi bi-clipboard-data"></i>
+                  Conferir estoque
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown" href="#" id="navbarDropdownMensagens" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-comment-dots"></i> Mensagens
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownMensagens">
+              <li>
+                <a class="dropdown-item" target="_blank" th:href="@{/mensagens/recebidas}">
+                  <i class="bi bi-chat"></i> Recebidas
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" target="_blank" th:href="@{/mensagens/nova}">
+                  <i class="bi bi-chat-dots"></i> Enviar nova
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          <li sec:authorize="hasRole('ROLE_SUPER_USER')" class="nav-item dropdown">
+            <a class="nav-link dropdown" href="#" id="navbarDropdownAdminSistema" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-gear"></i> Administração do sistema
+            </a>
+            <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownAdminSistema">
+              <li>
+                <a class="dropdown-item" th:href="@{/permissoes-usadas-front}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10.5 1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4H1.5a.5.5 0 0 1 0-1H10V1.5a.5.5 0 0 1 .5-.5ZM12 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm-6.5 2A.5.5 0 0 1 6 6v1.5h8.5a.5.5 0 0 1 0 1H6V10a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5ZM1 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 1 8Zm9.5 2a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V13H1.5a.5.5 0 0 1 0-1H10v-1.5a.5.5 0 0 1 .5-.5Zm1.5 2.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/>
+                  </svg> Uso de permissão no front
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<!--<script th:inline="javascript" type="text/javascript">
+  function imgError(image) {
+    if(image) {
+      image.removeEventListener('error');
+      image.src = `[(@{/imagens/icon-perfil.jpg})]`;
+    }
+  }
+</script>-->

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Dashboard</title>
+    <meta name="description" content="Dashboard">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <link th:href="@{/vendor/css/morris.css}" rel="stylesheet" type="text/css"/>
+    <div th:replace="layout/fragments/Menu :: menu"></div>
+  </head>
+  <body>
+    <main class="container-fluid">
+      <div>
+        <span style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 100px; color: #999999">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </span>
+      </div>
+    </main>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  </body>
+</html>

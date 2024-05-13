@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Enviar Mensagem</title>
+    <meta name="description" content="Enviar Mensagem">
+    <meta name="_flag" th:content="${#authentication.getPrincipal().getUsuario().getId()}"/>
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <div th:replace="~{layout/fragments/Menu :: menu}"></div>
+  </head>
+<body class="bg-light">
+  <main class="container" style="margin-top: 46px;">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card shadow-sm">
+          <h5 class="card-header">Envio de mensagens internas</h5>
+          <div class="card-body">
+            <div class="callout-md callout-primary">
+              <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
+                <div class="row g-2">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 sd-required">
+                    <label for="destinatario" class="form-label">Destinatário:</label>
+                    <select type="text" class="form-control" id="destinatario" data-placeholder="Destinatário">
+                      <option value=""></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-sm-12 col-md-12 col-lg-12 sd-required">
+                <label for="mensagem" class="form-label">Mensagem:</label>
+                <textarea maxlength="255" placeholder="Sua mensagem..." class="form-control" id="mensagem" name="mensagem" rows="5"></textarea>
+              </div>
+              <button id="btnEnviar" type="button" class="btn btn-outline-secondary btn-sm">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <th:block th:replace="fragments/JsFragment :: script"></th:block>
+  <script th:src="@{/alldrink-js/mensagem/Nova.js}" type="text/javascript"></script>
+</body>
+</html>
