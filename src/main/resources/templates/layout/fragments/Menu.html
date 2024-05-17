@@ -198,6 +198,12 @@
             </ul>
           </li>
           
+          <li sec:authorize="hasRole('ROLE_SUPER_USER')" class="nav-item dropdown">
+            <a class="nav-link dropdown" th:href="@{/integracoes}" id="navbarDropdownIntegracoes" role="button">
+              <i class="fa-solid fa-arrows-to-circle"></i> Integrações
+            </a>
+          </li>
+          
         </ul>
       </div>
     </div>
