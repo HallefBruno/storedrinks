@@ -21,4 +21,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry.addFormatter(new BigDecimalFormatter("R$ #,##0.00"));
     registry.addConverter(new ConverterStringInEnumFormaPagamento());
   }
+
 }

@@ -16,40 +16,47 @@
         </div>
       </div>
     </section>
-    <main class="container mb-4 py-5 bg-body-tertiary d-flex justify-content-center">
-      <div class="row g-3">
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <div class="card" style="width: 300px">
-            <img draggable="false" th:src="@{/imagens/Store1.png}" class="rounded-circle p-1" alt="Logo mercado livre">
+    <main class="container mb-4 py-5 bg-light d-flex justify-content-center">
+      <div class="row g-3 ">
+        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
+          <div class="card" style="width: 150px;">
+            <div class="d-flex justify-content-center mt-2">
+              <img draggable="false" th:src="@{/imagens/mercado-livre-logo.png}" alt="Logo mercado livre">
+            </div>
             <div class="card-body">
-              <h5 class="card-title text-warning">Mercado Livre</h5>
-              <p class="card-text">Integração com Mercado Livre</p>
-              <a href="#" class="btn btn-warning " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Mercado Livre</a>
+              <div class="d-flex justify-content-center mt-2">
+                <a id="btnMercadoLivre" class="btn btn-warning text-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #fae634">Mercado Livre</a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <div class="card" style="width: 300px">
-            <img th:src="@{/imagens/Store1.png}" class="rounded-circle p-1" alt="Logo mercado livre">
+        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
+          <div class="card" style="width: 150px;">
+            <div class="d-flex justify-content-center mt-2">
+              <img th:src="@{/imagens/shopee-logo.png}"  alt="Logo shopee">
+            </div>
             <div class="card-body">
-              <h5 class="card-title text-danger">Shopee</h5>
-              <p class="card-text">Integração com Shopee</p>
-              <a href="#" class="btn btn-danger " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Shopee</a>
+              <div class="d-flex justify-content-center mt-2">
+                <a href="#" class="btn btn-danger " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Shopee</a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <div class="card" style="width: 300px">
-            <img th:src="@{/imagens/Store1.png}" class="rounded-circle p-1" alt="Logo mercado livre" >
+        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
+          <div class="card" style="width: 150px;">
+              <div class="d-flex justify-content-center mt-2">
+                  <img th:src="@{/imagens/magalu-logo.png}" alt="Logo mercado livre" >
+              </div>
             <div class="card-body">
-              <h5 class="card-title text-primary">Magazine Luiza</h5>
-              <p class="card-text">Integração com Magazine Luiza</p>
-              <a href="#" class="btn btn-primary " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Magazine Luiza</a>
+              <div class="d-flex justify-content-center mt-2">
+                <a href="#" class="btn btn-primary " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Magazine Luiza</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </main>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script th:src="@{/alldrink-js/integracoes/Integracoes.js}" type="text/javascript"></script>
   </body>
 </html>

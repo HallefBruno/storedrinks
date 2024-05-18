@@ -225,6 +225,7 @@ StoreDrink.AjaxError = (function () {
       if (jqXHR.status === 0) {
       } else if (jqXHR.status === 400) {
         window.console.log(jqXHR.responseJSON);
+        window.console.log(jqXHR.responseText);
         if(jqXHR.responseJSON && jqXHR.responseJSON.errors && jqXHR.responseJSON.errors.length > 0) {
           $.each(jqXHR.responseJSON.errors, function (i, item) {
             $.toast({
@@ -235,7 +236,7 @@ StoreDrink.AjaxError = (function () {
               icon: 'error'
             });
           });
-        } else if (jqXHR.responseJSON.message) {
+        } else if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message) {
           $.toast({
             heading: `${"Atenção!"}`,
             text: `${jqXHR.responseJSON.message}`,
