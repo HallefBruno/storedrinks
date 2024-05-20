@@ -1,9 +1,9 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.MercadoLivre;
+import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.enuns.PlataformasEcommerce;
 import com.store.drinks.repository.MercadoLivreRepository;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +22,10 @@ public class MercadoLivreService {
     this.usuarioService = usuarioService;
   }
   
-  //@PreAuthorize("hasRole('SUPER_USER')")
   @Transactional
-  public void salvar(String code, HttpServletRequest request) {
+  public void salvar(String code) {
     var usuario = UsuarioService.usuarioLogado();
-    if(usuario.getProprietario()) {
+    if(usuario.getProprietario() && plataformaImplementada(usuario) == Boolean.FALSE) {
       var mercadoLivre = new MercadoLivre();
       mercadoLivre.setCode(code);
       mercadoLivre.setUsuario(usuario);
@@ -37,5 +36,12 @@ public class MercadoLivreService {
       mercadoLivreRepository.save(mercadoLivre);
       usuarioService.updateUsuarioMercadoLivre(mercadoLivre);
     }
+  }
+  
+  private boolean plataformaImplementada(Usuario usuario) {
+    if (usuario.getMercadoLivre() != null) {
+      return usuario.getMercadoLivre().getPlataformasEcommerce().getImplantada();
+    }
+    return false;
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,13 +20,23 @@ import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping("/mercado-livre")
+@PreAuthorize("hasRole('INTEGRACOES')")
 public class MercadoLivreController {
   
   @Value("${url.meli.code}")
   private String urlMeliCode;
   
-  @Value("url.token")
+  @Value("${url.token}")
   private String urlToken;
+  
+  @Value("${url.redirect}")
+  private String redirect;
+  
+  @Value("${app.id}")
+  private String appId;
+  
+  @Value("${app.secret}")
+  private String appSecret;
   
   @Autowired
   private MercadoLivreService mercadoLivreService;
@@ -40,9 +51,9 @@ public class MercadoLivreController {
   }
   
   @GetMapping("/redirect-code")
-  public String redirecCode(@RequestParam("code") String code, HttpServletRequest request) {
-    mercadoLivreService.salvar(code, request);
-    return "redirect:/integracoes";
+  public String redirecCode(@RequestParam("code") String code) {
+    mercadoLivreService.salvar(code);
+    return "redirect:/congratulation";
   }
 
   @GetMapping("/token")
@@ -55,17 +66,17 @@ public class MercadoLivreController {
 
     MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
     requestBody.add("grant_type", "authorization_code");
-    requestBody.add("client_id", "2035043297707429");
-    requestBody.add("client_secret", "q6Yl9pF4xm3L5fZhQmPoRqIO7oEbkDxW");
+    requestBody.add("client_id", appId);
+    requestBody.add("client_secret", appSecret);
     requestBody.add("code", "TG-664625cf76c85000019633d6-560901384");
-    requestBody.add("redirect_uri", "https://google.com.br");
+    //requestBody.add("redirect_uri", redirect);
 
     HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
     ResponseEntity<?> response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
     return ResponseEntity.ok(response.getBody());
   }
 
-  @GetMapping("refresh-token")
+  @GetMapping("/refresh-token")
   public ResponseEntity<?> refreshToken() {
     RestTemplate restTemplate = new RestTemplate();
 
@@ -75,8 +86,8 @@ public class MercadoLivreController {
 
     MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
     requestBody.add("grant_type", "refresh_token");
-    requestBody.add("client_id", "2035043297707429");
-    requestBody.add("client_secret", "q6Yl9pF4xm3L5fZhQmPoRqIO7oEbkDxW");
+    requestBody.add("client_id", appId);
+    requestBody.add("client_secret", appSecret);
     requestBody.add("refresh_token", "TG-664626667f781d0001e928b4-560901384");
 
     HttpEntity formEntity = new HttpEntity<>(requestBody, headers);

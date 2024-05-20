@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Congratulation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div th:replace="fragments/CssFragment :: css"></div>
+  </head>
+  <body>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-12 d-flex justify-content-center">
+            <lottie-player src="https://lottie.host/495c5fc0-f5b6-4b43-9b58-7f8efa61e089/IhN9mkfd19.json" background="##fff" speed="0.5" style="width: 400px; height: 400px" loop autoplay direction="1" mode="normal"></lottie-player>
+          </div>
+          <div class="col-sm-12 d-flex justify-content-center">
+            <p class="fs-4 text-muted fw-normal">A integração foi criada, faço login novamente no Sistema!</p>
+          </div>
+          <div class="col-sm-12 mt-4 d-flex justify-content-center">
+            <button id="btnRedirectLogin" class="btn-sm btn btn-primary">Fazer login</button>
+          </div>
+        </div>
+    </div>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script type="text/javascript">
+      $(function () {
+        $("#btnRedirectLogin").click(function () {
+          $.get(`${CONTEXT}congratulation/login`, function( data ) {
+            location.reload();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
