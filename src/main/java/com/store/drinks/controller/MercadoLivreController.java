@@ -40,10 +40,9 @@ public class MercadoLivreController {
   }
   
   @GetMapping("/redirect-code")
-  public String redirecCode(@RequestParam("code") String code) {
-    mercadoLivreService.salvar(code);
-    System.out.println(code);
-    return "redirect:/mercado-livre";
+  public String redirecCode(@RequestParam("code") String code, HttpServletRequest request) {
+    mercadoLivreService.salvar(code, request);
+    return "redirect:/integracoes";
   }
 
   @GetMapping("/token")

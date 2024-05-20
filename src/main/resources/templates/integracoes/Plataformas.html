@@ -17,43 +17,21 @@
       </div>
     </section>
     <main class="container mb-4 py-5 bg-light d-flex justify-content-center">
-      <div class="row g-3 ">
-        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
-          <div class="card" style="width: 150px;">
-            <div class="d-flex justify-content-center mt-2">
-              <img draggable="false" th:src="@{/imagens/mercado-livre-logo.png}" alt="Logo mercado livre">
-            </div>
-            <div class="card-body">
+      <div class="row g-3">
+        <th:block th:each="plataformas : ${plataformasAtivas}">
+          <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
+            <div class="card" style="width: 150px;" th:styleappend="${plataformas.implantada} ? 'filter: gray; -webkit-filter: grayscale(1); filter: grayscale(1);'">
               <div class="d-flex justify-content-center mt-2">
-                <a id="btnMercadoLivre" class="btn btn-warning text-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #fae634">Mercado Livre</a>
+                <img draggable="false" th:src="@{${'/imagens/' + plataformas.imagem}}" alt="Logo">
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-center mt-2">
+                  <button th:id="${plataformas.htmlIdButton}" th:disabled="${plataformas.implantada}" th:class="${plataformas.htmlClass}" th:style="${plataformas.htmlStyle}" th:text="${plataformas.descricao}"></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
-          <div class="card" style="width: 150px;">
-            <div class="d-flex justify-content-center mt-2">
-              <img th:src="@{/imagens/shopee-logo.png}"  alt="Logo shopee">
-            </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-center mt-2">
-                <a href="#" class="btn btn-danger " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Shopee</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
-          <div class="card" style="width: 150px;">
-              <div class="d-flex justify-content-center mt-2">
-                  <img th:src="@{/imagens/magalu-logo.png}" alt="Logo mercado livre" >
-              </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-center mt-2">
-                <a href="#" class="btn btn-primary " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Magazine Luiza</a>
-              </div>
-            </div>
-          </div>
-        </div>
+        </th:block>
       </div>
     </main>
     <th:block th:replace="fragments/JsFragment :: script"></th:block>

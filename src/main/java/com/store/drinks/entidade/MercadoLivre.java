@@ -1,5 +1,6 @@
 package com.store.drinks.entidade;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +14,15 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
-public class MercadoLivreCode implements Serializable {
+@DynamicUpdate
+@EqualsAndHashCode
+public class MercadoLivre implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mercado_livre_code_generator")
@@ -29,7 +34,12 @@ public class MercadoLivreCode implements Serializable {
   
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(nullable = false, name = "usuario_id")
+  @JsonManagedReference
   private Usuario usuario;
+  
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(nullable = true, name = "plataformas_ecommerce_id")
+  private PlataformasEcommerce plataformasEcommerce;
 
   @PrePersist
   @PreUpdate

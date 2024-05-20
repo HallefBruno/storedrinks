@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SqlResultSetMapping;
@@ -32,14 +31,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
-import java.util.HashSet;
 import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@DynamicUpdate
+@EqualsAndHashCode
 @NamedEntityGraph(name = "graph.Usuario.clienteSistema", attributeNodes = @NamedAttributeNode("clienteSistema"))
-
 @SqlResultSetMapping(
   name="UsuarioMensagemdto",
   classes={ 
@@ -97,11 +99,11 @@ public class Usuario implements Serializable {
   @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
   private Set<Grupo> grupos;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
   @JsonManagedReference
   private Set<MensagemEnviada> mensagensEnviadas;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
   @JsonManagedReference
   private Set<MensagemRecebida> mensagensRecebidas;
   
@@ -117,10 +119,10 @@ public class Usuario implements Serializable {
   @JsonBackReference
   private ClienteSistema clienteSistema;
   
-  public Usuario() {
-    this.mensagensEnviadas = new HashSet<>();
-    this.mensagensRecebidas = new HashSet<>();
-  }
+  @JoinColumn(name = "mercado_livre_id", nullable = true)
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JsonBackReference
+  public MercadoLivre mercadoLivre;
 
   public Long getId() {
     return id;
@@ -186,6 +188,14 @@ public class Usuario implements Serializable {
     this.imagem = imagem;
   }
 
+  public String getExtensao() {
+    return extensao;
+  }
+
+  public void setExtensao(String extensao) {
+    this.extensao = extensao;
+  }
+
   public Set<Grupo> getGrupos() {
     return grupos;
   }
@@ -199,8 +209,7 @@ public class Usuario implements Serializable {
   }
 
   public void setMensagensEnviadas(Set<MensagemEnviada> mensagensEnviadas) {
-    this.mensagensEnviadas.clear();
-    this.mensagensEnviadas.addAll(mensagensEnviadas);
+    this.mensagensEnviadas = mensagensEnviadas;
   }
 
   public Set<MensagemRecebida> getMensagensRecebidas() {
@@ -208,8 +217,7 @@ public class Usuario implements Serializable {
   }
 
   public void setMensagensRecebidas(Set<MensagemRecebida> mensagensRecebidas) {
-    this.mensagensRecebidas.clear();
-    this.mensagensRecebidas.addAll(mensagensRecebidas);
+    this.mensagensRecebidas = mensagensRecebidas;
   }
 
   public LocalDate getDataNascimento() {
@@ -236,97 +244,14 @@ public class Usuario implements Serializable {
     this.clienteSistema = clienteSistema;
   }
 
-  public String getExtensao() {
-    return extensao;
+  public MercadoLivre getMercadoLivre() {
+    return mercadoLivre;
   }
 
-  public void setExtensao(String extensao) {
-    this.extensao = extensao;
+  public void setMercadoLivre(MercadoLivre mercadoLivre) {
+    this.mercadoLivre = mercadoLivre;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 79 * hash + Objects.hashCode(this.id);
-    hash = 79 * hash + Objects.hashCode(this.nome);
-    hash = 79 * hash + Objects.hashCode(this.email);
-    hash = 79 * hash + Objects.hashCode(this.senha);
-    hash = 79 * hash + Objects.hashCode(this.telefone);
-    hash = 79 * hash + Objects.hashCode(this.confirmacaoSenha);
-    hash = 79 * hash + Objects.hashCode(this.ativo);
-    hash = 79 * hash + Objects.hashCode(this.imagem);
-    hash = 79 * hash + Objects.hashCode(this.extensao);
-    hash = 79 * hash + Objects.hashCode(this.grupos);
-    hash = 79 * hash + Objects.hashCode(this.mensagensEnviadas);
-    hash = 79 * hash + Objects.hashCode(this.mensagensRecebidas);
-    hash = 79 * hash + Objects.hashCode(this.dataNascimento);
-    hash = 79 * hash + Objects.hashCode(this.proprietario);
-    hash = 79 * hash + Objects.hashCode(this.clienteSistema);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final Usuario other = (Usuario) obj;
-    if (!Objects.equals(this.nome, other.nome)) {
-      return false;
-    }
-    if (!Objects.equals(this.email, other.email)) {
-      return false;
-    }
-    if (!Objects.equals(this.senha, other.senha)) {
-      return false;
-    }
-    if (!Objects.equals(this.telefone, other.telefone)) {
-      return false;
-    }
-    if (!Objects.equals(this.confirmacaoSenha, other.confirmacaoSenha)) {
-      return false;
-    }
-    if (!Objects.equals(this.imagem, other.imagem)) {
-      return false;
-    }
-    if (!Objects.equals(this.extensao, other.extensao)) {
-      return false;
-    }
-    if (!Objects.equals(this.id, other.id)) {
-      return false;
-    }
-    if (!Objects.equals(this.ativo, other.ativo)) {
-      return false;
-    }
-    if (!Objects.equals(this.grupos, other.grupos)) {
-      return false;
-    }
-    if (!Objects.equals(this.mensagensEnviadas, other.mensagensEnviadas)) {
-      return false;
-    }
-    if (!Objects.equals(this.mensagensRecebidas, other.mensagensRecebidas)) {
-      return false;
-    }
-    if (!Objects.equals(this.dataNascimento, other.dataNascimento)) {
-      return false;
-    }
-    if (!Objects.equals(this.proprietario, other.proprietario)) {
-      return false;
-    }
-    return Objects.equals(this.clienteSistema, other.clienteSistema);
-  }
-
-  @Override
-  public String toString() {
-    return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", confirmacaoSenha=" + confirmacaoSenha + ", ativo=" + ativo + ", imagem=" + imagem + ", extensao=" + extensao + ", grupos=" + grupos + ", mensagensEnviadas=" + mensagensEnviadas + ", mensagensRecebidas=" + mensagensRecebidas + ", dataNascimento=" + dataNascimento + ", proprietario=" + proprietario + ", clienteSistema=" + clienteSistema + '}';
-  }
-  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {

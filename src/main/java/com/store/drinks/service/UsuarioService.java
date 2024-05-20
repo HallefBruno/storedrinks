@@ -1,6 +1,7 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Grupo;
+import com.store.drinks.entidade.MercadoLivre;
 import com.store.drinks.entidade.Permissao;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.EmailValido;
@@ -95,6 +96,13 @@ public class UsuarioService {
       salvarImagemStorage(image, fileName);
       return Void.TYPE;
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
+  }
+  
+  @Transactional
+  public void updateUsuarioMercadoLivre(MercadoLivre mercadoLivre) {
+    Usuario u = findByEmailAndAtivoTrue(usuarioLogado().getEmail()).get();
+    u.setMercadoLivre(mercadoLivre);
+    usuarioRepository.save(u);
   }
 
   public static Usuario usuarioLogado() {
