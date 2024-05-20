@@ -45,6 +45,9 @@ public class MercadoLivreController {
   @Autowired
   private MercadoLivreService mercadoLivreService;
   
+  @Autowired
+  private UsuarioService usuarioService;
+  
   @GetMapping("/code")
   public ResponseEntity<String> urlForRedirect(HttpServletRequest request) {
     String s = request.getHeader("User-Agent");
@@ -72,13 +75,14 @@ public class MercadoLivreController {
     requestBody.add("grant_type", "authorization_code");
     requestBody.add("client_id", appId);
     requestBody.add("client_secret", appSecret);
-    requestBody.add("code", UsuarioService.usuarioLogado().getMercadoLivre().getCode());
+    requestBody.add("code", usuarioService.usuarioAtualizado().getMercadoLivre().getCode());
     requestBody.add("redirect_uri", redirect);
 
     HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
     ResponseEntity<?> response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
     
-    System.out.println(response.toString());
+    System.out.println(response.getBody());
+    System.out.println(response.getBody());
     
     return "redirect:/congratulation";
   }

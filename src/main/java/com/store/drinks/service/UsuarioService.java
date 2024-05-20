@@ -115,6 +115,10 @@ public class UsuarioService {
     return usuarioRepository.findByEmailAndAtivoTrue(email);
   }
   
+  public Usuario usuarioAtualizado() {
+    return findByEmailAndAtivoTrue(usuarioLogado().getEmail()).get();
+  }
+  
   public Optional<Usuario> findByClienteSistemaTenantAndId(String tenant, Long id) {
     return usuarioRepository.findByClienteSistemaTenantAndId(tenant, id).map(user -> {
       return Optional.of(user);
