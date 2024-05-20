@@ -1,6 +1,7 @@
 package com.store.drinks.controller;
 
 import com.store.drinks.service.MercadoLivreService;
+import com.store.drinks.service.UsuarioService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,9 @@ public class MercadoLivreController {
   @Value("${app.secret}")
   private String appSecret;
   
+  @Value("${url.congratulation}")
+  private String urlCongratulation;
+  
   @Autowired
   private MercadoLivreService mercadoLivreService;
   
@@ -53,11 +57,11 @@ public class MercadoLivreController {
   @GetMapping("/redirect-code")
   public String redirecCode(@RequestParam("code") String code) {
     mercadoLivreService.salvar(code);
-    return "redirect:/congratulation";
+    return "redirect:/mercado-livre/token";
   }
 
   @GetMapping("/token")
-  public ResponseEntity<?> token() {
+  public String token() {
     RestTemplate restTemplate = new RestTemplate();
 
     HttpHeaders headers = new HttpHeaders();
@@ -68,12 +72,15 @@ public class MercadoLivreController {
     requestBody.add("grant_type", "authorization_code");
     requestBody.add("client_id", appId);
     requestBody.add("client_secret", appSecret);
-    requestBody.add("code", "TG-664625cf76c85000019633d6-560901384");
-    //requestBody.add("redirect_uri", redirect);
+    requestBody.add("code", UsuarioService.usuarioLogado().getMercadoLivre().getCode());
+    requestBody.add("redirect_uri", redirect);
 
     HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
     ResponseEntity<?> response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
-    return ResponseEntity.ok(response.getBody());
+    
+    System.out.println(response.toString());
+    
+    return "redirect:/congratulation";
   }
 
   @GetMapping("/refresh-token")
