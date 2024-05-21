@@ -32,6 +32,7 @@ public class NovaContaClienteSistema {
   private final UsuarioService usuarioService;
   private final MensagemEnviadaService mensagensEnviadasService;
   private final MensagemRecebidaService mensagensRecebidasService;
+  private final PlataformasIntegracaoService plataformasIntegracaoService;
   
 
   @Transactional
@@ -88,6 +89,7 @@ public class NovaContaClienteSistema {
         validarClienteService.salvar(validarCliente);
         usuario = usuarioService.salvar(usuario);
         salvarMensagemEnviadaRecebida(email, nome, usuario);
+        plataformasIntegracaoService.criarPlataformas();
       } else {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi possível criar a conta, entre em contato com a o Administrador!");
       }

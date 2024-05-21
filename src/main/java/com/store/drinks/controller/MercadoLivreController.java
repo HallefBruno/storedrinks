@@ -30,23 +30,14 @@ public class MercadoLivreController {
   @Value("${url.token}")
   private String urlToken;
   
-  @Value("${url.redirect}")
-  private String redirect;
-  
   @Value("${app.id}")
   private String appId;
   
   @Value("${app.secret}")
   private String appSecret;
   
-  @Value("${url.congratulation}")
-  private String urlCongratulation;
-  
   @Autowired
   private MercadoLivreService mercadoLivreService;
-  
-  @Autowired
-  private UsuarioService usuarioService;
   
   @GetMapping("/code")
   public ResponseEntity<String> urlForRedirect(HttpServletRequest request) {
@@ -65,25 +56,7 @@ public class MercadoLivreController {
 
   @GetMapping("/token")
   public String token() {
-    RestTemplate restTemplate = new RestTemplate();
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED.toString());
-    headers.add("Accept", MediaType.APPLICATION_JSON.toString());
-
-    MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-    requestBody.add("grant_type", "authorization_code");
-    requestBody.add("client_id", appId);
-    requestBody.add("client_secret", appSecret);
-    requestBody.add("code", usuarioService.usuarioAtualizado().getMercadoLivre().getCode());
-    requestBody.add("redirect_uri", redirect);
-
-    HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
-    ResponseEntity<?> response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
-    
-    System.out.println(response.getBody());
-    System.out.println(response.getBody());
-    
+    mercadoLivreService.salvarTokenMercadoLivre();
     return "redirect:/congratulation";
   }
 

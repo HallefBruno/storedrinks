@@ -40,6 +40,9 @@ public class MercadoLivre implements Serializable {
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(nullable = true, name = "plataformas_ecommerce_id")
   private PlataformasEcommerce plataformasEcommerce;
+  
+  @OneToOne(fetch = FetchType.EAGER, mappedBy = "mercadoLivre")
+  private AccessTokenMeli accessTokenMeli;
 
   @PrePersist
   @PreUpdate
