@@ -10,7 +10,7 @@ import com.store.drinks.entidade.dto.movimentacaoCaixa.MovimentacaoCaixadto;
 import com.store.drinks.entidade.dto.usuario.UsuarioMovimentacaoCaixadto;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.util.JpaUtils;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import com.store.drinks.service.UsuarioService;
 import java.math.BigDecimal;
 import java.time.LocalDate;

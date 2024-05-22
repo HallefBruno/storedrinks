@@ -34,10 +34,12 @@ import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Data
 @Entity
 @DynamicUpdate
 @EqualsAndHashCode
@@ -99,11 +101,11 @@ public class Usuario implements Serializable {
   @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
   private Set<Grupo> grupos;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
   @JsonManagedReference
   private Set<MensagemEnviada> mensagensEnviadas;
   
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
   @JsonManagedReference
   private Set<MensagemRecebida> mensagensRecebidas;
   
@@ -122,136 +124,8 @@ public class Usuario implements Serializable {
   @JoinColumn(name = "mercado_livre_id", nullable = true)
   @ManyToOne(fetch = FetchType.EAGER)
   @JsonBackReference
-  public MercadoLivre mercadoLivre;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getNome() {
-    return nome;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getSenha() {
-    return senha;
-  }
-
-  public void setSenha(String senha) {
-    this.senha = senha;
-  }
-
-  public String getTelefone() {
-    return telefone;
-  }
-
-  public void setTelefone(String telefone) {
-    this.telefone = telefone;
-  }
-
-  public String getConfirmacaoSenha() {
-    return confirmacaoSenha;
-  }
-
-  public void setConfirmacaoSenha(String confirmacaoSenha) {
-    this.confirmacaoSenha = confirmacaoSenha;
-  }
-
-  public Boolean getAtivo() {
-    return ativo;
-  }
-
-  public void setAtivo(Boolean ativo) {
-    this.ativo = ativo;
-  }
-
-  public String getImagem() {
-    return imagem;
-  }
-
-  public void setImagem(String imagem) {
-    this.imagem = imagem;
-  }
-
-  public String getExtensao() {
-    return extensao;
-  }
-
-  public void setExtensao(String extensao) {
-    this.extensao = extensao;
-  }
-
-  public Set<Grupo> getGrupos() {
-    return grupos;
-  }
-
-  public void setGrupos(Set<Grupo> grupos) {
-    this.grupos = grupos;
-  }
-
-  public Set<MensagemEnviada> getMensagensEnviadas() {
-    return mensagensEnviadas;
-  }
-
-  public void setMensagensEnviadas(Set<MensagemEnviada> mensagensEnviadas) {
-    this.mensagensEnviadas = mensagensEnviadas;
-  }
-
-  public Set<MensagemRecebida> getMensagensRecebidas() {
-    return mensagensRecebidas;
-  }
-
-  public void setMensagensRecebidas(Set<MensagemRecebida> mensagensRecebidas) {
-    this.mensagensRecebidas = mensagensRecebidas;
-  }
-
-  public LocalDate getDataNascimento() {
-    return dataNascimento;
-  }
-
-  public void setDataNascimento(LocalDate dataNascimento) {
-    this.dataNascimento = dataNascimento;
-  }
-
-  public Boolean getProprietario() {
-    return proprietario;
-  }
-
-  public void setProprietario(Boolean proprietario) {
-    this.proprietario = proprietario;
-  }
-
-  public ClienteSistema getClienteSistema() {
-    return clienteSistema;
-  }
-
-  public void setClienteSistema(ClienteSistema clienteSistema) {
-    this.clienteSistema = clienteSistema;
-  }
-
-  public MercadoLivre getMercadoLivre() {
-    return mercadoLivre;
-  }
-
-  public void setMercadoLivre(MercadoLivre mercadoLivre) {
-    this.mercadoLivre = mercadoLivre;
-  }
-
+  private MercadoLivre mercadoLivre;
+  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {

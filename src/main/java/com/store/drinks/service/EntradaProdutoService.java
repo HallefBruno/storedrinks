@@ -9,7 +9,7 @@ import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.repository.EntradaProdutoRepository;
 import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.ProdutoRepository;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

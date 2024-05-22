@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.store.drinks.repository.CaixaRepository;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;

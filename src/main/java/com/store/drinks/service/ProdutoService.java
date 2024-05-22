@@ -6,7 +6,7 @@ import com.store.drinks.entidade.dto.ProdutoSelect2;
 import com.store.drinks.entidade.dto.ResultSelectProdutos;
 import com.store.drinks.entidade.wrapper.DataTableWrapper;
 import com.store.drinks.repository.ProdutoRepository;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

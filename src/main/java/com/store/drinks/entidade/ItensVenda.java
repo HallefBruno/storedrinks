@@ -1,7 +1,7 @@
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
 import java.io.Serializable;
 import java.util.Objects;

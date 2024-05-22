@@ -2,7 +2,7 @@ package com.store.drinks.repository.querys.mensagensRecebidas;
 
 import com.store.drinks.entidade.dto.usuario.UsuarioMensagemdto;
 import com.store.drinks.entidade.dto.mensagem.Mensagemdto;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

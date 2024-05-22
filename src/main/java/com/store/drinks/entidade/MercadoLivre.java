@@ -1,6 +1,7 @@
 package com.store.drinks.entidade;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.store.drinks.util.Multitenancy;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,11 +44,15 @@ public class MercadoLivre implements Serializable {
   
   @OneToOne(fetch = FetchType.EAGER, mappedBy = "mercadoLivre")
   private AccessTokenMeli accessTokenMeli;
+  
+  @Column(nullable = false, unique = true, length = 50)
+  private String tenant;
 
   @PrePersist
   @PreUpdate
   private void prePersistPreUpdate() {
     this.code = StringUtils.strip(this.code);
+    this.tenant = new Multitenancy().getTenantValue().trim();
   }
 
 }
