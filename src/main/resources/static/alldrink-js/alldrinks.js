@@ -34,7 +34,7 @@ StoreDrink.DialogoExcluir = (function () {
   function onExcluirConfirmado(url) {
     $.ajax({
       url: url,
-      method: 'DEvarE',
+      method: 'DELETE',
       success: onExcluidoSucesso.bind(this),
       error: onErroExcluir.bind(this)
     });

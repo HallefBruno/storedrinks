@@ -49,10 +49,7 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a sec:authorize="hasRole('ROLE_DASHBOARD')" class="nav-link invock-gif" th:href="@{/}">
-              <i class="fa-solid fa-chart-pie"></i> Dashboard
-            </a>
-            <a  class="nav-link invock-gif" th:if="${auth.getGrupos().size() == 1} ? ${auth.getGrupos()[0].getNome().equalsIgnoreCase('Operador caixa')}" th:href="@{/}">
+            <a  class="nav-link invock-gif" th:if="${auth.getGrupos().size() > 0}" th:href="@{/}">
               <i class="fa-solid fa-chart-pie"></i> Dashboard
             </a>
           </li>

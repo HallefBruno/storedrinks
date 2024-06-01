@@ -7,7 +7,7 @@
   </head>
   <body class="bg-light">
     <main class="container pt-4 mb-4 col-md-6 offset-md-3 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4">
-      <form th:object="${permissaoUsadaFront}" th:action="@{/permissoes-usadas-front}" method="post">
+      <form th:object="${permissaoUsadaFront}" th:action="${permissaoUsadaFront.id} == null ? @{/permissoes-usadas-front/salvar} : @{/permissoes-usadas-front/update/{codigo}(codigo=${permissaoUsadaFront.id})}" method="post">
         <th:block th:include="fragments/MensagemSucesso"></th:block>
         <th:block th:include="fragments/MensagensErroValidacao"></th:block>
         <div class="shadow-sm">

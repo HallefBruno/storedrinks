@@ -42,7 +42,7 @@ public class PermissoesUsadasFrontController {
     return view;
   }
   
-  @PostMapping
+  @PostMapping("/salvar")
   public ModelAndView salvar(@Valid PermissaoUsadaFront permissaoUsadaFront, BindingResult result, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
@@ -54,11 +54,11 @@ public class PermissoesUsadasFrontController {
       result.addError(error);
       return pageNovo(permissaoUsadaFront);
     }
-    attributes.addFlashAttribute("mensagem", "Operação salva com sucesso!");
+    attributes.addFlashAttribute("mensagem", "Registro salva com sucesso!");
     return new ModelAndView("redirect:/permissoes-usadas-front");
   }
   
-  @PostMapping("update/{codigo}")
+  @PostMapping("/update/{codigo}")
   public ModelAndView update(@PathVariable(required = true, name = "codigo") Long codigo, @Valid PermissaoUsadaFront permissaoUsadaFront, BindingResult result, RedirectAttributes attributes) {
     try {
       if (result.hasErrors()) {
@@ -70,11 +70,11 @@ public class PermissoesUsadasFrontController {
       result.addError(error);
       return pageNovo(permissaoUsadaFront);
     }
-    attributes.addFlashAttribute("mensagem", "Fornecedor alterado com sucesso!");
-    return new ModelAndView("redirect:/fornecedor");
+    attributes.addFlashAttribute("mensagem", "Registro alterado com sucesso!");
+    return new ModelAndView("redirect:/permissoes-usadas-front");
   }
   
-   @DeleteMapping("{codigo}")
+   @DeleteMapping("/{codigo}")
   public ResponseEntity<?> excluir(@PathVariable("codigo") PermissaoUsadaFront permissaoUsadaFront) {
     try {
       permissaoUsadaFrontService.excluir(permissaoUsadaFront);
@@ -84,7 +84,7 @@ public class PermissoesUsadasFrontController {
     return ResponseEntity.ok().build();
   }
   
-  @GetMapping("{codigo}")
+  @GetMapping("/{codigo}")
   public ModelAndView editar(@PathVariable("codigo") PermissaoUsadaFront permissaoUsadaFront) {
     ModelAndView mv = pageNovo(permissaoUsadaFront);
     mv.addObject(permissaoUsadaFront);
