@@ -1,5 +1,6 @@
 package com.store.drinks.entidade.dto.venda;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItensVendadto {
+public class ItensVendadto implements Serializable {
   private Long id;
   private String codProduto;
   private String codigoBarra;
   private Integer quantidade;
-
+  
 }

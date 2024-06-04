@@ -471,7 +471,7 @@ function finalizarVenda() {
       $.ajax({
         url: `${CONTEXT}${ENDPOINT}/finalizar`,
         dataType: "json",
-        contentType: "application/json",
+        contentType: "application/json;charset=UTF-8",
         method: "POST",
         data: JSON.stringify(venda),
         beforeSend: function () {

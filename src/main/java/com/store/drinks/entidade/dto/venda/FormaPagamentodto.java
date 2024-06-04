@@ -1,26 +1,18 @@
 package com.store.drinks.entidade.dto.venda;
 
-import com.store.drinks.entidade.MovimentacaoCaixa;
 import com.store.drinks.entidade.enuns.TipoPagamento;
-import com.store.drinks.util.Multitenancy;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class FormaPagamentodto {
-
-  private Long id;
+@NoArgsConstructor
+public class FormaPagamentodto implements Serializable {
   private TipoPagamento tipoPagamento;
   private BigDecimal valor;
-  private MovimentacaoCaixa movimentacaoCaixa;
-  private String tenant;
-  
-  public FormaPagamentodto() {
-    tenant = new Multitenancy().getTenantValue();
-  }
-  
 }
