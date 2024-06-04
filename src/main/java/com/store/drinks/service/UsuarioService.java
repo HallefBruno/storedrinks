@@ -58,8 +58,8 @@ public class UsuarioService {
     fileName = fileName.substring(0, fileName.lastIndexOf("."));
     usuario.setImagem(fileName);
     usuario.setExtensao(extenssao);
-    validarDadosUsuarioSalvar(usuario);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());
+    validarDadosUsuarioSalvar(usuario);
     usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuarioRepository.save(usuario);
     salvarImagemStorage(image, fileName);
@@ -156,7 +156,7 @@ public class UsuarioService {
     existeEmail(usuario.getEmail());
     existeNomeImagem(usuario.getImagem());
     permiteCriarUsuario();
-    validarEmail(usuario.getEmail());
+    //validarEmail(usuario.getEmail());
   }
   
   private void validarDadosUsuarioUpdate(Usuario usuarioUpdate, Usuario usuarioAtual) {
@@ -173,7 +173,7 @@ public class UsuarioService {
         existeNomeImagem(usuarioUpdate.getImagem());
       }
     }
-    validarEmail(usuarioUpdate.getEmail());
+    //validarEmail(usuarioUpdate.getEmail());
   }
   
   private void existeTelefone(String telefone) {

@@ -99,7 +99,7 @@
                             <div class="col-12">
                               <label class="list-group-item border-0">
                                 <i class="bi bi-file-earmark-lock2-fill"></i>
-                                <input class="form-check-input me-1" name="grupos" th:id="${grupo.id}" th:text="${grupo.nome}" th:field="*{grupos}" th:value="${grupo.id}" type="checkbox">
+                                <input th:disabled="${#lists.size(grupos) == 1}" class="form-check-input me-1" name="grupos" th:id="${grupo.id}" th:text="${grupo.nome}" th:field="*{grupos}" th:value="${grupo.id}" type="checkbox">
                               </label>
                             </div>
                           </div>
@@ -138,8 +138,8 @@
         });
         $("form").submit(function () {
           if ($('div.checkbox-group :checkbox:checked').length <= 0) {
-            toast.show('warning','Atenção','Permissão é obrigatória!','top-right');
-            $("#divPermissoes").prop("title", "Selecione as permissões");
+            toast.show('warning','Atenção','Grupo é obrigatório!','top-right');
+            $("#divPermissoes").prop("title", "Selecione os Grupos");
             $("#divLoading").removeClass("loading");
             return false;
           } else if ($("#dataNascimento").val()) {
