@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.drinks.entidade.MercadoLivre;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.AccessTokenMeli;
-import com.store.drinks.entidade.dto.AccessTokenMeliDTO;
+import com.store.drinks.entidade.dto.meli.AccessTokenMelidto;
 import com.store.drinks.entidade.enuns.PlataformasEcommerce;
 import com.store.drinks.repository.MercadoLivreRepository;
 import org.springframework.beans.BeanUtils;
@@ -90,7 +90,7 @@ public class MercadoLivreService {
       HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
       var response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
       ObjectMapper objectMapper = new ObjectMapper();
-      var accessTokenMeliDTO = objectMapper.readValue(response.getBody(), AccessTokenMeliDTO.class);
+      var accessTokenMeliDTO = objectMapper.readValue(response.getBody(), AccessTokenMelidto.class);
       var accessTokenMeli = new AccessTokenMeli();
       BeanUtils.copyProperties(accessTokenMeliDTO, accessTokenMeli);
       accessTokenMeli.setMercadoLivre(usuarioService.usuarioAtualizado().getMercadoLivre());

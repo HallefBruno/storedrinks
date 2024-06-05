@@ -1,5 +1,5 @@
 
-package com.store.drinks.entidade.dto;
+package com.store.drinks.entidade.dto.meli;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class AccessTokenMeliDTO {
+public class AccessTokenMelidto {
   
   @JsonProperty("access_token")
   private String accessToken;

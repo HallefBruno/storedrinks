@@ -4,7 +4,7 @@ package com.store.drinks.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.drinks.entidade.AccessTokenMeli;
-import com.store.drinks.entidade.dto.AccessTokenMeliDTO;
+import com.store.drinks.entidade.dto.meli.AccessTokenMelidto;
 import com.store.drinks.repository.AccessTokenMeliRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -47,7 +47,7 @@ public class AccessTokenMeliService {
     return accessTokenMeli;
   }
   
-  public AccessTokenMeliDTO atualAccessTokenMeli() {
+  public AccessTokenMelidto atualAccessTokenMeli() {
     try {
       
       var tenant = UsuarioService.usuarioLogado().getClienteSistema().getTenant();
@@ -69,7 +69,7 @@ public class AccessTokenMeliService {
       HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
       var response = restTemplate.exchange(urlToken, HttpMethod.POST, formEntity, String.class);
       ObjectMapper objectMapper = new ObjectMapper();
-      var accessTokenMeliDTO = objectMapper.readValue(response.getBody(), AccessTokenMeliDTO.class);
+      var accessTokenMeliDTO = objectMapper.readValue(response.getBody(), AccessTokenMelidto.class);
       BeanUtils.copyProperties(accessTokenMeliDTO, meliToken, "id");
       
       salvar(meliToken);

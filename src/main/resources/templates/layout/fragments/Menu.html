@@ -190,11 +190,20 @@
             </ul>
           </li>
           
+          <li sec:authorize="hasRole('ROLE_INTEGRACOES')" class="nav-item dropdown">
+            <a class="nav-link dropdown" th:href="@{/integracoes}" id="navbarDropdownIntegracoes" role="button">
+              <i class="fa-solid fa-arrows-to-circle"></i> Integrações
+            </a>
+          </li>
+          
           <li sec:authorize="hasRole('ROLE_SUPER_USER')" class="nav-item dropdown">
+            
             <a class="nav-link dropdown" href="#" id="navbarDropdownAdminSistema" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa-solid fa-gear"></i> Administração do sistema
             </a>
+            
             <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownAdminSistema">
+              
               <li>
                 <a class="dropdown-item" th:href="@{/permissoes-usadas-front}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">
@@ -202,13 +211,23 @@
                   </svg> Uso de permissão no front
                 </a>
               </li>
+              
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/mercado-livre/page-categorias}">
+                  <i class="fa-solid fa-list"></i> Categorias Meli
+                </a>
+              </li>
+              
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" th:href="@{/mercado-livre/page-desvincular-conta-meli}">
+                  <i class="fa-solid fa-list"></i> Desvincular conta Meli
+                </a>
+              </li>
+              
             </ul>
-          </li>
-          
-          <li sec:authorize="hasRole('ROLE_INTEGRACOES')" class="nav-item dropdown">
-            <a class="nav-link dropdown" th:href="@{/integracoes}" id="navbarDropdownIntegracoes" role="button">
-              <i class="fa-solid fa-arrows-to-circle"></i> Integrações
-            </a>
+            
           </li>
           
         </ul>

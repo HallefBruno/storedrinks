@@ -12,8 +12,8 @@ $(function () {
     });
   });
   
-  $.get(`${CONTEXT}mercado-livre/refresh-token`, function (response) {
-      console.log(response);
-    });
+//  $.get(`${CONTEXT}mercado-livre/refresh-token`, function (response) {
+//    console.log(response);
+//  });
   
 });
