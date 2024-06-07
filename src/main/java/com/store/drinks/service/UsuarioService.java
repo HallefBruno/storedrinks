@@ -56,6 +56,7 @@ public class UsuarioService {
     String fileName = StringUtils.cleanPath(image.getOriginalFilename());
     String extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
     fileName = fileName.substring(0, fileName.lastIndexOf("."));
+    usuario.setAdmim(Boolean.FALSE);
     usuario.setImagem(fileName);
     usuario.setExtensao(extenssao);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());
@@ -70,7 +71,6 @@ public class UsuarioService {
     if (Objects.isNull(codigo)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
     }
-    
     usuarioRepository.findById(codigo).map(usuarioAtual -> {
       String fileName = "";
       String extensao = "";
@@ -84,7 +84,7 @@ public class UsuarioService {
         fileName = usuarioAtual.getImagem();
         extensao = usuarioAtual.getExtensao();
       }
-      CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha");
+      CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha", "admim");
       casoAltereSenha(usuarioUpdate, usuarioAtual);
       verificaAtributoNull(usuarioUpdate, usuarioAtual);
       validarDadosUsuarioUpdate(usuarioUpdate, usuarioAtual);

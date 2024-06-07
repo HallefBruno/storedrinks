@@ -14,24 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/congratulation")
 @PreAuthorize("hasRole('INTEGRACOES')")
-public class CongratulationController {
+public class CongratulationController extends EncerrarSessaoController {
   
   @GetMapping
-  public ModelAndView page() {
+  public ModelAndView page(HttpServletRequest request, HttpServletResponse response) {
     return new ModelAndView("congratulation/Congratulation");
   }
   
   @GetMapping("/login")
-  public String login(HttpServletRequest request, HttpServletResponse response) {
-    HttpSession session = request.getSession(false);
-    SecurityContextHolder.clearContext();
-    if (session != null) {
-      session.invalidate();
-    }
-    for (Cookie cookie : request.getCookies()) {
-      cookie.setMaxAge(0);
-    }
-    return "Login";
+  public void login(HttpServletRequest request, HttpServletResponse response) {
+    encerrarSessao(request, response);
   }
   
 }

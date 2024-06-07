@@ -126,6 +126,9 @@ public class Usuario implements Serializable {
   @JsonBackReference
   private MercadoLivre mercadoLivre;
   
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private Boolean admim;
+  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {
@@ -139,6 +142,9 @@ public class Usuario implements Serializable {
     }
     if(Objects.isNull(this.proprietario)) {
       this.proprietario = Boolean.FALSE;
+    }
+    if (Objects.isNull(this.admim)) {
+      this.admim = Boolean.FALSE;
     }
   }
   
