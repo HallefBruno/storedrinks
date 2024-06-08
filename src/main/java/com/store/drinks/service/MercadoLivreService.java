@@ -74,7 +74,7 @@ public class MercadoLivreService {
   @Transactional
   public void salvar(String code) {
     var usuario = UsuarioService.usuarioLogado();
-    if(usuario.getProprietario() && usuario.getAdmim() && plataformaImplementada(usuario) == Boolean.FALSE) {
+    if(usuario.getProprietario() && usuario.getAdm()&& plataformaImplementada(usuario) == Boolean.FALSE) {
       var mercadoLivre = new MercadoLivre();
       mercadoLivre.setCode(code);
       mercadoLivre.setUsuario(usuario);

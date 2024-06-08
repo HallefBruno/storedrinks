@@ -56,7 +56,7 @@ public class UsuarioService {
     String fileName = StringUtils.cleanPath(image.getOriginalFilename());
     String extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
     fileName = fileName.substring(0, fileName.lastIndexOf("."));
-    usuario.setAdmim(Boolean.FALSE);
+    usuario.setAdm(Boolean.FALSE);
     usuario.setImagem(fileName);
     usuario.setExtensao(extenssao);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());

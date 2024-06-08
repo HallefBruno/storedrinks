@@ -78,7 +78,7 @@ public class NovaContaClienteSistema {
         Usuario usuario = new Usuario();
         usuario.setAtivo(Boolean.TRUE);
         usuario.setProprietario(Boolean.TRUE);
-        usuario.setAdmim(Boolean.TRUE);
+        usuario.setAdm(Boolean.TRUE);
         usuario.setNome(nome);
         usuario.setTelefone(telefone);
         usuario.setEmail(email);

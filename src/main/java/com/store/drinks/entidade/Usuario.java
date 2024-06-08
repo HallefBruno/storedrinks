@@ -127,7 +127,7 @@ public class Usuario implements Serializable {
   private MercadoLivre mercadoLivre;
   
   @Column(nullable = false, columnDefinition = "boolean default false")
-  private Boolean admim;
+  private Boolean adm;
   
   @PreUpdate
   @PrePersist
@@ -143,8 +143,8 @@ public class Usuario implements Serializable {
     if(Objects.isNull(this.proprietario)) {
       this.proprietario = Boolean.FALSE;
     }
-    if (Objects.isNull(this.admim)) {
-      this.admim = Boolean.FALSE;
+    if (Objects.isNull(this.adm)) {
+      this.adm = Boolean.FALSE;
     }
   }
   
