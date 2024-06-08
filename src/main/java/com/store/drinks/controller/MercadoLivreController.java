@@ -3,14 +3,11 @@ package com.store.drinks.controller;
 import com.store.drinks.entidade.CategoriaMercadoLivre;
 import com.store.drinks.service.CategoriaMercadoLivreService;
 import com.store.drinks.service.MercadoLivreService;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -38,7 +35,12 @@ public class MercadoLivreController extends EncerrarSessaoController {
   
   @GetMapping("/code")
   public ResponseEntity<String> urlForRedirect(HttpServletRequest request) {
-    return ResponseEntity.ok(urlMeliCode);
+    try {
+      mercadoLivreService.verificarSeMercadoFoiImplementado();
+      return ResponseEntity.ok(urlMeliCode);
+    } catch (ResponseStatusException ex) {
+      return ResponseEntity.badRequest().body(ex.getReason());
+    }
   }
   
   @GetMapping("/redirect-code")

@@ -10,9 +10,9 @@ import com.store.drinks.entidade.dto.meli.RevogarContaMelidto;
 import com.store.drinks.entidade.enuns.PlataformasEcommerce;
 import com.store.drinks.repository.AccessTokenMeliRepository;
 import com.store.drinks.repository.MercadoLivreRepository;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -200,5 +200,12 @@ public class MercadoLivreService {
       return usuario.getMercadoLivre().getPlataformasEcommerce().getImplantada();
     }
     return false;
+  }
+  
+  public void verificarSeMercadoFoiImplementado() {
+    var mercadoLivre = UsuarioService.usuarioLogado().getMercadoLivre();
+    if(Objects.nonNull(mercadoLivre) && mercadoLivre.getId() > 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Plataforma Mercado Livre ja foi implantada");
+    }
   }
 }

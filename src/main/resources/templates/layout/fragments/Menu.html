@@ -203,12 +203,14 @@
             </a>
             
             <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownMeli">
-              <li>
-                <a class="dropdown-item" th:href="@{/mercado-livre/page-desvincular-conta-meli}">
-                  <i class="fa-solid fa-trash"></i> Desvincular conta Meli
-                </a>
-              </li>
-              <li><hr class="dropdown-divider"></li>
+              <th:block th:if="${auth.mercadoLivre != null && auth.adm}">
+                <li>
+                  <a class="dropdown-item" th:href="@{/mercado-livre/page-desvincular-conta-meli}">
+                    <i class="fa-solid fa-trash"></i> Desvincular conta Meli
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+              </th:block>
               <li>
                 <a class="dropdown-item" th:href="@{/mercado-livre/page-categorias}">
                   <i class="fa-solid fa-list"></i> Categorias Mercado Livre

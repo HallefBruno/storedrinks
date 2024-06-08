@@ -244,6 +244,14 @@ StoreDrink.AjaxError = (function () {
             loader: false,
             icon: 'error'
           });
+        } else if(jqXHR && jqXHR.responseText) {
+          $.toast({
+            heading: `${"Atenção!"}`,
+            text: `${jqXHR.responseText}`,
+            position: 'top-right',
+            loader: false,
+            icon: 'error'
+          });
         }
       }
     }.bind(this));
