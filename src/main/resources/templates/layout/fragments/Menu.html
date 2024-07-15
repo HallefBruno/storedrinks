@@ -203,14 +203,24 @@
             </a>
             
             <ul class="dropdown-menu text-small shadow" style="font-size: 90%;" aria-labelledby="navbarDropdownMeli">
-              <th:block th:if="${auth.mercadoLivre != null && auth.adm}">
+              <th:block th:if="${auth.meliImplantadoIsUserAdmin}">
                 <li>
                   <a class="dropdown-item" th:href="@{/mercado-livre/page-desvincular-conta-meli}">
-                    <i class="fa-solid fa-trash"></i> Desvincular conta Meli
+                    <i class="fa-regular fa-trash-can"></i> Desvincular conta Meli
                   </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
               </th:block>
+              
+              <th:block>
+                <li>
+                  <a class="dropdown-item" th:href="@{/mercado-livre/page-anuncio}">
+                    <i class="fa-solid fa-arrow-up"></i> Publicar anúncio
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+              </th:block>
+              
               <li>
                 <a class="dropdown-item" th:href="@{/mercado-livre/page-categorias}">
                   <i class="fa-solid fa-list"></i> Categorias Mercado Livre

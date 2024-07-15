@@ -129,6 +129,10 @@ public class Usuario implements Serializable {
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean adm;
   
+  public Boolean meliImplantadoIsUserAdmin() {
+    return mercadoLivre != null && adm;
+  }
+  
   @PreUpdate
   @PrePersist
   private void prePersistPreUpdate() {
