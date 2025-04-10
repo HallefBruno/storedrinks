@@ -38,11 +38,11 @@ $(function () {
   
   $('.btnCriarConta').click(function (e) {
     if(validarCampos()) {
-      $(".setblockUI").block({message: 'Validando email...'});
-      response = $.get("https://isitarealemail.com/api/email/validate?email=" + $("#email").val(), function() {});
-      response.always(function (data) {
-        $(".setblockUI").unblock();
-        if (data.status === 'valid') {
+      //$(".setblockUI").block({message: 'Validando email...'});
+      //response = $.get("https://isitarealemail.com/api/email/validate?email=" + $("#email").val(), function() {});
+      //response.always(function (data) {
+      //$(".setblockUI").unblock();
+      //if (data.status === 'valid') {
           $.ajax({
             url: $("#contextApp").val() + "validar/finalizar",
             type: "GET",
@@ -119,8 +119,8 @@ $(function () {
           alertWarning("Email inválido!");
         }
       });
-    }
-  });
+    //}
+  //});
   
   $("#password").on('keyup', function () {
     let number = /([0-9])/;
