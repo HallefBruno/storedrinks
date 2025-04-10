@@ -34,7 +34,7 @@ StoreDrink.DialogoExcluir = (function () {
   function onExcluirConfirmado(url) {
     $.ajax({
       url: url,
-      method: 'DEvarE',
+      method: 'DELETE',
       success: onExcluidoSucesso.bind(this),
       error: onErroExcluir.bind(this)
     });
@@ -225,6 +225,7 @@ StoreDrink.AjaxError = (function () {
       if (jqXHR.status === 0) {
       } else if (jqXHR.status === 400) {
         window.console.log(jqXHR.responseJSON);
+        window.console.log(jqXHR.responseText);
         if(jqXHR.responseJSON && jqXHR.responseJSON.errors && jqXHR.responseJSON.errors.length > 0) {
           $.each(jqXHR.responseJSON.errors, function (i, item) {
             $.toast({
@@ -235,10 +236,18 @@ StoreDrink.AjaxError = (function () {
               icon: 'error'
             });
           });
-        } else if (jqXHR.responseJSON.message) {
+        } else if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message) {
           $.toast({
             heading: `${"Atenção!"}`,
             text: `${jqXHR.responseJSON.message}`,
+            position: 'top-right',
+            loader: false,
+            icon: 'error'
+          });
+        } else if(jqXHR && jqXHR.responseText) {
+          $.toast({
+            heading: `${"Atenção!"}`,
+            text: `${jqXHR.responseText}`,
             position: 'top-right',
             loader: false,
             icon: 'error'

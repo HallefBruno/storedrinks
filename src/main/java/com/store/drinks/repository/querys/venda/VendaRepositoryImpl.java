@@ -2,7 +2,7 @@ package com.store.drinks.repository.querys.venda;
 
 import com.store.drinks.entidade.dto.venda.CancelarVendadto;
 import com.store.drinks.entidade.dto.venda.ItensVendaCancelardto;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import com.store.drinks.service.UsuarioService;
 import java.util.Collections;
 import java.util.List;

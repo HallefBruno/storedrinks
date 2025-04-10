@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @ControllerAdvice
 public class ModelAndViewException {
@@ -28,6 +29,20 @@ public class ModelAndViewException {
   @ExceptionHandler(CaixaAbertoPorUsuarioException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public String caixaAbertoPorUsuarioException(Exception ex, Model model, HttpServletRequest request) {
+    String location = request.getRequestURL().toString();
+    model.addAttribute("title","Se estiver vendo esse erro, entre em contato com o Admin do sistema!");
+    model.addAttribute("timestamp",LocalDateTime.now());
+    model.addAttribute("message", ex.getMessage());
+    model.addAttribute("location", location);
+    model.addAttribute("path", "/");
+    model.addAttribute("exception", ex);
+    model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+    return "Error";
+  }
+  
+  @ExceptionHandler(ResponseStatusException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public String mercadoLivreException(Exception ex, Model model, HttpServletRequest request) {
     String location = request.getRequestURL().toString();
     model.addAttribute("title","Se estiver vendo esse erro, entre em contato com o Admin do sistema!");
     model.addAttribute("timestamp",LocalDateTime.now());

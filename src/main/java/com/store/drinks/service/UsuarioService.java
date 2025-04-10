@@ -1,6 +1,7 @@
 package com.store.drinks.service;
 
 import com.store.drinks.entidade.Grupo;
+import com.store.drinks.entidade.MercadoLivre;
 import com.store.drinks.entidade.Permissao;
 import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.EmailValido;
@@ -55,10 +56,11 @@ public class UsuarioService {
     String fileName = StringUtils.cleanPath(image.getOriginalFilename());
     String extenssao = StringUtils.getFilenameExtension(image.getOriginalFilename());
     fileName = fileName.substring(0, fileName.lastIndexOf("."));
+    usuario.setAdm(Boolean.FALSE);
     usuario.setImagem(fileName);
     usuario.setExtensao(extenssao);
-    validarDadosUsuarioSalvar(usuario);
     usuario.setClienteSistema(usuarioLogado().getClienteSistema());
+    validarDadosUsuarioSalvar(usuario);
     usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
     usuarioRepository.save(usuario);
     salvarImagemStorage(image, fileName);
@@ -69,7 +71,6 @@ public class UsuarioService {
     if (Objects.isNull(codigo)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
     }
-    
     usuarioRepository.findById(codigo).map(usuarioAtual -> {
       String fileName = "";
       String extensao = "";
@@ -83,7 +84,7 @@ public class UsuarioService {
         fileName = usuarioAtual.getImagem();
         extensao = usuarioAtual.getExtensao();
       }
-      CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha");
+      CopyProperties.copyProperties(usuarioUpdate, usuarioAtual, "id", "telefone", "imagem", "extensao", "senha", "admim");
       casoAltereSenha(usuarioUpdate, usuarioAtual);
       verificaAtributoNull(usuarioUpdate, usuarioAtual);
       validarDadosUsuarioUpdate(usuarioUpdate, usuarioAtual);
@@ -96,6 +97,13 @@ public class UsuarioService {
       return Void.TYPE;
     }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+codigo));
   }
+  
+  @Transactional
+  public void updateUsuarioMercadoLivre(MercadoLivre mercadoLivre) {
+    Usuario u = findByEmailAndAtivoTrue(usuarioLogado().getEmail()).get();
+    u.setMercadoLivre(mercadoLivre);
+    usuarioRepository.save(u);
+  }
 
   public static Usuario usuarioLogado() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,6 +113,10 @@ public class UsuarioService {
   
   public Optional<Usuario> findByEmailAndAtivoTrue(String email) {
     return usuarioRepository.findByEmailAndAtivoTrue(email);
+  }
+  
+  public Usuario usuarioAtualizado() {
+    return findByEmailAndAtivoTrue(usuarioLogado().getEmail()).get();
   }
   
   public Optional<Usuario> findByClienteSistemaTenantAndId(String tenant, Long id) {
@@ -144,7 +156,7 @@ public class UsuarioService {
     existeEmail(usuario.getEmail());
     existeNomeImagem(usuario.getImagem());
     permiteCriarUsuario();
-    validarEmail(usuario.getEmail());
+    //validarEmail(usuario.getEmail());
   }
   
   private void validarDadosUsuarioUpdate(Usuario usuarioUpdate, Usuario usuarioAtual) {
@@ -161,7 +173,7 @@ public class UsuarioService {
         existeNomeImagem(usuarioUpdate.getImagem());
       }
     }
-    validarEmail(usuarioUpdate.getEmail());
+    //validarEmail(usuarioUpdate.getEmail());
   }
   
   private void existeTelefone(String telefone) {

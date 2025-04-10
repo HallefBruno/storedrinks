@@ -1,7 +1,7 @@
 package com.store.drinks.entidade;
 
 import com.store.drinks.entidade.dto.caixa.Caixadto;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

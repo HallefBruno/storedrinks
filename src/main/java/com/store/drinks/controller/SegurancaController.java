@@ -43,7 +43,7 @@ public class SegurancaController {
       for (Cookie cookie : request.getCookies()) {
         cookie.setMaxAge(0);
       }
-      return "/login?invalid-session=true";
+      return "Login";
     }
     return null;
   }

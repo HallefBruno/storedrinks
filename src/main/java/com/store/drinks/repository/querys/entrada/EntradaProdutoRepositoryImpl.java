@@ -5,7 +5,7 @@ import com.store.drinks.entidade.EntradaProduto;
 import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.entidade.Produto;
 import com.store.drinks.entidade.enuns.Tenant;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import java.util.ArrayList;
 import java.util.List;

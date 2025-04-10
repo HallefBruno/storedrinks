@@ -14,7 +14,7 @@ import com.store.drinks.repository.ItensVendaRepository;
 import com.store.drinks.repository.MovimentacaoCaixaRepository;
 import com.store.drinks.repository.ProdutoRepository;
 import com.store.drinks.repository.VendaRepository;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -115,6 +115,7 @@ public class VendaService {
     Set<FormaPagamento> formasPagamento = modelMapper.map(vendadto.getFormasPagamento(), new TypeToken<Set<FormaPagamento>>(){}.getType());
     formasPagamento.forEach(formaPg -> {
       formaPg.setMovimentacaoCaixa(movimentacaoCaixa);
+      formaPg.setTenant(tenant());
     });
     return formasPagamento;
   }
@@ -128,7 +129,7 @@ public class VendaService {
   
   private void setMovimentacaoCaixa(MovimentacaoCaixa movimentacaoCaixa, Venda venda, Set<FormaPagamento> formasPagamento) {
     movimentacaoCaixa.setFormaPagamentos(formasPagamento);
-    movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa(null));
+    movimentacaoCaixa.setCaixa(abrirCaixaService.getCaixa(UsuarioService.usuarioLogado().getId()));
     movimentacaoCaixa.setVenda(venda);
     movimentacaoCaixa.setUsuario(UsuarioService.usuarioLogado());
     movimentacaoCaixa.setValorTroco(somaValorFormaPagamento(formasPagamento).subtract(venda.getValorTotalVenda()));

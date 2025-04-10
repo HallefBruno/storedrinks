@@ -3,31 +3,33 @@ package com.store.drinks.controller;
 import com.store.drinks.service.DashBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(path = {"/", "/dashboard"})
 @RequiredArgsConstructor
 public class DashBoardController {
   
   private final DashBoardService boardService;
   
-  @GetMapping
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("/")
   public ModelAndView pageIndex() {
     return new ModelAndView("Dashboard");
   }
   
-  @GetMapping("/pesquisar")
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("dashboard/pesquisar")
   public ResponseEntity<?> pesqisar(@RequestParam String filters) {
     return ResponseEntity.ok(boardService.produtosMaisVendidos(filters));
   }
   
-  @GetMapping("/vendas-tempo-real")
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("dashboard/vendas-tempo-real")
   public ResponseEntity<?> vendasTempoReal(
     @RequestParam(name = "draw", required = false) Integer draw,
     @RequestParam(name = "start", required = false) Integer start,
@@ -37,18 +39,21 @@ public class DashBoardController {
     return ResponseEntity.ok(list);
   }
   
-  @GetMapping("/detalhe-produto-vendido/{idVenda}")
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("dashboard/detalhe-produto-vendido/{idVenda}")
   public ResponseEntity<?> listDetalheProdutoVendido(@PathVariable(required = true) Long idVenda) {
     var list = boardService.listDetalheProdutoVendido(idVenda);
     return ResponseEntity.ok(list);
   }
   
-  @GetMapping("/total-vendas")
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("dashboard/total-vendas")
   public ResponseEntity<?> totalVenda(@RequestParam(name = "idUsuario", required = false) Long idUsuario) {
     return ResponseEntity.ok(boardService.totalVenda(idUsuario));
   }
   
-  @GetMapping("/total-custo")
+  @PreAuthorize("hasRole('DASHBOARD')")
+  @GetMapping("dashboard/total-custo")
   public ResponseEntity<?> totalCusto(@RequestParam(name = "idUsuario", required = false) Long idUsuario) {
     return ResponseEntity.ok(boardService.totalCusto(idUsuario));
   }

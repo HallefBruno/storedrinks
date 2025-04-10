@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Integrações</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Integrações">
+    <th:block th:replace="fragments/CssFragment :: css"></th:block>
+    <th:block th:replace="layout/fragments/Menu :: menu"></th:block>
+  </head>
+  <body th:with="auth=${#authentication.getPrincipal().getUsuario()}">
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">Integrador Storedrinks</h1>
+          <p class="lead text-body-secondary">Seja bem vindo ao Integrador Storedrinks, selecione a plataforma na qual gostaria de fazer a integração.</p>
+        </div>
+      </div>
+    </section>
+    <main class="container mb-4 py-5 bg-light d-flex justify-content-center">
+      <div class="row g-3">
+        <th:block th:each="plataformas : ${plataformasAtivas}">
+          <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center">
+            <div class="card" style="width: 150px;" th:styleappend="${plataformas.implantada || !auth.adm} ? 'filter: gray; -webkit-filter: grayscale(1); filter: grayscale(1);'">
+              <div class="d-flex justify-content-center mt-2">
+                <img draggable="false" th:src="@{${'/imagens/' + plataformas.imagem}}" alt="Logo">
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-center mt-2">
+                  <button th:id="${plataformas.htmlIdButton}" th:disabled="${plataformas.implantada || !auth.adm }" th:class="${plataformas.htmlClass}" th:style="${plataformas.htmlStyle}" th:text="${plataformas.descricao}"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </main>
+    <th:block th:replace="fragments/JsFragment :: script"></th:block>
+    <script th:src="@{/alldrink-js/integracoes/Integracoes.js}" type="text/javascript"></script>
+  </body>
+</html>

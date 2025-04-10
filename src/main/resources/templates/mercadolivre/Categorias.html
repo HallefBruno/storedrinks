@@ -1,0 +1,47 @@
+<html lang="pt-BR">
+  <head>
+    <title>Categorias Mercado Livre</title>
+    <meta name="description" content="Atualizar categorias Mercado Livre">
+    <th:block th:replace="~{fragments/CssFragment :: css}"></th:block>
+    <th:block th:replace="~{layout/fragments/Menu :: menu}"></th:block>
+  </head>
+  <body class="bg-light">
+    <form th:object="${categoriaMercadoLivre}">
+      <div class="p-2">
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <th:block th:include="fragments/MensagensErroValidacao"></th:block>
+      </div>
+      <div class="card-body">
+        <button id="btnAtualizarCategorias" class="btn btn-sm btn-secondary mt-2 ms-1">Atualizar Categorias</button>
+        <div class="table-responsive">
+          <table id="categorias" class="table table-hover caption-top">
+            <caption>Categorias Mercado Livre</caption>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="categoria : ${categorias}">
+                <td th:text="${categoria.id}"></td>
+                <td th:text="${categoria.nome}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+    
+    <th:block th:replace="~{fragments/JsFragment :: script}"></th:block>
+    <script type="text/javascript">
+      $(function () {
+        $("#btnAtualizarCategorias").click(function () {
+          $("form").prop("action", `${CONTEXT}mercado-livre/atualizar-categorias`);
+          $("form").trigger("submit");
+        });
+      });
+    </script>
+    
+  </body>
+</html>  

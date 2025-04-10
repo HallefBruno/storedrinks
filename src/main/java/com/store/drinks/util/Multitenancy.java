@@ -1,4 +1,4 @@
-package com.store.drinks.repository.util;
+package com.store.drinks.util;
 
 import com.store.drinks.entidade.enuns.Tenant;
 import javax.servlet.http.HttpServletRequest;

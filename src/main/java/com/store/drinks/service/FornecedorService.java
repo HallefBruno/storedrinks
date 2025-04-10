@@ -4,7 +4,7 @@ import com.store.drinks.entidade.Fornecedor;
 import com.store.drinks.execption.NegocioException;
 import com.store.drinks.repository.FornecedorRepository;
 import com.store.drinks.repository.filtros.FornecedorFiltro;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

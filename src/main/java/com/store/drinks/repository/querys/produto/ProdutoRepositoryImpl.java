@@ -6,7 +6,7 @@ import com.store.drinks.entidade.Usuario;
 import com.store.drinks.entidade.dto.ProdutoConferirEstoquedto;
 import com.store.drinks.entidade.enuns.Tenant;
 import com.store.drinks.repository.util.JpaUtils;
-import com.store.drinks.repository.util.Multitenancy;
+import com.store.drinks.util.Multitenancy;
 import com.store.drinks.repository.util.RowsUtil;
 import com.store.drinks.service.UsuarioService;
 import java.util.ArrayList;
